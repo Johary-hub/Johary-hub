@@ -39,19 +39,19 @@ a:hover{text-decoration:underline}
   color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
   justify-content:center}
 .side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
 .side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
   color:var(--ink);font-size:14px}
 .side-extra:hover{background:var(--bg);text-decoration:none}
-.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
-  max-width:880px}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
 .content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
   padding-bottom:.3em;border-bottom:2px solid var(--gold)}
 .content h3{font-size:19px;margin:1.3em 0 .4em}
 .content h4{font-size:16px;margin:1.1em 0 .3em}
 .card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
-  border-radius:12px;padding:14px 20px;margin:16px 0;
-  box-shadow:0 1px 2px rgba(16,24,40,.04)}
-.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
 .card.sec-obj{border-left-color:var(--obj)}
 .card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
 .card.sec-content{border-left-color:var(--content)}
@@ -66,59 +66,108 @@ a:hover{text-decoration:underline}
 blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
   border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
 blockquote p{margin:.4em 0}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
-  display:block;overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
 th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
 thead th{background:var(--slate);color:#fff;font-weight:600}
 tbody tr:nth-child(even){background:#fafbfc}
 code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
-  overflow-x:auto;line-height:1.45}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
 pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
 ul,ol{padding-left:1.4em}
 li{margin:.25em 0}
 hr{border:none;border-top:1px solid var(--line);margin:26px 0}
-details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
-  background:#fff}
-summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
-  list-style:none;color:#6d28d9}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
 summary::-webkit-details-marker{display:none}
 summary::before{content:"▸ ";font-weight:700}
 details[open] summary::before{content:"▾ "}
 details[open] summary{border-bottom:1px solid var(--line)}
 details>*:not(summary){padding-left:15px;padding-right:15px}
 details>ol,details>ul{padding-left:2.2em}
-.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
-  padding-top:18px;border-top:1px solid var(--line)}
-.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
-  background:#fff}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .pager a:hover{border-color:var(--gold);text-decoration:none}
 .pager .nx{text-align:right}
 .pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
 .hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
   padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
 .hero h1{border:none;color:#fff;margin:0 0 .3em}
-.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
-  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
 .hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
-/* single-file version */
-.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
-  margin-top:40px;padding-top:8px}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
 .module-block:first-of-type{border-top:none}
 .toc-back{font-size:13px;color:var(--muted)}
 @media(max-width:900px){
   .layout{flex-direction:column}
-  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
-    border-right:none;border-bottom:1px solid var(--line)}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
   .content{max-width:none}
 }
 @media print{
-  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
   .content{max-width:none;padding:0}
   .card{break-inside:avoid;box-shadow:none}
-  details[open] *{display:revert}
-  details{border:1px solid #ccc}
+  .quiz .q-exp{display:block!important}
 }
 </style>
 </head>
@@ -128,9 +177,9 @@ details>ol,details>ul{padding-left:2.2em}
   <div class="topnav"><a href="13-types-de-donnees.html">← Préc.</a></div>
 </header>
 <div class="layout">
-  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link active" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link active" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
   <main class="content">
-<h1>Module 14 — Les Statistiques Descriptives</h1>
+<div class="mod-toolbar"><button class="btn-done" data-slug="14-statistiques-descriptives">Marquer ce module comme terminé</button></div><h1>Module 14 — Les Statistiques Descriptives</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -149,6 +198,8 @@ details>ol,details>ul{padding-left:2.2em}
 <li>Aucun prérequis mathématique avancé : les quatre opérations et la racine carrée suffisent.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 520 250" role="img" class="svg-anim"><path d="M205.0,210.0 L205.0,119.0 L206.8,116.0 L208.7,113.0 L210.5,110.0 L212.3,107.0 L214.2,104.0 L216.0,101.1 L217.8,98.2 L219.7,95.4 L221.5,92.6 L223.3,89.9 L225.2,87.3 L227.0,84.7 L228.8,82.2 L230.7,79.9 L232.5,77.6 L234.3,75.5 L236.2,73.4 L238.0,71.5 L239.8,69.8 L241.7,68.1 L243.5,66.6 L245.3,65.2 L247.2,64.0 L249.0,63.0 L250.8,62.1 L252.7,61.3 L254.5,60.7 L256.3,60.3 L258.2,60.1 L260.0,60.0 L261.8,60.1 L263.7,60.3 L265.5,60.7 L267.3,61.3 L269.2,62.1 L271.0,63.0 L272.8,64.0 L274.7,65.2 L276.5,66.6 L278.3,68.1 L280.2,69.8 L282.0,71.5 L283.8,73.4 L285.7,75.5 L287.5,77.6 L289.3,79.9 L291.2,82.2 L293.0,84.7 L294.8,87.3 L296.7,89.9 L298.5,92.6 L300.3,95.4 L302.2,98.2 L304.0,101.1 L305.8,104.0 L307.7,107.0 L309.5,110.0 L311.3,113.0 L313.2,116.0 L315.0,119.0 L315.0,210.0 Z" fill="#f6b400" opacity="0.30"/><line x1="40" y1="210" x2="480" y2="210" stroke="#9aa3b0" stroke-width="1.5"/><path d="M60.0,209.8 L63.3,209.7 L66.7,209.7 L70.0,209.6 L73.3,209.5 L76.7,209.4 L80.0,209.3 L83.3,209.1 L86.7,209.0 L90.0,208.7 L93.3,208.5 L96.7,208.2 L100.0,207.8 L103.3,207.4 L106.7,206.9 L110.0,206.4 L113.3,205.7 L116.7,205.0 L120.0,204.1 L123.3,203.2 L126.7,202.1 L130.0,200.8 L133.3,199.4 L136.7,197.9 L140.0,196.1 L143.3,194.2 L146.7,192.1 L150.0,189.7 L153.3,187.1 L156.7,184.3 L160.0,181.3 L163.3,178.0 L166.7,174.5 L170.0,170.7 L173.3,166.7 L176.7,162.4 L180.0,157.9 L183.3,153.2 L186.7,148.3 L190.0,143.3 L193.3,138.0 L196.7,132.7 L200.0,127.3 L203.3,121.8 L206.7,116.3 L210.0,110.8 L213.3,105.3 L216.7,100.0 L220.0,94.9 L223.3,89.9 L226.7,85.2 L230.0,80.7 L233.3,76.6 L236.7,72.9 L240.0,69.6 L243.3,66.7 L246.7,64.3 L250.0,62.5 L253.3,61.1 L256.7,60.3 L260.0,60.0 L263.3,60.3 L266.7,61.1 L270.0,62.5 L273.3,64.3 L276.7,66.7 L280.0,69.6 L283.3,72.9 L286.7,76.6 L290.0,80.7 L293.3,85.2 L296.7,89.9 L300.0,94.9 L303.3,100.0 L306.7,105.3 L310.0,110.8 L313.3,116.3 L316.7,121.8 L320.0,127.3 L323.3,132.7 L326.7,138.0 L330.0,143.3 L333.3,148.3 L336.7,153.2 L340.0,157.9 L343.3,162.4 L346.7,166.7 L350.0,170.7 L353.3,174.5 L356.7,178.0 L360.0,181.3 L363.3,184.3 L366.7,187.1 L370.0,189.7 L373.3,192.1 L376.7,194.2 L380.0,196.1 L383.3,197.9 L386.7,199.4 L390.0,200.8 L393.3,202.1 L396.7,203.2 L400.0,204.1 L403.3,205.0 L406.7,205.7 L410.0,206.4 L413.3,206.9 L416.7,207.4 L420.0,207.8 L423.3,208.2 L426.7,208.5 L430.0,208.7 L433.3,209.0 L436.7,209.1 L440.0,209.3 L443.3,209.4 L446.7,209.5 L450.0,209.6 L453.3,209.7 L456.7,209.7 L460.0,209.8" fill="none" stroke="#2563eb" stroke-width="3"/><line x1="95" y1="210" x2="95" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="95" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−3σ</text><line x1="150" y1="210" x2="150" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="150" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−2σ</text><line x1="205" y1="210" x2="205" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="205" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−1σ</text><line x1="260" y1="210" x2="260" y2="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="260" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="800">μ</text><line x1="315" y1="210" x2="315" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="315" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+1σ</text><line x1="370" y1="210" x2="370" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="370" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+2σ</text><line x1="425" y1="210" x2="425" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="425" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+3σ</text><text x="260" y="64" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">~68 % à ±1σ</text><text x="260" y="60" text-anchor="middle" fill="#5b6675" font-size="10.5" dy="-6">~95 % à ±2σ · ~99,7 % à ±3σ</text></svg><figcaption>La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ autour de la moyenne.</figcaption></figure>
+
 <h3>1. Pourquoi les statistiques descriptives ?</h3>
 <p>La statistique descriptive consiste à <strong>utiliser des méthodes scientifiques pour collecter, organiser, résumer et présenter des données</strong>. C'est l'un des enjeux clés du <strong>6 Sigma</strong> : avant d'améliorer un processus, il faut savoir le décrire objectivement avec des chiffres plutôt qu'avec des impressions.</p>
 <p>Décrire un jeu de données, c'est répondre à trois questions :</p>
@@ -600,47 +651,8 @@ Les deux valeurs centrales (6ᵉ et 7ᵉ) sont 5 et 5 ⟹ médiane = <strong>5</
 <li>Pour une <strong>loi normale</strong> : moyenne = médiane = mode au centre ; <strong>68 % à ±1σ, 95 % à ±2σ, 99,7 % à ±3σ</strong> ; connaître moyenne + écart-type suffit à connaître toute la courbe.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>La <strong>moyenne</strong> se calcule en…
-   - a) prenant la valeur du milieu
-   - b) divisant la somme des valeurs par leur nombre
-   - c) prenant la valeur la plus fréquente
-   - d) soustrayant le min du max</li>
-<li>En présence d'une <strong>valeur exceptionnelle (outlier)</strong>, quel indicateur du centre est généralement le plus représentatif ?
-   - a) La moyenne
-   - b) La médiane
-   - c) Le mode
-   - d) L'étendue</li>
-<li>L'<strong>écart-type</strong> est…
-   - a) le carré de la variance
-   - b) la racine carrée de la variance
-   - c) le max moins le min
-   - d) la valeur la plus fréquente</li>
-<li>Pour l'échantillon <strong>8, 13, 7, 10, 12, 11, 10, 9</strong> (moyenne = 10, Sum of Squares = 28), la <strong>variance</strong> vaut :
-   - a) 28
-   - b) 3,5
-   - c) 4
-   - d) 2</li>
-<li>Dans une distribution <strong>normale</strong>, le pourcentage de cas compris entre <strong>±2 écarts-types</strong> autour de la moyenne est d'environ :
-   - a) 68 %
-   - b) 95 %
-   - c) 99,7 %
-   - d) 50 %</li>
-<li><strong>Vrai ou faux ?</strong> Moyenne, médiane, étendue, variance et écart-type ne peuvent se calculer que si la distribution est normale.
-   - a) Vrai
-   - b) Faux</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — La moyenne = somme de toutes les valeurs ÷ nombre de valeurs.</li>
-<li><strong>b</strong> — La médiane n'est pas tirée par les valeurs extrêmes, contrairement à la moyenne.</li>
-<li><strong>b</strong> — L'écart-type est la racine carrée de la variance (s = √s²).</li>
-<li><strong>c</strong> — Variance d'échantillon = Sum of Squares ÷ (n − 1) = 28 ÷ 7 = 4 (et l'écart-type = √4 = 2).</li>
-<li><strong>b</strong> — Règle 68/95/99,7 % : ±2σ ≈ 95 % des cas.</li>
-<li><strong>b (Faux)</strong> — Ces mesures s'appliquent <strong>quelle que soit l'allure</strong> de la distribution ; la normalité n'est requise que pour appliquer la règle 68/95/99,7 %.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">La <strong>moyenne</strong> se calcule en…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> prenant la valeur du milieu</button><button type="button" class="opt" data-key="b"><b>b)</b> divisant la somme des valeurs par leur nombre</button><button type="button" class="opt" data-key="c"><b>c)</b> prenant la valeur la plus fréquente</button><button type="button" class="opt" data-key="d"><b>d)</b> soustrayant le min du max</button></div><div class="q-exp" hidden>La moyenne = somme de toutes les valeurs ÷ nombre de valeurs.</div></li><li class="q" data-correct="b"><div class="q-text">En présence d'une <strong>valeur exceptionnelle (outlier)</strong>, quel indicateur du centre est généralement le plus représentatif ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La moyenne</button><button type="button" class="opt" data-key="b"><b>b)</b> La médiane</button><button type="button" class="opt" data-key="c"><b>c)</b> Le mode</button><button type="button" class="opt" data-key="d"><b>d)</b> L'étendue</button></div><div class="q-exp" hidden>La médiane n'est pas tirée par les valeurs extrêmes, contrairement à la moyenne.</div></li><li class="q" data-correct="b"><div class="q-text">L'<strong>écart-type</strong> est…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> le carré de la variance</button><button type="button" class="opt" data-key="b"><b>b)</b> la racine carrée de la variance</button><button type="button" class="opt" data-key="c"><b>c)</b> le max moins le min</button><button type="button" class="opt" data-key="d"><b>d)</b> la valeur la plus fréquente</button></div><div class="q-exp" hidden>L'écart-type est la racine carrée de la variance (s = √s²).</div></li><li class="q" data-correct="c"><div class="q-text">Pour l'échantillon <strong>8, 13, 7, 10, 12, 11, 10, 9</strong> (moyenne = 10, Sum of Squares = 28), la <strong>variance</strong> vaut :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 28</button><button type="button" class="opt" data-key="b"><b>b)</b> 3,5</button><button type="button" class="opt" data-key="c"><b>c)</b> 4</button><button type="button" class="opt" data-key="d"><b>d)</b> 2</button></div><div class="q-exp" hidden>Variance d'échantillon = Sum of Squares ÷ (n − 1) = 28 ÷ 7 = 4 (et l'écart-type = √4 = 2).</div></li><li class="q" data-correct="b"><div class="q-text">Dans une distribution <strong>normale</strong>, le pourcentage de cas compris entre <strong>±2 écarts-types</strong> autour de la moyenne est d'environ :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 68 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 95 %</button><button type="button" class="opt" data-key="c"><b>c)</b> 99,7 %</button><button type="button" class="opt" data-key="d"><b>d)</b> 50 %</button></div><div class="q-exp" hidden>Règle 68/95/99,7 % : ±2σ ≈ 95 % des cas.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux ?</strong> Moyenne, médiane, étendue, variance et écart-type ne peuvent se calculer que si la distribution est normale.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Ces mesures s'appliquent <strong>quelle que soit l'allure</strong> de la distribution ; la normalité n'est requise que pour appliquer la règle 68/95/99,7 %.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <strong>18. Statistiques Descriptives.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13sJMTpQpoUkoyYJxOhriZy4Zy6M2fV93/view">Ouvrir dans Drive</a></li>
@@ -648,9 +660,54 @@ Les deux valeurs centrales (6ᵉ et 7ᵉ) sont 5 et 5 ⟹ médiane = <strong>5</
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section>
-<nav class="pager"><a href="13-types-de-donnees.html"><small>← Module précédent</small>13 · Les Types de données</a><span></span></nav>
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="13-types-de-donnees.html"><small>← Module précédent</small>13 · Les Types de données</a><span></span></nav>
   </main>
 </div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
 </body>
 </html>

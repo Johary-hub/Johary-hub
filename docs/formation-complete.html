@@ -39,19 +39,19 @@ a:hover{text-decoration:underline}
   color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
   justify-content:center}
 .side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
 .side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
   color:var(--ink);font-size:14px}
 .side-extra:hover{background:var(--bg);text-decoration:none}
-.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
-  max-width:880px}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
 .content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
   padding-bottom:.3em;border-bottom:2px solid var(--gold)}
 .content h3{font-size:19px;margin:1.3em 0 .4em}
 .content h4{font-size:16px;margin:1.1em 0 .3em}
 .card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
-  border-radius:12px;padding:14px 20px;margin:16px 0;
-  box-shadow:0 1px 2px rgba(16,24,40,.04)}
-.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
 .card.sec-obj{border-left-color:var(--obj)}
 .card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
 .card.sec-content{border-left-color:var(--content)}
@@ -66,59 +66,108 @@ a:hover{text-decoration:underline}
 blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
   border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
 blockquote p{margin:.4em 0}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
-  display:block;overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
 th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
 thead th{background:var(--slate);color:#fff;font-weight:600}
 tbody tr:nth-child(even){background:#fafbfc}
 code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
-  overflow-x:auto;line-height:1.45}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
 pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
 ul,ol{padding-left:1.4em}
 li{margin:.25em 0}
 hr{border:none;border-top:1px solid var(--line);margin:26px 0}
-details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
-  background:#fff}
-summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
-  list-style:none;color:#6d28d9}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
 summary::-webkit-details-marker{display:none}
 summary::before{content:"▸ ";font-weight:700}
 details[open] summary::before{content:"▾ "}
 details[open] summary{border-bottom:1px solid var(--line)}
 details>*:not(summary){padding-left:15px;padding-right:15px}
 details>ol,details>ul{padding-left:2.2em}
-.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
-  padding-top:18px;border-top:1px solid var(--line)}
-.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
-  background:#fff}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .pager a:hover{border-color:var(--gold);text-decoration:none}
 .pager .nx{text-align:right}
 .pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
 .hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
   padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
 .hero h1{border:none;color:#fff;margin:0 0 .3em}
-.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
-  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
 .hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
-/* single-file version */
-.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
-  margin-top:40px;padding-top:8px}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
 .module-block:first-of-type{border-top:none}
 .toc-back{font-size:13px;color:var(--muted)}
 @media(max-width:900px){
   .layout{flex-direction:column}
-  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
-    border-right:none;border-bottom:1px solid var(--line)}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
   .content{max-width:none}
 }
 @media print{
-  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
   .content{max-width:none;padding:0}
   .card{break-inside:avoid;box-shadow:none}
-  details[open] *{display:revert}
-  details{border:1px solid #ccc}
+  .quiz .q-exp{display:block!important}
 }
 </style>
 </head>
@@ -128,9 +177,9 @@ details>ol,details>ul{padding-left:2.2em}
   <div class="topnav"><a href="index.html">🏠 Version site</a></div>
 </header>
 <div class="layout">
-  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
   <main class="content">
-<a id="top"></a><div class="hero"><span class="tag">PARCOURS COMPLET</span><h1>Formation Lean Six Sigma — Yellow Belt</h1><p>Tous les modules réunis dans une seule page, à suivre hors-ligne. Utilisez le sommaire ci-dessous pour naviguer.</p></div><h2>Sommaire</h2><ol><li><a href="#mod-00">0 · Démarrage & cahier du stagiaire</a></li><li><a href="#mod-01">1 · Lean, 6 Sigma & Lean Six Sigma</a></li><li><a href="#mod-02">2 · Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</a></li><li><a href="#mod-03">3 · Les Fondements du Lean</a></li><li><a href="#mod-04">4 · Les Paradigmes</a></li><li><a href="#mod-05">5 · Management Lean & Diagramme de Nemoto</a></li><li><a href="#mod-06">6 · Standards & Standardisation</a></li><li><a href="#mod-07">7 · Les 5S</a></li><li><a href="#mod-08">8 · Le Management Visuel</a></li><li><a href="#mod-09">9 · Résolution de problème : QQOQCCP, Ishikawa, PDCA</a></li><li><a href="#mod-10">10 · La démarche DMAIC</a></li><li><a href="#mod-11">11 · Voix du Client (VoC) & arbre des CTS</a></li><li><a href="#mod-12">12 · Le SIPOC</a></li><li><a href="#mod-13">13 · Les Types de données</a></li><li><a href="#mod-14">14 · Les Statistiques Descriptives</a></li></ol><section id="mod-00" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 0 — Démarrage &amp; cahier du stagiaire</h1>
+<a id="top"></a><div class="hero"><span class="tag">PARCOURS COMPLET</span><h1>Formation Lean Six Sigma — Yellow Belt</h1><p>Tous les modules réunis dans une seule page, à suivre hors-ligne. Schémas, quiz interactifs et navigation par sommaire.</p></div><h2>Sommaire</h2><ol><li><a href="#mod-00">0 · Démarrage & cahier du stagiaire</a></li><li><a href="#mod-01">1 · Lean, 6 Sigma & Lean Six Sigma</a></li><li><a href="#mod-02">2 · Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</a></li><li><a href="#mod-03">3 · Les Fondements du Lean</a></li><li><a href="#mod-04">4 · Les Paradigmes</a></li><li><a href="#mod-05">5 · Management Lean & Diagramme de Nemoto</a></li><li><a href="#mod-06">6 · Standards & Standardisation</a></li><li><a href="#mod-07">7 · Les 5S</a></li><li><a href="#mod-08">8 · Le Management Visuel</a></li><li><a href="#mod-09">9 · Résolution de problème : QQOQCCP, Ishikawa, PDCA</a></li><li><a href="#mod-10">10 · La démarche DMAIC</a></li><li><a href="#mod-11">11 · Voix du Client (VoC) & arbre des CTS</a></li><li><a href="#mod-12">12 · Le SIPOC</a></li><li><a href="#mod-13">13 · Les Types de données</a></li><li><a href="#mod-14">14 · Les Statistiques Descriptives</a></li></ol><section id="mod-00" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 0 — Démarrage &amp; cahier du stagiaire</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Avant la Séquence 1
 ⏱️ Durée estimée : 15 min · 🎓 Niveau : Yellow Belt</p>
@@ -268,24 +317,8 @@ active : prenez l'habitude de le remplir dès maintenant, même seul.</p>
 <li>Choisir <strong>un terrain réel</strong> dès le départ rend chaque module immédiatement utile.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Quel est l'objectif premier du parcours ?
-   - a) Réussir un examen théorique
-   - b) Être capable d'appliquer chaque outil sur son terrain
-   - c) Mémoriser les niveaux sigma</li>
-<li>Que signifie le <strong>T</strong> de MAST ?
-   - a) Théorie · b) Transférer · c) Test</li>
-<li>Les modules 1 à 14 couvrent quelles séquences ?
-   - a) Les classroom (2 et 4) · b) Les digital learning (1 et 3) · c) Aucune</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — tout le parcours est orienté mise en application.</li>
-<li><strong>b</strong> — Transférer = ce que je vais appliquer sur mon terrain.</li>
-<li><strong>b</strong> — les modules couvrent le <em>digital learning</em> des séquences 1 et 3.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quel est l'objectif premier du parcours ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Réussir un examen théorique</button><button type="button" class="opt" data-key="b"><b>b)</b> Être capable d'appliquer chaque outil sur son terrain</button><button type="button" class="opt" data-key="c"><b>c)</b> Mémoriser les niveaux sigma</button></div><div class="q-exp" hidden>tout le parcours est orienté mise en application.</div></li><li class="q" data-correct="b"><div class="q-text">Que signifie le <strong>T</strong> de MAST ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Théorie</button><button type="button" class="opt" data-key="b"><b>b)</b> Transférer</button><button type="button" class="opt" data-key="c"><b>c)</b> Test</button></div><div class="q-exp" hidden>Transférer = ce que je vais appliquer sur mon terrain.</div></li><li class="q" data-correct="b"><div class="q-text">Les modules 1 à 14 couvrent quelles séquences ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Les classroom (2 et 4)</button><button type="button" class="opt" data-key="b"><b>b)</b> Les digital learning (1 et 3)</button><button type="button" class="opt" data-key="c"><b>c)</b> Aucune</button></div><div class="q-exp" hidden>les modules couvrent le <em>digital learning</em> des séquences 1 et 3.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>Dossier à compléter par les stagiaires YB_BL.pptx</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1aBip6U9Ve41SBq2la0VnpgsCWPPgsINk/view">Ouvrir dans Drive</a></li>
@@ -293,7 +326,7 @@ active : prenez l'habitude de le remplir dès maintenant, même seul.</p>
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-01" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 1 — Lean, 6 Sigma &amp; Lean Six Sigma</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-01" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 1 — Lean, 6 Sigma &amp; Lean Six Sigma</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -312,6 +345,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Aucune notion statistique préalable n'est exigée.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 520 250" role="img" class="svg-anim"><path d="M205.0,210.0 L205.0,119.0 L206.8,116.0 L208.7,113.0 L210.5,110.0 L212.3,107.0 L214.2,104.0 L216.0,101.1 L217.8,98.2 L219.7,95.4 L221.5,92.6 L223.3,89.9 L225.2,87.3 L227.0,84.7 L228.8,82.2 L230.7,79.9 L232.5,77.6 L234.3,75.5 L236.2,73.4 L238.0,71.5 L239.8,69.8 L241.7,68.1 L243.5,66.6 L245.3,65.2 L247.2,64.0 L249.0,63.0 L250.8,62.1 L252.7,61.3 L254.5,60.7 L256.3,60.3 L258.2,60.1 L260.0,60.0 L261.8,60.1 L263.7,60.3 L265.5,60.7 L267.3,61.3 L269.2,62.1 L271.0,63.0 L272.8,64.0 L274.7,65.2 L276.5,66.6 L278.3,68.1 L280.2,69.8 L282.0,71.5 L283.8,73.4 L285.7,75.5 L287.5,77.6 L289.3,79.9 L291.2,82.2 L293.0,84.7 L294.8,87.3 L296.7,89.9 L298.5,92.6 L300.3,95.4 L302.2,98.2 L304.0,101.1 L305.8,104.0 L307.7,107.0 L309.5,110.0 L311.3,113.0 L313.2,116.0 L315.0,119.0 L315.0,210.0 Z" fill="#f6b400" opacity="0.30"/><line x1="40" y1="210" x2="480" y2="210" stroke="#9aa3b0" stroke-width="1.5"/><path d="M60.0,209.8 L63.3,209.7 L66.7,209.7 L70.0,209.6 L73.3,209.5 L76.7,209.4 L80.0,209.3 L83.3,209.1 L86.7,209.0 L90.0,208.7 L93.3,208.5 L96.7,208.2 L100.0,207.8 L103.3,207.4 L106.7,206.9 L110.0,206.4 L113.3,205.7 L116.7,205.0 L120.0,204.1 L123.3,203.2 L126.7,202.1 L130.0,200.8 L133.3,199.4 L136.7,197.9 L140.0,196.1 L143.3,194.2 L146.7,192.1 L150.0,189.7 L153.3,187.1 L156.7,184.3 L160.0,181.3 L163.3,178.0 L166.7,174.5 L170.0,170.7 L173.3,166.7 L176.7,162.4 L180.0,157.9 L183.3,153.2 L186.7,148.3 L190.0,143.3 L193.3,138.0 L196.7,132.7 L200.0,127.3 L203.3,121.8 L206.7,116.3 L210.0,110.8 L213.3,105.3 L216.7,100.0 L220.0,94.9 L223.3,89.9 L226.7,85.2 L230.0,80.7 L233.3,76.6 L236.7,72.9 L240.0,69.6 L243.3,66.7 L246.7,64.3 L250.0,62.5 L253.3,61.1 L256.7,60.3 L260.0,60.0 L263.3,60.3 L266.7,61.1 L270.0,62.5 L273.3,64.3 L276.7,66.7 L280.0,69.6 L283.3,72.9 L286.7,76.6 L290.0,80.7 L293.3,85.2 L296.7,89.9 L300.0,94.9 L303.3,100.0 L306.7,105.3 L310.0,110.8 L313.3,116.3 L316.7,121.8 L320.0,127.3 L323.3,132.7 L326.7,138.0 L330.0,143.3 L333.3,148.3 L336.7,153.2 L340.0,157.9 L343.3,162.4 L346.7,166.7 L350.0,170.7 L353.3,174.5 L356.7,178.0 L360.0,181.3 L363.3,184.3 L366.7,187.1 L370.0,189.7 L373.3,192.1 L376.7,194.2 L380.0,196.1 L383.3,197.9 L386.7,199.4 L390.0,200.8 L393.3,202.1 L396.7,203.2 L400.0,204.1 L403.3,205.0 L406.7,205.7 L410.0,206.4 L413.3,206.9 L416.7,207.4 L420.0,207.8 L423.3,208.2 L426.7,208.5 L430.0,208.7 L433.3,209.0 L436.7,209.1 L440.0,209.3 L443.3,209.4 L446.7,209.5 L450.0,209.6 L453.3,209.7 L456.7,209.7 L460.0,209.8" fill="none" stroke="#2563eb" stroke-width="3"/><line x1="95" y1="210" x2="95" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="95" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−3σ</text><line x1="150" y1="210" x2="150" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="150" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−2σ</text><line x1="205" y1="210" x2="205" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="205" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−1σ</text><line x1="260" y1="210" x2="260" y2="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="260" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="800">μ</text><line x1="315" y1="210" x2="315" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="315" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+1σ</text><line x1="370" y1="210" x2="370" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="370" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+2σ</text><line x1="425" y1="210" x2="425" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="425" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+3σ</text><text x="260" y="64" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">~68 % à ±1σ</text><text x="260" y="60" text-anchor="middle" fill="#5b6675" font-size="10.5" dy="-6">~95 % à ±2σ · ~99,7 % à ±3σ</text></svg><figcaption>La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ. Le « niveau sigma » mesure la capacité d'un processus.</figcaption></figure>
+
 <h3>1. Le contexte : un monde qui change</h3>
 <p>L'entreprise fait face à de <strong>nouveaux défis</strong> qui rendent l'amélioration permanente indispensable :
 - <strong>Exigences clients élevées</strong> sur le triptyque <strong>Q.C.D.</strong> (Qualité, Coût, Délai) ;
@@ -1329,39 +1364,8 @@ La clé pour atteindre la satisfaction client est de <strong>parler avec des don
 <li><strong>Kaizen = amélioration continue</strong>, infinie : « réaliser <strong>60 % dès maintenant</strong> » plutôt que viser la perfection.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Quelle phrase résume le mieux le couple Lean / 6 Sigma ?
-   - a) Lean = qualité, 6 Sigma = vitesse
-   - b) Lean = faire vite (flux, zéro Muda), 6 Sigma = faire bien (variabilité, défauts)
-   - c) Les deux servent uniquement à réduire les coûts salariaux
-   - d) Ce sont deux noms d'une même méthode identique</li>
-<li>Un processus <strong>6 Sigma</strong> produit combien de défauts par million d'opportunités (DPMO) ?
-   - a) 6 210 · b) 233 · c) 3,4 · d) 66 807</li>
-<li>Écrivez correctement la <strong>loi de Little</strong>.
-   - a) Lead Time = Taux d'achèvement × WIP
-   - b) Lead Time = WIP / Taux d'achèvement
-   - c) WIP = Lead Time × Taux d'achèvement / 2
-   - d) Taux d'achèvement = WIP × Lead Time</li>
-<li><strong>Vrai ou faux :</strong> « Le client ressent la moyenne du processus, pas sa variance. »</li>
-<li>D'après Deming, quelle part des problèmes provient de <strong>l'organisation des processus</strong> (et non des collaborateurs) ?
-   - a) 15 % · b) 50 % · c) 85 % · d) 100 %</li>
-<li>Pourquoi le rendement global d'un processus de <strong>40 étapes à ±3σ</strong> n'est-il que de <strong>6,29 %</strong> ?
-   - a) Parce que 3σ correspond à 6,29 % de bon par étape
-   - b) Parce que la qualité globale = (qualité d'une étape)^(nombre d'étapes), et 0,9332^40 ≈ 6,29 %
-   - c) Parce que le Lean supprime 94 % des étapes
-   - d) C'est une erreur de la table</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Lean adresse la <strong>vitesse/le flux</strong> (zéro Muda) ; 6 Sigma la <strong>qualité</strong> (réduction de la variabilité et des défauts).</li>
-<li><strong>c</strong> — un processus 6 Sigma ne produit que <strong>3,4 DPMO</strong> (99,9997 % de bon).</li>
-<li><strong>b</strong> — <strong>Lead Time = WIP / Taux moyen d'achèvement</strong> : on réduit le délai en baissant le WIP ou en augmentant la vitesse de sortie.</li>
-<li><strong>Faux</strong> — c'est l'inverse : <strong>le client ressent la variance, pas la moyenne</strong> ; une bonne moyenne masque des clients servis hors spécification.</li>
-<li><strong>c</strong> — <strong>85 %</strong> des problèmes viennent de l'organisation des processus, 15 % des collaborateurs.</li>
-<li><strong>b</strong> — la qualité se <strong>compose</strong> étape après étape : 93,32 % à la puissance 40 ≈ <strong>6,29 %</strong>. D'où l'intérêt de réduire le nombre d'étapes (Lean) <strong>et</strong> d'élever le niveau sigma (6 Sigma).</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quelle phrase résume le mieux le couple Lean / 6 Sigma ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Lean = qualité, 6 Sigma = vitesse</button><button type="button" class="opt" data-key="b"><b>b)</b> Lean = faire vite (flux, zéro Mud</button><button type="button" class="opt" data-key="a"><b>a)</b> , 6 Sigma = faire bien (variabilité, défauts)</button><button type="button" class="opt" data-key="c"><b>c)</b> Les deux servent uniquement à réduire les coûts salariaux</button><button type="button" class="opt" data-key="d"><b>d)</b> Ce sont deux noms d'une même méthode identique</button></div><div class="q-exp" hidden>Lean adresse la <strong>vitesse/le flux</strong> (zéro Muda) ; 6 Sigma la <strong>qualité</strong> (réduction de la variabilité et des défauts).</div></li><li class="q" data-correct="c"><div class="q-text">Un processus <strong>6 Sigma</strong> produit combien de défauts par million d'opportunités (DPMO) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 6 210</button><button type="button" class="opt" data-key="b"><b>b)</b> 233</button><button type="button" class="opt" data-key="c"><b>c)</b> 3,4</button><button type="button" class="opt" data-key="d"><b>d)</b> 66 807</button></div><div class="q-exp" hidden>un processus 6 Sigma ne produit que <strong>3,4 DPMO</strong> (99,9997 % de bon).</div></li><li class="q" data-correct="b"><div class="q-text">Écrivez correctement la <strong>loi de Little</strong>.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Lead Time = Taux d'achèvement × WIP</button><button type="button" class="opt" data-key="b"><b>b)</b> Lead Time = WIP / Taux d'achèvement</button><button type="button" class="opt" data-key="c"><b>c)</b> WIP = Lead Time × Taux d'achèvement / 2</button><button type="button" class="opt" data-key="d"><b>d)</b> Taux d'achèvement = WIP × Lead Time</button></div><div class="q-exp" hidden><strong>Lead Time = WIP / Taux moyen d'achèvement</strong> : on réduit le délai en baissant le WIP ou en augmentant la vitesse de sortie.</div></li><li class="q" data-correct="faux"><div class="q-text"><strong>Vrai ou faux :</strong> « Le client ressent la moyenne du processus, pas sa variance. »</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>c'est l'inverse : <strong>le client ressent la variance, pas la moyenne</strong> ; une bonne moyenne masque des clients servis hors spécification.</div></li><li class="q" data-correct="c"><div class="q-text">D'après Deming, quelle part des problèmes provient de <strong>l'organisation des processus</strong> (et non des collaborateurs) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 15 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 50 %</button><button type="button" class="opt" data-key="c"><b>c)</b> 85 %</button><button type="button" class="opt" data-key="d"><b>d)</b> 100 %</button></div><div class="q-exp" hidden><strong>85 %</strong> des problèmes viennent de l'organisation des processus, 15 % des collaborateurs.</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi le rendement global d'un processus de <strong>40 étapes à ±3σ</strong> n'est-il que de <strong>6,29 %</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Parce que 3σ correspond à 6,29 % de bon par étape</button><button type="button" class="opt" data-key="b"><b>b)</b> Parce que la qualité globale = (qualité d'une étape)^(nombre d'étapes), et 0,9332^40 ≈ 6,29 %</button><button type="button" class="opt" data-key="c"><b>c)</b> Parce que le Lean supprime 94 % des étapes</button><button type="button" class="opt" data-key="d"><b>d)</b> C'est une erreur de la table</button></div><div class="q-exp" hidden>la qualité se <strong>compose</strong> étape après étape : 93,32 % à la puissance 40 ≈ <strong>6,29 %</strong>. D'où l'intérêt de réduire le nombre d'étapes (Lean) <strong>et</strong> d'élever le niveau sigma (6 Sigma).</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>1. Qu'est-ce que le Lean.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1rz0D47faq6BqmckPs-yjLzvrg-__cCNs/view">Ouvrir dans Drive</a></li>
@@ -1373,7 +1377,7 @@ La clé pour atteindre la satisfaction client est de <strong>parler avec des don
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-02" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 2 — Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI &amp; Gemba</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-02" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 2 — Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI &amp; Gemba</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -1841,35 +1845,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li><strong>Productivité : Identifier → Éliminer le MUDA → Ajouter de la valeur.</strong></li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Quels sont les <strong>3 critères</strong> d'une activité à <strong>Valeur Ajoutée</strong> ?
-   - a) Rapide · pas chère · automatisée
-   - b) Intéresse le client · transformation réelle · bon du premier coup
-   - c) Documentée · contrôlée · standardisée · validée</li>
-<li>Associez correctement : <strong>MURA</strong> désigne…
-   - a) Le gaspillage · b) La variabilité (dérive d'un standard) · c) La surcharge des hommes et des machines</li>
-<li>Parmi ces 7 MUDA, lequel est considéré comme <strong>générant tous les autres</strong> ?
-   - a) Le Transport · b) La Surproduction · c) Les Défauts · d) L'Attente</li>
-<li>Vrai ou faux : <em>« Un niveau de stock élevé est plutôt une bonne chose car il masque les problèmes et lisse la production. »</em>
-   - a) Vrai · b) Faux</li>
-<li>Quelle est la <strong>première</strong> des 6 attitudes Gemba quand une anomalie survient ?
-   - a) Standardiser · b) Se rendre au Gemba · c) Appliquer les contre-mesures · d) Trouver la cause fondamentale</li>
-<li>Dans la démarche « MUDA et productivité », quel est l'<strong>ordre</strong> correct ?
-   - a) Ajouter de la valeur → Identifier → Éliminer
-   - b) Identifier le MUDA → Éliminer le MUDA → Ajouter de la valeur
-   - c) Éliminer → Standardiser → Contrôler</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — VA = <em>intéresse le client</em> + <em>transformation réelle</em> + <em>bon du premier coup</em>.</li>
-<li><strong>b</strong> — MURA = variabilité (tout ce qui fait dériver d'un standard). MUDA = gaspillage, MURI = surcharge.</li>
-<li><strong>b</strong> — La <strong>Surproduction</strong> fait perdre du temps et <strong>génère tous les autres MUDA</strong>.</li>
-<li><strong>b — Faux.</strong> Le stock <strong>masque</strong> les problèmes ; quand on le <strong>baisse</strong>, les problèmes apparaissent et l'amélioration devient possible.</li>
-<li><strong>b</strong> — On commence par <strong>se rendre au Gemba</strong> ; ensuite seulement on vérifie le fait réel (Gembutsu), etc.</li>
-<li><strong>b</strong> — Étape 1 <strong>Identifier</strong> → Étape 2 <strong>Éliminer</strong> → Étape 3 <strong>Ajouter de la valeur</strong>.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quels sont les <strong>3 critères</strong> d'une activité à <strong>Valeur Ajoutée</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Rapide · pas chère · automatisée</button><button type="button" class="opt" data-key="b"><b>b)</b> Intéresse le client · transformation réelle · bon du premier coup</button><button type="button" class="opt" data-key="c"><b>c)</b> Documentée · contrôlée · standardisée · validée</button></div><div class="q-exp" hidden>VA = <em>intéresse le client</em> + <em>transformation réelle</em> + <em>bon du premier coup</em>.</div></li><li class="q" data-correct="b"><div class="q-text">Associez correctement : <strong>MURA</strong> désigne…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Le gaspillage</button><button type="button" class="opt" data-key="b"><b>b)</b> La variabilité (dérive d'un standar</button><button type="button" class="opt" data-key="d"><b>d)</b> </button><button type="button" class="opt" data-key="c"><b>c)</b> La surcharge des hommes et des machines</button></div><div class="q-exp" hidden>MURA = variabilité (tout ce qui fait dériver d'un standard). MUDA = gaspillage, MURI = surcharge.</div></li><li class="q" data-correct="b"><div class="q-text">Parmi ces 7 MUDA, lequel est considéré comme <strong>générant tous les autres</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Le Transport</button><button type="button" class="opt" data-key="b"><b>b)</b> La Surproduction</button><button type="button" class="opt" data-key="c"><b>c)</b> Les Défauts</button><button type="button" class="opt" data-key="d"><b>d)</b> L'Attente</button></div><div class="q-exp" hidden>La <strong>Surproduction</strong> fait perdre du temps et <strong>génère tous les autres MUDA</strong>.</div></li><li class="q" data-correct="b"><div class="q-text">Vrai ou faux : <em>« Un niveau de stock élevé est plutôt une bonne chose car il masque les problèmes et lisse la production. »</em></div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Le stock <strong>masque</strong> les problèmes ; quand on le <strong>baisse</strong>, les problèmes apparaissent et l'amélioration devient possible.</div></li><li class="q" data-correct="b"><div class="q-text">Quelle est la <strong>première</strong> des 6 attitudes Gemba quand une anomalie survient ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Standardiser</button><button type="button" class="opt" data-key="b"><b>b)</b> Se rendre au Gemba</button><button type="button" class="opt" data-key="c"><b>c)</b> Appliquer les contre-mesures</button><button type="button" class="opt" data-key="d"><b>d)</b> Trouver la cause fondamentale</button></div><div class="q-exp" hidden>On commence par <strong>se rendre au Gemba</strong> ; ensuite seulement on vérifie le fait réel (Gembutsu), etc.</div></li><li class="q" data-correct="b"><div class="q-text">Dans la démarche « MUDA et productivité », quel est l'<strong>ordre</strong> correct ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Ajouter de la valeur → Identifier → Éliminer</button><button type="button" class="opt" data-key="b"><b>b)</b> Identifier le MUDA → Éliminer le MUDA → Ajouter de la valeur</button><button type="button" class="opt" data-key="c"><b>c)</b> Éliminer → Standardiser → Contrôler</button></div><div class="q-exp" hidden>Étape 1 <strong>Identifier</strong> → Étape 2 <strong>Éliminer</strong> → Étape 3 <strong>Ajouter de la valeur</strong>.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>4. Fiche outils_EO_VA-NVA MUDA-MURA-MURI_V1 .pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1eQ6l2VCZa48G0_VGaFjOoxJ3W8F4SK6i/view">Ouvrir dans Drive</a></li>
@@ -1879,7 +1856,7 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-03" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 3 — Les Fondements du Lean</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-03" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 3 — Les Fondements du Lean</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 35 min · 🎓 Niveau : Yellow Belt</p>
@@ -1897,6 +1874,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Module 2 — Les MUDA (les 7 gaspillages) : la notion de <em>Muda</em> est mobilisée ici.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 440 350" role="img" class="svg-anim"><polygon points="40,118 220,28 400,118" fill="#f6b400" class="seg"/><text x="220" y="84" text-anchor="middle" fill="#3a3320" font-size="15" font-weight="800">CLIENT</text><text x="220" y="104" text-anchor="middle" fill="#3a3320" font-size="11.5">Satisfaction Qualité · Coût · Délai</text><rect x="60" y="122" width="320" height="44" rx="4" fill="#0d9488" class="seg"/><text x="220" y="142" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Outils & Systèmes</text><text x="220" y="158" text-anchor="middle" fill="#e8edf4" font-size="10.5">méthodes et techniques</text><rect x="60" y="170" width="320" height="44" rx="4" fill="#2563eb" class="seg"/><text x="220" y="190" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">7 Concepts</text><text x="220" y="206" text-anchor="middle" fill="#e8edf4" font-size="10.5">savoir-être / attitude</text><rect x="60" y="218" width="320" height="44" rx="4" fill="#334155" class="seg"/><text x="220" y="238" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">3 Principes</text><text x="220" y="254" text-anchor="middle" fill="#e8edf4" font-size="10.5">état d'esprit</text><rect x="40" y="270" width="360" height="50" rx="4" fill="#b91c1c" class="seg"/><text x="220" y="291" text-anchor="middle" fill="#fff" font-size="13" font-weight="800">Lutte contre le MUDA (gaspillage)</text><text x="220" y="309" text-anchor="middle" fill="#ffe2e2" font-size="11">… à partir du GEMBA (le terrain)</text></svg><figcaption>Le Lean comme système : du socle (lutte contre le Muda, sur le Gemba) jusqu'à la satisfaction Client (Qualité · Coût · Délai).</figcaption></figure>
+
 <h3>1. Qu'est‑ce que « les fondements du Lean » ?</h3>
 <p>Les fondements du Lean <strong>permettent, à partir du gemba</strong> (le terrain, là où l'on crée la valeur), <strong>de satisfaire le client en QCD</strong> (Qualité, Coût, Délai) en mobilisant :
 - <strong>le bon état d'esprit</strong> → les <strong>3 principes</strong> ;
@@ -2305,39 +2284,8 @@ Au lieu de fonctions cloisonnées (R&amp;D, Marketing, Fabrication, Ventes, Serv
 <li>Les fondements se relient aux <strong>5 principes universels</strong> : <strong>valeur → flux de valeur → flux → flux tiré → perfection (Kaizen)</strong>.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Quels sont les <strong>3 principes</strong> du Lean (l'état d'esprit) ?
-   - a) Qualité, Coût, Délai
-   - b) Système global, Ne pas juger/blâmer, Processus et résultat
-   - c) Valeur, Flux, Perfection
-   - d) Plan, Do, Check, Act</li>
-<li>Que signifie « Le processus suivant est le client » ?
-   - a) Toujours livrer plus vite que prévu
-   - b) Ne pas recevoir, ne pas faire, ne pas transmettre un défaut
-   - c) Confier le contrôle qualité au client final
-   - d) Sous‑traiter l'inspection</li>
-<li>D'après le support, où coûte‑t‑il <strong>le plus cher</strong> de corriger un défaut ?
-   - a) Dès qu'il apparaît au poste · b) À l'inspection finale · c) Après réclamation du consommateur · d) Sur la chaîne d'assemblage</li>
-<li>Quelle est la définition d'un <strong>standard</strong> ?
-   - a) Une norme ISO imposée
-   - b) La meilleure manière, la plus facile et la plus sûre connue à ce jour
-   - c) La moyenne des pratiques de l'équipe
-   - d) Un objectif de production mensuel</li>
-<li><strong>Vrai ou faux</strong> : dans le paradigme Lean, face à un problème on cherche d'abord <strong>qui a tort</strong>.</li>
-<li>À quel principe universel du Lean correspond « ne produire que ce que le client demande, quand il le demande » ?
-   - a) La valeur · b) Le flux de valeur · c) Le flux tiré (<em>pull</em>) · d) La perfection</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Système global, Ne pas juger/ne pas blâmer, Processus et résultat (l'état d'esprit).</li>
-<li><strong>b</strong> — chaque poste protège son client aval : ne pas recevoir / ne pas faire / ne pas transmettre un défaut.</li>
-<li><strong>c</strong> — le coût est <strong>maximal après réclamation du consommateur</strong> ; minimal <strong>dès l'apparition</strong> au poste.</li>
-<li><strong>b</strong> — <em>la meilleure manière, la plus facile et la plus sûre connue à ce jour</em> ; et <strong>un seul standard à la fois</strong>.</li>
-<li><strong>Faux</strong> — le Lean manager ne cherche <strong>jamais un coupable</strong> mais une <strong>solution</strong> ; on demande d'abord « qu'est‑ce qui ne va pas ? » et « y a‑t‑il un standard ? ».</li>
-<li><strong>c</strong> — le <strong>flux tiré</strong> (<em>pull</em>) : la demande client déclenche la production.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quels sont les <strong>3 principes</strong> du Lean (l'état d'esprit) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Qualité, Coût, Délai</button><button type="button" class="opt" data-key="b"><b>b)</b> Système global, Ne pas juger/blâmer, Processus et résultat</button><button type="button" class="opt" data-key="c"><b>c)</b> Valeur, Flux, Perfection</button><button type="button" class="opt" data-key="d"><b>d)</b> Plan, Do, Check, Act</button></div><div class="q-exp" hidden>Système global, Ne pas juger/ne pas blâmer, Processus et résultat (l'état d'esprit).</div></li><li class="q" data-correct="b"><div class="q-text">Que signifie « Le processus suivant est le client » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Toujours livrer plus vite que prévu</button><button type="button" class="opt" data-key="b"><b>b)</b> Ne pas recevoir, ne pas faire, ne pas transmettre un défaut</button><button type="button" class="opt" data-key="c"><b>c)</b> Confier le contrôle qualité au client final</button><button type="button" class="opt" data-key="d"><b>d)</b> Sous‑traiter l'inspection</button></div><div class="q-exp" hidden>chaque poste protège son client aval : ne pas recevoir / ne pas faire / ne pas transmettre un défaut.</div></li><li class="q" data-correct="c"><div class="q-text">D'après le support, où coûte‑t‑il <strong>le plus cher</strong> de corriger un défaut ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Dès qu'il apparaît au poste</button><button type="button" class="opt" data-key="b"><b>b)</b> À l'inspection finale</button><button type="button" class="opt" data-key="c"><b>c)</b> Après réclamation du consommateur</button><button type="button" class="opt" data-key="d"><b>d)</b> Sur la chaîne d'assemblage</button></div><div class="q-exp" hidden>le coût est <strong>maximal après réclamation du consommateur</strong> ; minimal <strong>dès l'apparition</strong> au poste.</div></li><li class="q" data-correct="b"><div class="q-text">Quelle est la définition d'un <strong>standard</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Une norme ISO imposée</button><button type="button" class="opt" data-key="b"><b>b)</b> La meilleure manière, la plus facile et la plus sûre connue à ce jour</button><button type="button" class="opt" data-key="c"><b>c)</b> La moyenne des pratiques de l'équipe</button><button type="button" class="opt" data-key="d"><b>d)</b> Un objectif de production mensuel</button></div><div class="q-exp" hidden><em>la meilleure manière, la plus facile et la plus sûre connue à ce jour</em> ; et <strong>un seul standard à la fois</strong>.</div></li><li class="q" data-correct="faux"><div class="q-text"><strong>Vrai ou faux</strong> : dans le paradigme Lean, face à un problème on cherche d'abord <strong>qui a tort</strong>.</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>le Lean manager ne cherche <strong>jamais un coupable</strong> mais une <strong>solution</strong> ; on demande d'abord « qu'est‑ce qui ne va pas ? » et « y a‑t‑il un standard ? ».</div></li><li class="q" data-correct="c"><div class="q-text">À quel principe universel du Lean correspond « ne produire que ce que le client demande, quand il le demande » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La valeur</button><button type="button" class="opt" data-key="b"><b>b)</b> Le flux de valeur</button><button type="button" class="opt" data-key="c"><b>c)</b> Le flux tiré (<em>pull</em>)</button><button type="button" class="opt" data-key="d"><b>d)</b> La perfection</button></div><div class="q-exp" hidden>le <strong>flux tiré</strong> (<em>pull</em>) : la demande client déclenche la production.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>5. Les Fondements du Lean.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13VEH88oxxBdTl2NjWzDwUgRFaXaRMtfy/view">Ouvrir dans Drive</a></li>
@@ -2348,7 +2296,7 @@ Au lieu de fonctions cloisonnées (R&amp;D, Marketing, Fabrication, Ventes, Serv
 </blockquote>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-04" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 4 — Les Paradigmes</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-04" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 4 — Les Paradigmes</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 25 min · 🎓 Niveau : Yellow Belt</p>
@@ -2533,45 +2481,8 @@ efficaces) sont à conserver — d'où l'importance de bien distinguer <em>bén�
 <li>Les <strong>innovations</strong> et les changements de paradigme viennent le plus souvent d'un <strong>regard extérieur</strong> au système.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Qu'est-ce qu'un paradigme, selon la définition du support ?
-   - a) Une procédure qualité certifiée
-   - b) Un modèle, une règle ou une habitude qui influence notre manière d'interpréter une situation ou une information
-   - c) Un indicateur de performance
-   - d) Une étape de la méthode DMAIC</li>
-<li>Les deux types de règles d'un paradigme sont :
-   - a) Internes et externes
-   - b) Bénéfiques et nuisibles
-   - c) Explicites et implicites
-   - d) Écrites et orales</li>
-<li>L'influence d'un paradigme est :
-   - a) Toujours nuisible
-   - b) Toujours bénéfique
-   - c) Parfois bénéfique, parfois nuisible
-   - d) Sans effet sur le comportement</li>
-<li>Que faut-il faire, d'après la Fiche Outil, quand la résolution d'un problème devient difficile ?
-   - a) Augmenter les moyens sans rien changer d'autre
-   - b) Se poser la question d'un changement de paradigme
-   - c) Abandonner le problème
-   - d) Attendre le formateur</li>
-<li>D'où viennent généralement les changements de paradigme ?
-   - a) De personnes ayant un regard extérieur sur le système
-   - b) De la direction uniquement
-   - c) D'un logiciel
-   - d) Du hasard</li>
-<li>Vrai ou faux : pour obtenir un changement <strong>durable</strong>, il suffit d'agir sur les comportements visibles sans toucher à la perception.</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — c'est la définition exacte du support : un modèle/règle/habitude qui influence notre interprétation.</li>
-<li><strong>c</strong> — un paradigme est un système de règles <strong>explicites ou implicites</strong>.</li>
-<li><strong>c</strong> — elle est parfois <strong>bénéfique</strong>, parfois <strong>nuisible</strong> : tout l'enjeu est de distinguer les deux.</li>
-<li><strong>b</strong> — la difficulté persistante est un <strong>signal</strong> invitant à changer de paradigme (Fiche Outil).</li>
-<li><strong>a</strong> — ils sont généralement <strong>provoqués par un regard extérieur</strong> au système.</li>
-<li><strong>Faux</strong> — selon le Cercle du changement, le changement durable part de la <strong>perception / du mode de pensée</strong> ; agir seulement sur les comportements donne un changement fragile.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Qu'est-ce qu'un paradigme, selon la définition du support ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Une procédure qualité certifiée</button><button type="button" class="opt" data-key="b"><b>b)</b> Un modèle, une règle ou une habitude qui influence notre manière d'interpréter une situation ou une information</button><button type="button" class="opt" data-key="c"><b>c)</b> Un indicateur de performance</button><button type="button" class="opt" data-key="d"><b>d)</b> Une étape de la méthode DMAIC</button></div><div class="q-exp" hidden>c'est la définition exacte du support : un modèle/règle/habitude qui influence notre interprétation.</div></li><li class="q" data-correct="c"><div class="q-text">Les deux types de règles d'un paradigme sont :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Internes et externes</button><button type="button" class="opt" data-key="b"><b>b)</b> Bénéfiques et nuisibles</button><button type="button" class="opt" data-key="c"><b>c)</b> Explicites et implicites</button><button type="button" class="opt" data-key="d"><b>d)</b> Écrites et orales</button></div><div class="q-exp" hidden>un paradigme est un système de règles <strong>explicites ou implicites</strong>.</div></li><li class="q" data-correct="c"><div class="q-text">L'influence d'un paradigme est :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Toujours nuisible</button><button type="button" class="opt" data-key="b"><b>b)</b> Toujours bénéfique</button><button type="button" class="opt" data-key="c"><b>c)</b> Parfois bénéfique, parfois nuisible</button><button type="button" class="opt" data-key="d"><b>d)</b> Sans effet sur le comportement</button></div><div class="q-exp" hidden>elle est parfois <strong>bénéfique</strong>, parfois <strong>nuisible</strong> : tout l'enjeu est de distinguer les deux.</div></li><li class="q" data-correct="b"><div class="q-text">Que faut-il faire, d'après la Fiche Outil, quand la résolution d'un problème devient difficile ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Augmenter les moyens sans rien changer d'autre</button><button type="button" class="opt" data-key="b"><b>b)</b> Se poser la question d'un changement de paradigme</button><button type="button" class="opt" data-key="c"><b>c)</b> Abandonner le problème</button><button type="button" class="opt" data-key="d"><b>d)</b> Attendre le formateur</button></div><div class="q-exp" hidden>la difficulté persistante est un <strong>signal</strong> invitant à changer de paradigme (Fiche Outil).</div></li><li class="q" data-correct="a"><div class="q-text">D'où viennent généralement les changements de paradigme ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> De personnes ayant un regard extérieur sur le système</button><button type="button" class="opt" data-key="b"><b>b)</b> De la direction uniquement</button><button type="button" class="opt" data-key="c"><b>c)</b> D'un logiciel</button><button type="button" class="opt" data-key="d"><b>d)</b> Du hasard</button></div><div class="q-exp" hidden>ils sont généralement <strong>provoqués par un regard extérieur</strong> au système.</div></li><li class="q" data-correct="faux"><div class="q-text">Vrai ou faux : pour obtenir un changement <strong>durable</strong>, il suffit d'agir sur les comportements visibles sans toucher à la perception.</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>selon le Cercle du changement, le changement durable part de la <strong>perception / du mode de pensée</strong> ; agir seulement sur les comportements donne un changement fragile.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>6. Les Paradigmes.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/173YKgfMMQt0HNmC38dyQtDpNiNztx5X2/view">Ouvrir dans Drive</a></li>
@@ -2579,7 +2490,7 @@ efficaces) sont à conserver — d'où l'importance de bien distinguer <em>bén�
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-05" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 5 — Management Lean &amp; Diagramme de Nemoto</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-05" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 5 — Management Lean &amp; Diagramme de Nemoto</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -3091,31 +3002,8 @@ Lean et le diagramme de Nemoto.</p>
 <li>Style cible : <strong>« Trouvons ensemble des solutions ! »</strong> — ni directif extrême, ni délégation extrême. <strong>Masse critique de changement : 50 %</strong> de l'effectif.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Selon l'état d'esprit Lean, que faut-il viser plutôt que la perfection ?
-   - a) 100 % parfaitement planifié · b) <strong>60 % réalisés dès maintenant</strong> · c) Attendre l'idée géniale d'une seule personne · d) Ne rien faire avant validation finale</li>
-<li>Combien de questions le manager Lean se pose-t-il face à un problème ?
-   - a) 3 · b) 5 · c) <strong>6</strong> · d) 10</li>
-<li>Dans le management Lean, le flux <strong>Bottom Up</strong> correspond surtout à :
-   - a) Donner les objectifs (Policy Management) · b) <strong>Faire remonter les idées (Daily Management), position d'aide et d'animation</strong> · c) Sanctionner les écarts · d) Définir la stratégie long terme</li>
-<li>Dans le <strong>diagramme de Nemoto</strong>, quel est le rôle du <strong>management intermédiaire</strong> ?
-   - a) Créer directement la valeur ajoutée · b) Délivrer la vision stratégique · c) <strong>Distribuer les objectifs, définir/améliorer les standards et passer beaucoup de temps à aider les opérateurs</strong> · d) Aucun rôle dans l'amélioration</li>
-<li>Quelle phrase caractérise le <strong>Manager Lean</strong> (et non un extrême) ?
-   - a) « Vous faites ce que je vous dis et c'est tout ! » · b) « Peu importe comment, tant que vous avez les résultats ! » · c) <strong>« Trouvons ensemble des solutions à nos problèmes ! »</strong> · d) « Je m'occupe de tout moi-même. »</li>
-<li>La masse critique estimée pour déclencher un changement de culture est de :
-   - a) 10 % · b) 25 % · c) <strong>50 %</strong> · d) 100 % de l'effectif</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — « Ne pas chercher la perfection, réaliser 60 % dès maintenant. »</li>
-<li><strong>c</strong> — les <strong>6 questions</strong> du manager Lean, du travail réel jusqu'à la preuve de résolution.</li>
-<li><strong>b</strong> — Bottom Up = <strong>position d'aide et d'animation</strong>, remontée des idées via le <strong>Daily Management</strong> ; le Top Down (objectifs/Policy Management) est descendant.</li>
-<li><strong>c</strong> — le management intermédiaire <strong>distribue les objectifs, définit/améliore les standards</strong> et consacre <strong>une grande partie de son temps à aider les opérateurs</strong>.</li>
-<li><strong>c</strong> — le Manager Lean engage et responsabilise : « Trouvons ensemble des solutions ! », à mi-chemin du directif extrême et de la délégation extrême.</li>
-<li><strong>c</strong> — la masse critique est estimée à <strong>50 %</strong> de la population de l'entreprise.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Selon l'état d'esprit Lean, que faut-il viser plutôt que la perfection ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 100 % parfaitement planifié</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>60 % réalisés dès maintenant</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Attendre l'idée géniale d'une seule personne</button><button type="button" class="opt" data-key="d"><b>d)</b> Ne rien faire avant validation finale</button></div><div class="q-exp" hidden>« Ne pas chercher la perfection, réaliser 60 % dès maintenant. »</div></li><li class="q" data-correct="c"><div class="q-text">Combien de questions le manager Lean se pose-t-il face à un problème ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 3</button><button type="button" class="opt" data-key="b"><b>b)</b> 5</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>6</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> 10</button></div><div class="q-exp" hidden>les <strong>6 questions</strong> du manager Lean, du travail réel jusqu'à la preuve de résolution.</div></li><li class="q" data-correct="b"><div class="q-text">Dans le management Lean, le flux <strong>Bottom Up</strong> correspond surtout à :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Donner les objectifs (Policy Management)</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>Faire remonter les idées (Daily Management), position d'aide et d'animation</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Sanctionner les écarts</button><button type="button" class="opt" data-key="d"><b>d)</b> Définir la stratégie long terme</button></div><div class="q-exp" hidden>Bottom Up = <strong>position d'aide et d'animation</strong>, remontée des idées via le <strong>Daily Management</strong> ; le Top Down (objectifs/Policy Management) est descendant.</div></li><li class="q" data-correct="c"><div class="q-text">Dans le <strong>diagramme de Nemoto</strong>, quel est le rôle du <strong>management intermédiaire</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Créer directement la valeur ajoutée</button><button type="button" class="opt" data-key="b"><b>b)</b> Délivrer la vision stratégique</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>Distribuer les objectifs, définir/améliorer les standards et passer beaucoup de temps à aider les opérateurs</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> Aucun rôle dans l'amélioration</button></div><div class="q-exp" hidden>le management intermédiaire <strong>distribue les objectifs, définit/améliore les standards</strong> et consacre <strong>une grande partie de son temps à aider les opérateurs</strong>.</div></li><li class="q" data-correct="c"><div class="q-text">Quelle phrase caractérise le <strong>Manager Lean</strong> (et non un extrême) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> « Vous faites ce que je vous dis et c'est tout ! »</button><button type="button" class="opt" data-key="b"><b>b)</b> « Peu importe comment, tant que vous avez les résultats ! »</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>« Trouvons ensemble des solutions à nos problèmes ! »</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> « Je m'occupe de tout moi-même. »</button></div><div class="q-exp" hidden>le Manager Lean engage et responsabilise : « Trouvons ensemble des solutions ! », à mi-chemin du directif extrême et de la délégation extrême.</div></li><li class="q" data-correct="c"><div class="q-text">La masse critique estimée pour déclencher un changement de culture est de :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 10 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 25 %</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>50 %</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> 100 % de l'effectif</button></div><div class="q-exp" hidden>la masse critique est estimée à <strong>50 %</strong> de la population de l'entreprise.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>7. Comportements_Manageriaux_Lean_MGT_v4.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-8jEuw6_kvQnryJHlmKeyd6I6zJ95TOS/view">Ouvrir dans Drive</a></li>
@@ -3131,7 +3019,7 @@ support, à consulter dans Drive.</p>
 </blockquote>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-06" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 6 — Standards &amp; Standardisation</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-06" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 6 — Standards &amp; Standardisation</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -3506,38 +3394,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>On observe le terrain avec <strong>2 grilles</strong> : la <strong>5M</strong> (Matière, Méthodes, Milieu, Moyens, Main-d'œuvre) et la <strong>STANDARDS</strong> (Qualité, Coûts, Délais, Gestion des Hommes).</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Quelle est la définition exacte d'un standard ?
-   - a) La procédure imposée par la direction
-   - b) La meilleure façon <strong>connue à ce jour et utilisée</strong> pour effectuer une tâche ou un processus
-   - c) La façon la plus rapide de produire, quelle que soit la qualité
-   - d) Un document d'archive non modifiable</li>
-<li>Selon Taiichi Ohno, quelle est la première étape avant l'amélioration ?
-   - a) La mesure · b) La standardisation · c) La formation · d) L'investissement</li>
-<li>À quoi sert le cycle <strong>SDCA</strong> par rapport au <strong>PDCA</strong> ?
-   - a) À remplacer le PDCA
-   - b) À <strong>standardiser/caler</strong> le niveau atteint avant d'améliorer avec le PDCA
-   - c) À auditer les fournisseurs · d) À calculer le DPMO</li>
-<li>Dans la <strong>Fenêtre Lean</strong>, si les standards existent et que le personnel <strong>les connaît</strong>, mais qu'un problème persiste, que fait-on ?
-   - a) On forme l'opérateur · b) On formalise le standard · c) On <strong>remet en cause le standard</strong> · d) On ignore le problème</li>
-<li>Quels sont les <strong>5M</strong> de la grille d'observation du Gemba ?
-   - a) Marché, Marge, Méthode, Machine, Mesure
-   - b) <strong>Matière, Méthodes, Milieu, Moyens, Main-d'œuvre</strong>
-   - c) Management, Money, Machine, Matériel, Main-d'œuvre</li>
-<li>Vrai ou faux : un standard rédigé mais <strong>non appliqué</strong> est quand même un standard valable.
-   - a) Vrai · b) Faux</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — la définition insiste sur « connue à ce jour » (évolutive) <strong>et</strong> « utilisée » (réellement appliquée).</li>
-<li><strong>b</strong> — « Là où il n'y a pas de standard, il ne peut pas y avoir d'amélioration. »</li>
-<li><strong>b</strong> — le SDCA fait office de <strong>cale</strong> (palier) ; le PDCA fait monter la performance.</li>
-<li><strong>c</strong> — standards présents <strong>et</strong> connus mais inefficaces → on <strong>remet en cause</strong> (améliore) le standard.</li>
-<li><strong>b</strong> — Matière, Méthodes, Milieu, Moyens, Main-d'œuvre.</li>
-<li><strong>b (Faux)</strong> — un standard non <em>utilisé</em> n'est pas un standard ; il doit être appliqué.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quelle est la définition exacte d'un standard ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La procédure imposée par la direction</button><button type="button" class="opt" data-key="b"><b>b)</b> La meilleure façon <strong>connue à ce jour et utilisée</strong> pour effectuer une tâche ou un processus</button><button type="button" class="opt" data-key="c"><b>c)</b> La façon la plus rapide de produire, quelle que soit la qualité</button><button type="button" class="opt" data-key="d"><b>d)</b> Un document d'archive non modifiable</button></div><div class="q-exp" hidden>la définition insiste sur « connue à ce jour » (évolutive) <strong>et</strong> « utilisée » (réellement appliquée).</div></li><li class="q" data-correct="b"><div class="q-text">Selon Taiichi Ohno, quelle est la première étape avant l'amélioration ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La mesure</button><button type="button" class="opt" data-key="b"><b>b)</b> La standardisation</button><button type="button" class="opt" data-key="c"><b>c)</b> La formation</button><button type="button" class="opt" data-key="d"><b>d)</b> L'investissement</button></div><div class="q-exp" hidden>« Là où il n'y a pas de standard, il ne peut pas y avoir d'amélioration. »</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert le cycle <strong>SDCA</strong> par rapport au <strong>PDCA</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À remplacer le PDCA</button><button type="button" class="opt" data-key="b"><b>b)</b> À <strong>standardiser/caler</strong> le niveau atteint avant d'améliorer avec le PDCA</button><button type="button" class="opt" data-key="c"><b>c)</b> À auditer les fournisseurs</button><button type="button" class="opt" data-key="d"><b>d)</b> À calculer le DPMO</button></div><div class="q-exp" hidden>le SDCA fait office de <strong>cale</strong> (palier) ; le PDCA fait monter la performance.</div></li><li class="q" data-correct="c"><div class="q-text">Dans la <strong>Fenêtre Lean</strong>, si les standards existent et que le personnel <strong>les connaît</strong>, mais qu'un problème persiste, que fait-on ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> On forme l'opérateur</button><button type="button" class="opt" data-key="b"><b>b)</b> On formalise le standard</button><button type="button" class="opt" data-key="c"><b>c)</b> On <strong>remet en cause le standard</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> On ignore le problème</button></div><div class="q-exp" hidden>standards présents <strong>et</strong> connus mais inefficaces → on <strong>remet en cause</strong> (améliore) le standard.</div></li><li class="q" data-correct="b"><div class="q-text">Quels sont les <strong>5M</strong> de la grille d'observation du Gemba ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Marché, Marge, Méthode, Machine, Mesure</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>Matière, Méthodes, Milieu, Moyens, Main-d'œuvre</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Management, Money, Machine, Matériel, Main-d'œuvre</button></div><div class="q-exp" hidden>Matière, Méthodes, Milieu, Moyens, Main-d'œuvre.</div></li><li class="q" data-correct="b"><div class="q-text">Vrai ou faux : un standard rédigé mais <strong>non appliqué</strong> est quand même un standard valable.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>un standard non <em>utilisé</em> n'est pas un standard ; il doit être appliqué.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>8. Standards.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/16RtP7cQbDR94FTpSE6Vzdg7AvdFecgRp/view">Ouvrir dans Drive</a></li>
@@ -3547,7 +3405,7 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-07" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 7 — Les 5S</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-07" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 7 — Les 5S</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 35 min · 🎓 Niveau : Yellow Belt</p>
@@ -3566,6 +3424,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>À défaut, aucun prérequis bloquant : le module se lit seul.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 380 380" role="img" class="svg-anim"><path d="M190.0,12.0 A178.0,178.0 0 0 1 357.3,129.1 L282.1,156.5 A98.0,98.0 0 0 0 190.0,92.0 Z" fill="#dc2626" class="seg"><title>1S — Éliminer · Seiri</title></path><text x="276" y="67" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">1S</text><text x="257" y="95" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Éliminer · Seiri</text><path d="M359.3,135.0 A178.0,178.0 0 0 1 299.6,330.3 L250.3,267.2 A98.0,98.0 0 0 0 283.2,159.7 Z" fill="#d97706" class="seg"><title>2S — Ranger · Seiton</title></path><text x="333" y="234" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">2S</text><text x="301" y="224" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Ranger · Seiton</text><path d="M294.6,334.0 A178.0,178.0 0 0 1 90.5,337.6 L135.2,271.2 A98.0,98.0 0 0 0 247.6,269.3 Z" fill="#0d9488" class="seg"><title>3S — Nettoyer · Seiso</title></path><text x="193" y="340" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">3S</text><text x="192" y="306" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Nettoyer · Seiso</text><path d="M85.4,334.0 A178.0,178.0 0 0 1 18.9,140.9 L95.8,163.0 A98.0,98.0 0 0 0 132.4,269.3 Z" fill="#2563eb" class="seg"><title>4S — Standardiser · Seiketsu</title></path><text x="48" y="239" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">4S</text><text x="80" y="228" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Standardiser · Seiketsu</text><path d="M20.7,135.0 A178.0,178.0 0 0 1 183.8,12.1 L186.6,92.1 A98.0,98.0 0 0 0 96.8,159.7 Z" fill="#7c3aed" class="seg"><title>5S — Respecter · Shitsuke</title></path><text x="100" y="70" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">5S</text><text x="120" y="97" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Respecter · Shitsuke</text><circle cx="190.0" cy="190.0" r="92.0" fill="#222b38"/><text x="190.0" y="184.0" text-anchor="middle" fill="#f6b400" font-size="30" font-weight="800">5S</text><text x="190.0" y="208.0" text-anchor="middle" fill="#cbd2db" font-size="12">poste rangé & tenu</text><text x="190.0" y="26" text-anchor="middle" fill="#222b38" font-size="20">↻</text></svg><figcaption>Les 5S : un cycle en 5 étapes pour un poste rangé, propre et tenu dans la durée.</figcaption></figure>
+
 <h3>1. Pourquoi les 5S ? Le nouvel objectif</h3>
 <p>Dans l'ère concurrentielle, <strong>réduire le coût de production par l'élimination des Muda est indispensable</strong>. Les 5S sont l'outil de base pour y parvenir : ils instaurent un environnement de travail clair et organisé, condition préalable à toute performance.</p>
 <blockquote>
@@ -3857,41 +3717,8 @@ On vise un <strong>résultat à la fermeture du 1ᵉʳ S</strong> exprimé en % 
 <li><strong>Sécurité → Efficacité → Prospérité.</strong></li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Quel est le <strong>bon ordre</strong> des 5S ?
-   - a) Ranger · Éliminer · Nettoyer · Standardiser · Pérenniser
-   - b) Éliminer (Seiri) · Ranger (Seiton) · Nettoyer-Inspecter (Seiso) · Standardiser (Seiketsu) · Respecter/Pérenniser (Shitsuke)
-   - c) Nettoyer · Ranger · Éliminer · Pérenniser · Standardiser</li>
-<li>À quoi sert principalement le <strong>3S (Seiso)</strong> ?
-   - a) Uniquement à faire briller les surfaces
-   - b) À <strong>nettoyer pour inspecter</strong> et <strong>détecter les anomalies</strong> (fuites, jeux, usures)
-   - c) À jeter les objets inutiles</li>
-<li>Lors du <strong>1S (Seiri)</strong>, que met-on en place pour les objets douteux ?
-   - a) Une étagère définitive supplémentaire
-   - b) Une <strong>« Zone d'objets inutiles »</strong> avec tri sélectif et <strong>date-butoir</strong>
-   - c) Rien, on jette tout immédiatement</li>
-<li><strong>Vrai ou faux :</strong> les 5S sont une opération ponctuelle qui se termine une fois la 4ᵉ étape atteinte.
-   - a) Vrai · b) Faux</li>
-<li>Dans la grille d'audit, que signifie la cotation <strong>0 / 1 / 2</strong> ?
-   - a) 0 = bien, 1 = moyen, 2 = insuffisant
-   - b) <strong>0 = insuffisant, 1 = moyen, 2 = bien</strong>
-   - c) Un pourcentage d'avancement</li>
-<li>Pourquoi dit-on que les obstacles aux 5S sont « une question de <strong>management</strong> » ?
-   - a) Parce que les opérateurs refusent de participer
-   - b) Parce que les managers (pompiers, studieux, « c'est trop simple ») ne s'y engagent pas vraiment
-   - c) Parce que les 5S coûtent trop cher</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Seiri → Seiton → Seiso → Seiketsu → Shitsuke, dans cet ordre.</li>
-<li><strong>b</strong> — « nettoyer, c'est inspecter » : le 3S rend les anomalies visibles et en cherche les causes.</li>
-<li><strong>b</strong> — une zone d'objets inutiles, avec tri sélectif des déchets et une date-butoir pour la vider.</li>
-<li><strong>b (Faux)</strong> — le processus 5S est <strong>infini</strong> ; le 5S (Shitsuke) entretient et fait progresser la boucle.</li>
-<li><strong>b</strong> — 0 = insuffisant, 1 = moyen, 2 = bien ; le total est ensuite converti en %.</li>
-<li><strong>b</strong> — le support cite le paradoxe « c'est trop simple », les managers pompiers et les managers studieux.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quel est le <strong>bon ordre</strong> des 5S ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Ranger · Éliminer · Nettoyer · Standardiser · Pérenniser</button><button type="button" class="opt" data-key="b"><b>b)</b> Éliminer (Seiri) · Ranger (Seiton) · Nettoyer-Inspecter (Seiso) · Standardiser (Seiketsu) · Respecter/Pérenniser (Shitsuke)</button><button type="button" class="opt" data-key="c"><b>c)</b> Nettoyer · Ranger · Éliminer · Pérenniser · Standardiser</button></div><div class="q-exp" hidden>Seiri → Seiton → Seiso → Seiketsu → Shitsuke, dans cet ordre.</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert principalement le <strong>3S (Seiso)</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Uniquement à faire briller les surfaces</button><button type="button" class="opt" data-key="b"><b>b)</b> À <strong>nettoyer pour inspecter</strong> et <strong>détecter les anomalies</strong> (fuites, jeux, usures)</button><button type="button" class="opt" data-key="c"><b>c)</b> À jeter les objets inutiles</button></div><div class="q-exp" hidden>« nettoyer, c'est inspecter » : le 3S rend les anomalies visibles et en cherche les causes.</div></li><li class="q" data-correct="b"><div class="q-text">Lors du <strong>1S (Seiri)</strong>, que met-on en place pour les objets douteux ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Une étagère définitive supplémentaire</button><button type="button" class="opt" data-key="b"><b>b)</b> Une <strong>« Zone d'objets inutiles »</strong> avec tri sélectif et <strong>date-butoir</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Rien, on jette tout immédiatement</button></div><div class="q-exp" hidden>une zone d'objets inutiles, avec tri sélectif des déchets et une date-butoir pour la vider.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux :</strong> les 5S sont une opération ponctuelle qui se termine une fois la 4ᵉ étape atteinte.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>le processus 5S est <strong>infini</strong> ; le 5S (Shitsuke) entretient et fait progresser la boucle.</div></li><li class="q" data-correct="b"><div class="q-text">Dans la grille d'audit, que signifie la cotation <strong>0 / 1 / 2</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 0 = bien, 1 = moyen, 2 = insuffisant</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>0 = insuffisant, 1 = moyen, 2 = bien</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Un pourcentage d'avancement</button></div><div class="q-exp" hidden>0 = insuffisant, 1 = moyen, 2 = bien ; le total est ensuite converti en %.</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi dit-on que les obstacles aux 5S sont « une question de <strong>management</strong> » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Parce que les opérateurs refusent de participer</button><button type="button" class="opt" data-key="b"><b>b)</b> Parce que les managers (pompiers, studieux, « c'est trop simple ») ne s'y engagent pas vraiment</button><button type="button" class="opt" data-key="c"><b>c)</b> Parce que les 5S coûtent trop cher</button></div><div class="q-exp" hidden>le support cite le paradoxe « c'est trop simple », les managers pompiers et les managers studieux.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>9. Les 5S dans l'Usine.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1lDvTOW_MB9OLj42JNbigtx928311MmMu/view">Ouvrir dans Drive</a></li>
@@ -3906,7 +3733,7 @@ On vise un <strong>résultat à la fermeture du 1ᵉʳ S</strong> exprimé en % 
 </blockquote>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-08" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 8 — Le Management Visuel</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-08" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 8 — Le Management Visuel</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -4216,47 +4043,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Le visuel <strong>responsabilise</strong> l'équipe et <strong>fait évoluer</strong> le manager vers l'animation.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Que signifie « management visuel » ?
-   - a) Décorer l'atelier avec des affiches
-   - b) Gérer par la vue : rendre la situation visible et pilotable d'un coup d'œil
-   - c) Surveiller les opérateurs par caméra
-   - d) Faire des reportings hebdomadaires en réunion</li>
-<li>Quels sont les trois sommets du <strong>Triangle d'Or</strong> du management visuel ?
-   - a) Sécurité, Qualité, Coût
-   - b) Définition, Création, Amélioration
-   - c) Standard opératoire, Standard de management, Management visuel
-   - d) Voir, Comprendre, Agir</li>
-<li>Selon « CONFIRMEZ VOTRE PROCESSUS », un standard solide doit être :
-   - a) Long, détaillé et signé
-   - b) Appliqué, à jour et connu
-   - c) Numérique, imprimé et plastifié
-   - d) Validé par la direction uniquement</li>
-<li>Vrai ou faux : un management visuel où l'écart est visible mais <strong>n'entraîne aucune réaction</strong> remplit son rôle.
-   - a) Vrai
-   - b) Faux</li>
-<li>À quoi sert principalement le management visuel pour le manager ?
-   - a) À remplacer l'équipe
-   - b) À piloter le Gemba par le visuel et faire évoluer son rôle vers l'animation/l'autonomie
-   - c) À supprimer les standards
-   - d) À centraliser toute l'information dans son bureau</li>
-<li>Quel est le test simple pour valider qu'un visuel est lisible ?
-   - a) Qu'il soit en couleur
-   - b) Qu'une personne non initiée comprenne la situation en quelques secondes, sans explication
-   - c) Qu'il tienne sur un A4
-   - d) Qu'il soit validé en réunion</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Le management visuel, c'est « la gestion par la vue » : rendre la situation visible et pilotable d'un coup d'œil.</li>
-<li><strong>c</strong> — Le Triangle d'Or relie <strong>standard opératoire</strong>, <strong>standard de management</strong> et <strong>management visuel</strong>. (Définition/Création/Amélioration est le cycle de vie des standards ; Sécurité/Qualité/Coût relève du SQCDM.)</li>
-<li><strong>b</strong> — Les standards doivent être <strong>appliqués, à jour et connus</strong>, au regard du SQCDM.</li>
-<li><strong>b (Faux)</strong> — Sans réaction prévue (standard de management), le visuel devient <strong>décoratif</strong> : voir l'écart n'a de valeur que s'il déclenche un plan d'action.</li>
-<li><strong>b</strong> — Il permet de <strong>piloter le Gemba par le visuel</strong> et fait <strong>évoluer le rôle du manager</strong> vers l'animation, l'autonomie et le travail d'équipe.</li>
-<li><strong>b</strong> — Le bon critère est la lisibilité <strong>immédiate</strong> : compris en quelques secondes, sans explication.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Que signifie « management visuel » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Décorer l'atelier avec des affiches</button><button type="button" class="opt" data-key="b"><b>b)</b> Gérer par la vue : rendre la situation visible et pilotable d'un coup d'œil</button><button type="button" class="opt" data-key="c"><b>c)</b> Surveiller les opérateurs par caméra</button><button type="button" class="opt" data-key="d"><b>d)</b> Faire des reportings hebdomadaires en réunion</button></div><div class="q-exp" hidden>Le management visuel, c'est « la gestion par la vue » : rendre la situation visible et pilotable d'un coup d'œil.</div></li><li class="q" data-correct="c"><div class="q-text">Quels sont les trois sommets du <strong>Triangle d'Or</strong> du management visuel ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Sécurité, Qualité, Coût</button><button type="button" class="opt" data-key="b"><b>b)</b> Définition, Création, Amélioration</button><button type="button" class="opt" data-key="c"><b>c)</b> Standard opératoire, Standard de management, Management visuel</button><button type="button" class="opt" data-key="d"><b>d)</b> Voir, Comprendre, Agir</button></div><div class="q-exp" hidden>Le Triangle d'Or relie <strong>standard opératoire</strong>, <strong>standard de management</strong> et <strong>management visuel</strong>. (Définition/Création/Amélioration est le cycle de vie des standards ; Sécurité/Qualité/Coût relève du SQCDM.)</div></li><li class="q" data-correct="b"><div class="q-text">Selon « CONFIRMEZ VOTRE PROCESSUS », un standard solide doit être :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Long, détaillé et signé</button><button type="button" class="opt" data-key="b"><b>b)</b> Appliqué, à jour et connu</button><button type="button" class="opt" data-key="c"><b>c)</b> Numérique, imprimé et plastifié</button><button type="button" class="opt" data-key="d"><b>d)</b> Validé par la direction uniquement</button></div><div class="q-exp" hidden>Les standards doivent être <strong>appliqués, à jour et connus</strong>, au regard du SQCDM.</div></li><li class="q" data-correct="b"><div class="q-text">Vrai ou faux : un management visuel où l'écart est visible mais <strong>n'entraîne aucune réaction</strong> remplit son rôle.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Sans réaction prévue (standard de management), le visuel devient <strong>décoratif</strong> : voir l'écart n'a de valeur que s'il déclenche un plan d'action.</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert principalement le management visuel pour le manager ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À remplacer l'équipe</button><button type="button" class="opt" data-key="b"><b>b)</b> À piloter le Gemba par le visuel et faire évoluer son rôle vers l'animation/l'autonomie</button><button type="button" class="opt" data-key="c"><b>c)</b> À supprimer les standards</button><button type="button" class="opt" data-key="d"><b>d)</b> À centraliser toute l'information dans son bureau</button></div><div class="q-exp" hidden>Il permet de <strong>piloter le Gemba par le visuel</strong> et fait <strong>évoluer le rôle du manager</strong> vers l'animation, l'autonomie et le travail d'équipe.</div></li><li class="q" data-correct="b"><div class="q-text">Quel est le test simple pour valider qu'un visuel est lisible ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Qu'il soit en couleur</button><button type="button" class="opt" data-key="b"><b>b)</b> Qu'une personne non initiée comprenne la situation en quelques secondes, sans explication</button><button type="button" class="opt" data-key="c"><b>c)</b> Qu'il tienne sur un A4</button><button type="button" class="opt" data-key="d"><b>d)</b> Qu'il soit validé en réunion</button></div><div class="q-exp" hidden>Le bon critère est la lisibilité <strong>immédiate</strong> : compris en quelques secondes, sans explication.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>10. Management Visuel.pdf</em> (support / diaporama, <strong>texte tronqué à l'extraction</strong> — galerie d'exemples en images) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1ERZhSn7jZCCDOgqhL0QyfDMCBcSrcjAV/view">Ouvrir dans Drive</a></li>
@@ -4264,7 +4052,7 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-09" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 9 — Résolution de problème : QQOQCCP, Ishikawa, PDCA</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-09" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 9 — Résolution de problème : QQOQCCP, Ishikawa, PDCA</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 55 min · 🎓 Niveau : Yellow Belt</p>
@@ -4283,6 +4071,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Aucun prérequis logiciel : les outils sont des fiches papier / tableurs simples.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 360 360" role="img" class="svg-anim"><path d="M180.0,12.0 A168.0,168.0 0 0 1 347.9,174.1 L267.9,176.9 A88.0,88.0 0 0 0 180.0,92.0 Z" fill="#2563eb" class="seg"><title>P — Planifier</title></path><text x="277" y="79" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">P</text><text x="254" y="104" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Planifier</text><path d="M348.0,180.0 A168.0,168.0 0 0 1 185.9,347.9 L183.1,267.9 A88.0,88.0 0 0 0 268.0,180.0 Z" fill="#16a34a" class="seg"><title>D — Dérouler (Faire)</title></path><text x="281" y="277" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">D</text><text x="256" y="254" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Dérouler (Faire)</text><path d="M180.0,348.0 A168.0,168.0 0 0 1 12.1,185.9 L92.1,183.1 A88.0,88.0 0 0 0 180.0,268.0 Z" fill="#d97706" class="seg"><title>C — Contrôler (Vérifier)</title></path><text x="83" y="281" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">C</text><text x="106" y="256" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Contrôler (Vérifier)</text><path d="M12.0,180.0 A168.0,168.0 0 0 1 174.1,12.1 L176.9,92.1 A88.0,88.0 0 0 0 92.0,180.0 Z" fill="#dc2626" class="seg"><title>A — Agir (Ajuster)</title></path><text x="79" y="83" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">A</text><text x="104" y="106" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Agir (Ajuster)</text><circle cx="180.0" cy="180.0" r="82.0" fill="#222b38"/><text x="180.0" y="174.0" text-anchor="middle" fill="#f6b400" font-size="30" font-weight="800">PDCA</text><text x="180.0" y="198.0" text-anchor="middle" fill="#cbd2db" font-size="12">amélioration continue</text><text x="180.0" y="26" text-anchor="middle" fill="#222b38" font-size="20">↻</text></svg><figcaption>La roue de Deming (PDCA) : Planifier → Dérouler → Contrôler → Agir, en boucle d'amélioration continue.</figcaption></figure>
+
 <h3>1. L'état d'esprit « Résolution de problème »</h3>
 <p>Avant tout outil, une posture. Chez Progress Partners, <strong>tout nouveau problème est une opportunité d'amélioration</strong>. À l'inverse, <strong>les problèmes récurrents sont un échec de notre mode de gestion de l'entreprise</strong> : s'ils reviennent, c'est que la cause racine n'a jamais été traitée.</p>
 <blockquote>
@@ -4801,61 +4591,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li><strong>Act = standardiser + prévenir la récurrence + capitaliser (REX, A3) + déployer</strong> : on fige le gain, puis la roue retourne.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>
-<p>Dans le QQOQCCP, à quoi sert la question <strong>« Combien ? »</strong> ?
-   - a) À identifier toutes les personnes concernées
-   - b) À quantifier l'ampleur du problème (%, nombre, unité)
-   - c) À trouver la cause racine
-   - d) À fixer la date de mise en application</p>
-</li>
-<li>
-<p>Quelles sont les <strong>5M</strong> du diagramme d'Ishikawa ?
-   - a) Méthode, Matière, Milieu, Machine, Main d'œuvre
-   - b) Mesure, Marché, Marge, Management, Méthode
-   - c) Moyen, Money, Matière, Milieu, Manager
-   - d) Matière, Machine, Mission, Milieu, Méthode</p>
-</li>
-<li>
-<p>Pourquoi enchaîne-t-on Ishikawa avec les <strong>5 Pourquoi</strong> ?
-   - a) Pour faire plus de réunions
-   - b) Parce que si la cause racine n'est pas déterminée, le problème se reproduira
-   - c) Pour remplacer le QQOQCCP
-   - d) Parce que l'Ishikawa est interdit en Lean</p>
-</li>
-<li>
-<p>Que signifie <strong>PDCA</strong> ?
-   - a) Plan – Do – Check – Act
-   - b) Prepare – Deploy – Control – Audit
-   - c) Plan – Détecter – Corriger – Auditer
-   - d) Produire – Distribuer – Contrôler – Améliorer</p>
-</li>
-<li>
-<p>Dans la phase <strong>Act</strong>, que fait-on en priorité pour éviter que le problème revienne ?
-   - a) On lance un nouveau brainstorming
-   - b) On standardise et on prévient la récurrence (puis REX / déploiement)
-   - c) On revient à la situation initiale
-   - d) On supprime les indicateurs</p>
-</li>
-<li>
-<p>« Parler avec des données » signifie que la résolution de problèmes se base sur… ?
-   - a) L'intuition du chef
-   - b) Des suppositions de l'équipe
-   - c) Des faits (batonnage, Pareto, SPC)
-   - d) L'ancienneté des opérateurs</p>
-</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Le « Combien ? » quantifie le problème (pourcentage, nombre, unité de mesure).</li>
-<li><strong>a</strong> — Méthode, Matière, Milieu, Machine, Main d'œuvre (les arêtes du poisson). Le formulaire source nomme la branche Machine « Moyen » et Main d'œuvre « M.O. ».</li>
-<li><strong>b</strong> — « Si la cause racine n'est pas déterminée, le problème se reproduira » : les 5 Pourquoi remontent à la vraie racine.</li>
-<li><strong>a</strong> — Plan (Planifier) – Do (Dérouler) – Check (Vérifier) – Act (Acter), la roue de Deming.</li>
-<li><strong>b</strong> — Act = prévenir la récurrence, standardiser, puis capitaliser (REX, A3) et déployer.</li>
-<li><strong>c</strong> — La résolution se base sur des FAITS et non sur des suppositions : fiches de batonnage, analyse de Pareto, SPC.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Dans le QQOQCCP, à quoi sert la question <strong>« Combien ? »</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À identifier toutes les personnes concernées</button><button type="button" class="opt" data-key="b"><b>b)</b> À quantifier l'ampleur du problème (%, nombre, unité)</button><button type="button" class="opt" data-key="c"><b>c)</b> À trouver la cause racine</button><button type="button" class="opt" data-key="d"><b>d)</b> À fixer la date de mise en application</button></div><div class="q-exp" hidden>Le « Combien ? » quantifie le problème (pourcentage, nombre, unité de mesure).</div></li><li class="q" data-correct="a"><div class="q-text">Quelles sont les <strong>5M</strong> du diagramme d'Ishikawa ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Méthode, Matière, Milieu, Machine, Main d'œuvre</button><button type="button" class="opt" data-key="b"><b>b)</b> Mesure, Marché, Marge, Management, Méthode</button><button type="button" class="opt" data-key="c"><b>c)</b> Moyen, Money, Matière, Milieu, Manager</button><button type="button" class="opt" data-key="d"><b>d)</b> Matière, Machine, Mission, Milieu, Méthode</button></div><div class="q-exp" hidden>Méthode, Matière, Milieu, Machine, Main d'œuvre (les arêtes du poisson). Le formulaire source nomme la branche Machine « Moyen » et Main d'œuvre « M.O. ».</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi enchaîne-t-on Ishikawa avec les <strong>5 Pourquoi</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Pour faire plus de réunions</button><button type="button" class="opt" data-key="b"><b>b)</b> Parce que si la cause racine n'est pas déterminée, le problème se reproduira</button><button type="button" class="opt" data-key="c"><b>c)</b> Pour remplacer le QQOQCCP</button><button type="button" class="opt" data-key="d"><b>d)</b> Parce que l'Ishikawa est interdit en Lean</button></div><div class="q-exp" hidden>« Si la cause racine n'est pas déterminée, le problème se reproduira » : les 5 Pourquoi remontent à la vraie racine.</div></li><li class="q" data-correct="a"><div class="q-text">Que signifie <strong>PDCA</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Plan – Do – Check – Act</button><button type="button" class="opt" data-key="b"><b>b)</b> Prepare – Deploy – Control – Audit</button><button type="button" class="opt" data-key="c"><b>c)</b> Plan – Détecter – Corriger – Auditer</button><button type="button" class="opt" data-key="d"><b>d)</b> Produire – Distribuer – Contrôler – Améliorer</button></div><div class="q-exp" hidden>Plan (Planifier) – Do (Dérouler) – Check (Vérifier) – Act (Acter), la roue de Deming.</div></li><li class="q" data-correct="b"><div class="q-text">Dans la phase <strong>Act</strong>, que fait-on en priorité pour éviter que le problème revienne ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> On lance un nouveau brainstorming</button><button type="button" class="opt" data-key="b"><b>b)</b> On standardise et on prévient la récurrence (puis REX / déploiement)</button><button type="button" class="opt" data-key="c"><b>c)</b> On revient à la situation initiale</button><button type="button" class="opt" data-key="d"><b>d)</b> On supprime les indicateurs</button></div><div class="q-exp" hidden>Act = prévenir la récurrence, standardiser, puis capitaliser (REX, A3) et déployer.</div></li><li class="q" data-correct="c"><div class="q-text">« Parler avec des données » signifie que la résolution de problèmes se base sur… ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> L'intuition du chef</button><button type="button" class="opt" data-key="b"><b>b)</b> Des suppositions de l'équipe</button><button type="button" class="opt" data-key="c"><b>c)</b> Des faits (batonnage, Pareto, SP</button><button type="button" class="opt" data-key="c"><b>c)</b> </button><button type="button" class="opt" data-key="d"><b>d)</b> L'ancienneté des opérateurs</button></div><div class="q-exp" hidden>La résolution se base sur des FAITS et non sur des suppositions : fiches de batonnage, analyse de Pareto, SPC.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <strong>11.QQOQCCP.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1HWbbQQAf6R3DvDzSNPQwmqmumJ5PQvRc/view">Ouvrir dans Drive</a> <em>(formulaire / gabarit, texte limité aux libellés des champs)</em></li>
@@ -4866,7 +4603,7 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-10" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 10 — La démarche DMAIC</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-10" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 10 — La démarche DMAIC</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 35 min · 🎓 Niveau : Yellow Belt</p>
@@ -4884,6 +4621,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Notions utiles : le <strong>SIPOC</strong>, la <strong>VOC / CTS</strong>, la charte de projet, les types de données.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 760 210" role="img" class="svg-anim"><text x="380" y="24" text-anchor="middle" fill="#222b38" font-size="14" font-weight="700">De 100+ variables d'entrée (X) vers 1 à 3 X clés — logique « entonnoir »</text><polygon points="14,46 124,46 146,89 124,132 14,132 36,89" fill="#2563eb" class="seg"/><text x="80" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">D</text><text x="80" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Define</text><text x="80" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Définir</text><text x="80" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">100+</tspan></text><polygon points="158,46 268,46 290,89 268,132 158,132 180,89" fill="#0d9488" class="seg"/><text x="224" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">M</text><text x="224" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Measure</text><text x="224" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Mesurer</text><text x="224" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">25–30</tspan></text><polygon points="302,46 412,46 434,89 412,132 302,132 324,89" fill="#d97706" class="seg"/><text x="368" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">A</text><text x="368" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Analyze</text><text x="368" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Analyser</text><text x="368" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">8–10</tspan></text><polygon points="446,46 556,46 578,89 556,132 446,132 468,89" fill="#16a34a" class="seg"/><text x="512" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">I</text><text x="512" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Improve</text><text x="512" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Améliorer</text><text x="512" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">3–6</tspan></text><polygon points="590,46 700,46 722,89 700,132 590,132 612,89" fill="#7c3aed" class="seg"/><text x="656" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">C</text><text x="656" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Control</text><text x="656" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Maîtriser</text><text x="656" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">1–3</tspan></text><path d="M720,40 q24,-22 -12,-26 M708,14 l-8,-2 6,8" fill="none" stroke="#9aa3b0" stroke-width="2"/></svg><figcaption>La démarche DMAIC : 5 phases en « entonnoir », de 100+ variables d'entrée vers les 1 à 3 X clés.</figcaption></figure>
+
 <h3>1. Qu'est-ce que le DMAIC ?</h3>
 <p><strong>DMAIC</strong> est la démarche structurée de résolution de problèmes du <strong>Lean Six Sigma (6σ)</strong>.
 C'est l'acronyme de ses cinq phases, parcourues <strong>dans l'ordre</strong> :</p>
@@ -5233,47 +4972,15 @@ d'autoriser le passage à la suivante.</p>
 <li>La roue DMAIC est <strong>cyclique</strong> : Control alimente le prochain Define.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Que signifie l'acronyme <strong>DMAIC</strong> ?
-   - a) Define · Manage · Audit · Improve · Close
-   - b) Define · Measure · Analyze · Improve · Control
-   - c) Decide · Measure · Act · Implement · Control
-   - d) Define · Model · Analyze · Iterate · Confirm</li>
-<li>Dans l'approche « entonnoir », combien de variables d'entrée reste-t-il <strong>en fin de Control</strong> ?
-   - a) 100+ · b) 25 à 30 · c) 8 à 10 · d) 1 à 3</li>
-<li>La formule <code>Y = f(X1, X2, X3 …)</code> signifie que…
-   - a) on agit directement sur Y
-   - b) Y (la sortie) est fonction des X (les entrées), donc on agit sur les X
-   - c) les X sont sans effet sur Y
-   - d) il faut autant de X que de Y</li>
-<li>À quelle phase associe-t-on le <strong>plan de surveillance</strong> (plan de contrôle) ?
-   - a) Define · b) Measure · c) Analyze · d) Control</li>
-<li>Qu'est-ce que la logique de <strong>stage-gating</strong> ?
-   - a) On peut sauter une phase si on est pressé
-   - b) On ne passe à la phase suivante que si le <strong>livrable</strong> de la phase en cours est prêt
-   - c) On traite toutes les phases en parallèle
-   - d) On commence toujours par Improve</li>
-<li>Vrai ou faux : le <strong>livrable</strong> de la phase <strong>Analyze</strong> est <em>« une cause fondamentale identifiée
-   et vérifiée »</em>.</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Define, Measure, Analyze, Improve, Control.</li>
-<li><strong>d</strong> — l'entonnoir converge de 100+ (Define) vers <strong>1 à 3</strong> X clés (Control).</li>
-<li><strong>b</strong> — la sortie Y dépend des entrées X ; on pilote Y <strong>via</strong> ses causes, les X.</li>
-<li><strong>d</strong> — le <strong>plan de surveillance</strong> sert à <strong>maintenir les gains</strong> en phase <strong>Control</strong>.</li>
-<li><strong>b</strong> — la <strong>porte</strong> n'autorise le passage que si le livrable de la phase est abouti.</li>
-<li><strong>Vrai</strong> — c'est exactement le livrable de sortie d'<strong>Analyze</strong>.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Que signifie l'acronyme <strong>DMAIC</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Define · Manage · Audit · Improve · Close</button><button type="button" class="opt" data-key="b"><b>b)</b> Define · Measure · Analyze · Improve · Control</button><button type="button" class="opt" data-key="c"><b>c)</b> Decide · Measure · Act · Implement · Control</button><button type="button" class="opt" data-key="d"><b>d)</b> Define · Model · Analyze · Iterate · Confirm</button></div><div class="q-exp" hidden>Define, Measure, Analyze, Improve, Control.</div></li><li class="q" data-correct="d"><div class="q-text">Dans l'approche « entonnoir », combien de variables d'entrée reste-t-il <strong>en fin de Control</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 100+</button><button type="button" class="opt" data-key="b"><b>b)</b> 25 à 30</button><button type="button" class="opt" data-key="c"><b>c)</b> 8 à 10</button><button type="button" class="opt" data-key="d"><b>d)</b> 1 à 3</button></div><div class="q-exp" hidden>l'entonnoir converge de 100+ (Define) vers <strong>1 à 3</strong> X clés (Control).</div></li><li class="q" data-correct="b"><div class="q-text">La formule <code>Y = f(X1, X2, X3 …)</code> signifie que…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> on agit directement sur Y</button><button type="button" class="opt" data-key="b"><b>b)</b> Y (la sortie) est fonction des X (les entrées), donc on agit sur les X</button><button type="button" class="opt" data-key="c"><b>c)</b> les X sont sans effet sur Y</button><button type="button" class="opt" data-key="d"><b>d)</b> il faut autant de X que de Y</button></div><div class="q-exp" hidden>la sortie Y dépend des entrées X ; on pilote Y <strong>via</strong> ses causes, les X.</div></li><li class="q" data-correct="d"><div class="q-text">À quelle phase associe-t-on le <strong>plan de surveillance</strong> (plan de contrôle) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Define</button><button type="button" class="opt" data-key="b"><b>b)</b> Measure</button><button type="button" class="opt" data-key="c"><b>c)</b> Analyze</button><button type="button" class="opt" data-key="d"><b>d)</b> Control</button></div><div class="q-exp" hidden>le <strong>plan de surveillance</strong> sert à <strong>maintenir les gains</strong> en phase <strong>Control</strong>.</div></li><li class="q" data-correct="b"><div class="q-text">Qu'est-ce que la logique de <strong>stage-gating</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> On peut sauter une phase si on est pressé</button><button type="button" class="opt" data-key="b"><b>b)</b> On ne passe à la phase suivante que si le <strong>livrable</strong> de la phase en cours est prêt</button><button type="button" class="opt" data-key="c"><b>c)</b> On traite toutes les phases en parallèle</button><button type="button" class="opt" data-key="d"><b>d)</b> On commence toujours par Improve</button></div><div class="q-exp" hidden>la <strong>porte</strong> n'autorise le passage que si le livrable de la phase est abouti.</div></li><li class="q" data-correct="vrai"><div class="q-text">Vrai ou faux : le <strong>livrable</strong> de la phase <strong>Analyze</strong> est <em>« une cause fondamentale identifiée et vérifiée »</em>.</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>c'est exactement le livrable de sortie d'<strong>Analyze</strong>.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>13.DMAIC Define Mesure Analyze Improve Control.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir dans Drive</a></li>
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-11" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 11 — Voix du Client (VoC) &amp; arbre des CTS</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-11" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 11 — Voix du Client (VoC) &amp; arbre des CTS</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -5715,47 +5422,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li><strong>Cherchez les CTS communs</strong> à plusieurs exigences et <strong>concentrez-y les efforts</strong> d'amélioration.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Que signifie l'acronyme <strong>VoC</strong> et qu'exprime-t-il ?
-   - a) Value of Customer — la valeur financière du client
-   - b) Voice of Customer — l'expression des exigences et attentes du client
-   - c) Variation of Control — la variation pilotée du processus
-   - d) Verification of Compliance — la conformité réglementaire</li>
-<li>À quoi sert la comparaison <strong>VoC vs VoP</strong> ?
-   - a) À fixer le prix de vente
-   - b) À identifier l'écart (le problème) entre attentes client et performance du processus
-   - c) À recruter un représentant client
-   - d) À supprimer les clients internes</li>
-<li>Quels sont les <strong>4 outils clés</strong> de collecte de la VoC ?
-   - a) Entretiens, groupes d'écoute, enquêtes, études internes
-   - b) SIPOC, Pareto, Ishikawa, Kano
-   - c) Audit, réclamation, garantie, plainte
-   - d) LSL, USL, DPMO, sigma</li>
-<li>Un bon <strong>CTS</strong> doit avant tout être…
-   - a) Vague et global pour couvrir un maximum de cas
-   - b) Décrit en termes de « comment » (solution technique)
-   - c) Spécifique, mesurable, non ambigu et décrire le « quoi »
-   - d) Identique pour tous les clients</li>
-<li>Dans l'exemple du <strong>call-center</strong>, le seuil « <strong>moins de 30 secondes</strong> avant mise en contact avec un technicien » est…
-   - a) Un LSL (limite basse)
-   - b) Un USL (limite haute)
-   - c) Un DPMO
-   - d) Un besoin générique non mesurable</li>
-<li><strong>Vrai ou faux</strong> : on peut supposer ce que veut le client sans le lui demander, du moment qu'on a de l'expérience métier.
-   - a) Vrai
-   - b) Faux</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — VoC = <em>Voice of Customer</em>, l'expression des exigences et des attentes du client sur un produit, un processus et/ou un service.</li>
-<li><strong>b</strong> — En clarifiant VoC vs VoP, on <strong>adresse l'écart (le problème)</strong> par rapport aux exigences clients ; c'est la première étape (phase Define).</li>
-<li><strong>a</strong> — Les 4 outils VoC clés sont : <strong>entretiens clients, groupes d'écoute clients, enquêtes clients, études internes</strong>.</li>
-<li><strong>c</strong> — Un bon CTS est <strong>spécifique et mesurable</strong>, lié à une caractéristique, complet et non ambigu, et <strong>décrit le « quoi » et non le « comment »</strong>.</li>
-<li><strong>b</strong> — C'est un <strong>USL</strong> (limite haute) : le temps d'attente ne doit <strong>pas dépasser</strong> 30 secondes.</li>
-<li><strong>b (Faux)</strong> — <em>« Ne partez pas du principe que vous savez ce que le client veut : demandez-le-lui »</em> et ayez un représentant du client dans votre équipe.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Que signifie l'acronyme <strong>VoC</strong> et qu'exprime-t-il ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Value of Customer — la valeur financière du client</button><button type="button" class="opt" data-key="b"><b>b)</b> Voice of Customer — l'expression des exigences et attentes du client</button><button type="button" class="opt" data-key="c"><b>c)</b> Variation of Control — la variation pilotée du processus</button><button type="button" class="opt" data-key="d"><b>d)</b> Verification of Compliance — la conformité réglementaire</button></div><div class="q-exp" hidden>VoC = <em>Voice of Customer</em>, l'expression des exigences et des attentes du client sur un produit, un processus et/ou un service.</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert la comparaison <strong>VoC vs VoP</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À fixer le prix de vente</button><button type="button" class="opt" data-key="b"><b>b)</b> À identifier l'écart (le problème) entre attentes client et performance du processus</button><button type="button" class="opt" data-key="c"><b>c)</b> À recruter un représentant client</button><button type="button" class="opt" data-key="d"><b>d)</b> À supprimer les clients internes</button></div><div class="q-exp" hidden>En clarifiant VoC vs VoP, on <strong>adresse l'écart (le problème)</strong> par rapport aux exigences clients ; c'est la première étape (phase Define).</div></li><li class="q" data-correct="a"><div class="q-text">Quels sont les <strong>4 outils clés</strong> de collecte de la VoC ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Entretiens, groupes d'écoute, enquêtes, études internes</button><button type="button" class="opt" data-key="b"><b>b)</b> SIPOC, Pareto, Ishikawa, Kano</button><button type="button" class="opt" data-key="c"><b>c)</b> Audit, réclamation, garantie, plainte</button><button type="button" class="opt" data-key="d"><b>d)</b> LSL, USL, DPMO, sigma</button></div><div class="q-exp" hidden>Les 4 outils VoC clés sont : <strong>entretiens clients, groupes d'écoute clients, enquêtes clients, études internes</strong>.</div></li><li class="q" data-correct="c"><div class="q-text">Un bon <strong>CTS</strong> doit avant tout être…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vague et global pour couvrir un maximum de cas</button><button type="button" class="opt" data-key="b"><b>b)</b> Décrit en termes de « comment » (solution technique)</button><button type="button" class="opt" data-key="c"><b>c)</b> Spécifique, mesurable, non ambigu et décrire le « quoi »</button><button type="button" class="opt" data-key="d"><b>d)</b> Identique pour tous les clients</button></div><div class="q-exp" hidden>Un bon CTS est <strong>spécifique et mesurable</strong>, lié à une caractéristique, complet et non ambigu, et <strong>décrit le « quoi » et non le « comment »</strong>.</div></li><li class="q" data-correct="b"><div class="q-text">Dans l'exemple du <strong>call-center</strong>, le seuil « <strong>moins de 30 secondes</strong> avant mise en contact avec un technicien » est…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Un LSL (limite basse)</button><button type="button" class="opt" data-key="b"><b>b)</b> Un USL (limite haute)</button><button type="button" class="opt" data-key="c"><b>c)</b> Un DPMO</button><button type="button" class="opt" data-key="d"><b>d)</b> Un besoin générique non mesurable</button></div><div class="q-exp" hidden>C'est un <strong>USL</strong> (limite haute) : le temps d'attente ne doit <strong>pas dépasser</strong> 30 secondes.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux</strong> : on peut supposer ce que veut le client sans le lui demander, du moment qu'on a de l'expérience métier.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden><em>« Ne partez pas du principe que vous savez ce que le client veut : demandez-le-lui »</em> et ayez un représentant du client dans votre équipe.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <strong>14. VoC.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/12bcflin4OZ48c7WBaClZ9ab93xoOuyls/view">Ouvrir dans Drive</a></li>
@@ -5764,7 +5432,7 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-12" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 12 — Le SIPOC</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-12" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 12 — Le SIPOC</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 40 min · 🎓 Niveau : Yellow Belt</p>
@@ -5783,6 +5451,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Connaître la place du SIPOC dans le <strong>DMAIC</strong>, en phase <strong>Define</strong>.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 760 180" role="img" class="svg-anim"><rect x="12" y="46" width="126" height="96" rx="9" fill="#2563eb" class="seg"/><text x="75" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">S</text><text x="75" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Suppliers</text><text x="75" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Fournisseurs</text><text x="149" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="160" y="46" width="126" height="96" rx="9" fill="#0d9488" class="seg"/><text x="223" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">I</text><text x="223" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Inputs</text><text x="223" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Entrées</text><text x="297" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="308" y="46" width="126" height="96" rx="9" fill="#f6b400" class="seg"/><text x="371" y="86" text-anchor="middle" fill="#3a3320" font-size="32" font-weight="800">P</text><text x="371" y="108" text-anchor="middle" fill="#3a3320" font-size="12.5" font-weight="600">Process</text><text x="371" y="126" text-anchor="middle" fill="#3a3320" font-size="11" opacity="0.92">Processus</text><text x="445" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="456" y="46" width="126" height="96" rx="9" fill="#16a34a" class="seg"/><text x="519" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">O</text><text x="519" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Outputs</text><text x="519" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Sorties</text><text x="593" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="604" y="46" width="126" height="96" rx="9" fill="#7c3aed" class="seg"/><text x="667" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">C</text><text x="667" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Customers</text><text x="667" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Clients</text></svg><figcaption>Le SIPOC : Fournisseurs → Entrées → Processus → Sorties → Clients — la vue d'ensemble d'un processus.</figcaption></figure>
+
 <h3>1. Qu'est-ce que le SIPOC ?</h3>
 <p><strong>SIPOC</strong> est l'acronyme de <strong>S</strong>uppliers — <strong>I</strong>nputs — <strong>P</strong>rocess — <strong>O</strong>utputs — <strong>C</strong>ustomers
 (<em>Fournisseurs — Entrées — Processus — Sorties — Clients</em>).</p>
@@ -6192,39 +5862,8 @@ Repartez du <strong>terrain d'application</strong> choisi au <strong>Module 0</s
 <li><strong>Internes ET externes</strong> : fournisseurs comme clients incluent les deux.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>Que signifie l'acronyme <strong>SIPOC</strong> ?
-   - a) Suppliers, Inputs, Process, Outputs, Customers
-   - b) Standard, Inspection, Process, Output, Control
-   - c) Suppliers, Information, Production, Order, Customers</li>
-<li>Dans quel <strong>ordre</strong> construit-on les colonnes d'un SIPOC ?
-   - a) S → I → P → O → C
-   - b) P → O → C → I → S
-   - c) C → O → P → I → S</li>
-<li>À quoi sert <strong>principalement</strong> le SIPOC ?
-   - a) À détailler chaque tâche élémentaire du processus
-   - b) À calculer le niveau sigma
-   - c) À <strong>cadrer le <em>scope</em></strong> et identifier le processus à améliorer</li>
-<li>Combien d'étapes <strong>maximum</strong> pour la colonne Process ?
-   - a) 5 à 10 · b) 15 à 20 · c) autant que nécessaire</li>
-<li>Une <strong>mesure influente</strong> se caractérise par :
-   - a) Elle donne les besoins d'ajustement <strong>avant</strong> les faits
-   - b) Elle informe sur la performance <strong>après</strong> les faits
-   - c) Elle ne sert qu'à la documentation</li>
-<li><strong>Vrai ou faux ?</strong> Le SIPOC ne prend en compte que les fournisseurs et clients <strong>externes</strong>.
-   - a) Vrai · b) Faux</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>a</strong> — Suppliers, Inputs, Process, Outputs, Customers (Fournisseurs, Entrées, Processus, Sorties, Clients).</li>
-<li><strong>b</strong> — on détaille dans l'ordre <strong>P – O – C – I – S</strong> (numérotation 1→7 du template), même si on le lit S→C.</li>
-<li><strong>c</strong> — sa raison d'être est de <strong>définir le <em>scope</em></strong> et de passer du problème au processus à améliorer.</li>
-<li><strong>a</strong> — la colonne Process reste <strong>macro : 5 à 10 étapes maximum</strong>.</li>
-<li><strong>a</strong> — la mesure <strong>influente</strong> donne les besoins d'ajustement <strong>avant</strong> les faits (la mesure <em>influencée</em> informe <em>après</em>).</li>
-<li><strong>b</strong> — Faux : fournisseurs <strong>et</strong> clients sont à la fois <strong>internes et externes</strong>.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="a"><div class="q-text">Que signifie l'acronyme <strong>SIPOC</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Suppliers, Inputs, Process, Outputs, Customers</button><button type="button" class="opt" data-key="b"><b>b)</b> Standard, Inspection, Process, Output, Control</button><button type="button" class="opt" data-key="c"><b>c)</b> Suppliers, Information, Production, Order, Customers</button></div><div class="q-exp" hidden>Suppliers, Inputs, Process, Outputs, Customers (Fournisseurs, Entrées, Processus, Sorties, Clients).</div></li><li class="q" data-correct="b"><div class="q-text">Dans quel <strong>ordre</strong> construit-on les colonnes d'un SIPOC ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> S → I → P → O → C</button><button type="button" class="opt" data-key="b"><b>b)</b> P → O → C → I → S</button><button type="button" class="opt" data-key="c"><b>c)</b> C → O → P → I → S</button></div><div class="q-exp" hidden>on détaille dans l'ordre <strong>P – O – C – I – S</strong> (numérotation 1→7 du template), même si on le lit S→C.</div></li><li class="q" data-correct="c"><div class="q-text">À quoi sert <strong>principalement</strong> le SIPOC ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À détailler chaque tâche élémentaire du processus</button><button type="button" class="opt" data-key="b"><b>b)</b> À calculer le niveau sigma</button><button type="button" class="opt" data-key="c"><b>c)</b> À <strong>cadrer le <em>scope</em></strong> et identifier le processus à améliorer</button></div><div class="q-exp" hidden>sa raison d'être est de <strong>définir le <em>scope</em></strong> et de passer du problème au processus à améliorer.</div></li><li class="q" data-correct="a"><div class="q-text">Combien d'étapes <strong>maximum</strong> pour la colonne Process ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 5 à 10</button><button type="button" class="opt" data-key="b"><b>b)</b> 15 à 20</button><button type="button" class="opt" data-key="c"><b>c)</b> autant que nécessaire</button></div><div class="q-exp" hidden>la colonne Process reste <strong>macro : 5 à 10 étapes maximum</strong>.</div></li><li class="q" data-correct="a"><div class="q-text">Une <strong>mesure influente</strong> se caractérise par :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Elle donne les besoins d'ajustement <strong>avant</strong> les faits</button><button type="button" class="opt" data-key="b"><b>b)</b> Elle informe sur la performance <strong>après</strong> les faits</button><button type="button" class="opt" data-key="c"><b>c)</b> Elle ne sert qu'à la documentation</button></div><div class="q-exp" hidden>la mesure <strong>influente</strong> donne les besoins d'ajustement <strong>avant</strong> les faits (la mesure <em>influencée</em> informe <em>après</em>).</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux ?</strong> Le SIPOC ne prend en compte que les fournisseurs et clients <strong>externes</strong>.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Faux : fournisseurs <strong>et</strong> clients sont à la fois <strong>internes et externes</strong>.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>16. Le SIPOC.pdf</em> (support de cours — <strong>fichier volumineux, contenu source tronqué</strong> : le diaporama
@@ -6236,7 +5875,7 @@ Repartez du <strong>terrain d'application</strong> choisi au <strong>Module 0</s
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-13" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 13 — Les Types de données</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-13" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 13 — Les Types de données</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 30 min · 🎓 Niveau : Yellow Belt</p>
@@ -6559,33 +6198,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li><strong>Convertissez attribut → variable</strong> chaque fois que possible (compter/mesurer plutôt que classer en « bon / pas bon »).</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<p><em>(Plusieurs questions reprennent l'Exercice n°1 du support.)</em></p>
-<ol>
-<li>« Nombre de rayures sur un écran d'ordinateur » est une donnée…
-   - a) Attribut · b) Variable, ratio et continue · c) Variable, ratio et discrète · d) Variable, intervalle et continue</li>
-<li>« Cette voiture est grise, cette autre est rouge » est une donnée…
-   - a) Attribut · b) Variable ratio · c) Variable intervalle · d) Variable discrète</li>
-<li>« Longueur d'un pinceau » est une donnée…
-   - a) Attribut · b) Variable, ratio et continue · c) Variable, intervalle et discrète · d) Variable, ratio et discrète</li>
-<li>La <strong>température en degrés Celsius</strong> est une donnée de type…
-   - a) Ratio (le zéro veut dire « rien ») · b) Intervalle (le zéro est arbitraire) · c) Attribut · d) Discrète</li>
-<li>Pourquoi le Lean Six Sigma <strong>préconise‑t‑il les données variables</strong> ?
-   - a) Elles sont plus faciles à collecter · b) Elles donnent accès à des outils plus puissants et demandent des échantillons plus petits · c) Elles évitent toute mesure · d) Elles n'ont pas d'unité</li>
-<li>« Échantillons qui peuvent être triés entre rond, carré et triangulaire » est une donnée…
-   - a) Variable continue · b) Variable discrète · c) Attribut · d) Variable intervalle</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>c</strong> — Variable, <strong>ratio et discrète</strong> (on compte un nombre entier de rayures).</li>
-<li><strong>a</strong> — <strong>Attribut</strong> : une couleur range l'objet dans une catégorie, sans ordre ni relation mathématique.</li>
-<li><strong>b</strong> — Variable, <strong>ratio et continue</strong> : une longueur peut prendre n'importe quelle valeur et son zéro est absolu.</li>
-<li><strong>b</strong> — <strong>Intervalle</strong> : en °C le zéro est arbitraire (il ne signifie pas « pas de température »), donc on peut additionner/soustraire mais pas multiplier/diviser de façon sensée.</li>
-<li><strong>b</strong> — Plus d'outils, <strong>plus puissants</strong>, et <strong>échantillons plus petits</strong> pour la même information ; les données par attribut n'ont pas de relation mathématique entre elles.</li>
-<li><strong>c</strong> — <strong>Attribut</strong> : on range les pièces dans des catégories de forme (pas d'ordre implicite).</li>
-</ol>
-<p><em>Rappel des autres items du support : « Écrans rayés vs écrans non‑rayés » → Attribut · « Prix du journal » → Variable ratio et discrète · « Pression d'air dans un pneu » → Variable ratio et continue · « Lecture de la pression d'air sur une jauge digitale » → Variable ratio et discrète.</em></p>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="c"><div class="q-text">« Nombre de rayures sur un écran d'ordinateur » est une donnée…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Attribut</button><button type="button" class="opt" data-key="b"><b>b)</b> Variable, ratio et continue</button><button type="button" class="opt" data-key="c"><b>c)</b> Variable, ratio et discrète</button><button type="button" class="opt" data-key="d"><b>d)</b> Variable, intervalle et continue</button></div><div class="q-exp" hidden>Variable, <strong>ratio et discrète</strong> (on compte un nombre entier de rayures).</div></li><li class="q" data-correct="a"><div class="q-text">« Cette voiture est grise, cette autre est rouge » est une donnée…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Attribut</button><button type="button" class="opt" data-key="b"><b>b)</b> Variable ratio</button><button type="button" class="opt" data-key="c"><b>c)</b> Variable intervalle</button><button type="button" class="opt" data-key="d"><b>d)</b> Variable discrète</button></div><div class="q-exp" hidden><strong>Attribut</strong> : une couleur range l'objet dans une catégorie, sans ordre ni relation mathématique.</div></li><li class="q" data-correct="b"><div class="q-text">« Longueur d'un pinceau » est une donnée…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Attribut</button><button type="button" class="opt" data-key="b"><b>b)</b> Variable, ratio et continue</button><button type="button" class="opt" data-key="c"><b>c)</b> Variable, intervalle et discrète</button><button type="button" class="opt" data-key="d"><b>d)</b> Variable, ratio et discrète</button></div><div class="q-exp" hidden>Variable, <strong>ratio et continue</strong> : une longueur peut prendre n'importe quelle valeur et son zéro est absolu.</div></li><li class="q" data-correct="b"><div class="q-text">La <strong>température en degrés Celsius</strong> est une donnée de type…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Ratio (le zéro veut dire « rien »)</button><button type="button" class="opt" data-key="b"><b>b)</b> Intervalle (le zéro est arbitraire)</button><button type="button" class="opt" data-key="c"><b>c)</b> Attribut</button><button type="button" class="opt" data-key="d"><b>d)</b> Discrète</button></div><div class="q-exp" hidden><strong>Intervalle</strong> : en °C le zéro est arbitraire (il ne signifie pas « pas de température »), donc on peut additionner/soustraire mais pas multiplier/diviser de façon sensée.</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi le Lean Six Sigma <strong>préconise‑t‑il les données variables</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Elles sont plus faciles à collecter</button><button type="button" class="opt" data-key="b"><b>b)</b> Elles donnent accès à des outils plus puissants et demandent des échantillons plus petits</button><button type="button" class="opt" data-key="c"><b>c)</b> Elles évitent toute mesure</button><button type="button" class="opt" data-key="d"><b>d)</b> Elles n'ont pas d'unité</button></div><div class="q-exp" hidden>Plus d'outils, <strong>plus puissants</strong>, et <strong>échantillons plus petits</strong> pour la même information ; les données par attribut n'ont pas de relation mathématique entre elles.</div></li><li class="q" data-correct="c"><div class="q-text">« Échantillons qui peuvent être triés entre rond, carré et triangulaire » est une donnée…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Variable continue</button><button type="button" class="opt" data-key="b"><b>b)</b> Variable discrète</button><button type="button" class="opt" data-key="c"><b>c)</b> Attribut</button><button type="button" class="opt" data-key="d"><b>d)</b> Variable intervalle</button></div><div class="q-exp" hidden><strong>Attribut</strong> : on range les pièces dans des catégories de forme (pas d'ordre implicite).</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <em>17. Types de données.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1p8iDW7xUF5Uix6v28jMgbSC7oROj9dz0/view">Ouvrir dans Drive</a></li>
@@ -6593,7 +6207,7 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-14" class="module-block"><p class="toc-back"><a href="#top">↑ Retour au sommaire</a></p><h1>Module 14 — Les Statistiques Descriptives</h1>
+Réorganisé en module de formation autoportant.</em></p></section></section><section id="mod-14" class="module-block"><p class="toc-back"><a href="#top">↑ Sommaire</a></p><h1>Module 14 — Les Statistiques Descriptives</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
@@ -6612,6 +6226,8 @@ Réorganisé en module de formation autoportant.</em></p></section></section><se
 <li>Aucun prérequis mathématique avancé : les quatre opérations et la racine carrée suffisent.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 520 250" role="img" class="svg-anim"><path d="M205.0,210.0 L205.0,119.0 L206.8,116.0 L208.7,113.0 L210.5,110.0 L212.3,107.0 L214.2,104.0 L216.0,101.1 L217.8,98.2 L219.7,95.4 L221.5,92.6 L223.3,89.9 L225.2,87.3 L227.0,84.7 L228.8,82.2 L230.7,79.9 L232.5,77.6 L234.3,75.5 L236.2,73.4 L238.0,71.5 L239.8,69.8 L241.7,68.1 L243.5,66.6 L245.3,65.2 L247.2,64.0 L249.0,63.0 L250.8,62.1 L252.7,61.3 L254.5,60.7 L256.3,60.3 L258.2,60.1 L260.0,60.0 L261.8,60.1 L263.7,60.3 L265.5,60.7 L267.3,61.3 L269.2,62.1 L271.0,63.0 L272.8,64.0 L274.7,65.2 L276.5,66.6 L278.3,68.1 L280.2,69.8 L282.0,71.5 L283.8,73.4 L285.7,75.5 L287.5,77.6 L289.3,79.9 L291.2,82.2 L293.0,84.7 L294.8,87.3 L296.7,89.9 L298.5,92.6 L300.3,95.4 L302.2,98.2 L304.0,101.1 L305.8,104.0 L307.7,107.0 L309.5,110.0 L311.3,113.0 L313.2,116.0 L315.0,119.0 L315.0,210.0 Z" fill="#f6b400" opacity="0.30"/><line x1="40" y1="210" x2="480" y2="210" stroke="#9aa3b0" stroke-width="1.5"/><path d="M60.0,209.8 L63.3,209.7 L66.7,209.7 L70.0,209.6 L73.3,209.5 L76.7,209.4 L80.0,209.3 L83.3,209.1 L86.7,209.0 L90.0,208.7 L93.3,208.5 L96.7,208.2 L100.0,207.8 L103.3,207.4 L106.7,206.9 L110.0,206.4 L113.3,205.7 L116.7,205.0 L120.0,204.1 L123.3,203.2 L126.7,202.1 L130.0,200.8 L133.3,199.4 L136.7,197.9 L140.0,196.1 L143.3,194.2 L146.7,192.1 L150.0,189.7 L153.3,187.1 L156.7,184.3 L160.0,181.3 L163.3,178.0 L166.7,174.5 L170.0,170.7 L173.3,166.7 L176.7,162.4 L180.0,157.9 L183.3,153.2 L186.7,148.3 L190.0,143.3 L193.3,138.0 L196.7,132.7 L200.0,127.3 L203.3,121.8 L206.7,116.3 L210.0,110.8 L213.3,105.3 L216.7,100.0 L220.0,94.9 L223.3,89.9 L226.7,85.2 L230.0,80.7 L233.3,76.6 L236.7,72.9 L240.0,69.6 L243.3,66.7 L246.7,64.3 L250.0,62.5 L253.3,61.1 L256.7,60.3 L260.0,60.0 L263.3,60.3 L266.7,61.1 L270.0,62.5 L273.3,64.3 L276.7,66.7 L280.0,69.6 L283.3,72.9 L286.7,76.6 L290.0,80.7 L293.3,85.2 L296.7,89.9 L300.0,94.9 L303.3,100.0 L306.7,105.3 L310.0,110.8 L313.3,116.3 L316.7,121.8 L320.0,127.3 L323.3,132.7 L326.7,138.0 L330.0,143.3 L333.3,148.3 L336.7,153.2 L340.0,157.9 L343.3,162.4 L346.7,166.7 L350.0,170.7 L353.3,174.5 L356.7,178.0 L360.0,181.3 L363.3,184.3 L366.7,187.1 L370.0,189.7 L373.3,192.1 L376.7,194.2 L380.0,196.1 L383.3,197.9 L386.7,199.4 L390.0,200.8 L393.3,202.1 L396.7,203.2 L400.0,204.1 L403.3,205.0 L406.7,205.7 L410.0,206.4 L413.3,206.9 L416.7,207.4 L420.0,207.8 L423.3,208.2 L426.7,208.5 L430.0,208.7 L433.3,209.0 L436.7,209.1 L440.0,209.3 L443.3,209.4 L446.7,209.5 L450.0,209.6 L453.3,209.7 L456.7,209.7 L460.0,209.8" fill="none" stroke="#2563eb" stroke-width="3"/><line x1="95" y1="210" x2="95" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="95" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−3σ</text><line x1="150" y1="210" x2="150" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="150" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−2σ</text><line x1="205" y1="210" x2="205" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="205" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−1σ</text><line x1="260" y1="210" x2="260" y2="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="260" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="800">μ</text><line x1="315" y1="210" x2="315" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="315" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+1σ</text><line x1="370" y1="210" x2="370" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="370" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+2σ</text><line x1="425" y1="210" x2="425" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="425" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+3σ</text><text x="260" y="64" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">~68 % à ±1σ</text><text x="260" y="60" text-anchor="middle" fill="#5b6675" font-size="10.5" dy="-6">~95 % à ±2σ · ~99,7 % à ±3σ</text></svg><figcaption>La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ autour de la moyenne.</figcaption></figure>
+
 <h3>1. Pourquoi les statistiques descriptives ?</h3>
 <p>La statistique descriptive consiste à <strong>utiliser des méthodes scientifiques pour collecter, organiser, résumer et présenter des données</strong>. C'est l'un des enjeux clés du <strong>6 Sigma</strong> : avant d'améliorer un processus, il faut savoir le décrire objectivement avec des chiffres plutôt qu'avec des impressions.</p>
 <p>Décrire un jeu de données, c'est répondre à trois questions :</p>
@@ -7063,47 +6679,8 @@ Les deux valeurs centrales (6ᵉ et 7ᵉ) sont 5 et 5 ⟹ médiane = <strong>5</
 <li>Pour une <strong>loi normale</strong> : moyenne = médiane = mode au centre ; <strong>68 % à ±1σ, 95 % à ±2σ, 99,7 % à ±3σ</strong> ; connaître moyenne + écart-type suffit à connaître toute la courbe.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>La <strong>moyenne</strong> se calcule en…
-   - a) prenant la valeur du milieu
-   - b) divisant la somme des valeurs par leur nombre
-   - c) prenant la valeur la plus fréquente
-   - d) soustrayant le min du max</li>
-<li>En présence d'une <strong>valeur exceptionnelle (outlier)</strong>, quel indicateur du centre est généralement le plus représentatif ?
-   - a) La moyenne
-   - b) La médiane
-   - c) Le mode
-   - d) L'étendue</li>
-<li>L'<strong>écart-type</strong> est…
-   - a) le carré de la variance
-   - b) la racine carrée de la variance
-   - c) le max moins le min
-   - d) la valeur la plus fréquente</li>
-<li>Pour l'échantillon <strong>8, 13, 7, 10, 12, 11, 10, 9</strong> (moyenne = 10, Sum of Squares = 28), la <strong>variance</strong> vaut :
-   - a) 28
-   - b) 3,5
-   - c) 4
-   - d) 2</li>
-<li>Dans une distribution <strong>normale</strong>, le pourcentage de cas compris entre <strong>±2 écarts-types</strong> autour de la moyenne est d'environ :
-   - a) 68 %
-   - b) 95 %
-   - c) 99,7 %
-   - d) 50 %</li>
-<li><strong>Vrai ou faux ?</strong> Moyenne, médiane, étendue, variance et écart-type ne peuvent se calculer que si la distribution est normale.
-   - a) Vrai
-   - b) Faux</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — La moyenne = somme de toutes les valeurs ÷ nombre de valeurs.</li>
-<li><strong>b</strong> — La médiane n'est pas tirée par les valeurs extrêmes, contrairement à la moyenne.</li>
-<li><strong>b</strong> — L'écart-type est la racine carrée de la variance (s = √s²).</li>
-<li><strong>c</strong> — Variance d'échantillon = Sum of Squares ÷ (n − 1) = 28 ÷ 7 = 4 (et l'écart-type = √4 = 2).</li>
-<li><strong>b</strong> — Règle 68/95/99,7 % : ±2σ ≈ 95 % des cas.</li>
-<li><strong>b (Faux)</strong> — Ces mesures s'appliquent <strong>quelle que soit l'allure</strong> de la distribution ; la normalité n'est requise que pour appliquer la règle 68/95/99,7 %.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">La <strong>moyenne</strong> se calcule en…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> prenant la valeur du milieu</button><button type="button" class="opt" data-key="b"><b>b)</b> divisant la somme des valeurs par leur nombre</button><button type="button" class="opt" data-key="c"><b>c)</b> prenant la valeur la plus fréquente</button><button type="button" class="opt" data-key="d"><b>d)</b> soustrayant le min du max</button></div><div class="q-exp" hidden>La moyenne = somme de toutes les valeurs ÷ nombre de valeurs.</div></li><li class="q" data-correct="b"><div class="q-text">En présence d'une <strong>valeur exceptionnelle (outlier)</strong>, quel indicateur du centre est généralement le plus représentatif ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La moyenne</button><button type="button" class="opt" data-key="b"><b>b)</b> La médiane</button><button type="button" class="opt" data-key="c"><b>c)</b> Le mode</button><button type="button" class="opt" data-key="d"><b>d)</b> L'étendue</button></div><div class="q-exp" hidden>La médiane n'est pas tirée par les valeurs extrêmes, contrairement à la moyenne.</div></li><li class="q" data-correct="b"><div class="q-text">L'<strong>écart-type</strong> est…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> le carré de la variance</button><button type="button" class="opt" data-key="b"><b>b)</b> la racine carrée de la variance</button><button type="button" class="opt" data-key="c"><b>c)</b> le max moins le min</button><button type="button" class="opt" data-key="d"><b>d)</b> la valeur la plus fréquente</button></div><div class="q-exp" hidden>L'écart-type est la racine carrée de la variance (s = √s²).</div></li><li class="q" data-correct="c"><div class="q-text">Pour l'échantillon <strong>8, 13, 7, 10, 12, 11, 10, 9</strong> (moyenne = 10, Sum of Squares = 28), la <strong>variance</strong> vaut :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 28</button><button type="button" class="opt" data-key="b"><b>b)</b> 3,5</button><button type="button" class="opt" data-key="c"><b>c)</b> 4</button><button type="button" class="opt" data-key="d"><b>d)</b> 2</button></div><div class="q-exp" hidden>Variance d'échantillon = Sum of Squares ÷ (n − 1) = 28 ÷ 7 = 4 (et l'écart-type = √4 = 2).</div></li><li class="q" data-correct="b"><div class="q-text">Dans une distribution <strong>normale</strong>, le pourcentage de cas compris entre <strong>±2 écarts-types</strong> autour de la moyenne est d'environ :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 68 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 95 %</button><button type="button" class="opt" data-key="c"><b>c)</b> 99,7 %</button><button type="button" class="opt" data-key="d"><b>d)</b> 50 %</button></div><div class="q-exp" hidden>Règle 68/95/99,7 % : ±2σ ≈ 95 % des cas.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux ?</strong> Moyenne, médiane, étendue, variance et écart-type ne peuvent se calculer que si la distribution est normale.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Ces mesures s'appliquent <strong>quelle que soit l'allure</strong> de la distribution ; la normalité n'est requise que pour appliquer la règle 68/95/99,7 %.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <strong>18. Statistiques Descriptives.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13sJMTpQpoUkoyYJxOhriZy4Zy6M2fV93/view">Ouvrir dans Drive</a></li>
@@ -7114,5 +6691,51 @@ Les deux valeurs centrales (6ᵉ et 7ᵉ) sont 5 et 5 ⟹ médiane = <strong>5</
 Réorganisé en module de formation autoportant.</em></p></section></section>
   </main>
 </div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
 </body>
 </html>

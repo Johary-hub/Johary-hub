@@ -39,19 +39,19 @@ a:hover{text-decoration:underline}
   color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
   justify-content:center}
 .side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
 .side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
   color:var(--ink);font-size:14px}
 .side-extra:hover{background:var(--bg);text-decoration:none}
-.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
-  max-width:880px}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
 .content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
   padding-bottom:.3em;border-bottom:2px solid var(--gold)}
 .content h3{font-size:19px;margin:1.3em 0 .4em}
 .content h4{font-size:16px;margin:1.1em 0 .3em}
 .card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
-  border-radius:12px;padding:14px 20px;margin:16px 0;
-  box-shadow:0 1px 2px rgba(16,24,40,.04)}
-.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
 .card.sec-obj{border-left-color:var(--obj)}
 .card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
 .card.sec-content{border-left-color:var(--content)}
@@ -66,59 +66,108 @@ a:hover{text-decoration:underline}
 blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
   border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
 blockquote p{margin:.4em 0}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
-  display:block;overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
 th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
 thead th{background:var(--slate);color:#fff;font-weight:600}
 tbody tr:nth-child(even){background:#fafbfc}
 code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
-  overflow-x:auto;line-height:1.45}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
 pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
 ul,ol{padding-left:1.4em}
 li{margin:.25em 0}
 hr{border:none;border-top:1px solid var(--line);margin:26px 0}
-details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
-  background:#fff}
-summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
-  list-style:none;color:#6d28d9}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
 summary::-webkit-details-marker{display:none}
 summary::before{content:"▸ ";font-weight:700}
 details[open] summary::before{content:"▾ "}
 details[open] summary{border-bottom:1px solid var(--line)}
 details>*:not(summary){padding-left:15px;padding-right:15px}
 details>ol,details>ul{padding-left:2.2em}
-.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
-  padding-top:18px;border-top:1px solid var(--line)}
-.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
-  background:#fff}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .pager a:hover{border-color:var(--gold);text-decoration:none}
 .pager .nx{text-align:right}
 .pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
 .hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
   padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
 .hero h1{border:none;color:#fff;margin:0 0 .3em}
-.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
-  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
 .hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
-/* single-file version */
-.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
-  margin-top:40px;padding-top:8px}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
 .module-block:first-of-type{border-top:none}
 .toc-back{font-size:13px;color:var(--muted)}
 @media(max-width:900px){
   .layout{flex-direction:column}
-  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
-    border-right:none;border-bottom:1px solid var(--line)}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
   .content{max-width:none}
 }
 @media print{
-  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
   .content{max-width:none;padding:0}
   .card{break-inside:avoid;box-shadow:none}
-  details[open] *{display:revert}
-  details{border:1px solid #ccc}
+  .quiz .q-exp{display:block!important}
 }
 </style>
 </head>
@@ -128,9 +177,9 @@ details>ol,details>ul{padding-left:2.2em}
   <div class="topnav"><a href="08-management-visuel.html">← Préc.</a><a href="10-dmaic.html">Suiv. →</a></div>
 </header>
 <div class="layout">
-  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link active" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link active" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
   <main class="content">
-<h1>Module 9 — Résolution de problème : QQOQCCP, Ishikawa, PDCA</h1>
+<div class="mod-toolbar"><button class="btn-done" data-slug="09-resolution-probleme-qqoqccp-ishikawa">Marquer ce module comme terminé</button></div><h1>Module 9 — Résolution de problème : QQOQCCP, Ishikawa, PDCA</h1>
 <blockquote>
 <p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
 ⏱️ Durée estimée : 55 min · 🎓 Niveau : Yellow Belt</p>
@@ -149,6 +198,8 @@ details>ol,details>ul{padding-left:2.2em}
 <li>Aucun prérequis logiciel : les outils sont des fiches papier / tableurs simples.</li>
 </ul>
 </section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 360 360" role="img" class="svg-anim"><path d="M180.0,12.0 A168.0,168.0 0 0 1 347.9,174.1 L267.9,176.9 A88.0,88.0 0 0 0 180.0,92.0 Z" fill="#2563eb" class="seg"><title>P — Planifier</title></path><text x="277" y="79" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">P</text><text x="254" y="104" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Planifier</text><path d="M348.0,180.0 A168.0,168.0 0 0 1 185.9,347.9 L183.1,267.9 A88.0,88.0 0 0 0 268.0,180.0 Z" fill="#16a34a" class="seg"><title>D — Dérouler (Faire)</title></path><text x="281" y="277" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">D</text><text x="256" y="254" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Dérouler (Faire)</text><path d="M180.0,348.0 A168.0,168.0 0 0 1 12.1,185.9 L92.1,183.1 A88.0,88.0 0 0 0 180.0,268.0 Z" fill="#d97706" class="seg"><title>C — Contrôler (Vérifier)</title></path><text x="83" y="281" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">C</text><text x="106" y="256" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Contrôler (Vérifier)</text><path d="M12.0,180.0 A168.0,168.0 0 0 1 174.1,12.1 L176.9,92.1 A88.0,88.0 0 0 0 92.0,180.0 Z" fill="#dc2626" class="seg"><title>A — Agir (Ajuster)</title></path><text x="79" y="83" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">A</text><text x="104" y="106" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Agir (Ajuster)</text><circle cx="180.0" cy="180.0" r="82.0" fill="#222b38"/><text x="180.0" y="174.0" text-anchor="middle" fill="#f6b400" font-size="30" font-weight="800">PDCA</text><text x="180.0" y="198.0" text-anchor="middle" fill="#cbd2db" font-size="12">amélioration continue</text><text x="180.0" y="26" text-anchor="middle" fill="#222b38" font-size="20">↻</text></svg><figcaption>La roue de Deming (PDCA) : Planifier → Dérouler → Contrôler → Agir, en boucle d'amélioration continue.</figcaption></figure>
+
 <h3>1. L'état d'esprit « Résolution de problème »</h3>
 <p>Avant tout outil, une posture. Chez Progress Partners, <strong>tout nouveau problème est une opportunité d'amélioration</strong>. À l'inverse, <strong>les problèmes récurrents sont un échec de notre mode de gestion de l'entreprise</strong> : s'ils reviennent, c'est que la cause racine n'a jamais été traitée.</p>
 <blockquote>
@@ -667,61 +718,8 @@ details>ol,details>ul{padding-left:2.2em}
 <li><strong>Act = standardiser + prévenir la récurrence + capitaliser (REX, A3) + déployer</strong> : on fige le gain, puis la roue retourne.</li>
 </ul>
 </section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
-<ol>
-<li>
-<p>Dans le QQOQCCP, à quoi sert la question <strong>« Combien ? »</strong> ?
-   - a) À identifier toutes les personnes concernées
-   - b) À quantifier l'ampleur du problème (%, nombre, unité)
-   - c) À trouver la cause racine
-   - d) À fixer la date de mise en application</p>
-</li>
-<li>
-<p>Quelles sont les <strong>5M</strong> du diagramme d'Ishikawa ?
-   - a) Méthode, Matière, Milieu, Machine, Main d'œuvre
-   - b) Mesure, Marché, Marge, Management, Méthode
-   - c) Moyen, Money, Matière, Milieu, Manager
-   - d) Matière, Machine, Mission, Milieu, Méthode</p>
-</li>
-<li>
-<p>Pourquoi enchaîne-t-on Ishikawa avec les <strong>5 Pourquoi</strong> ?
-   - a) Pour faire plus de réunions
-   - b) Parce que si la cause racine n'est pas déterminée, le problème se reproduira
-   - c) Pour remplacer le QQOQCCP
-   - d) Parce que l'Ishikawa est interdit en Lean</p>
-</li>
-<li>
-<p>Que signifie <strong>PDCA</strong> ?
-   - a) Plan – Do – Check – Act
-   - b) Prepare – Deploy – Control – Audit
-   - c) Plan – Détecter – Corriger – Auditer
-   - d) Produire – Distribuer – Contrôler – Améliorer</p>
-</li>
-<li>
-<p>Dans la phase <strong>Act</strong>, que fait-on en priorité pour éviter que le problème revienne ?
-   - a) On lance un nouveau brainstorming
-   - b) On standardise et on prévient la récurrence (puis REX / déploiement)
-   - c) On revient à la situation initiale
-   - d) On supprime les indicateurs</p>
-</li>
-<li>
-<p>« Parler avec des données » signifie que la résolution de problèmes se base sur… ?
-   - a) L'intuition du chef
-   - b) Des suppositions de l'équipe
-   - c) Des faits (batonnage, Pareto, SPC)
-   - d) L'ancienneté des opérateurs</p>
-</li>
-</ol>
-<details>
-<summary>👉 Voir les réponses</summary>
-<ol>
-<li><strong>b</strong> — Le « Combien ? » quantifie le problème (pourcentage, nombre, unité de mesure).</li>
-<li><strong>a</strong> — Méthode, Matière, Milieu, Machine, Main d'œuvre (les arêtes du poisson). Le formulaire source nomme la branche Machine « Moyen » et Main d'œuvre « M.O. ».</li>
-<li><strong>b</strong> — « Si la cause racine n'est pas déterminée, le problème se reproduira » : les 5 Pourquoi remontent à la vraie racine.</li>
-<li><strong>a</strong> — Plan (Planifier) – Do (Dérouler) – Check (Vérifier) – Act (Acter), la roue de Deming.</li>
-<li><strong>b</strong> — Act = prévenir la récurrence, standardiser, puis capitaliser (REX, A3) et déployer.</li>
-<li><strong>c</strong> — La résolution se base sur des FAITS et non sur des suppositions : fiches de batonnage, analyse de Pareto, SPC.</li>
-</ol>
-</details>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Dans le QQOQCCP, à quoi sert la question <strong>« Combien ? »</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À identifier toutes les personnes concernées</button><button type="button" class="opt" data-key="b"><b>b)</b> À quantifier l'ampleur du problème (%, nombre, unité)</button><button type="button" class="opt" data-key="c"><b>c)</b> À trouver la cause racine</button><button type="button" class="opt" data-key="d"><b>d)</b> À fixer la date de mise en application</button></div><div class="q-exp" hidden>Le « Combien ? » quantifie le problème (pourcentage, nombre, unité de mesure).</div></li><li class="q" data-correct="a"><div class="q-text">Quelles sont les <strong>5M</strong> du diagramme d'Ishikawa ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Méthode, Matière, Milieu, Machine, Main d'œuvre</button><button type="button" class="opt" data-key="b"><b>b)</b> Mesure, Marché, Marge, Management, Méthode</button><button type="button" class="opt" data-key="c"><b>c)</b> Moyen, Money, Matière, Milieu, Manager</button><button type="button" class="opt" data-key="d"><b>d)</b> Matière, Machine, Mission, Milieu, Méthode</button></div><div class="q-exp" hidden>Méthode, Matière, Milieu, Machine, Main d'œuvre (les arêtes du poisson). Le formulaire source nomme la branche Machine « Moyen » et Main d'œuvre « M.O. ».</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi enchaîne-t-on Ishikawa avec les <strong>5 Pourquoi</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Pour faire plus de réunions</button><button type="button" class="opt" data-key="b"><b>b)</b> Parce que si la cause racine n'est pas déterminée, le problème se reproduira</button><button type="button" class="opt" data-key="c"><b>c)</b> Pour remplacer le QQOQCCP</button><button type="button" class="opt" data-key="d"><b>d)</b> Parce que l'Ishikawa est interdit en Lean</button></div><div class="q-exp" hidden>« Si la cause racine n'est pas déterminée, le problème se reproduira » : les 5 Pourquoi remontent à la vraie racine.</div></li><li class="q" data-correct="a"><div class="q-text">Que signifie <strong>PDCA</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Plan – Do – Check – Act</button><button type="button" class="opt" data-key="b"><b>b)</b> Prepare – Deploy – Control – Audit</button><button type="button" class="opt" data-key="c"><b>c)</b> Plan – Détecter – Corriger – Auditer</button><button type="button" class="opt" data-key="d"><b>d)</b> Produire – Distribuer – Contrôler – Améliorer</button></div><div class="q-exp" hidden>Plan (Planifier) – Do (Dérouler) – Check (Vérifier) – Act (Acter), la roue de Deming.</div></li><li class="q" data-correct="b"><div class="q-text">Dans la phase <strong>Act</strong>, que fait-on en priorité pour éviter que le problème revienne ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> On lance un nouveau brainstorming</button><button type="button" class="opt" data-key="b"><b>b)</b> On standardise et on prévient la récurrence (puis REX / déploiement)</button><button type="button" class="opt" data-key="c"><b>c)</b> On revient à la situation initiale</button><button type="button" class="opt" data-key="d"><b>d)</b> On supprime les indicateurs</button></div><div class="q-exp" hidden>Act = prévenir la récurrence, standardiser, puis capitaliser (REX, A3) et déployer.</div></li><li class="q" data-correct="c"><div class="q-text">« Parler avec des données » signifie que la résolution de problèmes se base sur… ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> L'intuition du chef</button><button type="button" class="opt" data-key="b"><b>b)</b> Des suppositions de l'équipe</button><button type="button" class="opt" data-key="c"><b>c)</b> Des faits (batonnage, Pareto, SP</button><button type="button" class="opt" data-key="c"><b>c)</b> </button><button type="button" class="opt" data-key="d"><b>d)</b> L'ancienneté des opérateurs</button></div><div class="q-exp" hidden>La résolution se base sur des FAITS et non sur des suppositions : fiches de batonnage, analyse de Pareto, SPC.</div></li></ol><p class="quiz-final" hidden></p></div>
+
 </section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
 <ul>
 <li>📄 <strong>11.QQOQCCP.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1HWbbQQAf6R3DvDzSNPQwmqmumJ5PQvRc/view">Ouvrir dans Drive</a> <em>(formulaire / gabarit, texte limité aux libellés des champs)</em></li>
@@ -732,9 +730,54 @@ details>ol,details>ul{padding-left:2.2em}
 </ul>
 <hr />
 <p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
-Réorganisé en module de formation autoportant.</em></p></section>
-<nav class="pager"><a href="08-management-visuel.html"><small>← Module précédent</small>8 · Le Management Visuel</a><a class="nx" href="10-dmaic.html"><small>Module suivant →</small>10 · La démarche DMAIC</a></nav>
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="08-management-visuel.html"><small>← Module précédent</small>8 · Le Management Visuel</a><a class="nx" href="10-dmaic.html"><small>Module suivant →</small>10 · La démarche DMAIC</a></nav>
   </main>
 </div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
 </body>
 </html>
