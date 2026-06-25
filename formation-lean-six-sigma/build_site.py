@@ -339,11 +339,119 @@ def _svg_triangle():
     return "".join(p)
 
 
+def _svg_types_donnees():
+    def box(cx, y, w, h, col, l1, l2, tc="#fff", sc="#eef2f7"):
+        s = (f'<rect x="{cx-w/2:.0f}" y="{y}" width="{w}" height="{h}" rx="9" fill="{col}" class="seg"/>'
+             f'<text x="{cx}" y="{y+24}" text-anchor="middle" fill="{tc}" font-size="13" font-weight="700">{l1}</text>')
+        if l2:
+            s += f'<text x="{cx}" y="{y+42}" text-anchor="middle" fill="{sc}" font-size="11">{l2}</text>'
+        return s
+
+    def link(x1, y1, x2, y2):
+        return (f'<path d="M{x1},{y1} C{x1},{(y1+y2)//2} {x2},{(y1+y2)//2} {x2},{y2}" '
+                f'fill="none" stroke="#b6bdc7" stroke-width="2"/>')
+    p = ['<svg viewBox="0 0 720 330" role="img" class="svg-anim">']
+    p.append(link(360, 60, 170, 118))
+    p.append(link(360, 60, 540, 118))
+    p.append(link(540, 176, 430, 228))
+    p.append(link(540, 176, 632, 228))
+    p.append(box(360, 18, 220, 42, "#222b38", "TYPE DE DONNÉE", ""))
+    p.append(box(170, 118, 212, 58, "#2563eb", "Par ATTRIBUT", "catégories · pas d'ordre"))
+    p.append(box(540, 118, 212, 58, "#0d9488", "VARIABLE", "axe numérique · mesurable"))
+    p.append('<text x="540" y="206" text-anchor="middle" fill="#5b6675" font-size="10.5">2 découpages indépendants → 2 étiquettes</text>')
+    p.append(box(430, 228, 176, 58, "#16a34a", "Intervalle ↔ Ratio", "selon le sens du zéro"))
+    p.append(box(632, 228, 156, 58, "#7c3aed", "Continue ↔ Discrète", "selon les valeurs"))
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_paradigme():
+    nodes = [("Paradigme", "croyance · règle · habitude", 300, 66, "#7c3aed"),
+             ("Perception", "ce que je vois (ou pas)", 474, 188, "#2563eb"),
+             ("Comportement", "ce que je fais", 300, 310, "#0d9488"),
+             ("Résultats", "ce que j'obtiens", 126, 188, "#d97706")]
+    p = ['<svg viewBox="0 0 600 392" role="img" class="svg-anim">']
+    for i in range(4):
+        ax, ay = nodes[i][2], nodes[i][3]
+        bx, by = nodes[(i + 1) % 4][2], nodes[(i + 1) % 4][3]
+        ang = math.atan2(by - ay, bx - ax)
+        sx, sy = ax + math.cos(ang) * 88, ay + math.sin(ang) * 34
+        ex, ey = bx - math.cos(ang) * 88, by - math.sin(ang) * 34
+        adeg = math.degrees(math.atan2(ey - sy, ex - sx))
+        p.append(f'<line x1="{sx:.0f}" y1="{sy:.0f}" x2="{ex:.0f}" y2="{ey:.0f}" stroke="#9aa3b0" stroke-width="2.5"/>')
+        p.append(f'<polygon points="0,-5 11,0 0,5" fill="#9aa3b0" transform="translate({ex:.0f},{ey:.0f}) rotate({adeg:.0f})"/>')
+    for l1, l2, x, y, col in nodes:
+        p.append(f'<rect x="{x-90:.0f}" y="{y-26:.0f}" width="180" height="52" rx="10" fill="{col}" class="seg"/>')
+        p.append(f'<text x="{x}" y="{y-4}" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">{l1}</text>')
+        p.append(f'<text x="{x}" y="{y+13}" text-anchor="middle" fill="#eef2f7" font-size="10.5">{l2}</text>')
+    p.append('<text x="300" y="184" text-anchor="middle" fill="#7c3aed" font-size="12.5" font-weight="800">BOUCLE QUI</text>')
+    p.append('<text x="300" y="201" text-anchor="middle" fill="#7c3aed" font-size="12.5" font-weight="800">SE RENFORCE</text>')
+    p.append('<text x="300" y="384" text-anchor="middle" fill="#b45309" font-size="11.5" font-weight="600">Changer durablement = sortir du paradigme (regard extérieur, reformuler)</text>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_nemoto():
+    ax, ay = 350, 34
+    p = ['<svg viewBox="0 0 700 372" role="img" class="svg-anim">']
+
+    def edge(y):
+        t = (y - ay) / (300 - ay)
+        return ax + (110 - ax) * t, ax + (590 - ax) * t
+    l1, r1 = edge(120)
+    l2, r2 = edge(212)
+    p.append(f'<polygon points="{ax},{ay} {l1:.0f},120 {r1:.0f},120" fill="#334155" class="seg"/>')
+    p.append(f'<polygon points="{l1:.0f},120 {r1:.0f},120 {r2:.0f},212 {l2:.0f},212" fill="#2563eb" class="seg"/>')
+    p.append(f'<polygon points="{l2:.0f},212 {r2:.0f},212 590,300 110,300" fill="#16a34a" class="seg"/>')
+    p.append('<text x="350" y="103" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">TOP MANAGEMENT</text>')
+    p.append('<text x="350" y="117" text-anchor="middle" fill="#cdd6e2" font-size="10">Vision &amp; sens</text>')
+    p.append('<text x="350" y="165" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Management intermédiaire</text>')
+    p.append('<text x="350" y="182" text-anchor="middle" fill="#dbe5ff" font-size="10.5">Objectifs &amp; standards · fait le pont</text>')
+    p.append('<text x="350" y="254" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Opérationnels</text>')
+    p.append('<text x="350" y="271" text-anchor="middle" fill="#dcfce7" font-size="10.5">Création de valeur (Gemba) · remontent les idées</text>')
+    p.append('<line x1="56" y1="70" x2="56" y2="296" stroke="#64748b" stroke-width="2.5"/>')
+    p.append('<polygon points="0,-5 10,0 0,5" fill="#64748b" transform="translate(56,296) rotate(90)"/>')
+    p.append('<text x="42" y="186" fill="#475569" font-size="11" font-weight="600" transform="rotate(-90 42 186)" text-anchor="middle">Top-Down : déployer la vision</text>')
+    p.append('<line x1="644" y1="296" x2="644" y2="70" stroke="#64748b" stroke-width="2.5"/>')
+    p.append('<polygon points="0,-5 10,0 0,5" fill="#64748b" transform="translate(644,70) rotate(-90)"/>')
+    p.append('<text x="658" y="186" fill="#475569" font-size="11" font-weight="600" transform="rotate(90 658 186)" text-anchor="middle">Bottom-Up : remonter les idées</text>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_sdca_pdca():
+    pts = [(90, 288), (170, 243), (290, 243), (370, 198), (490, 198), (570, 153), (660, 153)]
+    p = ['<svg viewBox="0 0 700 348" role="img" class="svg-anim">']
+    p.append('<line x1="64" y1="40" x2="64" y2="312" stroke="#94a3b8" stroke-width="2"/>')
+    p.append('<line x1="64" y1="312" x2="672" y2="312" stroke="#94a3b8" stroke-width="2"/>')
+    p.append('<text x="22" y="178" fill="#475569" font-size="12" font-weight="600" transform="rotate(-90 22 178)" text-anchor="middle">Performance</text>')
+    p.append('<text x="370" y="336" fill="#475569" font-size="12" font-weight="600" text-anchor="middle">Temps →</text>')
+    for a, b in [(0, 1), (2, 3), (4, 5)]:
+        x1, y1 = pts[a]
+        x2, y2 = pts[b]
+        ang = math.degrees(math.atan2(y2 - y1, x2 - x1))
+        p.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#2563eb" stroke-width="5"/>')
+        p.append(f'<polygon points="0,-6 12,0 0,6" fill="#2563eb" transform="translate({x2},{y2}) rotate({ang:.0f})"/>')
+        p.append(f'<text x="{(x1+x2)//2-14}" y="{(y1+y2)//2}" text-anchor="end" fill="#1d4ed8" font-size="12" font-weight="700">PDCA ↑</text>')
+    for a, b in [(1, 2), (3, 4), (5, 6)]:
+        x1, y1 = pts[a]
+        x2, y2 = pts[b]
+        mx = (x1 + x2) // 2
+        p.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#0d9488" stroke-width="5"/>')
+        p.append(f'<text x="{mx}" y="{y1-9}" text-anchor="middle" fill="#0f766e" font-size="11.5" font-weight="700">SDCA = cale</text>')
+        p.append(f'<polygon points="{mx-11},{y1+3} {mx+11},{y1+3} {mx},{y1+16}" fill="#f6b400"/>')
+    p.append('<text x="368" y="28" text-anchor="middle" fill="#222b38" font-size="12.5" font-weight="700">« Pas de standard, pas d\'amélioration » — on monte (PDCA), on cale (SDCA)</text>')
+    p.append('</svg>')
+    return "".join(p)
+
+
 SVGS = {
     "roue-pdca": _svg_pdca(), "cinq-s": _svg_5s(), "cycle-dmaic": _svg_dmaic(),
     "maison-lean": _svg_maison(), "sipoc": _svg_sipoc(), "loi-normale": _svg_normale(),
     "va-nva": _svg_va_nva(), "sept-muda": _svg_7muda(), "ishikawa": _svg_ishikawa(),
     "arbre-cts": _svg_cts(), "triangle-or": _svg_triangle(),
+    "types-donnees": _svg_types_donnees(), "paradigme": _svg_paradigme(),
+    "nemoto": _svg_nemoto(), "sdca-pdca": _svg_sdca_pdca(),
 }
 
 # ============================================================ CSS ============
@@ -777,6 +885,18 @@ MODULE_SVG = {
         "Le SIPOC : Fournisseurs → Entrées → Processus → Sorties → Clients — la vue d'ensemble d'un processus."),
     "14-statistiques-descriptives": ("loi-normale",
         "La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ autour de la moyenne."),
+    "04-paradigmes": ("paradigme",
+        "Le paradigme s'auto-renforce : il filtre la perception, oriente le comportement et "
+        "produit des résultats qui le confirment. Changer durablement, c'est en sortir."),
+    "05-management-lean-nemoto": ("nemoto",
+        "Le diagramme de Nemoto relie les 3 niveaux : la direction porte la vision, l'encadrement "
+        "fait le pont (objectifs & standards), les opérationnels créent la valeur et remontent les idées."),
+    "06-standards-standardisation": ("sdca-pdca",
+        "Standardiser avant d'améliorer : chaque SDCA « cale » le palier atteint, chaque PDCA "
+        "fait monter d'un cran (escalier performance / temps)."),
+    "13-types-de-donnees": ("types-donnees",
+        "La classification des données : par attribut (catégories) ou variable (numérique) ; "
+        "une variable se lit sur deux axes indépendants — intervalle/ratio et continue/discrète."),
 }
 
 # Schémas placés en ligne, juste après le sous-titre de section : (ancre, nom_svg, légende)
