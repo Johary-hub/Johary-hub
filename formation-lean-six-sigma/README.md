@@ -80,6 +80,8 @@ et *classroom* (mise en pratique encadrée). Les modules ci‑dessous couvrent l
 3. **Validez avec le quiz** de fin de module.
 4. **Consignez vos livrables et vos notes MAST** dans le [cahier du stagiaire](modules/00-demarrage.md).
 5. **Récupérez les modèles** (grilles, templates) dans [`ressources/`](ressources/INDEX.md).
+6. **Passez l'examen final** transversal (26 questions, seuil **70 %**) et obtenez votre
+   **attestation imprimable** — page `examen.html` du site (lien « 🏅 Examen final » dans la barre latérale).
 
 ## 📂 Contenu du dépôt
 

@@ -24,6 +24,8 @@ MODULES_DIR = ROOT / "modules"
 SITE_DIR = ROOT.parent / "docs"   # racine du dépôt /docs (source GitHub Pages)
 README = ROOT / "README.md"
 RESSOURCES = ROOT / "ressources" / "INDEX.md"
+EXAM = ROOT / "exam.md"
+EXAM_PASS = 70  # seuil de réussite en %
 
 try:
     import markdown
@@ -614,11 +616,55 @@ details>ol,details>ul{padding-left:2.2em}
   .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
   .content{max-width:none}
 }
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
 @media print{
   .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
   .content{max-width:none;padding:0}
   .card{break-inside:avoid;box-shadow:none}
   .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
 }
 """
 
@@ -762,12 +808,8 @@ def wrap_sections(html):
     return "".join(out)
 
 
-def build_quiz(md):
-    """Extrait le quiz et renvoie (md_avec_slot, html_quiz) ou (md, None) en repli."""
-    m = re.search(r'(^##\s*📝\s*Quiz de validation.*?)(?=^\#\#\s|\Z)', md, flags=re.S | re.M)
-    if not m:
-        return md, None
-    block = m.group(1)
+def parse_quiz(block):
+    """Parse un bloc « questions + <details> réponses » → (questions, nb_interactives)."""
     dm = re.search(r'<details>(.*?)</details>', block, flags=re.S)
     answers, justif = {}, {}
     if dm:
@@ -799,8 +841,6 @@ def build_quiz(md):
             cur['text'] += ' ' + line.strip()
     if cur:
         questions.append(cur)
-    if not questions:
-        return md, None
     interactive = 0
     for q in questions:
         tok = (answers.get(q['n']) or '').strip().lower()
@@ -822,7 +862,17 @@ def build_quiz(md):
         else:
             q['static'] = True
             q['exp'] = justif.get(q['n'], '')
-    if interactive == 0:
+    return questions, interactive
+
+
+def build_quiz(md):
+    """Extrait le quiz d'un module → (md_avec_slot, html_quiz) ou (md, None)."""
+    m = re.search(r'(^##\s*📝\s*Quiz de validation.*?)(?=^\#\#\s|\Z)', md, flags=re.S | re.M)
+    if not m:
+        return md, None
+    block = m.group(1)
+    questions, interactive = parse_quiz(block)
+    if not questions or interactive == 0:
         return md, None
     quiz_html = render_quiz(questions)
     heading = re.match(r'^(##\s*📝\s*Quiz de validation[^\n]*\n)', block).group(1)
@@ -853,6 +903,96 @@ def render_quiz(questions):
         out.append(f'</div><div class="q-exp" hidden>{exp}</div></li>')
     out.append('</ol><p class="quiz-final" hidden></p></div>')
     return "".join(out)
+
+
+EXAM_JS = r"""
+(function(){
+  var exam=document.querySelector('.exam'); if(!exam) return;
+  var pass=parseInt(exam.getAttribute('data-pass'))||70;
+  var qs=exam.querySelectorAll('.exam-q'); var total=qs.length;
+  var cert=document.querySelector('.certificate');
+  var submit=exam.querySelector('.exam-submit'), reset=exam.querySelector('.exam-reset');
+  var result=exam.querySelector('.exam-result');
+  qs.forEach(function(q){ q.querySelectorAll('.opt').forEach(function(b){
+    b.addEventListener('click',function(){ if(exam.classList.contains('done'))return;
+      q.querySelectorAll('.opt').forEach(function(o){o.classList.remove('selected');});
+      b.classList.add('selected'); }); }); });
+  function fillCert(score,total,pct){
+    var nm=(exam.querySelector('.exam-name-in').value||'').trim()||'—';
+    cert.querySelector('.cert-name').textContent=nm;
+    cert.querySelector('.cert-score').textContent=score+' / '+total+' ('+pct+'%)';
+    var d=new Date();
+    cert.querySelector('.cert-date').textContent='Délivrée le '+d.toLocaleDateString('fr-FR');
+  }
+  submit.addEventListener('click',function(){
+    var score=0, unanswered=0;
+    qs.forEach(function(q){ var sel=q.querySelector('.opt.selected');
+      var correct=q.getAttribute('data-correct'); if(!sel)unanswered++;
+      q.querySelectorAll('.opt').forEach(function(o){ var k=o.getAttribute('data-key');
+        if(k===correct)o.classList.add('correct');
+        if(o.classList.contains('selected')&&k!==correct)o.classList.add('wrong'); });
+      if(sel&&sel.getAttribute('data-key')===correct)score++;
+      var e=q.querySelector('.q-exp'); if(e)e.hidden=false; });
+    exam.classList.add('done'); submit.disabled=true; reset.hidden=false;
+    var pct=Math.round(score/total*100), passed=pct>=pass;
+    result.hidden=false; result.className='exam-result '+(passed?'ok':'ko');
+    result.innerHTML='<strong>Score : '+score+' / '+total+' ('+pct+'%)</strong> — '+
+      (passed?'✅ Réussi ! Seuil de '+pass+'% atteint.'
+             :'❌ Seuil de '+pass+'% non atteint. Revoyez les modules concernés et retentez.')+
+      (unanswered?' <span class="warn">('+unanswered+' sans réponse)</span>':'');
+    if(passed && cert){ fillCert(score,total,pct); cert.classList.add('show');
+      setTimeout(function(){cert.scrollIntoView({behavior:'smooth'});},150); }
+    else if(cert){ cert.classList.remove('show'); }
+  });
+  reset.addEventListener('click',function(){ exam.classList.remove('done'); submit.disabled=false;
+    result.hidden=true; reset.hidden=true; if(cert)cert.classList.remove('show');
+    qs.forEach(function(q){ q.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('selected','correct','wrong'); });
+      var e=q.querySelector('.q-exp'); if(e)e.hidden=true; });
+    window.scrollTo({top:0,behavior:'smooth'}); });
+  var pb=cert&&cert.querySelector('.cert-print');
+  if(pb)pb.addEventListener('click',function(){window.print();});
+})();
+"""
+
+
+def render_exam(questions):
+    out = ['<div class="exam" data-pass="', str(EXAM_PASS), '">',
+           '<div class="exam-form">',
+           '<label class="exam-name">Votre nom et prénom (figurera sur l\'attestation)'
+           '<input type="text" class="exam-name-in" placeholder="Prénom NOM" autocomplete="name"></label>',
+           '<ol class="exam-list">']
+    for q in questions:
+        if q.get('static'):
+            continue
+        out.append(f'<li class="exam-q" data-correct="{q["correct"]}">'
+                   f'<div class="q-text">{md_inline(q["text"])}</div><div class="opts">')
+        for o in q['opts']:
+            label = o['text'] if o['key'] in ('vrai', 'faux') else f'<b>{o["key"]})</b> {md_inline(o["text"])}'
+            out.append(f'<button type="button" class="opt" data-key="{o["key"]}">{label}</button>')
+        exp = md_inline(q['exp']) if q['exp'] else ''
+        out.append(f'</div><div class="q-exp" hidden>{exp}</div></li>')
+    out.append('</ol></div>')
+    out.append('<div class="exam-controls"><button type="button" class="exam-submit">Valider mon examen</button>'
+               '<button type="button" class="exam-reset" hidden>↺ Recommencer</button></div>')
+    out.append('<div class="exam-result" hidden></div></div>')
+    return "".join(out)
+
+
+def render_cert():
+    return ('<div class="certificate"><div class="cert-inner">'
+            '<div class="cert-seal">🏅</div>'
+            '<div class="cert-kicker">Progress Partners — La passion de la performance</div>'
+            '<h2 class="cert-title">Attestation de réussite</h2>'
+            '<div class="cert-sub">Parcours Lean Six Sigma — Yellow Belt (SSYB)</div>'
+            '<p class="cert-line">Décernée à</p>'
+            '<div class="cert-name">—</div>'
+            '<p class="cert-body">a suivi l\'intégralité du parcours et réussi l\'examen final '
+            'transversal avec un score de <span class="cert-score">—</span>.</p>'
+            '<div class="cert-foot"><span class="cert-date">—</span>'
+            '<span class="cert-sign">Cachet / signature de l\'organisme</span></div>'
+            '<button type="button" class="cert-print">🖨️ Imprimer / Enregistrer en PDF</button>'
+            '</div></div>')
 
 
 def parse_title(md_text, fallback):
@@ -951,6 +1091,7 @@ def main():
                         f'<a class="side-link{active}" data-slug="{m["slug"]}" href="{m["slug"]}.html">'
                         f'<span class="badge">{m["num"]}</span><span>{m["label"]}</span>'
                         f'<span class="chk"></span></a>')
+        rows.append('<a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a>')
         rows.append('<a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a>')
         rows.append('<a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a>')
         rows.append("</nav>")
@@ -997,9 +1138,10 @@ def main():
     readme_html = wrap_sections(fix_links(md_to_html(README.read_text(encoding="utf-8"))))
     panel = ('<div class="progress-panel"><div class="ptext">Votre progression</div>'
              '<div class="bar"><i></i></div><button class="btn-reset">Réinitialiser ma progression</button></div>')
+    exam_cta = ('<a class="exam-cta" href="examen.html">🏅 Passer l\'examen final &amp; obtenir mon attestation →</a>')
     index_page = PAGE.format(title="Accueil — Formation Lean Six Sigma Yellow Belt", css=CSS,
                              script=JS_CODE, topnav='<a href="formation-complete.html">📖 Tout en un fichier</a>',
-                             sidebar=sidebar_html(None), content=panel + readme_html)
+                             sidebar=sidebar_html(None), content=panel + exam_cta + readme_html)
     (SITE_DIR / "index.html").write_text(index_page, encoding="utf-8")
 
     # ressources
@@ -1029,7 +1171,21 @@ def main():
                             sidebar=sidebar_html(None), content=full_content)
     (SITE_DIR / "formation-complete.html").write_text(full_page, encoding="utf-8")
 
-    print(f"OK — {len(modules)} modules + index + ressources + fichier unique")
+    # examen final transversal + attestation imprimable
+    exam_raw = EXAM.read_text(encoding="utf-8")
+    exam_title = parse_title(exam_raw, "Examen final")
+    eparts = re.split(r'^##\s*Questions\s*$', exam_raw, flags=re.M)
+    exam_intro = fix_links(md_to_html(eparts[0]))
+    equestions, _ = parse_quiz(eparts[1] if len(eparts) > 1 else "")
+    exam_content = ('<div class="exam-page-body">' + exam_intro + render_exam(equestions)
+                    + '</div>' + render_cert())
+    exam_page = PAGE.format(title=exam_title + " — LSS Yellow Belt", css=CSS,
+                            script=JS_CODE + EXAM_JS, topnav='<a href="index.html">🏠 Accueil</a>',
+                            sidebar=sidebar_html(None), content=exam_content)
+    (SITE_DIR / "examen.html").write_text(exam_page, encoding="utf-8")
+
+    print(f"OK — {len(modules)} modules + index + ressources + fichier unique + examen")
+    print(f"Examen : {len([q for q in equestions if not q.get('static')])} questions, seuil {EXAM_PASS}%")
     print(f"SVG injectés dans : {', '.join(sorted(MODULE_SVG))}")
     print(f"Sortie : {SITE_DIR}")
 
