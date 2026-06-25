@@ -3,7 +3,7 @@
 Génère un site HTML statique autoportant à partir des modules Markdown.
 
 Usage :  python3 build_site.py
-Sortie :  formation-lean-six-sigma/site/
+Sortie :  docs/  (racine du dépôt — dossier servi par GitHub Pages)
             ├── index.html                (accueil = README)
             ├── ressources.html           (= ressources/INDEX.md)
             ├── 00-...html … 14-...html    (un fichier par module)
@@ -17,7 +17,7 @@ import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent
 MODULES_DIR = ROOT / "modules"
-SITE_DIR = ROOT / "site"
+SITE_DIR = ROOT.parent / "docs"   # racine du dépôt /docs (source GitHub Pages)
 README = ROOT / "README.md"
 RESSOURCES = ROOT / "ressources" / "INDEX.md"
 
@@ -234,6 +234,7 @@ def short_label(title):
 # ----------------------------------------------------------- build ------------
 def main():
     SITE_DIR.mkdir(exist_ok=True)
+    (SITE_DIR / ".nojekyll").write_text("")  # désactive Jekyll sur GitHub Pages
     module_files = sorted(MODULES_DIR.glob("[0-9][0-9]-*.md"))
     modules = []
     for mf in module_files:

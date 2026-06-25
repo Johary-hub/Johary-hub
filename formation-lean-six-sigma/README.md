@@ -8,11 +8,11 @@ fondamentaux du Lean et du Six Sigma et, surtout, vous rend **capable d'applique
 notion directement sur votre terrain** : chaque module se termine par une section
 **« Application directe »** avec un exercice concret et un livrable.
 
-> 💻 **Version HTML autoportante** — le parcours est aussi disponible en HTML prêt à suivre :
-> ouvrez [`site/index.html`](site/index.html) (site complet avec navigation) ou
-> [`site/formation-complete.html`](site/formation-complete.html) (tout le parcours en **un seul
-> fichier**, à diffuser tel quel aux apprenants, lisible hors‑ligne). Pour régénérer après
-> modification des modules : `python3 build_site.py`.
+> 💻 **Version HTML autoportante** — le parcours est généré dans le dossier [`docs/`](../docs/)
+> (servi par **GitHub Pages**). Une fois Pages activé, il est consultable en ligne :
+> **https://johary-hub.github.io/Johary-hub/** — et en un seul fichier à diffuser aux
+> apprenants : **https://johary-hub.github.io/Johary-hub/formation-complete.html**.
+> Pour régénérer après modification des modules : `python3 build_site.py`.
 
 ---
 
