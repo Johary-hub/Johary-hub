@@ -218,13 +218,132 @@ def _svg_normale():
     return "".join(p)
 
 
+def _svg_va_nva():
+    x0, w, y, h = 40, 640, 70, 46
+    blocks = [("nva", 150), ("va", 12), ("nva", 170), ("va", 10),
+              ("nva", 150), ("va", 12), ("nva", 96)]
+    total = sum(b[1] for b in blocks)
+    p = ['<svg viewBox="0 0 720 218" role="img" class="svg-anim">']
+    p.append('<text x="360" y="34" text-anchor="middle" fill="#222b38" font-size="14" '
+             'font-weight="700">Délai d\'écoulement d\'un processus (Lead Time)</text>')
+    x = x0
+    for typ, bw in blocks:
+        ww = bw * w / total
+        col = "#16a34a" if typ == "va" else "#cbd5e1"
+        p.append(f'<rect x="{x:.1f}" y="{y}" width="{ww:.1f}" height="{h}" fill="{col}" '
+                 f'stroke="#fff" stroke-width="1" class="seg"/>')
+        x += ww
+    p.append(f'<rect x="{x0}" y="{y}" width="{w}" height="{h}" fill="none" stroke="#94a3b8"/>')
+    p.append(f'<rect x="{x0}" y="135" width="15" height="15" fill="#16a34a"/>')
+    p.append(f'<text x="{x0+21}" y="147" fill="#1f2733" font-size="12.5">'
+             f'<tspan font-weight="700">VA</tspan> — crée de la valeur pour le client</text>')
+    p.append(f'<rect x="{x0}" y="157" width="15" height="15" fill="#cbd5e1"/>')
+    p.append(f'<text x="{x0+21}" y="169" fill="#1f2733" font-size="12.5">'
+             f'<tspan font-weight="700">NVA</tspan> — gaspillage à éliminer (souvent &gt; 95 % du délai)</text>')
+    p.append('<text x="360" y="200" text-anchor="middle" fill="#b45309" font-size="12.5" '
+             'font-weight="600">Efficacité du cycle = temps VA ÷ délai total → le Lean comprime le NVA</text>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_7muda():
+    items = [("1", "Surproduction", "#dc2626"), ("2", "Stocks", "#d97706"),
+             ("3", "Transport", "#0d9488"), ("4", "Attente", "#2563eb"),
+             ("5", "Mouvements", "#7c3aed"), ("6", "Sur-processus", "#0ea5a4"),
+             ("7", "Défauts", "#db2777")]
+    cx, cy, R, n = 360, 205, 168, 7
+    p = ['<svg viewBox="0 0 720 430" role="img" class="svg-anim">']
+    for i in range(n):
+        x, y = _pol(cx, cy, R, -90 + i * 360 / n)
+        p.append(f'<line x1="{cx}" y1="{cy}" x2="{x:.0f}" y2="{y:.0f}" stroke="#dfe3e8" stroke-width="2"/>')
+    for i, (num, lab, col) in enumerate(items):
+        x, y = _pol(cx, cy, R, -90 + i * 360 / n)
+        p.append(f'<rect x="{x-78:.0f}" y="{y-23:.0f}" width="156" height="46" rx="9" fill="{col}" class="seg"/>')
+        p.append(f'<text x="{x:.0f}" y="{y+5:.0f}" text-anchor="middle" fill="#fff" '
+                 f'font-size="13" font-weight="700">{num}. {lab}</text>')
+    p.append(f'<circle cx="{cx}" cy="{cy}" r="66" fill="#222b38"/>')
+    p.append(f'<text x="{cx}" y="{cy-3}" text-anchor="middle" fill="#f6b400" font-size="22" font-weight="800">7 MUDA</text>')
+    p.append(f'<text x="{cx}" y="{cy+18}" text-anchor="middle" fill="#cbd2db" font-size="11">les gaspillages</text>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_ishikawa():
+    sy = 190
+    p = ['<svg viewBox="0 0 720 360" role="img" class="svg-anim">']
+    p.append(f'<line x1="60" y1="{sy}" x2="545" y2="{sy}" stroke="#334155" stroke-width="3"/>')
+    p.append(f'<polygon points="545,{sy-9} 566,{sy} 545,{sy+9}" fill="#334155"/>')
+    p.append('<rect x="567" y="158" width="146" height="64" rx="8" fill="#222b38" class="seg"/>')
+    p.append('<text x="640" y="184" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">EFFET</text>')
+    p.append('<text x="640" y="203" text-anchor="middle" fill="#cbd2db" font-size="11">(le problème)</text>')
+    top = [("Main-d'œuvre", "#2563eb", 180), ("Méthode", "#0d9488", 315), ("Milieu", "#7c3aed", 450)]
+    bot = [("Moyen (Machine)", "#d97706", 250), ("Matière", "#16a34a", 385)]
+    for lab, col, sx in top:
+        lcx, lcy = sx - 70, 58
+        p.append(f'<line x1="{lcx+42}" y1="{lcy+16}" x2="{sx}" y2="{sy}" stroke="{col}" stroke-width="2.5"/>')
+        p.append(f'<rect x="{lcx-66}" y="{lcy-16}" width="132" height="32" rx="6" fill="{col}" class="seg"/>')
+        p.append(f'<text x="{lcx}" y="{lcy+5}" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">{lab}</text>')
+    for lab, col, sx in bot:
+        lcx, lcy = sx - 70, 312
+        p.append(f'<line x1="{lcx+42}" y1="{lcy-16}" x2="{sx}" y2="{sy}" stroke="{col}" stroke-width="2.5"/>')
+        p.append(f'<rect x="{lcx-66}" y="{lcy-16}" width="132" height="32" rx="6" fill="{col}" class="seg"/>')
+        p.append(f'<text x="{lcx}" y="{lcy+5}" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">{lab}</text>')
+    p.append('<text x="115" y="34" fill="#5b6675" font-size="12">Les 5 familles de causes (5M) →</text>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_cts():
+    def box(x, y, w, h, col, l1, l2, tc="#fff", sc="#eef2f7"):
+        return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="9" fill="{col}" class="seg"/>'
+                f'<text x="{x+w/2:.0f}" y="{y+25}" text-anchor="middle" fill="{tc}" font-size="12.5" font-weight="700">{l1}</text>'
+                f'<text x="{x+w/2:.0f}" y="{y+43}" text-anchor="middle" fill="{sc}" font-size="11.5">{l2}</text>')
+
+    def link(x1, y1, x2, y2):
+        return (f'<path d="M{x1},{y1} C{(x1+x2)//2},{y1} {(x1+x2)//2},{y2} {x2},{y2}" '
+                f'fill="none" stroke="#b6bdc7" stroke-width="2"/>')
+    p = ['<svg viewBox="0 0 720 320" role="img" class="svg-anim">']
+    for t, x in [("BESOIN (générique)", 110), ("DRIVER / CRITÈRE QUALITÉ", 360), ("CTS (mesurable + seuils)", 610)]:
+        p.append(f'<text x="{x}" y="26" text-anchor="middle" fill="#5b6675" font-size="11" font-weight="700">{t}</text>')
+    p.append(link(192, 159, 270, 99))
+    p.append(link(192, 159, 270, 229))
+    p.append(link(450, 99, 520, 99))
+    p.append(link(450, 229, 520, 229))
+    p.append(box(28, 128, 164, 62, "#f6b400", "Besoin client (VoC)", "« être livré vite »", "#3a3320", "#6b5a1e"))
+    p.append(box(270, 70, 180, 58, "#2563eb", "Délai de livraison", "critère qualité"))
+    p.append(box(270, 200, 180, 58, "#2563eb", "Fiabilité produit", "critère qualité"))
+    p.append(box(520, 70, 180, 58, "#16a34a", "≤ 48 h (98 % cmd)", "CTS mesurable"))
+    p.append(box(520, 200, 180, 58, "#16a34a", "&lt; 1 % de défauts", "CTS mesurable"))
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _svg_triangle():
+    A, B, C = (280, 56), (78, 314), (482, 314)
+    p = ['<svg viewBox="0 0 560 372" role="img" class="svg-anim">']
+    p.append(f'<polygon points="{A[0]},{A[1]} {B[0]},{B[1]} {C[0]},{C[1]}" '
+             f'fill="#fff7e0" stroke="#f6b400" stroke-width="4"/>')
+    p.append('<text x="280" y="222" text-anchor="middle" fill="#b45309" font-size="13" font-weight="700">L\'écart au standard</text>')
+    p.append('<text x="280" y="242" text-anchor="middle" fill="#b45309" font-size="13" font-weight="700">saute aux yeux → action</text>')
+
+    def vbox(cx, cy, col, l1, l2):
+        return (f'<rect x="{cx-105}" y="{cy-26}" width="210" height="52" rx="9" fill="{col}" class="seg"/>'
+                f'<text x="{cx}" y="{cy-4}" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">{l1}</text>'
+                f'<text x="{cx}" y="{cy+14}" text-anchor="middle" fill="#eef2f7" font-size="11">{l2}</text>')
+    p.append(vbox(280, 40, "#0d9488", "Standard opératoire", "la bonne façon de faire"))
+    p.append(vbox(120, 344, "#2563eb", "Standard de management", "la bonne façon de piloter"))
+    p.append(vbox(440, 344, "#7c3aed", "Management visuel", "rend l'écart visible"))
+    for x, y in (A, B, C):
+        p.append(f'<circle cx="{x}" cy="{y}" r="6" fill="#222b38"/>')
+    p.append('</svg>')
+    return "".join(p)
+
+
 SVGS = {
-    "roue-pdca": _svg_pdca(),
-    "cinq-s": _svg_5s(),
-    "cycle-dmaic": _svg_dmaic(),
-    "maison-lean": _svg_maison(),
-    "sipoc": _svg_sipoc(),
-    "loi-normale": _svg_normale(),
+    "roue-pdca": _svg_pdca(), "cinq-s": _svg_5s(), "cycle-dmaic": _svg_dmaic(),
+    "maison-lean": _svg_maison(), "sipoc": _svg_sipoc(), "loi-normale": _svg_normale(),
+    "va-nva": _svg_va_nva(), "sept-muda": _svg_7muda(), "ishikawa": _svg_ishikawa(),
+    "arbre-cts": _svg_cts(), "triangle-or": _svg_triangle(),
 }
 
 # ============================================================ CSS ============
@@ -492,6 +611,16 @@ def inject_svgs(md_text):
     return re.sub(r"\[\[SVG:([a-z0-9\-]+)(?:\|([^\]]*))?\]\]", repl, md_text)
 
 
+def insert_after_anchor(md, anchor, token):
+    """Insère un jeton SVG juste après la 1re ligne contenant `anchor`."""
+    lines = md.split("\n")
+    for i, line in enumerate(lines):
+        if anchor in line:
+            lines.insert(i + 1, "\n" + token + "\n")
+            break
+    return "\n".join(lines)
+
+
 def fix_links(html):
     html = re.sub(r'href="(?:\.\./)?ressources/INDEX\.md"', 'href="ressources.html"', html)
     html = re.sub(r'href="(?:modules/)?(\d{2}-[a-z0-9\-]+)\.md"', r'href="\1.html"', html)
@@ -650,6 +779,32 @@ MODULE_SVG = {
         "La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ autour de la moyenne."),
 }
 
+# Schémas placés en ligne, juste après le sous-titre de section : (ancre, nom_svg, légende)
+MODULE_SVG_INLINE = {
+    "02-muda-mura-muri-gemba": [
+        ("### 1. Valeur", "va-nva",
+         "VA vs NVA : sur le délai d'écoulement, la valeur ajoutée n'est souvent qu'une "
+         "infime part ; le Lean comprime le NVA."),
+        ("### 3. Les 7 MUDA", "sept-muda",
+         "Les 7 MUDA (gaspillages) — la surproduction génère tous les autres."),
+    ],
+    "09-resolution-probleme-qqoqccp-ishikawa": [
+        ("### 4. Le diagramme", "ishikawa",
+         "Le diagramme d'Ishikawa (causes-effet, « arête de poisson ») : on remonte les "
+         "causes par les 5M jusqu'à l'effet."),
+    ],
+    "11-voc-cts": [
+        ("### 7. L", "arbre-cts",
+         "L'arbre des CTS : traduire un besoin client (VoC) en exigence mesurable "
+         "(Driver → CTS avec seuils)."),
+    ],
+    "08-management-visuel": [
+        ("### 4. Le Triangle", "triangle-or",
+         "Le Triangle d'Or : relier standard opératoire, standard de management et "
+         "management visuel pour que tout écart déclenche une action."),
+    ],
+}
+
 # ========================================================= build =============
 def main():
     SITE_DIR.mkdir(exist_ok=True)
@@ -687,6 +842,8 @@ def main():
         if m["slug"] in MODULE_SVG:
             name, cap = MODULE_SVG[m["slug"]]
             md = md.replace("## 📚 Contenu\n", f"## 📚 Contenu\n\n[[SVG:{name}|{cap}]]\n", 1)
+        for anchor, name, cap in MODULE_SVG_INLINE.get(m["slug"], []):
+            md = insert_after_anchor(md, anchor, f"[[SVG:{name}|{cap}]]")
         md = inject_svgs(md)
         html = fix_links(md_to_html(md))
         if quiz_html:
