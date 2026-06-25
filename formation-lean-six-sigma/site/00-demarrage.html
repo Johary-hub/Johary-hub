@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 0 — Démarrage & cahier du stagiaire — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
+  max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;
+  box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
+  display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
+  overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
+  list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
+  padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
+  background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
+  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+/* single-file version */
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
+  margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
+    border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+@media print{
+  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  details[open] *{display:revert}
+  details{border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="01-lean-6sigma-lean-six-sigma.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link active" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<h1>Module 0 — Démarrage &amp; cahier du stagiaire</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Avant la Séquence 1
+⏱️ Durée estimée : 15 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Situer</strong> votre position dans le parcours (les 4 séquences) et son objectif.
+- <strong>Utiliser</strong> le cahier du stagiaire pour ancrer vos apprentissages.
+- <strong>Mettre en place</strong> votre rituel de prise de notes <strong>MAST</strong> dès le premier module.
+- <strong>Choisir</strong> un « terrain d'application » personnel sur lequel vous appliquerez chaque outil.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Aucun.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<h3>1. Le but du parcours</h3>
+<p>Ce parcours <strong>Lean Six Sigma Yellow Belt</strong> ne vise pas seulement à <em>connaître</em> les outils,
+mais à les <strong>mettre en application</strong>. La règle d'or : <strong>après chaque module, vous produisez
+un livrable concret</strong> sur votre propre périmètre de travail.</p>
+<h3>2. Les 4 séquences</h3>
+<p>Le parcours officiel alterne auto‑formation et ateliers :</p>
+<table>
+<thead>
+<tr>
+<th>Séquence</th>
+<th>Format</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Séquence 1</strong></td>
+<td>Digital learning</td>
+<td>Introduction au Lean, au 6 Sigma, au Lean 6 Sigma · les MUDA · les principes &amp; concepts du Lean · les paradigmes · les comportements managériaux · les standards · les 5S · le management visuel</td>
+</tr>
+<tr>
+<td><strong>Séquence 2</strong></td>
+<td>Classroom</td>
+<td>Ancrage des apprentissages de la séquence 1 (atelier animé)</td>
+</tr>
+<tr>
+<td><strong>Séquence 3</strong></td>
+<td>Digital learning</td>
+<td>Les outils de base de la résolution de problèmes · la méthode PDCA · introduction au DMAIC · la VOC et les CTS · le SIPOC · les types de données · les statistiques descriptives</td>
+</tr>
+<tr>
+<td><strong>Séquence 4</strong></td>
+<td>Classroom</td>
+<td>Ancrage des apprentissages de la séquence 3 (atelier animé)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Dans ce dépôt, les <strong>séquences 1 et 3</strong> sont couvertes par les modules <strong>1 à 14</strong>.
+Les <strong>séquences 2 et 4</strong> sont les temps de <strong>classroom</strong> où vous présentez vos livrables.</p>
+</blockquote>
+<h3>3. Le cahier du stagiaire</h3>
+<p>Le fichier <strong>« Dossier à compléter par les stagiaires »</strong> est votre cahier de bord. Vous y
+notez, séquence après séquence :
+- <strong>Mes notes</strong> — l'essentiel de chaque module.
+- <strong>Ce que je retiens de cette séquence.</strong>
+- <strong>Quelles compétences je vais mettre en application dans mon environnement.</strong>
+- <strong>Ce que je veux aborder avec le formateur</strong> lors de la classroom.</p>
+<h3>4. Le rituel MAST (ancrage des apprentissages)</h3>
+<p>À la fin de chaque séquence classroom, on remplit le <strong>MAST</strong>. C'est un outil de mémorisation
+active : prenez l'habitude de le remplir dès maintenant, même seul.</p>
+<table>
+<thead>
+<tr>
+<th>Lettre</th>
+<th>Question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>M</strong> — Marqué</td>
+<td>Qu'est‑ce qui m'a <strong>marqué</strong> ?</td>
+</tr>
+<tr>
+<td><strong>A</strong> — Appris</td>
+<td>Qu'est‑ce que j'ai <strong>appris</strong> ?</td>
+</tr>
+<tr>
+<td><strong>S</strong> — Surpris</td>
+<td>Qu'est‑ce qui m'a <strong>surpris</strong> ?</td>
+</tr>
+<tr>
+<td><strong>T</strong> — Transférer</td>
+<td>Qu'est‑ce que je vais <strong>transférer</strong> (appliquer) sur mon terrain ?</td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dossier à compléter par les stagiaires (cahier de bord)</td>
+<td>Prendre des notes et ancrer les apprentissages</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1aBip6U9Ve41SBq2la0VnpgsCWPPgsINk/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Archive <strong>SSYB.zip</strong> (supports source complets)</td>
+<td>Retrouver tous les supports originaux</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/16lMY5ldxJ3IKJ9cNxRpHNfQKbfc7ujDh/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : poser le cadre qui rendra <strong>tous</strong> les modules suivants applicables.</p>
+</blockquote>
+<p><strong>Exercice — Choisir mon terrain d'application</strong>
+1. Identifiez <strong>un processus, un poste ou une zone</strong> de votre quotidien sur lequel vous
+   appliquerez chaque outil du parcours (ex. « ma ligne d'assemblage », « le traitement des
+   commandes », « mon poste de saisie »).
+2. Décrivez‑le en 3 lignes : que produit‑il, pour qui, quel problème vous agace au quotidien ?
+3. Ouvrez votre cahier du stagiaire (ou un simple carnet) et créez les 4 rubriques <strong>MAST</strong>.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une fiche « Mon terrain d'application » (½ page).</li>
+<li><strong>Critères de réussite :</strong> le terrain est précis, réel, et vous y avez accès chaque semaine.</li>
+<li><strong>Temps conseillé :</strong> 10 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li>Le parcours vise l'<strong>application</strong>, pas seulement la connaissance.</li>
+<li>4 séquences : 2 en auto‑formation (modules 1–14), 2 en atelier (classroom).</li>
+<li>Le <strong>cahier du stagiaire</strong> + le <strong>MAST</strong> sont vos outils d'ancrage.</li>
+<li>Choisir <strong>un terrain réel</strong> dès le départ rend chaque module immédiatement utile.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<ol>
+<li>Quel est l'objectif premier du parcours ?
+   - a) Réussir un examen théorique
+   - b) Être capable d'appliquer chaque outil sur son terrain
+   - c) Mémoriser les niveaux sigma</li>
+<li>Que signifie le <strong>T</strong> de MAST ?
+   - a) Théorie · b) Transférer · c) Test</li>
+<li>Les modules 1 à 14 couvrent quelles séquences ?
+   - a) Les classroom (2 et 4) · b) Les digital learning (1 et 3) · c) Aucune</li>
+</ol>
+<details>
+<summary>👉 Voir les réponses</summary>
+<ol>
+<li><strong>b</strong> — tout le parcours est orienté mise en application.</li>
+<li><strong>b</strong> — Transférer = ce que je vais appliquer sur mon terrain.</li>
+<li><strong>b</strong> — les modules couvrent le <em>digital learning</em> des séquences 1 et 3.</li>
+</ol>
+</details>
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>Dossier à compléter par les stagiaires YB_BL.pptx</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1aBip6U9Ve41SBq2la0VnpgsCWPPgsINk/view">Ouvrir dans Drive</a></li>
+<li>🗄️ <em>SSYB.zip</em> (archive complète des supports) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/16lMY5ldxJ3IKJ9cNxRpHNfQKbfc7ujDh/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section>
+<nav class="pager"><span></span><a class="nx" href="01-lean-6sigma-lean-six-sigma.html"><small>Module suivant →</small>1 · Lean, 6 Sigma & Lean Six Sigma</a></nav>
+  </main>
+</div>
+</body>
+</html>

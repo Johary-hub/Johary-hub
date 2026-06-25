@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2 — Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
+  max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;
+  box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
+  display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
+  overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
+  list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
+  padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
+  background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
+  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+/* single-file version */
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
+  margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
+    border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+@media print{
+  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  details[open] *{display:revert}
+  details{border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="01-lean-6sigma-lean-six-sigma.html">← Préc.</a><a href="03-fondements-du-lean.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link active" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<h1>Module 2 — Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI &amp; Gemba</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Distinguer</strong> la <strong>Valeur Ajoutée (VA)</strong> de la <strong>Non Valeur Ajoutée (NVA)</strong> dans n'importe quelle activité.
+- <strong>Citer et reconnaître</strong> les <strong>7 MUDA</strong> (gaspillages), ainsi que <strong>MURA</strong> (variabilité) et <strong>MURI</strong> (surcharge).
+- <strong>Aller sur le Gemba</strong> (le terrain) avec la bonne posture : observer le fait réel, agir, standardiser.
+- <strong>Utiliser une grille d'observation des 7 MUDA</strong> pour relever les gaspillages sur un poste ou un processus.
+- <strong>Enclencher</strong> la démarche d'amélioration : identifier → éliminer/réduire le MUDA → ajouter de la valeur.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 0 — Démarrage &amp; cahier du stagiaire (avoir choisi un <strong>terrain d'application</strong> réel).</li>
+<li>Notion d'introduction au Lean (Séquence 1) : la performance se mesure en <strong>Qualité, Coûts, Délais</strong> côté client, <strong>Sécurité et Motivation</strong> côté salariés.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<h3>1. Valeur Ajoutée (VA) vs Non Valeur Ajoutée (NVA)</h3>
+<p>Tout l'esprit du Lean tient dans une question posée à chaque activité : <em>« Le client est-il prêt à payer pour cela ? »</em></p>
+<ul>
+<li><strong>VA — Valeur Ajoutée :</strong> activité de <strong>transformation réelle</strong>, réalisée <strong>« bonne du premier coup »</strong>, <strong>qui intéresse le client</strong> et <strong>pour laquelle un client est prêt à payer</strong>.</li>
+<li><strong>NVA — Non Valeur Ajoutée :</strong> <strong>toutes les autres activités</strong>. Certaines sont <strong>parfois nécessaires</strong> (on ne peut pas les supprimer du jour au lendemain), mais aucune n'ajoute de valeur aux yeux du client.</li>
+</ul>
+<p>Les <strong>3 critères</strong> qui caractérisent ensemble une activité à <strong>Valeur Ajoutée</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Critère</th>
+<th>Signification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Intéresse le client</strong></td>
+<td>Le client perçoit le bénéfice de l'activité.</td>
+</tr>
+<tr>
+<td><strong>Transformation réelle</strong></td>
+<td>L'activité modifie réellement le produit / le service (forme, fonction, état).</td>
+</tr>
+<tr>
+<td><strong>Bon du premier coup</strong></td>
+<td>C'est fait correctement dès la première fois, sans reprise ni correction.</td>
+</tr>
+</tbody>
+</table>
+<h4>Quand ajoutons-nous de la valeur ?</h4>
+<p>Le support oppose des exemples concrets de VA et de NVA. <strong>La NVA, c'est le MUDA.</strong></p>
+<table>
+<thead>
+<tr>
+<th>✅ Valeur Ajoutée (VA)</th>
+<th>✘ Non Valeur Ajoutée = MUDA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Concevoir</td>
+<td>Chercher</td>
+</tr>
+<tr>
+<td>Vendre</td>
+<td>Attendre</td>
+</tr>
+<tr>
+<td>Acheter</td>
+<td>Dupliquer</td>
+</tr>
+<tr>
+<td>Comptabiliser</td>
+<td>Corriger</td>
+</tr>
+<tr>
+<td>Communiquer</td>
+<td>Stocker</td>
+</tr>
+<tr>
+<td>Former</td>
+<td>Transporter</td>
+</tr>
+<tr>
+<td>Recruter</td>
+<td>Détruire</td>
+</tr>
+</tbody>
+</table>
+<h4>Ce que l'on fait de chaque catégorie</h4>
+<ul>
+<li><strong>VA :</strong> l'<strong>améliorer sans cesse</strong> — c'est le <strong>KAIZEN</strong> (amélioration continue) des standards qui créent la valeur.</li>
+<li><strong>NVA :</strong> l'<strong>identifier</strong>, puis l'<strong>éliminer ou la réduire</strong>.</li>
+<li><strong>MUDA – MURA – MURI :</strong> les <strong>identifier, éliminer, réduire</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Objectif final :</strong> respecter les attentes — des <strong>CLIENTS</strong> en termes de <strong>Qualité, Coûts, Délais</strong> ; des <strong>SALARIÉS</strong> en termes de <strong>Sécurité et Motivation</strong>.</p>
+</blockquote>
+<h3>2. MUDA, MURA, MURI — « 3 mots pour 3 maux »</h3>
+<p>Ce sont les <strong>trois principaux ennemis de la PERFORMANCE</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Terme japonais</th>
+<th>Traduction</th>
+<th>Définition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MUDA</strong></td>
+<td>Gaspillage</td>
+<td>Toute activité sans valeur ajoutée. Il en existe <strong>7 types</strong> (voir §3).</td>
+</tr>
+<tr>
+<td><strong>MURA</strong></td>
+<td>Variabilité / irrégularité</td>
+<td>Tout ce qui fait <strong>dériver d'un standard</strong> (irrégularité des cadences, des charges, des méthodes…).</td>
+</tr>
+<tr>
+<td><strong>MURI</strong></td>
+<td>Surcharge / déraisonnable</td>
+<td><strong>Surcharge des hommes et des capacités</strong> (machines) — l'irrationnel, la pénibilité.</td>
+</tr>
+</tbody>
+</table>
+<h4>Les 3 familles de pertes (illustration des charges)</h4>
+<p>Le support illustre les trois familles avec une image de <strong>transport de charges</strong> (poids transportés par rapport à une capacité de référence d'environ <strong>1000 Kg</strong>) :</p>
+<ul>
+<li><strong>MUDA (inutile) :</strong> on transporte <strong>moins que nécessaire</strong> ou de façon improductive — par exemple deux charges de <strong>200 Kg</strong> pour <strong>1000 Kg</strong> de capacité : la ressource est sous-utilisée, on gaspille.</li>
+<li><strong>MURA (variabilité) :</strong> les charges sont <strong>déséquilibrées et irrégulières</strong> d'un passage à l'autre — par exemple <strong>75 kg</strong>, puis <strong>450 kg</strong>, puis <strong>500 kg / 500 kg</strong> : on dérive en permanence du standard.</li>
+<li><strong>MURI (irrationnel, pénibilité) :</strong> on <strong>surcharge</strong> au-delà du raisonnable — par exemple <strong>2500 Kg</strong> sur une capacité de <strong>1000 Kg</strong> : on abîme les hommes et les machines.</li>
+</ul>
+<blockquote>
+<p>🖼️ <em>Schéma « Les 3 familles de pertes » (visuel des charges 200 / 75 / 450 / 500 / 1000 / 2500 Kg) non transcriptible intégralement — voir le support source « 4. GEMBA &amp; MUDA.pdf ».</em></p>
+</blockquote>
+<p>Retenez l'idée : <strong>MUDA = on n'exploite pas</strong>, <strong>MURA = on est irrégulier</strong>, <strong>MURI = on force trop</strong>. Les trois se nourrissent l'un l'autre, et la <strong>surproduction</strong> les génère tous (voir §3).</p>
+<h3>3. Les 7 MUDA en détail</h3>
+<p>Les <strong>7 gaspillages</strong> à traquer (moyen mnémotechnique : ils touchent les flux, les stocks, les déplacements et la qualité) :</p>
+<blockquote>
+<p><strong>Attente · Surproduction · Stock · Transport · Mouvement · Processus · Défauts</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>MUDA</th>
+<th>Ce qu'il provoque</th>
+<th>Points clés / leviers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Surproduction</strong></td>
+<td>Fait perdre du temps ; <strong>génère tous les autres MUDA</strong>.</td>
+<td>C'est le gaspillage « racine » : produire plus, plus tôt ou plus vite que le besoin réel du client.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Stock (stocks &amp; inventaires)</strong></td>
+<td>Trop de <strong>matières premières</strong>, d'<strong>en-cours de fabrication</strong>, de <strong>produits finis</strong>.</td>
+<td>Le niveau de stock <strong>masque les problèmes</strong>. Quand le niveau <strong>baisse</strong>, les problèmes <strong>apparaissent</strong> et l'amélioration devient possible.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Transport</strong></td>
+<td>Pertes de temps ; recherches ; <strong>risques de perte, de détérioration, d'accident</strong>.</td>
+<td>On cherche d'abord à <strong>supprimer</strong> les transports, <strong>pas à les automatiser</strong>. À défaut, bonne solution provisoire : <strong>regrouper</strong> les transports en une <strong>fonction d'approvisionnement</strong>.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Attente</strong></td>
+<td>Rallonge les cycles ; fait perdre du temps ; <em>« ne repose pas… elle énerve ! »</em></td>
+<td>Souvent <strong>masquée par d'autres MUDA</strong>. <strong>Séparer le travail machine du travail humain</strong> permet de la réduire.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Mouvement</strong></td>
+<td>Se déplacer inutilement ; gestes difficiles, non naturels.</td>
+<td><em>« Bouger ne signifie pas travailler ! »</em> On vise des gestes naturels et des postes bien implantés.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Processus (sur-traitement)</strong></td>
+<td><strong>Pas assez de processus</strong> → résultats aléatoires, temps perdu. <strong>Trop de processus</strong> → perte d'efficacité, mauvaise utilisation des ressources.</td>
+<td>Éliminer les <strong>opérations standardisées qui n'apportent pas de VA aux yeux du client</strong>.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Défauts</strong></td>
+<td>Pertes de <strong>temps</strong>, pertes de <strong>matière</strong>, <strong>surcoûts</strong>, <strong>clients mécontents</strong>.</td>
+<td>Faire <strong>bon du premier coup</strong> ; éviter rebuts, reprises et réclamations.</td>
+</tr>
+</tbody>
+</table>
+<h4>Zoom — pourquoi le STOCK est dangereux</h4>
+<p>Image classique du support : le stock est comme un <strong>niveau d'eau</strong> qui recouvre des rochers.</p>
+<ul>
+<li><strong>Quand le stock est trop important</strong>, le <strong>niveau excessif</strong> cache les obstacles : les <strong>défauts ne sont pas perçus</strong>.</li>
+<li><strong>Quand le niveau de stock diminue</strong>, <strong>les problèmes apparaissent</strong> : pannes / arrêts, déséquilibre des performances de main-d'œuvre, produits défectueux, retards de livraison, opérations anormales.</li>
+</ul>
+<blockquote>
+<p>🖼️ <em>Schéma « bateau / niveau d'eau &amp; rochers » du MUDA Stock — voir « 4. GEMBA &amp; MUDA.pdf ».</em></p>
+</blockquote>
+<h4>Chasser les MUDA : une stratégie</h4>
+<p>Chasser le MUDA, ce n'est pas seulement faire la chasse au gâchis, c'est une <strong>stratégie</strong> :
+1. <strong>Savoir exactement</strong> ce que le client <strong>apprécie</strong> et <strong>ce pour quoi il paiera</strong>.
+2. Trouver <strong>la manière la meilleure, la plus sûre et la plus facile</strong> de fournir cette valeur.</p>
+<p><strong>Chasser la Non Valeur Ajoutée :</strong>
+- Réduit les gaspillages et les <strong>temps à NVA</strong> → on <strong>répond plus vite au client</strong>.
+- <strong>Augmente la Valeur Ajoutée du personnel</strong>.
+- <strong>Réduit la consommation</strong>.
+- <strong>Satisfait le client</strong>.
+- <strong>Génère des économies</strong>.</p>
+<h4>MUDA et productivité — la démarche en 3 étapes</h4>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Étape 1</strong></td>
+<td><strong>Identifier</strong> le MUDA</td>
+</tr>
+<tr>
+<td><strong>Étape 2</strong></td>
+<td><strong>Éliminer</strong> le MUDA</td>
+</tr>
+<tr>
+<td><strong>Étape 3</strong></td>
+<td><strong>Ajouter</strong> de la valeur</td>
+</tr>
+</tbody>
+</table>
+<p>Deux logiques de gain en découlent, illustrées dans le support :
+- <strong>1. Exploitation :</strong> sur un temps de travail mêlant VA et MUDA, on <strong>supprime le MUDA</strong> → le temps de cycle se raccourcit (on fait la même VA en moins de temps).
+- <strong>2. Productivité :</strong> on <strong>remplace le MUDA libéré par de la VA</strong> → on produit davantage de valeur sur le même temps, pour une <strong>meilleure utilisation de la main-d'œuvre</strong>.</p>
+<blockquote>
+<p>🖼️ <em>Schéma comparatif « Exploitation vs Productivité » (blocs VA / MUDA) — voir « 4. GEMBA &amp; MUDA.pdf ».</em></p>
+</blockquote>
+<h3>4. Le Gemba — aller là où le travail se fait</h3>
+<p><strong>Gemba</strong> (terme japonais) = <strong>le « TERRAIN »</strong>, l'endroit réel où se passent les choses. Le Gemba, c'est :</p>
+<ul>
+<li>❑ <strong>Où le travail est fait</strong></li>
+<li>❑ <strong>Où la valeur est créée</strong></li>
+<li>❑ <strong>Où la résolution des problèmes est déléguée</strong></li>
+<li>❑ <strong>Où sont les opérateurs</strong></li>
+</ul>
+<p>Le terrain <strong>apporte des solutions efficaces car il est générateur de valeurs</strong>. La chaîne de la satisfaction se lit ainsi :</p>
+<blockquote>
+<p><strong>ATTENTES CLIENTS → GEMBA → SATISFACTION</strong></p>
+</blockquote>
+<h4>Rôles : qui soutient qui ?</h4>
+<p>L'organisation est ici <strong>inversée</strong> par rapport à l'organigramme classique : le sommet est <strong>au service</strong> du terrain.</p>
+<table>
+<thead>
+<tr>
+<th>Niveau</th>
+<th>Rôle vis-à-vis du Gemba</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top Management</strong></td>
+<td><strong>Établit</strong> la politique, les objectifs, <strong>priorise et alloue les ressources</strong> ; il doit <strong>écouter, aider et apprendre</strong> du Gemba des employés.</td>
+</tr>
+<tr>
+<td><strong>Encadrement</strong></td>
+<td><strong>Soutenir les opérateurs du Gemba.</strong></td>
+</tr>
+<tr>
+<td><strong>Services supports</strong></td>
+<td><strong>Soutenir l'encadrement et les opérateurs du Gemba.</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Deux dynamiques structurent cette relation : le <strong>CONTRÔLE</strong> (l'attente client descend vers le Gemba) et le <strong>SOUTIEN</strong> (le management remonte aide et ressources vers le terrain).</p>
+<blockquote>
+<p>🖼️ <em>Schéma « Contrôle / Soutien — pyramide inversée Top Mgt ↔ Gemba » — voir « 4. GEMBA &amp; MUDA.pdf ».</em></p>
+</blockquote>
+<h4>Les 6 attitudes GEMBA</h4>
+<p>Quand un problème survient, voici la <strong>conduite à tenir</strong>, dans l'ordre :</p>
+<ol>
+<li><strong>Quand une anomalie survient, se rendre au Gemba</strong> (sur place, pas depuis le bureau).</li>
+<li><strong>Vérifier le fait réel — Gembutsu</strong> : observer la réalité concrète (machine, matière, pannes, rejets, conditions dangereuses, etc.).</li>
+<li><strong>Prendre immédiatement des mesures conservatoires</strong> (temporaires) pour sécuriser/contenir.</li>
+<li><strong>Trouver les causes fondamentales — Gemjitsu</strong> (remonter à la cause racine).</li>
+<li><strong>Appliquer les contre-mesures</strong> (actions correctives).</li>
+<li><strong>Standardiser</strong> pour empêcher que les problèmes ne se reproduisent.</li>
+</ol>
+<blockquote>
+<p>🔑 <strong>Gembutsu</strong> = le <strong>fait réel / l'objet réel</strong> que l'on va vérifier sur place.
+🔑 <strong>Gemjitsu</strong> = la <strong>cause fondamentale</strong> que l'on cherche à identifier.</p>
+</blockquote>
+<h4>Méthodes pour obtenir un Gemba dynamique</h4>
+<p>Un Gemba « vivant » (qui s'améliore en continu) repose sur le management :</p>
+<ul>
+<li>❑ Prendre du temps pour <strong>aider les personnes à reconnaître que c'est leur rôle d'améliorer</strong> et qu'elles sont <strong>responsables</strong> de cette tâche.</li>
+<li>❑ Leur <strong>donner du temps</strong> pour travailler aux améliorations.</li>
+<li>❑ Prendre du temps pour <strong>développer une confiance mutuelle</strong> dans l'organisation.</li>
+<li>❑ Le <strong>management opérationnel doit prendre des risques</strong> et conduire le processus, en <strong>reconnaissant le bon travail</strong> et en <strong>corrigeant les erreurs</strong>.</li>
+<li>❑ Veiller à ce que les personnes qui réalisent le Gemba <strong>ne pensent pas que leur travail est supérieur au Kaizen</strong> (l'amélioration concerne tout le monde).</li>
+</ul>
+<h3>5. La grille d'observation des 7 MUDA</h3>
+<p>L'outil de terrain par excellence : une <strong>grille d'observation du Gemba</strong> qui guide le regard MUDA par MUDA. Elle existe en <strong>deux versions</strong> — une orientée <strong>production (manufacturing)</strong> et une orientée <strong>bureau / services (office)</strong> — toutes deux structurées de la même façon :</p>
+<ul>
+<li>En-tête : <strong>PROCESSUS OBSERVÉ</strong> et <strong>VALEUR AJOUTÉE</strong> (que l'on renseigne avant de commencer).</li>
+<li>Trois colonnes : <strong>TYPE</strong> (le MUDA) · <strong>SYMPTÔMES / EXEMPLES</strong> (indices à repérer) · <strong>OBSERVATION</strong> (à remplir sur le terrain).</li>
+</ul>
+<h4>Version PRODUCTION (manufacturing) — symptômes à repérer</h4>
+<table>
+<thead>
+<tr>
+<th>7 MUDA</th>
+<th>Symptômes (indices visuels sur le terrain)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SURPRODUCTION</strong></td>
+<td>En-cours qui s'accumulent · surfaces « encombrées » · empilages désordonnés</td>
+</tr>
+<tr>
+<td><strong>ATTENTE</strong></td>
+<td>Opérateurs sans travail · cadences faibles · opérateurs qui regardent les machines tourner</td>
+</tr>
+<tr>
+<td><strong>TRANSPORT</strong></td>
+<td>Abondance de moyens de transport · zones de transfert · équipements espacés</td>
+</tr>
+<tr>
+<td><strong>PROCESSUS</strong></td>
+<td>Pas de VA pour le client · écarts entre réel et standard · variations entre les processus</td>
+</tr>
+<tr>
+<td><strong>STOCK</strong></td>
+<td>Volume insuffisant · dates périmées · produits abîmés · système de stockage complexe</td>
+</tr>
+<tr>
+<td><strong>MOUVEMENT</strong></td>
+<td>Accès difficile · manutentions multiples · gestes inutiles · équipements espacés</td>
+</tr>
+<tr>
+<td><strong>DÉFAUT</strong></td>
+<td>Rebuts · postes de réparations · difficultés d'assemblage · nombreux contrôles · réclamations</td>
+</tr>
+</tbody>
+</table>
+<h4>Version BUREAU / SERVICES (office) — exemples à repérer</h4>
+<table>
+<thead>
+<tr>
+<th>7 MUDA</th>
+<th>Exemples en environnement de bureau</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SURPRODUCTION</strong></td>
+<td>Dupliquer la même tâche · trop de copies · diffusion d'une information sous plusieurs formes (fax, mail, affichage) · diffuser plus d'information que le minimum nécessaire · indicateurs inutiles, non exploités</td>
+</tr>
+<tr>
+<td><strong>ATTENTE</strong></td>
+<td>Attente d'une validation ou d'une décision · attente de la photocopieuse · attente de l'ouverture d'un fichier informatique · attente de la distribution du courrier · attente de l'arrivée de fournitures</td>
+</tr>
+<tr>
+<td><strong>TRANSPORT</strong></td>
+<td>Transporter des dossiers entre les bureaux · trier des documents (micro-transports) · transports vers la photocopieuse / fax · transférer des documents pour obtenir des signatures ou accords</td>
+</tr>
+<tr>
+<td><strong>PROCESSUS</strong></td>
+<td>Doubles contrôles ou validations · recherches d'informations sur plusieurs écrans · recopies d'informations sur plusieurs supports · tâches mal définies · incompatibilités entre les versions des logiciels utilisés dans le service</td>
+</tr>
+<tr>
+<td><strong>STOCK</strong></td>
+<td>Piles de dossiers sur les bureaux · documentations / prospectus qui encombrent les tiroirs · tableaux d'affichage surchargés et pas à jour · stocks de fournitures · travaux lancés par lots</td>
+</tr>
+<tr>
+<td><strong>MOUVEMENT</strong></td>
+<td>Déplacements (implantations non optimisées) · soulever ou porter des poids · se pencher, se tourner · postes mal aménagés · éclairage insuffisant · bruit, courants d'air</td>
+</tr>
+<tr>
+<td><strong>DÉFAUT</strong></td>
+<td>Expédition du mauvais document ou à une mauvaise adresse · fax illisibles · erreurs d'orthographe ou de frappe · réclamations clients · retard dans l'envoi d'une réponse attendue · erreurs de calcul</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 Choisissez la <strong>version la plus proche de votre terrain</strong>. Le tableau « OBSERVATION » reste <strong>vide dans le modèle</strong> : c'est vous qui le remplissez lors de votre passage au Gemba.</p>
+</blockquote>
+<h3>6. La fiche outil — animer un chantier d'observation</h3>
+<p>La <strong>fiche outil VA-NVA / MUDA-MURA-MURI</strong> (guide animateur de chantier) résume la posture à adopter sur le terrain. La consigne d'animation tient en trois temps :</p>
+<ol>
+<li><strong>Aller sur le Gemba</strong> (se déplacer là où la valeur est créée).</li>
+<li><strong>Identifier les gaspillages</strong> (à l'aide de la grille des 7 MUDA).</li>
+<li><strong>Échanger vos remarques</strong> (partager les observations avec l'équipe pour faire émerger les améliorations).</li>
+</ol>
+<p>C'est exactement la trame de l'exercice d'application ci-dessous.</p>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fiche outils — VA-NVA / MUDA-MURA-MURI (guide animateur de chantier)</td>
+<td>Cadrer la posture VA/NVA et animer un chantier « chasse aux MUDA » sur le terrain</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1eQ6l2VCZa48G0_VGaFjOoxJ3W8F4SK6i/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Support pédagogique « GEMBA &amp; MUDA »</td>
+<td>Comprendre le Gemba, les 3 familles de pertes et les 7 MUDA en détail</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1QWrTn2R8B-W1x-PIdZU30aDYS5XbVbyf/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Grille d'observation du Gemba — 7 MUDA (version office, PDF)</td>
+<td>Relever les MUDA sur le terrain, MUDA par MUDA, avec les symptômes guides</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XTB6KM1h9PtXK_f4v-cM1Lj5CKqD2aS5/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Grille d'observation des MUDA (Excel — onglets <em>manufacturing</em> &amp; <em>office</em>)</td>
+<td>Modèle à remplir : choisir la version production ou bureau et noter ses observations</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1mS1xrXJ4mr7k1ULeZ32sCq3di7T_KKMp/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : aller <strong>physiquement</strong> observer votre terrain et en revenir avec une liste de MUDA concrets et au moins une action d'amélioration. <em>Aller sur le Gemba · Identifier les gaspillages · Échanger vos remarques.</em></p>
+</blockquote>
+<p><strong>Exercice 1 — Ma chasse aux MUDA sur le Gemba (grille d'observation)</strong>
+1. Reprenez votre <strong>terrain d'application</strong> (Module 0). Récupérez la <strong>grille d'observation des MUDA</strong> (fichier Excel) et choisissez l'onglet adapté : <strong>manufacturing</strong> (production) ou <strong>office</strong> (bureau).
+2. Renseignez l'en-tête : <strong>PROCESSUS OBSERVÉ</strong> (nom du processus / poste / zone) et <strong>VALEUR AJOUTÉE</strong> (en une phrase : pour quoi le client paie réellement).
+3. <strong>Rendez-vous sur place</strong> (Gemba) pendant 15–20 min. Pour <strong>chacun des 7 MUDA</strong>, parcourez la colonne <em>symptômes/exemples</em> et notez dans la colonne <strong>OBSERVATION</strong> ce que vous voyez <strong>réellement</strong> (faits, pas opinions). Donnez au moins <strong>un constat concret par MUDA</strong> quand c'est possible.
+4. Repérez le <strong>MUDA le plus pénalisant</strong> et notez s'il relève plutôt d'un <strong>MURA</strong> (variabilité) ou d'un <strong>MURI</strong> (surcharge) sous-jacent.
+5. Pour ce MUDA prioritaire, écrivez <strong>une contre-mesure</strong> en appliquant la logique <strong>Identifier → Éliminer/Réduire → Ajouter de la valeur</strong>.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> la <strong>grille des 7 MUDA remplie</strong> (colonne OBSERVATION renseignée) + <strong>1 action d'amélioration</strong> rédigée pour le MUDA prioritaire.</li>
+<li><strong>Critères de réussite :</strong> chaque ligne MUDA contient une <strong>observation factuelle</strong> issue du terrain (pas une généralité) ; le MUDA prioritaire est <strong>justifié</strong> ; l'action proposée est <strong>concrète, sûre et faisable</strong>.</li>
+<li><strong>Temps conseillé :</strong> 25 min.</li>
+</ul>
+<p><strong>Exercice 2 — Trier VA / NVA sur 5 étapes (rapide)</strong>
+1. Décomposez votre processus en <strong>5 à 8 étapes</strong> successives.
+2. Pour chaque étape, appliquez les <strong>3 critères VA</strong> (intéresse le client ? transformation réelle ? bon du premier coup ?) et classez-la <strong>VA</strong> ou <strong>NVA</strong>.
+3. Pour chaque <strong>NVA</strong>, cochez si elle est <strong>« nécessaire »</strong> (à conserver provisoirement) ou <strong>« à éliminer »</strong>.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> un tableau « Étape | VA/NVA | Nécessaire ? | MUDA associé ».</li>
+<li><strong>Critères de réussite :</strong> le classement s'appuie sur les 3 critères ; vous identifiez au moins <strong>2 NVA éliminables</strong>.</li>
+<li><strong>Temps conseillé :</strong> 10 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>VA = transformation réelle, bonne du premier coup, que le client paie.</strong> Tout le reste est <strong>NVA</strong>.</li>
+<li><strong>La NVA, c'est le MUDA</strong> : on l'<strong>identifie</strong>, on l'<strong>élimine ou on le réduit</strong> ; la <strong>VA</strong>, on l'<strong>améliore sans cesse (Kaizen)</strong>.</li>
+<li><strong>3 maux : MUDA</strong> (gaspillage, 7 types) · <strong>MURA</strong> (variabilité, dérive du standard) · <strong>MURI</strong> (surcharge des hommes et des machines).</li>
+<li>Les <strong>7 MUDA : Surproduction · Stock · Transport · Attente · Mouvement · Processus · Défauts.</strong> La <strong>surproduction génère tous les autres</strong>.</li>
+<li>Le <strong>stock masque les problèmes</strong> : baisser le stock fait <strong>apparaître</strong> les vrais problèmes à résoudre.</li>
+<li><strong>Le Gemba, c'est là où la valeur est créée</strong> ; le management est au <strong>service</strong> du terrain.</li>
+<li><strong>6 attitudes Gemba :</strong> aller sur place → vérifier le fait réel (<strong>Gembutsu</strong>) → mesures conservatoires → trouver la cause racine (<strong>Gemjitsu</strong>) → contre-mesures → <strong>standardiser</strong>.</li>
+<li><strong>Productivité : Identifier → Éliminer le MUDA → Ajouter de la valeur.</strong></li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<ol>
+<li>Quels sont les <strong>3 critères</strong> d'une activité à <strong>Valeur Ajoutée</strong> ?
+   - a) Rapide · pas chère · automatisée
+   - b) Intéresse le client · transformation réelle · bon du premier coup
+   - c) Documentée · contrôlée · standardisée · validée</li>
+<li>Associez correctement : <strong>MURA</strong> désigne…
+   - a) Le gaspillage · b) La variabilité (dérive d'un standard) · c) La surcharge des hommes et des machines</li>
+<li>Parmi ces 7 MUDA, lequel est considéré comme <strong>générant tous les autres</strong> ?
+   - a) Le Transport · b) La Surproduction · c) Les Défauts · d) L'Attente</li>
+<li>Vrai ou faux : <em>« Un niveau de stock élevé est plutôt une bonne chose car il masque les problèmes et lisse la production. »</em>
+   - a) Vrai · b) Faux</li>
+<li>Quelle est la <strong>première</strong> des 6 attitudes Gemba quand une anomalie survient ?
+   - a) Standardiser · b) Se rendre au Gemba · c) Appliquer les contre-mesures · d) Trouver la cause fondamentale</li>
+<li>Dans la démarche « MUDA et productivité », quel est l'<strong>ordre</strong> correct ?
+   - a) Ajouter de la valeur → Identifier → Éliminer
+   - b) Identifier le MUDA → Éliminer le MUDA → Ajouter de la valeur
+   - c) Éliminer → Standardiser → Contrôler</li>
+</ol>
+<details>
+<summary>👉 Voir les réponses</summary>
+<ol>
+<li><strong>b</strong> — VA = <em>intéresse le client</em> + <em>transformation réelle</em> + <em>bon du premier coup</em>.</li>
+<li><strong>b</strong> — MURA = variabilité (tout ce qui fait dériver d'un standard). MUDA = gaspillage, MURI = surcharge.</li>
+<li><strong>b</strong> — La <strong>Surproduction</strong> fait perdre du temps et <strong>génère tous les autres MUDA</strong>.</li>
+<li><strong>b — Faux.</strong> Le stock <strong>masque</strong> les problèmes ; quand on le <strong>baisse</strong>, les problèmes apparaissent et l'amélioration devient possible.</li>
+<li><strong>b</strong> — On commence par <strong>se rendre au Gemba</strong> ; ensuite seulement on vérifie le fait réel (Gembutsu), etc.</li>
+<li><strong>b</strong> — Étape 1 <strong>Identifier</strong> → Étape 2 <strong>Éliminer</strong> → Étape 3 <strong>Ajouter de la valeur</strong>.</li>
+</ol>
+</details>
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>4. Fiche outils_EO_VA-NVA MUDA-MURA-MURI_V1 .pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1eQ6l2VCZa48G0_VGaFjOoxJ3W8F4SK6i/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>4. GEMBA &amp; MUDA.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1QWrTn2R8B-W1x-PIdZU30aDYS5XbVbyf/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>4. grille observation 7 MUDA .pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XTB6KM1h9PtXK_f4v-cM1Lj5CKqD2aS5/view">Ouvrir dans Drive</a></li>
+<li>📊 <em>4. grille_observation_muda.xls</em> (onglets <em>manufacturing</em> &amp; <em>office</em>) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1mS1xrXJ4mr7k1ULeZ32sCq3di7T_KKMp/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section>
+<nav class="pager"><a href="01-lean-6sigma-lean-six-sigma.html"><small>← Module précédent</small>1 · Lean, 6 Sigma & Lean Six Sigma</a><a class="nx" href="03-fondements-du-lean.html"><small>Module suivant →</small>3 · Les Fondements du Lean</a></nav>
+  </main>
+</div>
+</body>
+</html>

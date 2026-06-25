@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 9 — Résolution de problème : QQOQCCP, Ishikawa, PDCA — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
+  max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;
+  box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
+  display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
+  overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
+  list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
+  padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
+  background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
+  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+/* single-file version */
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
+  margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
+    border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+@media print{
+  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  details[open] *{display:revert}
+  details{border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="08-management-visuel.html">← Préc.</a><a href="10-dmaic.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link active" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<h1>Module 9 — Résolution de problème : QQOQCCP, Ishikawa, PDCA</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
+⏱️ Durée estimée : 55 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Cadrer un problème</strong> avec le <strong>QQOQCCP</strong> en établissant les faits (Qui, Quoi, Où, Quand, Comment, Combien, Pourquoi).
+- <strong>Construire un diagramme d'Ishikawa (5M)</strong> pour lister et organiser les causes possibles d'un effet observé.
+- <strong>Remonter à la cause racine</strong> en enchaînant Ishikawa et la technique des <strong>5 Pourquoi</strong>.
+- <strong>Structurer la résolution</strong> d'un problème quotidien avec le cycle <strong>PDCA (Plan-Do-Check-Act)</strong> et ses 12 étapes.
+- <strong>Choisir le bon outil</strong> de résolution selon la complexité du problème (Just-do-it, PDCA, QQOQCCP &amp; 5P, A3/8D, DMAIC).
+- <strong>Décider sur des données</strong> (faits, batonnage, Pareto) plutôt que sur des suppositions.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Notions Lean Six Sigma de base : la définition d'un <strong>problème</strong> comme écart, la notion de <strong>processus</strong>, les <strong>5M</strong>, et le bon sens « parler avec des données ».</li>
+<li>Aucun prérequis logiciel : les outils sont des fiches papier / tableurs simples.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<h3>1. L'état d'esprit « Résolution de problème »</h3>
+<p>Avant tout outil, une posture. Chez Progress Partners, <strong>tout nouveau problème est une opportunité d'amélioration</strong>. À l'inverse, <strong>les problèmes récurrents sont un échec de notre mode de gestion de l'entreprise</strong> : s'ils reviennent, c'est que la cause racine n'a jamais été traitée.</p>
+<blockquote>
+<p>« Nous apprenons beaucoup plus des erreurs que nous faisons et des problèmes que nous surmontons que si notre vie ne connaissait aucun problème et si nous ne faisions jamais d'erreurs. »</p>
+</blockquote>
+<p><strong>Définition fondatrice — un problème est l'écart entre une situation actuelle et une situation idéale.</strong> On cherche à aller <strong>vers le mieux</strong> en maîtrisant une caractéristique : la situation idéale est la cible, la situation actuelle est le réel, et l'<strong>écart</strong> entre les deux est le problème à réduire.</p>
+<pre><code>        Situation idéale  ────────────────  (cible, &quot;vers le mieux&quot;)
+                 ▲
+                 │   ÉCART  =  PROBLÈME
+                 ▼
+        Situation actuelle ───────────────  (le réel observé)
+</code></pre>
+<p><strong>La gestion des problèmes — l'image du niveau d'eau.</strong> La majorité des problèmes se cachent <strong>sous la surface</strong>, tout comme les gaspillages : on ne voit d'abord que les <strong>symptômes</strong>, pas les <strong>problèmes</strong> eux-mêmes. L'objectif du leadership est de <strong>faire baisser le niveau d'eau et de le maîtriser</strong>, pour faire apparaître les problèmes immergés. Pour commencer, il faut <strong>un processus, une structure et des compétences robustes</strong> afin de définir des <strong>contre-mesures</strong> capables de résoudre les problèmes immédiatement visibles.</p>
+<blockquote>
+<p>🖼️ <em>Schéma source non transcriptible : la métaphore « bateau / niveau d'eau / rochers » (symptômes en surface, problèmes immergés) figure dans « 12. Methode PDCA.pdf ». S'y reporter pour la projection visuelle.</em></p>
+</blockquote>
+<p><strong>PDCA ou « méthode pompier » ?</strong> Le PDCA est l'opposé du <strong>PANIC MODE</strong> : au lieu de réagir dans l'urgence en boucle (éteindre des incendies), on déroule un cycle discipliné <strong>Plan → Do → Check → Act</strong>. La maîtrise s'acquiert d'abord par la <strong>standardisation</strong> : on passe du <strong>SDCA</strong> (Standardize-Do-Check-Act, tenir le standard existant) vers le <strong>PDCA</strong> (résolution de problème pour relever le standard). Un <strong>standard</strong> est défini comme <em>la meilleure manière, la plus facile et la plus sûre connue à ce jour</em>.</p>
+<h3>2. Quel outil, et quand l'utiliser ?</h3>
+<p>Tous les problèmes ne se valent pas. On adapte l'outil à la <strong>complexité du problème</strong> et au <strong>nombre de personnes impliquées (« People Involvement »)</strong>. Ordre de grandeur cité par la source : <strong>≈ 80 % de problèmes simples, ≈ 15 % de problèmes transverses, ≈ 5 % de problèmes complexes.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type de problème</th>
+<th>Outil recommandé</th>
+<th>Qui / niveau d'implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Solution connue</strong> — il suffit de suivre le standard</td>
+<td><strong>Just-do-it</strong></td>
+<td>Faire, sans projet</td>
+</tr>
+<tr>
+<td><strong>Problèmes quotidiens</strong></td>
+<td><strong>PDCA</strong></td>
+<td>Équipe / opérationnel</td>
+</tr>
+<tr>
+<td><strong>Problème lié à un processus, faisant intervenir plusieurs acteurs</strong></td>
+<td><strong>QQOQCCP &amp; 5P</strong> (5 Pourquoi)</td>
+<td>Groupe</td>
+</tr>
+<tr>
+<td><strong>Problème lié à plusieurs processus</strong></td>
+<td><strong>A3 / 8D</strong></td>
+<td>Professionnel / champion</td>
+</tr>
+<tr>
+<td><strong>Problèmes liés à de multiples processus, à fort enjeu client</strong></td>
+<td><strong>6σ DMAIC (Green / Black Belt)</strong></td>
+<td>High People Involvement</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🖼️ <em>Schéma source non transcriptible : la matrice « complexité × nombre de personnes impliquées » positionnant Just-do-it / PDCA / QQOQCCP-5P / A3-8D / DMAIC figure dans « 11. Résolution de Pb Méthode PDCA.pdf ». Le présent module couvre les briques </em><em>QQOQCCP</em><em>, </em><em>Ishikawa</em><em> et </em><em>PDCA</em><em>.</em></p>
+</blockquote>
+<p><strong>Les premières étapes, quel que soit l'outil.</strong> Clarifier le problème, c'est : <strong>définir le problème et ses impacts</strong> (« un problème bien posé est déjà à moitié résolu »), et si besoin le <strong>décomposer en sous-problèmes</strong>. Puis :
+- <strong>Établir les faits</strong> → <strong>QQOQCCP</strong>.
+- <strong>Investiguer toutes les causes potentielles</strong> → <strong>diagramme d'Ishikawa (5M)</strong>.
+- <strong>Conserver les causes réelles et remonter à leurs racines</strong> → <strong>5 Pourquoi</strong>.</p>
+<h3>3. Le QQOQCCP — établir les faits</h3>
+<p>Le <strong>QQOQCCP</strong> est une grille de questionnement systématique pour <strong>cadrer un problème par les faits</strong>, sans interprétation. Sept questions, sept lettres :</p>
+<table>
+<thead>
+<tr>
+<th>Lettre</th>
+<th>Question</th>
+<th>Ce que l'on cherche</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Q — Qui ?</strong></td>
+<td>Qui voit le problème ? Qui est concerné ?</td>
+<td>Trouver <strong>toutes les personnes concernées</strong>.</td>
+</tr>
+<tr>
+<td><strong>Q — Quoi ?</strong></td>
+<td>De quoi s'agit-il exactement ?</td>
+<td><strong>Observer comment apparaît physiquement</strong> le problème.</td>
+</tr>
+<tr>
+<td><strong>O — Où ?</strong></td>
+<td>À quels endroits observe-t-on le problème ?</td>
+<td>Localiser précisément.</td>
+</tr>
+<tr>
+<td><strong>Q — Quand ?</strong></td>
+<td>Quand est-il apparu ? Quelle fréquence d'apparition ?</td>
+<td>Dater et mesurer la récurrence.</td>
+</tr>
+<tr>
+<td><strong>C — Comment ?</strong></td>
+<td>Dans quelles circonstances apparaît-il ? Peut-on établir des corrélations d'événements ?</td>
+<td><strong>Observer si possible comment le problème arrive.</strong></td>
+</tr>
+<tr>
+<td><strong>C — Combien ?</strong></td>
+<td>Quelle quantité de problème (pourcentage, nombre, unité de mesure…) ?</td>
+<td><strong>Quantifier</strong> l'ampleur.</td>
+</tr>
+<tr>
+<td><strong>P — Pourquoi ?</strong></td>
+<td>Pourquoi est-ce un problème ? Pourquoi doit-on le résoudre ?</td>
+<td>Trouver <strong>l'enjeu</strong> si on le résout, déterminer les <strong>conséquences</strong> si on le laisse, et <strong>choisir</strong>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>Astuce de lecture.</strong> On ne confond pas le <strong>« Pourquoi ? » du QQOQCCP</strong> (= pourquoi traiter ce problème, son enjeu) avec les <strong>« 5 Pourquoi »</strong> (= remonter aux causes racines, voir §5). Le premier justifie l'action ; les seconds expliquent le défaut.</p>
+</blockquote>
+<p>La <strong>fiche QQOQCCP</strong> (formulaire source) comporte un cartouche de gestion : <strong>Réf.</strong>, <strong>Màj</strong> (mise à jour), <strong>Propriétaire (Propr.)</strong>, et les sept cases QUI / QUOI / OÙ / QUAND / COMMENT / COMBIEN / POURQUOI à renseigner.</p>
+<blockquote>
+<p>🖼️ <em>Le formulaire « 11.QQOQCCP.pdf » est un </em><em>gabarit quasi vierge</em><em> (cartouche + 7 cases disposées en étoile autour du problème) : son contenu textuel se limite aux libellés des champs. Utiliser le fichier source comme trame d'impression.</em></p>
+</blockquote>
+<h3>4. Le diagramme d'Ishikawa (5M) — chercher les causes</h3>
+<p>Le <strong>diagramme d'Ishikawa</strong>, aussi appelé <strong>diagramme causes-effet</strong> ou <strong>arêtes de poisson</strong> (<em>fishbone</em>), sert à <strong>lister et organiser les causes possibles d'une situation</strong>. On part de l'<strong>effet</strong> (le problème, à la tête du poisson, à droite) et on remonte les <strong>arêtes</strong>, une par grande famille de causes : les <strong>5M</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>M</th>
+<th>Famille de causes</th>
+<th>Exemples de questions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Méthode</strong></td>
+<td>Procédures, modes opératoires, façons de faire</td>
+<td>Le processus est-il standardisé ? manuel ?</td>
+</tr>
+<tr>
+<td><strong>Matière</strong></td>
+<td>Matières premières, composants, consommables, informations entrantes</td>
+<td>La matière est-elle conforme et stable ?</td>
+</tr>
+<tr>
+<td><strong>Milieu</strong></td>
+<td>Environnement de travail, conditions, ambiance</td>
+<td>L'espace de travail est-il sale, bruyant, exigu ?</td>
+</tr>
+<tr>
+<td><strong>Machine</strong></td>
+<td>Équipements, outils, moyens</td>
+<td>L'outil est-il adapté, en bon état ?</td>
+</tr>
+<tr>
+<td><strong>Main d'œuvre (M.O.)</strong></td>
+<td>Personnes, compétences, soin, technique</td>
+<td>L'opérateur est-il formé ? la technique varie-t-elle ?</td>
+</tr>
+</tbody>
+</table>
+<pre><code>   MILIEU        MÉTHODE        MACHINE
+       \            |            /
+        \           |           /
+         \____      |      ____/
+              \     |     /
+   ════════════╲════╪════╱════════════►  EFFET (le problème)
+              ____/     \____
+         /          |          \
+        /           |           \
+       /            |            \
+  MAIN D'ŒUVRE   MATIÈRE
+</code></pre>
+<blockquote>
+<p>🖼️ <em>Le formulaire « 11. Formulaire Diagramme Ishikawa.pdf » est un </em><em>squelette vierge</em><em> d'arête de poisson, avec : cartouche </em><em>Pilote / Animateur</em><em> + </em><em>Date</em><em>, la case </em><em>Problème</em><em> à droite, et les cinq branches </em><em>Moyen (Machine)</em><em>, </em><em>Matière</em><em>, </em><em>Milieu</em><em>, </em><em>Méthode</em><em>, </em><em>M.O. (Main d'œuvre)</em><em>. À imprimer pour l'atelier.</em></p>
+</blockquote>
+<p><strong>Comment investiguer ?</strong> Pour chaque M, on <strong>liste les causes possibles</strong> (idéalement en brainstorming, voir §7). On peut prolonger chaque arête par des <strong>sous-causes</strong> (arêtes secondaires).</p>
+<p><strong>Exemple complet (cas source) — « Le tampon de certification est illisible ».</strong> La source développe ce cas réel sur les 5M. Voici les causes recensées par famille :</p>
+<table>
+<thead>
+<tr>
+<th>Famille (5M)</th>
+<th>Causes identifiées sur le cas « tampon illisible »</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Méthode</strong></td>
+<td>Le processus est <strong>manuel</strong> ; <strong>variabilité liée à la technique</strong> employée ; <strong>rush</strong> / process « à la bourre » en fin de poste ; pas de validation.</td>
+</tr>
+<tr>
+<td><strong>Matière</strong></td>
+<td>Le <strong>tampon et la réserve d'encre sont séparés</strong> ; la <strong>nature de la carte est variable</strong> ; la <strong>réserve d'encre est rechargée manuellement</strong> ; encrage inadapté.</td>
+</tr>
+<tr>
+<td><strong>Milieu</strong></td>
+<td><strong>Conditions de production trop stressantes</strong> ; l'<strong>espace de travail est sale</strong> ; atelier <strong>bruyant</strong> (<em>« noisy » shop floor area</em>) ; surface de travail non plane / non rigide.</td>
+</tr>
+<tr>
+<td><strong>Machine</strong></td>
+<td><strong>Détérioration du tampon encreur</strong> ; <strong>surface d'encrage non plate, non rigide</strong> ; <strong>pas de localisation précise de la date</strong> ; le tampon s'use (<em>stamp becomes worn</em>).</td>
+</tr>
+<tr>
+<td><strong>Main d'œuvre</strong></td>
+<td><strong>Manque de soin de l'opérateur</strong> ; <strong>manque de moyen de nettoyage</strong> ; <strong>pas d'emplacement de rangement</strong> ; conscience / awareness opérateur.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Priorisation par Pareto (sur ce même cas).</strong> L'analyse statistique du cas montre <strong>≈ 288 problèmes (issues)</strong>, soit <strong>≈ 7 issues par MSN</strong>, répartis ainsi :
+- <strong>A — Cartes manquantes dans le pack : 44 %</strong> des problèmes,
+- <strong>B — Tampons manquants ou illisibles : 33 %</strong>,
+- <strong>C — Données manquantes : 13 %</strong>.
+- Autres : D (fin dupliqué/illisible), E (n° de série dupliqué/en conflit), F (n° de pièce manquant), G (description manquante), H/I (autres).</p>
+<p>➡️ <strong>Les 3 premières causes (A + B + C) représentent ≈ 90 % des problèmes.</strong> C'est la <strong>loi de Pareto (80/20)</strong> : on concentre l'effort sur le vital few.</p>
+<h3>5. Confirmer les causes, puis remonter aux racines avec les 5 Pourquoi</h3>
+<p><strong>Confirmer les causes réelles.</strong> Le diagramme d'Ishikawa produit des causes <strong>suggérées</strong> ; il faut les <strong>vérifier sur le terrain</strong>. La source propose un tableau de confirmation : <strong>N° · Quoi · Resp. (responsable) · Quand · Statut</strong>. Trois actions :
+1. <strong>Affecter la responsabilité</strong> de la confirmation d'une cause suggérée.
+2. <strong>Convenir du timing</strong> pour réaliser ces vérifications.
+3. <strong>Confirmer les causes réelles.</strong></p>
+<p><strong>Pourquoi aller plus loin que les causes apparentes ?</strong> Les efforts de résolution permettent souvent d'identifier les problèmes, de déterminer des causes et de définir des solutions. <strong>Néanmoins, si la cause racine n'est pas déterminée, le problème se reproduira.</strong> Les <strong>5 Pourquoi (5P)</strong> sont une approche structurée, applicable à toutes les opérations, pour faciliter l'identification de la <strong>vraie cause racine</strong>.</p>
+<p><strong>Principe : la Réponse est le point de départ de la Question suivante.</strong> On demande « Pourquoi ? » de façon répétée (≈ 5 fois) jusqu'à atteindre une cause sur laquelle on peut agir.</p>
+<p><strong>Exemple de 5P (cas « tampon illisible »).</strong> Le problème se scinde en deux branches :</p>
+<p><em>Branche 1 — « trop d'encre sur le tampon »</em>
+- <strong>Q : Pourquoi les tampons sont-ils illisibles ?</strong> R : Trop d'encre sur le tampon.
+- <strong>Q : Pourquoi y a-t-il trop d'encre sur le tampon ?</strong> R : Trop de pression sur l'encreur.
+- <strong>Q : Pourquoi applique-t-on trop de pression sur l'encreur ?</strong> R : Il n'existe <strong>aucun mécanisme de contrôle</strong>.
+- <strong>Q : Pourquoi n'y a-t-il pas de mécanisme de contrôle ?</strong> R : Opération <strong>manuelle non standard</strong> impliquant deux éléments.
+- <strong>Q : Pourquoi est-ce une opération manuelle non standard à deux éléments ?</strong> R : <strong>Les encreurs sont séparés des tampons.</strong> <em>(cause racine)</em></p>
+<p><em>Branche 2 — « manque de clarté du tampon »</em>
+- <strong>Q : Pourquoi le tampon manque-t-il de clarté ?</strong> R : Le <strong>caoutchouc du tampon est endommagé</strong>.
+- <strong>Q : Pourquoi le caoutchouc est-il endommagé ?</strong> R : Les tampons sont <strong>stockés dans des conditions inadéquates</strong>.
+- <strong>Q : Pourquoi sont-ils stockés dans des conditions inadéquates ?</strong> R : <strong>Pas de support de rangement disponible</strong>.
+- <strong>Q : Pourquoi n'y a-t-il pas de support de rangement ?</strong> R : <strong>Aucun support de rangement n'est fourni.</strong> <em>(cause racine)</em></p>
+<p><strong>Vérification de la cohérence (lecture remontante « Et donc, par conséquent… »).</strong> Une chaîne de 5 Pourquoi se valide en la relisant de la racine vers l'effet :</p>
+<blockquote>
+<p>Les encreurs sont séparés des tampons + il n'y a pas de support de rangement fourni → <strong>et donc</strong> c'est une opération manuelle non standard / il n'y a pas de support disponible → <strong>et donc</strong> aucun mécanisme de contrôle + tampons mal stockés → <strong>et donc</strong> trop de pression sur l'encreur + caoutchouc endommagé → <strong>et donc</strong> trop d'encre sur le tampon → <strong>et donc</strong> le tampon manque de clarté → <strong>et donc</strong> le tampon est illisible.</p>
+</blockquote>
+<p>Si chaque « et donc » s'enchaîne logiquement, la chaîne causale tient.</p>
+<blockquote>
+<p>🖼️ <em>Schéma source non transcriptible : « Représentation d'un 5 Pourquoi » (arbre des Q/R des deux branches) dans « 11. Résolution de Pb Méthode PDCA.pdf ».</em></p>
+</blockquote>
+<p><strong>Et après les causes : trouver et choisir les solutions.</strong> Une fois les causes racines supprimées :
+- Utiliser le <strong>brainstorming</strong> pour produire des idées et les <strong>classer par ordre d'importance</strong> selon le thème choisi.
+- <strong>Définir les critères de choix</strong> de la solution à retenir : <strong>efficacité, retour sur investissement, délai et facilité de mise en œuvre, sécurité, respect des contraintes…</strong>, puis <strong>faire valider</strong> la solution.</p>
+<h3>6. La méthode PDCA (Plan-Do-Check-Act) — la roue de Deming</h3>
+<p>La <strong>roue de Deming</strong> (<em>Deming's wheel</em>) est la transposition graphique de la méthode de gestion de la qualité <strong>PDCA (Plan-Do-Check-Act)</strong>. C'est <strong>avant tout un état d'esprit</strong>, mais aussi un <strong>cadre méthodologique vertueux</strong> utilisé pour la résolution de problèmes, <strong>en associant des outils à chaque étape</strong>. Le cycle PDCA sert à <strong>transformer une idée en action, et l'action en connaissance</strong> ; l'utiliser correctement <strong>nécessite discipline et effort</strong>.</p>
+<p>Le PDCA repose sur <strong>trois piliers</strong> :
+- <strong>Un état d'esprit</strong> (accueil positif des problèmes),
+- <strong>Une méthode</strong> (démarche structurée),
+- <strong>Des outils</strong> (QQOQCCP, Ishikawa, 5P, Pareto, SPC…),</p>
+<p>le tout <strong>fondamentalement orienté travail de groupe</strong>.</p>
+<p><strong>Pourquoi utiliser une méthode ?</strong> Avec une méthode :
+- on <strong>suit une démarche structurée</strong>,
+- on <strong>aborde tous les points</strong>,
+- on <strong>exploite au maximum les capacités d'un groupe</strong>,
+- on <strong>simplifie le traitement du problème</strong> et on <strong>trouve rapidement des solutions</strong> et des actions de progrès.</p>
+<p><strong>Les 4 phases du cycle :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Nom (source)</th>
+<th>Finalité</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P — Plan</strong></td>
+<td>Planifier</td>
+<td>Clarifier le problème, fixer les objectifs, bâtir le plan d'action et les indicateurs.</td>
+</tr>
+<tr>
+<td><strong>D — Do</strong></td>
+<td>Dérouler</td>
+<td>Réaliser les actions préliminaires, informer/former, exécuter sur une période probatoire.</td>
+</tr>
+<tr>
+<td><strong>C — Check</strong></td>
+<td>Vérifier</td>
+<td>Vérifier les résultats, identifier les écarts, analyser les causes racines, manager les écarts.</td>
+</tr>
+<tr>
+<td><strong>A — Act</strong></td>
+<td>Acter</td>
+<td>Prévenir la récurrence, standardiser, capitaliser (REX) et déployer.</td>
+</tr>
+</tbody>
+</table>
+<h3>7. Les 12 étapes de la résolution de problèmes (PDCA détaillé)</h3>
+<p>Le PDCA se décline en <strong>12 étapes</strong> réparties sur les 4 phases.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>#</th>
+<th>Étape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Plan</strong></td>
+<td>1</td>
+<td><strong>Clarifier le problème</strong> et les objectifs</td>
+</tr>
+<tr>
+<td><strong>Plan</strong></td>
+<td>2</td>
+<td><strong>Définir le plan d'action</strong></td>
+</tr>
+<tr>
+<td><strong>Plan</strong></td>
+<td>3</td>
+<td><strong>Définir les KPIs, points de contrôle et jalons</strong></td>
+</tr>
+<tr>
+<td><strong>Do</strong></td>
+<td>4</td>
+<td><strong>Mettre en œuvre les actions préliminaires</strong></td>
+</tr>
+<tr>
+<td><strong>Do</strong></td>
+<td>5</td>
+<td><strong>Formation et information</strong></td>
+</tr>
+<tr>
+<td><strong>Do</strong></td>
+<td>6</td>
+<td><strong>Exécuter et mettre en œuvre</strong></td>
+</tr>
+<tr>
+<td><strong>Check</strong></td>
+<td>7</td>
+<td><strong>Vérifier les résultats</strong></td>
+</tr>
+<tr>
+<td><strong>Check</strong></td>
+<td>8</td>
+<td><strong>Identifier les écarts et analyser les causes racines</strong></td>
+</tr>
+<tr>
+<td><strong>Check</strong></td>
+<td>9</td>
+<td><strong>Manager les écarts</strong></td>
+</tr>
+<tr>
+<td><strong>Act</strong></td>
+<td>10</td>
+<td><strong>Prévenir la récurrence</strong></td>
+</tr>
+<tr>
+<td><strong>Act</strong></td>
+<td>11</td>
+<td><strong>Standardiser</strong></td>
+</tr>
+<tr>
+<td><strong>Act</strong></td>
+<td>12</td>
+<td><strong>Déployer</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>P — Planifier (étapes 1 à 3)</h4>
+<p><strong>1 &amp; 2 — Clarifier le problème &amp; les objectifs, puis définir le plan d'action :</strong>
+- <strong>Définir le problème et ses impacts.</strong>
+- Si besoin, <strong>décomposer le problème (QQOQCCP)</strong> sur la base de <strong>faits</strong>.
+- <strong>Trouver la cause racine</strong> (Ishikawa, 5 Pourquoi).
+- <strong>Définir les objectifs</strong> en lien avec les <strong>attentes clients</strong>.
+- Pour le plan : <em>Quel est le meilleur moyen d'atteindre les objectifs ? De quelles ressources a-t-on besoin ?</em></p>
+<p><strong>Choisir le problème — matrice de priorisation.</strong> On positionne chaque problème selon <strong>l'impact</strong> (axe horizontal : ++ / + / 0) et la <strong>facilité de résolution</strong> (axe vertical : Facile / Moyen / Difficile), et on note les cases pour prioriser (les cases « Facile × fort impact » sont prioritaires).</p>
+<blockquote>
+<p>🖼️ <em>Schéma source non transcriptible : la grille de priorisation Impact × Facilité (cases numérotées 1 à 9) figure dans « 12. Methode PDCA.pdf ».</em></p>
+</blockquote>
+<p><strong>3 — Définir les indicateurs : jalons et points de vérification.</strong>
+- <em>Quels indicateurs traduiront une amélioration de la situation ?</em>
+- <em>Quels indicateurs mettront le plan d'action sous contrôle ?</em></p>
+<p><strong>PARLER AVEC DES DONNÉES.</strong> La résolution de problèmes se base sur des <strong>FAITS et non sur des suppositions</strong>. Outils cités :
+- <strong>Fiches de batonnage</strong> : système simple à <strong>5 barres</strong> (« ▍▍▍▍╱ ») pour noter le nombre par type de défaut.
+- <strong>Analyse de Pareto</strong> : priorisation des préoccupations / % du nombre total de problèmes.
+- <strong>SPC (Statistical Process Control)</strong> : suivi de la <strong>tendance</strong> par rapport aux <strong>limites supérieure (UCL)</strong> et <strong>inférieure (LCL)</strong>.</p>
+<h4>D — Dérouler (étapes 4 à 6)</h4>
+<ul>
+<li><strong>Réaliser les actions préliminaires</strong> nécessaires à la mise en œuvre de la solution retenue.</li>
+<li><strong>Information &amp; formation :</strong></li>
+<li><strong>Informer</strong> : date de mise en application, objectifs, le nouveau processus.</li>
+<li><strong>Former</strong> au nouveau processus et à la tenue des indicateurs.</li>
+<li>Étudier les <strong>mesures correctives</strong> et évaluer leurs effets : <em>S'agit-il de mesures palliatives ponctuelles ? Empêcheront-elles la réapparition du problème ? Modifient-elles la façon de travailler ?</em></li>
+<li><strong>Définir les ressources et confirmer le délai</strong> ; estimer les <strong>impacts globaux</strong> (processus amont/aval, <strong>QCD</strong>, organisation…).</li>
+<li>Établir la <strong>liste des personnes à informer et à former</strong>, le <strong>planning</strong>, et <strong>valider</strong> information et formation des personnes concernées.</li>
+<li><strong>Exécution :</strong></li>
+<li>Vérifier que <strong>l'ensemble des moyens</strong> sont à disposition des acteurs.</li>
+<li><strong>Réaliser le changement décidé, si possible à petite échelle</strong>, et <strong>réversible</strong>.</li>
+<li><strong>Appliquer le nouveau processus sur une période probatoire suffisamment longue.</strong></li>
+<li>Lorsque <strong>plusieurs changements</strong> sont programmés : essayer le <strong>changement n°1</strong>, analyser les résultats et <strong>revenir à la situation initiale</strong> ; puis le <strong>changement n°2</strong>, analyser, revenir ; et ainsi de suite (pour isoler l'effet de chacun).</li>
+</ul>
+<h4>C — Vérifier (étapes 7 à 9)</h4>
+<ul>
+<li><strong>Vérifier les résultats :</strong></li>
+<li><strong>Indicateurs de processus</strong> : Avez-vous des dérives ? Sont-ils assez précis pour <strong>anticiper</strong> une dérive ?</li>
+<li><strong>Indicateurs de résultats</strong> : La période est-elle <strong>représentative</strong> ? Y a-t-il de la <strong>variabilité</strong> ?</li>
+<li><strong>Identifier les écarts et analyser les causes racines :</strong></li>
+<li><strong>Comparer</strong> les indicateurs aux <strong>objectifs</strong> pour identifier les écarts avec l'attendu.</li>
+<li><strong>Réagir promptement sur le Gemba</strong> (le terrain) s'il existe un <strong>risque additionnel pour le client</strong>.</li>
+<li><strong>Rechercher sur le Gemba les causes racines</strong> de ces écarts.</li>
+<li><strong>Manager les écarts.</strong></li>
+</ul>
+<p><strong>La maîtrise de la dispersion (le « C » du PDCA).</strong> Les données sont <strong>naturellement dispersées autour d'une moyenne</strong> ; il faut en rechercher les causes pour <strong>réduire la dispersion</strong> et <strong>stabiliser le processus</strong>. Points essentiels :
+- <strong>Éliminer les écarts aux standards</strong> (analyser <strong>moyenne &amp; écart type</strong>).
+- <strong>Maintenir le processus stable.</strong> Les causes de variation par rapport à la moyenne sont de <strong>deux ordres</strong> :
+  - <strong>Causes communes</strong> : la <strong>variation naturelle</strong> du processus, due à la variation naturelle des <strong>5M</strong>.
+  - <strong>Causes assignables</strong> : la variation due à un <strong>écart au standard</strong>.</p>
+<h4>A — Acter (étapes 10 à 12)</h4>
+<ul>
+<li><strong>Prévention des récurrences (10)</strong> : définir ce qui est nécessaire pour que le problème <strong>ne se reproduise plus</strong>.</li>
+<li><strong>Standardiser (11)</strong> :</li>
+<li><strong>Formaliser les standards</strong> à appliquer (mode opératoire, <strong>management visuel</strong>, photos…).</li>
+<li><strong>Former</strong> les personnes à ces nouveaux standards et <strong>s'assurer de la bonne application</strong>.</li>
+<li><strong>Formaliser une confirmation de processus sur le Gemba</strong> pour vérifier la bonne compréhension et application.</li>
+<li>Objectifs du standard : <strong>ne pas répéter la même erreur</strong>, <strong>pérenniser les résultats</strong>, <strong>réduire la variabilité et prévenir la récurrence</strong>.</li>
+<li><strong>Mettre à jour</strong> les documents et plans modifiés ; <strong>rendre les standards accessibles</strong> ; prévoir si besoin la <strong>confirmation du processus</strong> par <strong>audit régulier du management direct</strong>, avec <strong>affichage</strong> des contrôles réalisés et des actions correctives.</li>
+<li><strong>Réflexion &amp; déploiement (12)</strong> :</li>
+<li><em>Qu'avons-nous appris ? Aurions-nous oublié quelque chose ?</em></li>
+<li><strong>Formaliser le Retour d'Expériences (REX)</strong> et la <strong>Leçon Apprise</strong> ; décider <strong>comment communiquer</strong> dessus.</li>
+<li>Chercher s'il existe des <strong>processus similaires</strong> susceptibles d'avoir le même problème.</li>
+<li><strong>Manager le déploiement</strong> (à qui, de quelle manière) et <strong>généraliser</strong> : les connaissances acquises pourront orienter d'autres études.</li>
+<li><strong>Rendre compte de façon formalisée</strong> (rapports <strong>A3</strong>) des résultats, points forts et points faibles.</li>
+<li><strong>Lister les problèmes restants</strong> et <strong>planifier de nouveaux PDCA</strong> pour les résoudre — la roue tourne à nouveau.</li>
+</ul>
+<h3>8. Comment les trois outils s'enchaînent</h3>
+<pre><code>  ┌──────────────┐   ┌───────────────────┐   ┌────────────────────┐
+  │   QQOQCCP    │ → │ ISHIKAWA (5M)     │ → │   5 POURQUOI       │
+  │ Établir les  │   │ Lister/organiser  │   │ Remonter à la      │
+  │ FAITS        │   │ les causes        │   │ cause RACINE       │
+  └──────────────┘   └───────────────────┘   └────────────────────┘
+          └───────────────  cadrés dans le cycle  ───────────────┘
+                              ▼
+              ┌─────────────────────────────────────┐
+              │  PDCA — Plan / Do / Check / Act      │
+              │  (12 étapes, du cadrage au déploiement)
+              └─────────────────────────────────────┘
+</code></pre>
+<p>Dans le <strong>PDCA</strong>, QQOQCCP, Ishikawa et 5 Pourquoi sont les <strong>outils de la phase Plan</strong> (étape 1, « Clarifier le problème »). Pareto, batonnage et SPC outillent la <strong>mesure</strong> et le <strong>Check</strong>. Le standard et le REX outillent l'<strong>Act</strong>.</p>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fiche QQOQCCP</strong> (formulaire)</td>
+<td>Cadrer un problème par les faits (Qui/Quoi/Où/Quand/Comment/Combien/Pourquoi) — gabarit à imprimer</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1HWbbQQAf6R3DvDzSNPQwmqmumJ5PQvRc/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Formulaire Diagramme d'Ishikawa</strong></td>
+<td>Squelette d'arête de poisson (5M) à remplir en atelier — cartouche Pilote/Animateur + Date</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1tMNC8kc1xbxpkZahpUU1UUHRFabLlMTQ/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Résolution de Pb — Méthode PDCA</strong> (support)</td>
+<td>QQOQCCP, Ishikawa (exemple « tampon »), 5 Pourquoi, choix de l'outil</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1w2bxVg3SykhVprDZC35GcZrtDpcgqq-8/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Méthode PDCA</strong> (support)</td>
+<td>12 étapes, détail P-D-C-A, matrice de priorisation, parler avec des données</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1Bk8O5k5qgwNcYDduEY9HXycQn3vCbzqI/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>PDCA — Fiche Outil</strong></td>
+<td>Définition synthétique : roue de Deming, état d'esprit / méthode / outils, travail de groupe</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/170NTmP74oaBL_BvyrW2LBO5Pw77SSCH0/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice 1 — Passer un problème réel au QQOQCCP + Ishikawa, puis cadrer un PDCA</strong></p>
+<p>Choisissez <strong>un problème réel et récurrent</strong> de votre périmètre (un défaut, un retard, une réclamation, une rupture…).</p>
+<ol>
+<li><strong>Formulez le problème comme un écart</strong> : situation actuelle vs situation idéale (1 phrase).</li>
+<li><strong>Remplissez une fiche QQOQCCP</strong> (utilisez le gabarit Drive) : répondez aux 7 questions <strong>par des faits</strong>. Pour le « Combien ? », mettez <strong>un chiffre</strong> (%, nombre, fréquence). Pour le « Pourquoi ? », donnez <strong>l'enjeu</strong> (conséquence si on ne fait rien).</li>
+<li><strong>Construisez une arête d'Ishikawa (5M)</strong> (gabarit Drive) : pour <strong>chaque M</strong> (Méthode, Matière, Milieu, Machine, Main d'œuvre), notez <strong>au moins 2 causes possibles</strong>. Inscrivez le problème dans la case « effet ».</li>
+<li><strong>Ciblez la cause la plus probable</strong> et déroulez <strong>5 Pourquoi</strong> dessus jusqu'à une cause racine <strong>actionnable</strong> ; vérifiez la chaîne en la relisant « … et donc, par conséquent … ».</li>
+<li><strong>Cadrez le PDCA</strong> sur une demi-page : pour <strong>Plan / Do / Check / Act</strong>, écrivez 1 à 2 actions concrètes. Dans <strong>Plan</strong>, fixez <strong>un objectif chiffré</strong> et <strong>un indicateur</strong> (KPI). Dans <strong>Check</strong>, dites <strong>comment</strong> vous mesurerez l'écart.</li>
+</ol>
+<ul>
+<li><strong>Livrable attendu :</strong> une <strong>fiche QQOQCCP renseignée</strong> + une <strong>arête d'Ishikawa remplie</strong> (5M) avec une <strong>branche 5 Pourquoi</strong> menant à une cause racine, + un <strong>cadrage PDCA</strong> d'une demi-page (≥ 1 action et 1 indicateur par phase).</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>Les 7 cases du QQOQCCP sont remplies par des <strong>faits</strong> (pas d'opinion) et le « Combien ? » est <strong>chiffré</strong>.</li>
+<li>Chaque M de l'Ishikawa porte <strong>≥ 2 causes</strong> ; aucune branche n'est vide.</li>
+<li>Les <strong>5 Pourquoi</strong> aboutissent à une cause <strong>sur laquelle vous pouvez agir</strong>, et la chaîne « et donc » est cohérente.</li>
+<li>Le PDCA contient <strong>un objectif chiffré</strong>, <strong>un indicateur</strong> et un <strong>moyen de vérification</strong> dans Check.</li>
+<li><strong>Temps conseillé :</strong> 30 min.</li>
+</ul>
+<p><strong>Exercice 2 — Trier vos problèmes par la matrice de priorisation (optionnel, +10 min)</strong></p>
+<ol>
+<li>Listez <strong>5 problèmes</strong> de votre service.</li>
+<li>Positionnez chacun selon <strong>Impact</strong> (++ / + / 0) et <strong>Facilité de résolution</strong> (Facile / Moyen / Difficile).</li>
+<li>Désignez le <strong>Just-do-it</strong> (solution connue), les candidats <strong>PDCA</strong> (quotidiens) et ceux à escalader en <strong>QQOQCCP-5P / A3-8D / DMAIC</strong>.</li>
+</ol>
+<ul>
+<li><strong>Livrable attendu :</strong> une grille Impact × Facilité avec vos 5 problèmes positionnés et l'outil retenu pour chacun.</li>
+<li><strong>Critères de réussite :</strong> au moins un problème classé « Facile × fort impact » est désigné comme <strong>chantier prioritaire</strong>.</li>
+<li><strong>Temps conseillé :</strong> 10 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>Un problème = un écart</strong> entre la situation actuelle et la situation idéale. <strong>« Un problème bien posé est déjà à moitié résolu. »</strong></li>
+<li><strong>Tout nouveau problème est une opportunité ; un problème récurrent est un échec de gestion</strong> (la cause racine n'a pas été traitée).</li>
+<li><strong>QQOQCCP = établir les faits</strong> (7 questions). Le <strong>« Pourquoi ? »</strong> du QQOQCCP, c'est <strong>l'enjeu</strong> ; les <strong>5 Pourquoi</strong>, c'est la <strong>cause racine</strong>.</li>
+<li><strong>Ishikawa = lister/organiser les causes par les 5M</strong> (Méthode, Matière, Milieu, Machine, Main d'œuvre), puis <strong>confirmer les causes réelles</strong> sur le terrain.</li>
+<li><strong>Sans cause racine traitée, le problème revient</strong> : enchaînez Ishikawa → <strong>5 Pourquoi</strong> → solution.</li>
+<li><strong>Parler avec des données</strong> (batonnage, <strong>Pareto 80/20</strong>, <strong>SPC</strong> entre UCL/LCL) — jamais sur des suppositions.</li>
+<li><strong>PDCA = Plan-Do-Check-Act</strong> (roue de Deming), <strong>12 étapes</strong>, état d'esprit + méthode + outils, en <strong>travail de groupe</strong>.</li>
+<li><strong>On adapte l'outil à la complexité</strong> : Just-do-it → PDCA → QQOQCCP-5P → A3/8D → DMAIC.</li>
+<li><strong>Act = standardiser + prévenir la récurrence + capitaliser (REX, A3) + déployer</strong> : on fige le gain, puis la roue retourne.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<ol>
+<li>
+<p>Dans le QQOQCCP, à quoi sert la question <strong>« Combien ? »</strong> ?
+   - a) À identifier toutes les personnes concernées
+   - b) À quantifier l'ampleur du problème (%, nombre, unité)
+   - c) À trouver la cause racine
+   - d) À fixer la date de mise en application</p>
+</li>
+<li>
+<p>Quelles sont les <strong>5M</strong> du diagramme d'Ishikawa ?
+   - a) Méthode, Matière, Milieu, Machine, Main d'œuvre
+   - b) Mesure, Marché, Marge, Management, Méthode
+   - c) Moyen, Money, Matière, Milieu, Manager
+   - d) Matière, Machine, Mission, Milieu, Méthode</p>
+</li>
+<li>
+<p>Pourquoi enchaîne-t-on Ishikawa avec les <strong>5 Pourquoi</strong> ?
+   - a) Pour faire plus de réunions
+   - b) Parce que si la cause racine n'est pas déterminée, le problème se reproduira
+   - c) Pour remplacer le QQOQCCP
+   - d) Parce que l'Ishikawa est interdit en Lean</p>
+</li>
+<li>
+<p>Que signifie <strong>PDCA</strong> ?
+   - a) Plan – Do – Check – Act
+   - b) Prepare – Deploy – Control – Audit
+   - c) Plan – Détecter – Corriger – Auditer
+   - d) Produire – Distribuer – Contrôler – Améliorer</p>
+</li>
+<li>
+<p>Dans la phase <strong>Act</strong>, que fait-on en priorité pour éviter que le problème revienne ?
+   - a) On lance un nouveau brainstorming
+   - b) On standardise et on prévient la récurrence (puis REX / déploiement)
+   - c) On revient à la situation initiale
+   - d) On supprime les indicateurs</p>
+</li>
+<li>
+<p>« Parler avec des données » signifie que la résolution de problèmes se base sur… ?
+   - a) L'intuition du chef
+   - b) Des suppositions de l'équipe
+   - c) Des faits (batonnage, Pareto, SPC)
+   - d) L'ancienneté des opérateurs</p>
+</li>
+</ol>
+<details>
+<summary>👉 Voir les réponses</summary>
+<ol>
+<li><strong>b</strong> — Le « Combien ? » quantifie le problème (pourcentage, nombre, unité de mesure).</li>
+<li><strong>a</strong> — Méthode, Matière, Milieu, Machine, Main d'œuvre (les arêtes du poisson). Le formulaire source nomme la branche Machine « Moyen » et Main d'œuvre « M.O. ».</li>
+<li><strong>b</strong> — « Si la cause racine n'est pas déterminée, le problème se reproduira » : les 5 Pourquoi remontent à la vraie racine.</li>
+<li><strong>a</strong> — Plan (Planifier) – Do (Dérouler) – Check (Vérifier) – Act (Acter), la roue de Deming.</li>
+<li><strong>b</strong> — Act = prévenir la récurrence, standardiser, puis capitaliser (REX, A3) et déployer.</li>
+<li><strong>c</strong> — La résolution se base sur des FAITS et non sur des suppositions : fiches de batonnage, analyse de Pareto, SPC.</li>
+</ol>
+</details>
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <strong>11.QQOQCCP.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1HWbbQQAf6R3DvDzSNPQwmqmumJ5PQvRc/view">Ouvrir dans Drive</a> <em>(formulaire / gabarit, texte limité aux libellés des champs)</em></li>
+<li>📄 <strong>11. Formulaire Diagramme Ishikawa.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1tMNC8kc1xbxpkZahpUU1UUHRFabLlMTQ/view">Ouvrir dans Drive</a> <em>(squelette d'arête de poisson 5M à imprimer)</em></li>
+<li>📄 <strong>11. Résolution de Pb Méthode PDCA.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1w2bxVg3SykhVprDZC35GcZrtDpcgqq-8/view">Ouvrir dans Drive</a></li>
+<li>📄 <strong>12. Methode PDCA.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1Bk8O5k5qgwNcYDduEY9HXycQn3vCbzqI/view">Ouvrir dans Drive</a></li>
+<li>📄 <strong>12. PDCA Fiche Outil.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/170NTmP74oaBL_BvyrW2LBO5Pw77SSCH0/view">Ouvrir dans Drive</a> <em>(fiche outil synthétique)</em></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section>
+<nav class="pager"><a href="08-management-visuel.html"><small>← Module précédent</small>8 · Le Management Visuel</a><a class="nx" href="10-dmaic.html"><small>Module suivant →</small>10 · La démarche DMAIC</a></nav>
+  </main>
+</div>
+</body>
+</html>

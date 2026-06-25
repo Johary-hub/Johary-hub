@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 13 — Les Types de données — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 80px;
+  max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;
+  box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px;display:flex;gap:.4em;align-items:baseline}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;
+  display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;
+  overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;
+  list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;
+  padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;
+  background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;
+  font-size:12px;padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+/* single-file version */
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);
+  margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;
+    border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+@media print{
+  .topbar,.sidebar,.pager,.topnav{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  details[open] *{display:revert}
+  details{border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="12-sipoc.html">← Préc.</a><a href="14-statistiques-descriptives.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span></a><a class="side-link" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span></a><a class="side-link" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span></a><a class="side-link" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span></a><a class="side-link" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span></a><a class="side-link" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span></a><a class="side-link" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span></a><a class="side-link" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span></a><a class="side-link" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span></a><a class="side-link" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span></a><a class="side-link" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span></a><a class="side-link active" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span></a><a class="side-link" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span></a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<h1>Module 13 — Les Types de données</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
+⏱️ Durée estimée : 30 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Distinguer</strong> les <strong>données par attribut</strong> (qualitatives / nominales) des <strong>données variables</strong> (quantitatives).
+- <strong>Classer</strong> une donnée variable selon ses deux axes de découpage : <strong>intervalle vs ratio</strong> et <strong>discrète vs continue</strong>.
+- <strong>Expliquer</strong> pourquoi le type de donnée détermine l'outil ou le test statistique utilisable lors de l'analyse.
+- <strong>Justifier</strong> la préférence Lean Six Sigma pour les données variables (outils plus puissants, échantillons plus petits).
+- <strong>Transformer</strong>, quand c'est possible, une donnée par attribut en donnée variable pour gagner en puissance d'analyse.
+- <strong>Choisir</strong> le bon type de données à collecter sur votre propre processus.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 12 — La VOC, les CTS et le SIPOC (savoir identifier ce qu'on mesure sur un processus).</li>
+<li>Notions de base sur les indicateurs d'un projet.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<h3>1. Pourquoi le type de donnée est‑il décisif ?</h3>
+<p>Avant même de mesurer, il faut savoir <strong>quel type de donnée</strong> on s'apprête à collecter. Deux raisons fondamentales :</p>
+<ul>
+<li>❑ <strong>Le type de donnée détermine quel test devra être utilisé</strong> lors de l'analyse statistique. On ne peut pas appliquer n'importe quel outil à n'importe quelle donnée.</li>
+<li>❑ <strong>Certains types de données donnent accès à des outils plus puissants</strong> que d'autres.</li>
+</ul>
+<p>Autrement dit : le choix se fait <strong>en amont</strong>, à la conception de la collecte. Collecter la « mauvaise » nature de donnée, c'est se priver d'outils d'analyse — et parfois devoir tout recommencer.</p>
+<blockquote>
+<p><strong>Les deux grandes familles</strong>
+- <strong>Données par attribut</strong> : données <strong>qualitatives</strong> ou <strong>nominales</strong>. Ce sont des caractéristiques permettant de <strong>ranger les objets dans des catégories</strong>.
+- <strong>Données variables</strong> : données <strong>quantitatives</strong> qui peuvent être <strong>représentées sur un axe numérique</strong>.</p>
+</blockquote>
+<h3>2. Les données par attribut (qualitatives / nominales)</h3>
+<p><strong>Définition.</strong> Les <strong>données par attribut</strong> rangent les objets <strong>dans des catégories</strong>.</p>
+<p>Leurs propriétés :
+- ❑ Cela <strong>range les objets dans des catégories</strong>.
+- ❑ <strong>Pas d'ordre implicite</strong> entre les catégories (le « bon » n'est pas « avant » le « pas bon » sur un axe).
+- ❑ Également appelées <strong>données nominales</strong>.
+- ❑ Elles sont <strong>plus faciles à collecter</strong> que les données variables.</p>
+<p><strong>Inconvénient majeur :</strong> elles font généralement l'objet d'une <strong>interprétation par les évaluateurs</strong> (deux personnes peuvent classer différemment le même objet).</p>
+<p><strong>Exemples de données par attribut :</strong>
+- Bon – Pas bon
+- Ford – Nissan – Toyota – Volvo
+- Bleu – Rouge – Vert
+- Petit – Grand</p>
+<h3>3. Les données variables (quantitatives)</h3>
+<p><strong>Définition.</strong> Les <strong>données variables</strong> sont <strong>représentées sur un axe numérique</strong>.</p>
+<p>Leurs propriétés :
+- ❑ <strong>Représentées sur un axe numérique.</strong>
+- ❑ Peuvent prendre <strong>différentes valeurs</strong>.
+- ❑ Peuvent être <strong>manipulées mathématiquement</strong>.
+- ❑ Également désignées par <strong>données intervalle / ratio</strong>.</p>
+<p><strong>Exemples de données variables :</strong>
+- Pression d'un airbag
+- Poids de gaz
+- Diamètre d'une pièce
+- Tenue à la traction d'une sangle</p>
+<h3>4. Deux façons de découper les données variables</h3>
+<p>Il y a <strong>deux façons</strong> de partager les données variables en sous‑groupes — et ces deux découpages sont <strong>indépendants</strong> (ils se combinent) :</p>
+<ul>
+<li>❑ <strong>Intervalle vs Ratio</strong></li>
+<li>❑ <strong>Discrète vs Continue</strong></li>
+</ul>
+<pre><code>                 Donnée variable
+            ┌────────────┴────────────┐
+   Intervalle  vs  Ratio      Continue  vs  Discrète
+</code></pre>
+<blockquote>
+<p>👉 Une même donnée variable porte donc <strong>deux étiquettes</strong> : une sur l'axe <em>intervalle/ratio</em>, une sur l'axe <em>discrète/continue</em>. (Schéma original : voir la fiche source Drive.)</p>
+</blockquote>
+<h3>5. Découpage 1 — Intervalle vs Ratio</h3>
+<p>La différence tient à <strong>ce qu'on a le droit de faire mathématiquement</strong> et au <strong>sens du zéro</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Opérations possibles</th>
+<th>Le zéro</th>
+<th>Exemples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Donnée intervalle</strong></td>
+<td>Peut être <strong>ajoutée ou soustraite</strong>, mais <strong>pas multipliée ni divisée</strong> de manière sensée</td>
+<td>Le <strong>zéro est arbitraire</strong></td>
+<td>Température en °C ou °F · l'année (« anno domini ») · mesure d'une longueur par rapport à une valeur connue (référence)</td>
+</tr>
+<tr>
+<td><strong>Donnée ratio</strong></td>
+<td>Peut être <strong>ajoutée, soustraite, multipliée et divisée</strong> de manière sensée</td>
+<td>Le <strong>zéro n'est pas arbitraire</strong> : zéro veut réellement dire « <strong>il n'y a rien là</strong> »</td>
+<td>Quantité d'argent sur un compte en banque · température en degrés <strong>Kelvin</strong> · poids d'un échantillon de matière · mesure d'une longueur par rapport à zéro</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pourquoi ces exemples sont des données intervalle :</strong>
+- ❑ <strong>Température en °C ou °F</strong> → le zéro <strong>ne veut pas dire</strong> qu'il n'y a pas de température.
+- ❑ <strong>L'année « anno domini »</strong> → le temps <strong>n'a pas démarré</strong> en l'an 0.
+- ❑ <strong>Mesure d'une longueur par rapport à une valeur connue</strong> (et non par rapport à zéro absolu).</p>
+<p><strong>Pourquoi ces exemples sont des données ratio :</strong>
+- ❑ <strong>La quantité d'argent</strong> sur un compte en banque.
+- ❑ <strong>Température en degrés Kelvin</strong> (0 K = absence réelle de température).
+- ❑ <strong>Le poids</strong> d'un échantillon de matière.
+- ❑ <strong>Mesure d'une longueur par rapport à zéro</strong>.</p>
+<blockquote>
+<p>💡 Repère mémo : si « <strong>deux fois plus</strong> » a un sens (40 cm = 2 × 20 cm), c'est du <strong>ratio</strong>. Si « deux fois plus » n'a pas de sens (20 °C ≠ 2 × 10 °C en chaleur réelle), c'est de l'<strong>intervalle</strong>.</p>
+</blockquote>
+<h3>6. Découpage 2 — Discrète vs Continue</h3>
+<p>La différence tient à <strong>l'ensemble des valeurs</strong> que la donnée peut prendre.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Caractéristique</th>
+<th>Exemples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Données continues</strong></td>
+<td>Peut prendre <strong>n'importe quelle valeur</strong></td>
+<td>La longueur d'une pièce · la température de la pièce · la pression d'un airbag</td>
+</tr>
+<tr>
+<td><strong>Données discrètes</strong></td>
+<td><strong>Limitée à certaines valeurs</strong>, certains <strong>incréments</strong></td>
+<td>Une somme d'argent physique (incréments de 1 centime) · la position d'un <em>locating</em> · un nombre de pièces</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 Repère mémo : si entre deux valeurs il existe <strong>toujours</strong> une valeur intermédiaire possible (12,5 mm puis 12,53 mm…), c'est <strong>continu</strong>. Si les valeurs « sautent » par paliers (3 pièces, puis 4, jamais 3,5), c'est <strong>discret</strong>.</p>
+</blockquote>
+<h3>7. La puissance des données variables</h3>
+<p>C'est le cœur du module : <strong>on préconise les données variables</strong>, parce qu'elles donnent accès à des <strong>outils plus puissants</strong>.</p>
+<ul>
+<li>❑ <strong>Les données par attribut n'ont pas de relation mathématique entre elles.</strong></li>
+<li>➢ <em>À quelle distance une pièce bonne est‑elle d'une mauvaise ?</em> → la question n'a pas de réponse chiffrée : il n'y a pas de « distance » entre deux catégories.</li>
+<li>❑ <strong>Beaucoup plus d'outils</strong> peuvent être employés pour les <strong>données variables</strong> que pour les attributs.</li>
+<li>❑ Pour obtenir <strong>la même information</strong> à partir de données par attribut (vs variable), il faudra de <strong>gros échantillons</strong>.</li>
+</ul>
+<p><strong>Synthèse à garder en tête :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Critère</th>
+<th>Données par attribut</th>
+<th>Données variables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nature</td>
+<td>Qualitatives / nominales (catégories)</td>
+<td>Quantitatives (axe numérique)</td>
+</tr>
+<tr>
+<td>Manipulation mathématique</td>
+<td>Non</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>Facilité de collecte</td>
+<td><strong>Plus faciles</strong> à collecter</td>
+<td>Plus exigeantes</td>
+</tr>
+<tr>
+<td>Risque d'interprétation</td>
+<td><strong>Oui</strong> (jugement de l'évaluateur)</td>
+<td>Faible (mesure)</td>
+</tr>
+<tr>
+<td>Outils statistiques disponibles</td>
+<td>Peu</td>
+<td><strong>Beaucoup (plus puissants)</strong></td>
+</tr>
+<tr>
+<td>Taille d'échantillon nécessaire</td>
+<td><strong>Grosse</strong></td>
+<td>Plus petite</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>✅ <strong>Règle Lean Six Sigma :</strong> chaque fois que c'est possible, <strong>transformez une donnée par attribut en donnée variable</strong>. Exemple : au lieu de compter « écran rayé / non rayé » (attribut), mesurez le <strong>nombre de rayures</strong> ou la <strong>longueur de la rayure</strong> (variable).</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fiche Outil — Types de données</strong></td>
+<td>Mémo des définitions (attribut vs variable, intervalle/ratio, discrète/continue) et de leurs exemples</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1LIqGzN2BtAL3PfKz8dPiBDb3IFu6HFXK/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Support — 17. Types de données</strong></td>
+<td>Présentation complète avec schémas et exercices de classification corrigés</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1p8iDW7xUF5Uix6v28jMgbSC7oROj9dz0/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice 1 — Classer les données de mon terrain</strong>
+1. Sur votre processus (le « terrain d'application » choisi au Module 0), <strong>listez 5 à 8 données</strong> que vous mesurez ou pourriez mesurer (ex. nombre de retards, diamètre d'une pièce, OK/NOK d'un contrôle, température, montant facturé…).
+2. Pour <strong>chaque</strong> donnée, remplissez le tableau ci‑dessous :
+   - <strong>Attribut ou variable ?</strong>
+   - Si variable : <strong>intervalle ou ratio ?</strong>
+   - Si variable : <strong>discrète ou continue ?</strong>
+3. Repérez vos <strong>données par attribut</strong> et demandez‑vous, pour chacune : <em>« Pourrais‑je la mesurer autrement pour en faire une donnée variable ? »</em> (cf. Exercice 2 du support).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Donnée mesurée</th>
+<th>Attribut / Variable</th>
+<th>Intervalle / Ratio</th>
+<th>Discrète / Continue</th>
+<th>Transformable en variable ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Livrable attendu :</strong> le tableau ci‑dessus rempli avec <strong>5 à 8 données réelles</strong> de votre processus, chacune correctement classée, plus <strong>au moins une</strong> proposition de passage attribut → variable.</li>
+<li><strong>Critères de réussite :</strong> chaque donnée porte les <strong>deux étiquettes</strong> quand elle est variable (intervalle/ratio <strong>et</strong> discrète/continue) ; les justifications « zéro arbitraire ou non » et « valeurs continues ou par incréments » sont cohérentes ; au moins une donnée par attribut a une piste de transformation crédible.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+<p><strong>Exercice 2 — Revue de mes indicateurs projet (en groupe)</strong>
+1. <strong>Passez en revue les indicateurs</strong> de vos projets.
+2. <strong>Identifiez de quel type de données</strong> il s'agit (attribut / variable, et le sous‑type).
+3. <strong>Déterminez si vos données par attribut pourraient être mesurées différemment</strong> pour en faire des <strong>données variables</strong>.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une courte note listant chaque indicateur, son type, et les conversions possibles vers du variable.</li>
+<li><strong>Critères de réussite :</strong> tous les indicateurs sont typés ; au moins une opportunité de « gagner en puissance d'analyse » est identifiée.</li>
+<li><strong>Temps conseillé :</strong> 10 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li>Le <strong>type de donnée se décide avant la collecte</strong> : il <strong>détermine le test statistique</strong> utilisable.</li>
+<li><strong>Deux familles</strong> : <strong>attribut</strong> (qualitatif / nominal, = catégories) et <strong>variable</strong> (quantitatif, = axe numérique).</li>
+<li>Une donnée variable se classe sur <strong>deux axes indépendants</strong> : <strong>intervalle vs ratio</strong> et <strong>discrète vs continue</strong>.</li>
+<li><strong>Intervalle</strong> = on peut additionner/soustraire, <strong>zéro arbitraire</strong> (°C, années). <strong>Ratio</strong> = on peut aussi multiplier/diviser, <strong>zéro = absence réelle</strong> (poids, argent, Kelvin).</li>
+<li><strong>Continue</strong> = n'importe quelle valeur ; <strong>discrète</strong> = valeurs limitées, par incréments.</li>
+<li>Les <strong>données variables sont plus puissantes</strong> : plus d'outils, <strong>échantillons plus petits</strong>. Les données par attribut <strong>n'ont pas de relation mathématique</strong> entre elles.</li>
+<li>Les données par attribut sont <strong>plus faciles à collecter</strong> mais <strong>sujettes à l'interprétation</strong> de l'évaluateur.</li>
+<li><strong>Convertissez attribut → variable</strong> chaque fois que possible (compter/mesurer plutôt que classer en « bon / pas bon »).</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<p><em>(Plusieurs questions reprennent l'Exercice n°1 du support.)</em></p>
+<ol>
+<li>« Nombre de rayures sur un écran d'ordinateur » est une donnée…
+   - a) Attribut · b) Variable, ratio et continue · c) Variable, ratio et discrète · d) Variable, intervalle et continue</li>
+<li>« Cette voiture est grise, cette autre est rouge » est une donnée…
+   - a) Attribut · b) Variable ratio · c) Variable intervalle · d) Variable discrète</li>
+<li>« Longueur d'un pinceau » est une donnée…
+   - a) Attribut · b) Variable, ratio et continue · c) Variable, intervalle et discrète · d) Variable, ratio et discrète</li>
+<li>La <strong>température en degrés Celsius</strong> est une donnée de type…
+   - a) Ratio (le zéro veut dire « rien ») · b) Intervalle (le zéro est arbitraire) · c) Attribut · d) Discrète</li>
+<li>Pourquoi le Lean Six Sigma <strong>préconise‑t‑il les données variables</strong> ?
+   - a) Elles sont plus faciles à collecter · b) Elles donnent accès à des outils plus puissants et demandent des échantillons plus petits · c) Elles évitent toute mesure · d) Elles n'ont pas d'unité</li>
+<li>« Échantillons qui peuvent être triés entre rond, carré et triangulaire » est une donnée…
+   - a) Variable continue · b) Variable discrète · c) Attribut · d) Variable intervalle</li>
+</ol>
+<details>
+<summary>👉 Voir les réponses</summary>
+<ol>
+<li><strong>c</strong> — Variable, <strong>ratio et discrète</strong> (on compte un nombre entier de rayures).</li>
+<li><strong>a</strong> — <strong>Attribut</strong> : une couleur range l'objet dans une catégorie, sans ordre ni relation mathématique.</li>
+<li><strong>b</strong> — Variable, <strong>ratio et continue</strong> : une longueur peut prendre n'importe quelle valeur et son zéro est absolu.</li>
+<li><strong>b</strong> — <strong>Intervalle</strong> : en °C le zéro est arbitraire (il ne signifie pas « pas de température »), donc on peut additionner/soustraire mais pas multiplier/diviser de façon sensée.</li>
+<li><strong>b</strong> — Plus d'outils, <strong>plus puissants</strong>, et <strong>échantillons plus petits</strong> pour la même information ; les données par attribut n'ont pas de relation mathématique entre elles.</li>
+<li><strong>c</strong> — <strong>Attribut</strong> : on range les pièces dans des catégories de forme (pas d'ordre implicite).</li>
+</ol>
+<p><em>Rappel des autres items du support : « Écrans rayés vs écrans non‑rayés » → Attribut · « Prix du journal » → Variable ratio et discrète · « Pression d'air dans un pneu » → Variable ratio et continue · « Lecture de la pression d'air sur une jauge digitale » → Variable ratio et discrète.</em></p>
+</details>
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>17. Types de données.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1p8iDW7xUF5Uix6v28jMgbSC7oROj9dz0/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>17. Types de données Fiche Outil.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1LIqGzN2BtAL3PfKz8dPiBDb3IFu6HFXK/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section>
+<nav class="pager"><a href="12-sipoc.html"><small>← Module précédent</small>12 · Le SIPOC</a><a class="nx" href="14-statistiques-descriptives.html"><small>Module suivant →</small>14 · Les Statistiques Descriptives</a></nav>
+  </main>
+</div>
+</body>
+</html>
