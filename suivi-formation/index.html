@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AOSOM FR — Suivi Formation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__logo">📊</span>
+      <div>
+        <h1>Suivi Formation</h1>
+        <p class="topbar__sub">AOSOM FR — Conseillers client × Marketplaces</p>
+      </div>
+    </div>
+    <div class="topbar__actions">
+      <span id="source-info" class="source-info">Chargement…</span>
+      <label class="btn btn--ghost">
+        📁 Charger un fichier
+        <input type="file" id="file-input" accept=".xlsx,.xls" hidden />
+      </label>
+    </div>
+  </header>
+
+  <!-- Bandeau d'aide affiché si le chargement automatique échoue (ex : ouverture en file://) -->
+  <div id="dropzone" class="dropzone hidden">
+    <div class="dropzone__inner">
+      <p class="dropzone__title">Glissez votre fichier <code>.xlsx</code> ici</p>
+      <p class="dropzone__hint">ou utilisez le bouton « Charger un fichier ». Le tableur reste la source de données.</p>
+    </div>
+  </div>
+
+  <div id="error" class="banner banner--error hidden"></div>
+
+  <nav class="tabs">
+    <button class="tab tab--active" data-tab="dashboard">🎯 Tableau de bord</button>
+    <button class="tab" data-tab="matrice">🧩 Matrice de compétences</button>
+    <button class="tab" data-tab="detail">📋 Suivi détaillé</button>
+  </nav>
+
+  <main class="container">
+    <!-- ================= DASHBOARD ================= -->
+    <section id="tab-dashboard" class="tab-panel">
+      <div id="kpi-cards" class="kpi-grid"></div>
+
+      <div class="status-strip" id="status-strip"></div>
+
+      <div class="charts-grid">
+        <div class="card">
+          <h2 class="card__title">Répartition des statuts</h2>
+          <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+        </div>
+        <div class="card">
+          <h2 class="card__title">Couverture par marketplace</h2>
+          <div class="chart-wrap chart-wrap--tall"><canvas id="chart-marketplace"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card__title">⚠️ Principaux besoins de formation</h2>
+        <div id="gaps" class="gaps-grid"></div>
+      </div>
+    </section>
+
+    <!-- ================= MATRICE ================= -->
+    <section id="tab-matrice" class="tab-panel hidden">
+      <div class="card">
+        <div class="card__header">
+          <h2 class="card__title">Matrice agents × marketplaces</h2>
+          <p class="legend">
+            <span class="lg lg--ok">✅ Formé</span>
+            <span class="lg lg--prog">🟡 En cours</span>
+            <span class="lg lg--no">🔴 Non formé</span>
+            <span class="lg lg--na">· Non assigné</span>
+          </p>
+        </div>
+        <p class="muted">Calculé en direct depuis la feuille de suivi détaillé. % = formations validées ÷ marketplaces.</p>
+        <div class="table-scroll">
+          <table id="matrice-table" class="matrice"></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DETAIL ================= -->
+    <section id="tab-detail" class="tab-panel hidden">
+      <div class="card">
+        <div class="filters">
+          <input type="search" id="f-search" placeholder="🔍 Rechercher (agent, commentaire…)" />
+          <select id="f-agent"><option value="">Tous les agents</option></select>
+          <select id="f-marketplace"><option value="">Toutes les marketplaces</option></select>
+          <select id="f-statut"><option value="">Tous les statuts</option></select>
+          <select id="f-formateur"><option value="">Tous les formateurs</option></select>
+          <button id="f-reset" class="btn btn--ghost">↺ Réinitialiser</button>
+          <button id="export-csv" class="btn btn--primary">⬇️ Export CSV</button>
+        </div>
+        <p class="muted"><span id="detail-count">0</span> formation(s) affichée(s)</p>
+        <div class="table-scroll">
+          <table id="detail-table" class="detail"></table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    App web statique — le fichier <code>.xlsx</code> est la source de vérité.
+    Aucune donnée n'est envoyée sur un serveur, tout est calculé dans le navigateur.
+  </footer>
+
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
