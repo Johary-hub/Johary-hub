@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 3 — Les Fondements du Lean — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="02-muda-mura-muri-gemba.html">← Préc.</a><a href="04-paradigmes.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link active" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="03-fondements-du-lean">Marquer ce module comme terminé</button></div><h1>Module 3 — Les Fondements du Lean</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 35 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Expliquer</strong> l'objet et l'objectif du Lean : produire le juste nécessaire, au bon moment, au niveau de qualité demandé, en réduisant les gaspillages.
+- <strong>Restituer</strong> les <strong>3 principes</strong> (l'état d'esprit) et les <strong>7 concepts</strong> (le savoir‑être) qui constituent les fondements du Lean selon Progress Partners.
+- <strong>Distinguer</strong> le paradigme traditionnel du paradigme Lean (résultats vs processus + résultats, fonctionnel vs systèmes globaux, blâmer vs ne pas juger/ne pas blâmer).
+- <strong>Relier</strong> ces fondements aux principes universels du Lean — <strong>valeur, flux de valeur, flux, flux tiré, perfection</strong> — et au <strong>Kaizen</strong> (amélioration continue par la standardisation : SDCA → PDCA).
+- <strong>Appliquer</strong> ces principes sur votre propre terrain via un diagnostic concret et un plan d'action.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 1 — Introduction au Lean / 6 Sigma / Lean 6 Sigma.</li>
+<li>Module 2 — Les MUDA (les 7 gaspillages) : la notion de <em>Muda</em> est mobilisée ici.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 440 350" role="img" class="svg-anim"><polygon points="40,118 220,28 400,118" fill="#f6b400" class="seg"/><text x="220" y="84" text-anchor="middle" fill="#3a3320" font-size="15" font-weight="800">CLIENT</text><text x="220" y="104" text-anchor="middle" fill="#3a3320" font-size="11.5">Satisfaction Qualité · Coût · Délai</text><rect x="60" y="122" width="320" height="44" rx="4" fill="#0d9488" class="seg"/><text x="220" y="142" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">Outils & Systèmes</text><text x="220" y="158" text-anchor="middle" fill="#e8edf4" font-size="10.5">méthodes et techniques</text><rect x="60" y="170" width="320" height="44" rx="4" fill="#2563eb" class="seg"/><text x="220" y="190" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">7 Concepts</text><text x="220" y="206" text-anchor="middle" fill="#e8edf4" font-size="10.5">savoir-être / attitude</text><rect x="60" y="218" width="320" height="44" rx="4" fill="#334155" class="seg"/><text x="220" y="238" text-anchor="middle" fill="#fff" font-size="14" font-weight="700">3 Principes</text><text x="220" y="254" text-anchor="middle" fill="#e8edf4" font-size="10.5">état d'esprit</text><rect x="40" y="270" width="360" height="50" rx="4" fill="#b91c1c" class="seg"/><text x="220" y="291" text-anchor="middle" fill="#fff" font-size="13" font-weight="800">Lutte contre le MUDA (gaspillage)</text><text x="220" y="309" text-anchor="middle" fill="#ffe2e2" font-size="11">… à partir du GEMBA (le terrain)</text></svg><figcaption>Le Lean comme système : du socle (lutte contre le Muda, sur le Gemba) jusqu'à la satisfaction Client (Qualité · Coût · Délai).</figcaption></figure>
+
+<h3>1. Qu'est‑ce que « les fondements du Lean » ?</h3>
+<p>Les fondements du Lean <strong>permettent, à partir du gemba</strong> (le terrain, là où l'on crée la valeur), <strong>de satisfaire le client en QCD</strong> (Qualité, Coût, Délai) en mobilisant :
+- <strong>le bon état d'esprit</strong> → les <strong>3 principes</strong> ;
+- <strong>la bonne attitude / le bon savoir‑être</strong> → les <strong>7 concepts</strong> ;
+- <strong>les bons outils</strong>.</p>
+<blockquote>
+<p>🔑 Phrase‑clé du support : <em>« Les trois principes constituent l'état d'esprit et les sept concepts le savoir‑être, c.‑à‑d. la manière de se comporter. »</em> L'application des outils Lean <strong>s'appuie largement sur ces principes et concepts</strong>.</p>
+</blockquote>
+<p><strong>Objectif du Lean :</strong> produire le <strong>juste nécessaire</strong>, au <strong>bon moment</strong>, au <strong>niveau de qualité demandé</strong>, en <strong>réduisant les gaspillages</strong>. Autrement dit, chercher le <strong>zéro gaspillage</strong> dans la <strong>chaîne de valeur</strong> pour être plus <strong>efficient</strong> (zéro panne, zéro défaut, zéro stock inutile…).</p>
+<p><strong>Définition fondatrice :</strong></p>
+<blockquote>
+<p><strong>Lean</strong> = <em>Les individus utilisent le processus pour obtenir des résultats.</em>
+<strong>Traditionnel</strong> = <em>Les individus font ce qu'ils peuvent pour obtenir les résultats.</em></p>
+</blockquote>
+<h3>2. Les 3 principes (l'état d'esprit)</h3>
+<p>Les <strong>3 principes</strong> forment l'<strong>état d'esprit</strong> du Lean. Ils répondent à la question : <em>comment penser pour faire du Lean ?</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Principe</th>
+<th>Définition (source Progress Partners)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Systèmes globaux</strong> (système global)</td>
+<td>L'entreprise est vue comme une <strong>entité globale</strong> dans laquelle <strong>tout le monde va dans la même direction</strong>. Plutôt que de se débarrasser des problèmes en les renvoyant aux autres sans les régler, <strong>les facteurs critiques sont pris en compte par l'ensemble des parties prenantes</strong>.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Ne pas juger, ne pas blâmer</strong></td>
+<td>Lorsqu'un problème apparaît, le Lean manager <strong>n'est jamais dans la recherche d'un coupable</strong> mais dans la <strong>recherche d'une solution</strong>.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Processus et résultat</strong></td>
+<td>Avec la <strong>mise en place de processus</strong>, on <strong>garantit l'homogénéité des résultats</strong> attendus.</td>
+</tr>
+</tbody>
+</table>
+<h4>2.1 Principe « Processus et résultat »</h4>
+<p>Le Lean <strong>équilibre</strong> processus et résultats :
+- <strong>Oublier les processus</strong> réduit les chances d'obtenir les résultats recherchés.
+- <strong>Oublier les résultats</strong> masque la stratégie à long terme et les domaines à améliorer.</p>
+<p><strong>Schéma source — Individus / Processus → Résultats</strong> <em>(visuel à consulter dans le fichier source, voir §Sources).</em>
+Le support oppose deux situations :
+- <strong>Processus hétérogènes</strong> → <strong>résultats hétérogènes</strong> : les résultats obtenus (R1, R2, R3, R4) sont <strong>dispersés</strong> autour des <strong>résultats souhaités</strong>.
+- <strong>Processus homogènes</strong> → résultats <strong>homogènes</strong>, alignés sur la cible.</p>
+<blockquote>
+<p>💡 Idée à retenir : ce sont <strong>les individus qui utilisent un processus homogène</strong> pour obtenir des résultats reproductibles. Standardiser le processus, c'est réduire la variabilité des résultats.</p>
+</blockquote>
+<h4>2.2 Principe « Systèmes globaux » (point de vue système)</h4>
+<p>Une organisation pilotée en silos (vue purement <strong>fonctionnelle</strong>) produit des dysfonctionnements. Le support liste les symptômes d'une organisation <strong>sans vision système</strong> :
+- ❑ Conflits excessifs au sein même de l'usine
+- ❑ Direction confuse
+- ❑ Mauvaise répartition des ressources
+- ❑ Perte d'énergie des personnes
+- ❑ Renvoi du problème aux autres</p>
+<p>À l'inverse, le <strong>point de vue système</strong> :
+- ❑ Met l'accent sur l'<strong>intégration dans un système global</strong>
+- ❑ Prend en compte <strong>tous les facteurs critiques</strong></p>
+<p><strong>Vue fonctionnelle vs Point de vue système (besoins QCD)</strong>
+Au lieu de fonctions cloisonnées (R&amp;D, Marketing, Fabrication, Ventes, Services/SAV) qui se transmettent les contraintes, on raisonne en <strong>chaîne orientée vers la satisfaction QCD du client</strong> : les <strong>« Fonctions Groupe »</strong> (R&amp;D → Marketing → Fabrication → Ventes &amp; SAV) travaillent ensemble pour transformer les <strong>besoins QCD</strong> en <strong>satisfaction QCD</strong>.</p>
+<h4>2.3 Principe « Ne pas juger, ne pas blâmer »</h4>
+<p>C'est un <strong>changement de paradigme</strong> majeur. Le support oppose deux paradigmes :</p>
+<table>
+<thead>
+<tr>
+<th>Ancien paradigme — <em>optique de l'inspecteur</em></th>
+<th>Nouveau paradigme — <em>« Bienvenue aux problèmes »</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jugement critique <strong>« après coup »</strong></td>
+<td>Fait <strong>apparaître les « vraies » questions</strong></td>
+</tr>
+<tr>
+<td><strong>« Qui a tort »</strong> a priorité sur <strong>« Qu'est‑ce qui ne va pas »</strong></td>
+<td><strong>Réduit</strong> les attitudes critiques négatives</td>
+</tr>
+<tr>
+<td>Pousse les gens à se mettre <strong>sur la défensive</strong></td>
+<td><strong>Augmente la confiance</strong></td>
+</tr>
+<tr>
+<td>Les problèmes <strong>restent enfouis pendant des années</strong></td>
+<td>Augmente la <strong>qualité de la communication</strong></td>
+</tr>
+<tr>
+<td>Crée une <strong>orientation de crise</strong></td>
+<td><strong>Augmente les compétences</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Accueillir positivement les problèmes</strong> :
+- ❑ Là où on ne perçoit pas de problèmes, <strong>il ne peut y avoir d'améliorations</strong>.
+- ❑ Les problèmes sont une <strong>mine de trésors</strong>.
+- ❑ Les problèmes <strong>ne tiennent pas aux personnes</strong>.
+- ❑ Il faut <strong>augmenter les compétences du personnel à résoudre les problèmes</strong>.</p>
+<p><strong>Avant de juger, vérifier le standard</strong> — la séquence de questions du Lean manager :
+1. <strong>Y a‑t‑il un standard ?</strong>
+2. <strong>Le standard est‑il connu et visible ?</strong>
+3. <strong>Le standard est‑il appliqué ?</strong>
+4. <strong>L'application des standards est‑elle sécurisée</strong> (Poka‑Yoke…) ?</p>
+<blockquote>
+<p>Tant que ces questions n'ont pas de réponse, le problème relève du <strong>système</strong> (absence ou non‑respect d'un standard), <strong>pas de la personne</strong>.</p>
+</blockquote>
+<h4>2.4 Le changement du mode de pensée (synthèse des 3 principes)</h4>
+<table>
+<thead>
+<tr>
+<th>Ancien paradigme</th>
+<th>→</th>
+<th>Paradigme Lean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Résultats</td>
+<td>→</td>
+<td><strong>Processus et résultats</strong></td>
+</tr>
+<tr>
+<td>Fonctionnel</td>
+<td>→</td>
+<td><strong>Systèmes globaux</strong></td>
+</tr>
+<tr>
+<td>Blâmer</td>
+<td>→</td>
+<td><strong>Ne pas blâmer / Ne pas juger</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>3. Les 7 concepts du Lean (le savoir‑être)</h3>
+<p>Les <strong>7 concepts</strong> constituent le <strong>savoir‑être</strong> : la manière concrète de se comporter au quotidien. Le support les présente comme l'attitude qui découle des 3 principes.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Concept</th>
+<th>Idée‑force</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>SDCA vers PDCA</strong></td>
+<td>Stabiliser par le <strong>standard</strong> (SDCA) puis <strong>améliorer</strong> (PDCA) : c'est le moteur du <strong>Kaizen</strong>.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Le processus suivant est le client</strong></td>
+<td>Chaque poste considère le poste <strong>aval</strong> comme son client : <strong>ne pas faire / ne pas recevoir / ne pas transmettre</strong> un défaut.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>La Qualité en premier</strong></td>
+<td>La plupart des problèmes de <strong>Coût</strong> et de <strong>Délai</strong> sont en réalité des problèmes de <strong>Qualité</strong> dans un processus <strong>amont</strong>.</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Orienté marché</strong></td>
+<td>Comprendre les besoins <strong>réels</strong> du client (les faits) plutôt que de présumer ce qu'il veut.</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>La gestion en amont</strong></td>
+<td><strong>Trouver, éviter/empêcher</strong> les problèmes en amont plutôt que de les <strong>résoudre</strong> en aval.</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Parler avec des données</strong></td>
+<td>Décider et agir <strong>sur la base de données</strong> vérifiées au <strong>gemba</strong>.</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Maîtrise / Contrôle de la variabilité</strong></td>
+<td>Réduire la <strong>dispersion</strong> du processus (les 5 pourquoi, l'analyse des causes).</td>
+</tr>
+</tbody>
+</table>
+<h4>3.1 Concept « SDCA vers PDCA » — la mécanique du Kaizen</h4>
+<p><strong>SDCA = Standardize, Do, Check, Act</strong> ; <strong>PDCA = Plan, Do, Check, Act</strong>. Le Lean <strong>alterne</strong> stabilisation et amélioration :
+- on <strong>standardise</strong> pour <strong>stabiliser</strong> (SDCA),
+- puis on <strong>améliore</strong> le standard (PDCA),
+- et on <strong>re‑standardise</strong> le nouveau niveau atteint.</p>
+<p><strong>Schéma source — l'escalier de l'amélioration</strong> <em>(visuel à consulter dans le fichier source)</em> : sur un axe <strong>Valeur / Temps</strong>, le couple <strong>Standardisation + Amélioration</strong> dessine un <strong>escalier ascendant</strong> : chaque marche est un standard qui empêche de <strong>redescendre</strong> (effet « cale »), chaque amélioration fait monter d'une marche. C'est l'illustration du <strong>Kaizen</strong> (amélioration continue).</p>
+<p><strong>Définition du standard :</strong></p>
+<blockquote>
+<p><strong>Standard</strong> = <em>La meilleure manière, la plus facile et la plus sûre connue à ce jour.</em>
+<strong>Il ne doit y avoir qu'un seul standard à la fois.</strong></p>
+</blockquote>
+<p>Un bon <strong>standard de processus</strong> :
+- ❑ documente le <strong>savoir‑faire</strong> ;
+- ❑ fixe des <strong>objectifs simples et visibles</strong> ;
+- ❑ est <strong>conforme aux exigences de Qualité, de Coût et de Délai</strong> ;
+- ❑ <strong>démontre les relations causes → effets</strong>.</p>
+<h4>3.2 Concept « Le processus suivant est le client »</h4>
+<p>Chaque opérateur est <strong>à la fois client</strong> (du poste amont) <strong>et fournisseur</strong> (du poste aval). La règle est triple, du point de vue de votre poste (« <strong>Vous êtes ici</strong> ») :
+- <strong>Ne pas recevoir</strong> un défaut (du fournisseur amont) ;
+- <strong>Ne pas faire</strong> de défaut ;
+- <strong>Ne pas transmettre</strong> un défaut (au <strong>client intermédiaire</strong>, puis au <strong>client final</strong>).</p>
+<blockquote>
+<p>La chaîne va du fournisseur → client intermédiaire → <strong>client final</strong> : un défaut non arrêté à votre poste se <strong>propage</strong> et coûte de plus en plus cher.</p>
+</blockquote>
+<h4>3.3 Concept « La Qualité en premier »</h4>
+<blockquote>
+<p><em>« … Parce que la plupart des problèmes de Coût et de Délai sont en réalité des problèmes de Qualité dans un processus amont. »</em></p>
+</blockquote>
+<p>Traiter la <strong>Qualité d'abord</strong>, c'est s'attaquer à la <strong>cause racine</strong> des dérives de coût et de délai.</p>
+<p><strong>Coûts de la Non‑Qualité — plus on détecte tard, plus c'est cher.</strong> Le coût pour corriger un défaut <strong>croît</strong> au fil du flux :
+1. <strong>Dès qu'il apparaît</strong> (au poste de travail) — coût minimal ;
+2. <strong>Au poste de travail suivant</strong> ;
+3. <strong>Sur la chaîne d'assemblage</strong> ;
+4. <strong>À l'inspection finale</strong> ;
+5. <strong>Après réclamation du consommateur</strong> — coût maximal.</p>
+<blockquote>
+<p>⚠️ Règle mémorisable : <strong>un défaut détecté tôt coûte une fraction de ce qu'il coûte une fois arrivé chez le client.</strong></p>
+</blockquote>
+<h4>3.4 Concept « Orienté marché » (Orientation produit vs Orientation marché)</h4>
+<table>
+<thead>
+<tr>
+<th>Orientation <strong>Produit</strong> (à éviter)</th>
+<th>Orientation <strong>Marché</strong> (visée Lean)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Les ingénieurs Développement connaissent <strong>intuitivement</strong> les besoins des clients</td>
+<td><strong>Comprendre les besoins et désirs du client en s'en tenant aux faits</strong></td>
+</tr>
+<tr>
+<td>Concevoir avec des <strong>tolérances proches des capabilités de fabrication</strong></td>
+<td><strong>Traduire</strong> cette compréhension en activités qui <strong>satisfont</strong> les besoins en <strong>Qualité, Coût et Délai</strong></td>
+</tr>
+<tr>
+<td>Produire suivant des <strong>plannings qui conviennent à la fabrication</strong></td>
+<td><strong>Détecter les tendances avant la concurrence</strong></td>
+</tr>
+<tr>
+<td>Coûts de qualité <strong>égaux aux performances passées</strong></td>
+<td><strong>Ne pas transmettre ses contraintes à son client</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>3.5 Concept « La gestion en amont »</h4>
+<p>On déplace l'effort <strong>vers l'amont</strong> du flux : il vaut mieux <strong>trouver</strong> et <strong>éviter / empêcher</strong> les problèmes que les <strong>résoudre</strong> une fois survenus.</p>
+<p><strong>Schéma source — sélection qualité vs Poka‑Yoke</strong> <em>(visuel à consulter dans le fichier source)</em> : le support compare deux logiques le long du <strong>flux de production</strong> (Conception/DEV → fabrication → client) :
+- <strong>Logique de tri (« sélection qualité »)</strong> : on inspecte, puis on <strong>répare / rejette</strong> à chaque étape ; le <strong>non‑conforme</strong> repart en boucle (réparer / rejeter), seul le <strong>conforme</strong> part <strong>vers le client</strong>. Coûteux et tardif.
+- <strong>Logique amont (« systèmes anti‑erreur / Poka‑Yoke »)</strong> : on <strong>empêche</strong> l'erreur de se produire dès la conception et au poste, ce qui supprime les boucles de réparation.</p>
+<h4>3.6 Concept « Parler avec des données »</h4>
+<p>La démarche factuelle, étape par étape :
+- ❑ <strong>Vérifiez sur le gemba</strong> (le terrain réel) ;
+- ❑ <strong>Collectez</strong> les données ;
+- ❑ <strong>Analysez</strong> les données ;
+- ❑ <strong>Prenez des décisions</strong> sur la base des données ;
+- ❑ <strong>Agissez</strong> sur la base des données ;
+- ❑ <strong>Confirmez</strong> sur la base des données.</p>
+<blockquote>
+<p>📌 <em>Gemba</em> = le lieu réel où la valeur est créée. On ne décide pas depuis le bureau : <strong>on va voir</strong>.</p>
+</blockquote>
+<h4>3.7 Concept « Maîtrise de la variabilité »</h4>
+<p>Réduire la <strong>dispersion</strong> d'un processus, c'est en chercher les <strong>causes</strong>. Le support associe ce concept à l'outil des <strong>5 pourquoi</strong> (« ? ? ? ? ? » — remonter la chaîne des causes) et au suivi de la grandeur dans le <strong>temps</strong> afin de la <strong>maîtriser</strong>. C'est le pont direct vers la composante <strong>6 Sigma</strong> du parcours (réduction de la variabilité).</p>
+<h3>4. Le système global du Lean : principes, concepts, outils</h3>
+<p>Le support organise le Lean en <strong>système</strong> cohérent, des fondements vers les outils :</p>
+<pre><code>        ┌──────────────────────────────────────────────┐
+        │              CLIENT  (Satisfaction QCD)        │
+        └──────────────────────────────────────────────┘
+                              ▲
+   ┌───────────────────────── │ ─────────────────────────┐
+   │   OUTILS &amp; SYSTÈMES  (méthodes et techniques)        │
+   ├──────────────────────────────────────────────────────┤
+   │   7 CONCEPTS  (savoir‑être / attitude)                │
+   │   SDCA→PDCA · processus suivant = client · qualité    │
+   │   en premier · orienté marché · gestion en amont ·    │
+   │   parler avec des données · maîtrise variabilité      │
+   ├──────────────────────────────────────────────────────┤
+   │   3 PRINCIPES  (état d'esprit)                         │
+   │   Système global · Ne pas juger/blâmer · Processus     │
+   │   et résultat                                          │
+   ├──────────────────────────────────────────────────────┤
+   │   Lutte contre le MUDA (gaspillage) · à partir du GEMBA│
+   └──────────────────────────────────────────────────────┘
+</code></pre>
+<p><em>(Reconstitution textuelle de l'architecture présentée dans le support ; voir le visuel d'origine dans le fichier source.)</em></p>
+<p>Les <strong>outils et systèmes</strong> (méthodes et techniques) s'appuient sur cette base ; le tout est tourné vers le <strong>Client</strong> et la <strong>lutte contre le Muda</strong> (gaspillage), <strong>à partir du gemba</strong>.</p>
+<h3>5. Le lien avec les 5 principes universels du Lean</h3>
+<p>Les fondements Progress Partners (3 principes + 7 concepts) sont la déclinaison « état d'esprit / savoir‑être » des <strong>5 principes universels du Lean</strong> (Lean Thinking). Il est utile de les garder en tête car ils structurent toute démarche d'amélioration des flux :</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Principe universel</th>
+<th>Question à se poser</th>
+<th>Concept(s) Progress Partners reliés</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>La valeur</strong></td>
+<td>Qu'est‑ce qui a de la valeur <strong>pour le client</strong> (et qu'il est prêt à payer) ?</td>
+<td>Orienté marché · La Qualité en premier</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Le flux de valeur</strong> (<em>value stream</em>)</td>
+<td>Quelles sont <strong>toutes les étapes</strong> de la chaîne ? Lesquelles <strong>créent de la valeur</strong>, lesquelles sont du <strong>Muda</strong> ?</td>
+<td>Système global · Le processus suivant est le client</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Le flux</strong> (<em>flow</em>)</td>
+<td>Comment faire <strong>s'écouler</strong> le travail <strong>sans interruption</strong> ni stock ?</td>
+<td>Gestion en amont · SDCA→PDCA</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Le flux tiré</strong> (<em>pull</em>)</td>
+<td>Comment <strong>ne produire que ce que le client demande</strong>, quand il le demande ?</td>
+<td>Orienté marché · Le juste nécessaire au bon moment</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>La perfection</strong> (<em>Kaizen</em>)</td>
+<td>Comment <strong>s'améliorer en continu</strong> vers le zéro gaspillage ?</td>
+<td>SDCA→PDCA · Maîtrise de la variabilité · Ne pas juger/blâmer</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🧩 <strong>Kaizen</strong> = <strong>amélioration continue</strong>, à petits pas, par tous, tout le temps. Dans la grammaire du support, le Kaizen est porté par le couple <strong>SDCA → PDCA</strong> (on stabilise par un standard, puis on l'améliore) et par l'esprit <strong>« Bienvenue aux problèmes »</strong>.</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fiche outil — <em>Les Fondements du Lean</em> (Guide animateur de chantier)</td>
+<td>Mémo des 3 principes + 7 concepts pour cadrer un chantier terrain</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1CJrhbQyzX1C94PADaEorOZn240ILyUSI/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Support de cours — <em>5. Les Fondements du Lean</em> (slides)</td>
+<td>Référence complète : paradigmes, schémas, SDCA/PDCA, coûts de non‑qualité</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13VEH88oxxBdTl2NjWzDwUgRFaXaRMtfy/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Grille « <strong>Y a‑t‑il un standard ?</strong> » (4 questions)</td>
+<td>Diagnostiquer un problème <strong>avant de juger</strong> : standard présent / connu / appliqué / sécurisé</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13VEH88oxxBdTl2NjWzDwUgRFaXaRMtfy/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Démarche « <strong>Parler avec des données</strong> » (6 étapes)</td>
+<td>Structurer une décision factuelle du gemba à la confirmation</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13VEH88oxxBdTl2NjWzDwUgRFaXaRMtfy/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, l'état d'esprit et le savoir‑être du Lean.</p>
+</blockquote>
+<p><strong>Exercice 1 — Diagnostic « standard » d'un problème réel (Ne pas juger / Ne pas blâmer)</strong>
+1. Choisissez <strong>un problème récurrent</strong> sur votre terrain d'application (défaut, retard, retouche…).
+2. Passez‑le au crible des <strong>4 questions</strong> :
+   - Y a‑t‑il un <strong>standard</strong> pour cette tâche ?
+   - Est‑il <strong>connu et visible</strong> ?
+   - Est‑il <strong>appliqué</strong> ?
+   - Son application est‑elle <strong>sécurisée</strong> (Poka‑Yoke) ?
+3. Pour chaque « non », notez <strong>l'action système</strong> correspondante (créer / afficher / former / sécuriser le standard) — <strong>sans nommer de coupable</strong>.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une fiche « Diagnostic standard » (1 problème × 4 réponses + actions).</li>
+<li><strong>Critères de réussite :</strong> chaque cause identifiée est <strong>systémique</strong> (liée au standard, pas à une personne) et débouche sur <strong>au moins une action concrète</strong>.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+<p><strong>Exercice 2 — Cartographier « le processus suivant est mon client »</strong>
+1. Sur votre poste, listez : <strong>ce que je reçois</strong> (de l'amont), <strong>ce que je fais</strong>, <strong>ce que je transmets</strong> (à l'aval).
+2. À chaque interface, repérez <strong>un défaut possible</strong> que vous pourriez <strong>ne pas recevoir / ne pas faire / ne pas transmettre</strong>.
+3. Choisissez <strong>un</strong> point et proposez une <strong>vérification simple</strong> (auto‑contrôle ou Poka‑Yoke) pour l'arrêter au plus tôt.
+4. Reliez votre poste à <strong>un</strong> des 7 concepts (ex. « La Qualité en premier ») et à <strong>un</strong> des 5 principes universels (ex. « flux »).</p>
+<ul>
+<li><strong>Livrable attendu :</strong> un mini‑schéma fournisseur → <strong>moi</strong> → client + 1 action anti‑défaut.</li>
+<li><strong>Critères de réussite :</strong> le défaut est <strong>arrêté au plus près de sa source</strong> et l'action est <strong>réalisable cette semaine</strong>.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>Lean</strong> = <em>les individus utilisent le processus pour obtenir des résultats</em> ; objectif : <strong>juste nécessaire, au bon moment, au niveau de qualité demandé, en réduisant les gaspillages</strong>.</li>
+<li><strong>3 principes (état d'esprit)</strong> : <strong>Système global · Ne pas juger/blâmer · Processus et résultat</strong>.</li>
+<li><strong>7 concepts (savoir‑être)</strong> : SDCA→PDCA · le processus suivant est le client · la Qualité en premier · orienté marché · gestion en amont · parler avec des données · maîtrise de la variabilité.</li>
+<li><strong>Un standard</strong> = <em>la meilleure manière, la plus facile et la plus sûre connue à ce jour</em> — <strong>un seul à la fois</strong> ; il sert de <strong>cale</strong> au Kaizen (SDCA → PDCA).</li>
+<li><strong>La Qualité d'abord</strong> : la plupart des problèmes de <strong>Coût/Délai</strong> sont des problèmes de <strong>Qualité en amont</strong> ; un défaut <strong>coûte de plus en plus cher</strong> plus on le détecte <strong>tard</strong>.</li>
+<li><strong>Parler avec des données</strong> depuis le <strong>gemba</strong> ; <strong>gérer en amont</strong> (Poka‑Yoke) plutôt que <strong>trier en aval</strong>.</li>
+<li>Les fondements se relient aux <strong>5 principes universels</strong> : <strong>valeur → flux de valeur → flux → flux tiré → perfection (Kaizen)</strong>.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quels sont les <strong>3 principes</strong> du Lean (l'état d'esprit) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Qualité, Coût, Délai</button><button type="button" class="opt" data-key="b"><b>b)</b> Système global, Ne pas juger/blâmer, Processus et résultat</button><button type="button" class="opt" data-key="c"><b>c)</b> Valeur, Flux, Perfection</button><button type="button" class="opt" data-key="d"><b>d)</b> Plan, Do, Check, Act</button></div><div class="q-exp" hidden>Système global, Ne pas juger/ne pas blâmer, Processus et résultat (l'état d'esprit).</div></li><li class="q" data-correct="b"><div class="q-text">Que signifie « Le processus suivant est le client » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Toujours livrer plus vite que prévu</button><button type="button" class="opt" data-key="b"><b>b)</b> Ne pas recevoir, ne pas faire, ne pas transmettre un défaut</button><button type="button" class="opt" data-key="c"><b>c)</b> Confier le contrôle qualité au client final</button><button type="button" class="opt" data-key="d"><b>d)</b> Sous‑traiter l'inspection</button></div><div class="q-exp" hidden>chaque poste protège son client aval : ne pas recevoir / ne pas faire / ne pas transmettre un défaut.</div></li><li class="q" data-correct="c"><div class="q-text">D'après le support, où coûte‑t‑il <strong>le plus cher</strong> de corriger un défaut ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Dès qu'il apparaît au poste</button><button type="button" class="opt" data-key="b"><b>b)</b> À l'inspection finale</button><button type="button" class="opt" data-key="c"><b>c)</b> Après réclamation du consommateur</button><button type="button" class="opt" data-key="d"><b>d)</b> Sur la chaîne d'assemblage</button></div><div class="q-exp" hidden>le coût est <strong>maximal après réclamation du consommateur</strong> ; minimal <strong>dès l'apparition</strong> au poste.</div></li><li class="q" data-correct="b"><div class="q-text">Quelle est la définition d'un <strong>standard</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Une norme ISO imposée</button><button type="button" class="opt" data-key="b"><b>b)</b> La meilleure manière, la plus facile et la plus sûre connue à ce jour</button><button type="button" class="opt" data-key="c"><b>c)</b> La moyenne des pratiques de l'équipe</button><button type="button" class="opt" data-key="d"><b>d)</b> Un objectif de production mensuel</button></div><div class="q-exp" hidden><em>la meilleure manière, la plus facile et la plus sûre connue à ce jour</em> ; et <strong>un seul standard à la fois</strong>.</div></li><li class="q" data-correct="faux"><div class="q-text"><strong>Vrai ou faux</strong> : dans le paradigme Lean, face à un problème on cherche d'abord <strong>qui a tort</strong>.</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>le Lean manager ne cherche <strong>jamais un coupable</strong> mais une <strong>solution</strong> ; on demande d'abord « qu'est‑ce qui ne va pas ? » et « y a‑t‑il un standard ? ».</div></li><li class="q" data-correct="c"><div class="q-text">À quel principe universel du Lean correspond « ne produire que ce que le client demande, quand il le demande » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La valeur</button><button type="button" class="opt" data-key="b"><b>b)</b> Le flux de valeur</button><button type="button" class="opt" data-key="c"><b>c)</b> Le flux tiré (<em>pull</em>)</button><button type="button" class="opt" data-key="d"><b>d)</b> La perfection</button></div><div class="q-exp" hidden>le <strong>flux tiré</strong> (<em>pull</em>) : la demande client déclenche la production.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>5. Les Fondements du Lean.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13VEH88oxxBdTl2NjWzDwUgRFaXaRMtfy/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>5. Les Fondements du Lean — Fiche outil.pdf</em> (Guide animateur de chantier) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1CJrhbQyzX1C94PADaEorOZn240ILyUSI/view">Ouvrir dans Drive</a></li>
+</ul>
+<blockquote>
+<p>ℹ️ <strong>Note sur les sources.</strong> Le fichier <em>5. Les Fondements du Lean.pdf</em> est volumineux (~17,8 Mo) ; l'extraction texte exploitée pour ce module <strong>s'arrête au concept « Maîtrise de la variabilité » (slide ~22)</strong>. Les <strong>schémas et visuels</strong> (escalier SDCA→PDCA, point de vue système, tri qualité vs Poka‑Yoke, courbe des coûts de non‑qualité) <strong>n'étant pas transcriptibles</strong>, ils sont <strong>décrits</strong> ci‑dessus et <strong>renvoyés au fichier source</strong> pour consultation. Si des slides au‑delà de la 22 existaient dans le support original, se référer au PDF complet dans Drive.</p>
+</blockquote>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="02-muda-mura-muri-gemba.html"><small>← Module précédent</small>2 · Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</a><a class="nx" href="04-paradigmes.html"><small>Module suivant →</small>4 · Les Paradigmes</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

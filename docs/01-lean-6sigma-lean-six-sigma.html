@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1 — Lean, 6 Sigma & Lean Six Sigma — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="00-demarrage.html">← Préc.</a><a href="02-muda-mura-muri-gemba.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link active" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="01-lean-6sigma-lean-six-sigma">Marquer ce module comme terminé</button></div><h1>Module 1 — Lean, 6 Sigma &amp; Lean Six Sigma</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Distinguer</strong> le <strong>Lean</strong> (vitesse, flux, élimination des gaspillages) du <strong>6 Sigma</strong> (qualité, réduction de la variabilité) et expliquer ce que chacun apporte.
+- <strong>Expliquer</strong> pourquoi et comment les deux approches se <strong>combinent</strong> en <strong>Lean Six Sigma</strong> pour « faire vite » <em>et</em> « faire bien ».
+- <strong>Lire</strong> les <strong>niveaux sigma</strong> et leur traduction en <strong>DPMO</strong> (défauts par million d'opportunités) et en pourcentage de bon.
+- <strong>Utiliser</strong> la <strong>loi de Little</strong> pour raisonner sur le délai d'exécution d'un processus.
+- <strong>Interpréter</strong> la <strong>loi normale</strong> et sa table pour situer la performance d'un processus.
+- <strong>Décrire</strong> la logique de l'amélioration continue (<strong>Kaizen</strong>) et la démarche structurée <strong>DMAIC</strong>.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 0 — Démarrage &amp; cahier du stagiaire (avoir choisi son <strong>terrain d'application</strong>).</li>
+<li>Aucune notion statistique préalable n'est exigée.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 520 250" role="img" class="svg-anim"><path d="M205.0,210.0 L205.0,119.0 L206.8,116.0 L208.7,113.0 L210.5,110.0 L212.3,107.0 L214.2,104.0 L216.0,101.1 L217.8,98.2 L219.7,95.4 L221.5,92.6 L223.3,89.9 L225.2,87.3 L227.0,84.7 L228.8,82.2 L230.7,79.9 L232.5,77.6 L234.3,75.5 L236.2,73.4 L238.0,71.5 L239.8,69.8 L241.7,68.1 L243.5,66.6 L245.3,65.2 L247.2,64.0 L249.0,63.0 L250.8,62.1 L252.7,61.3 L254.5,60.7 L256.3,60.3 L258.2,60.1 L260.0,60.0 L261.8,60.1 L263.7,60.3 L265.5,60.7 L267.3,61.3 L269.2,62.1 L271.0,63.0 L272.8,64.0 L274.7,65.2 L276.5,66.6 L278.3,68.1 L280.2,69.8 L282.0,71.5 L283.8,73.4 L285.7,75.5 L287.5,77.6 L289.3,79.9 L291.2,82.2 L293.0,84.7 L294.8,87.3 L296.7,89.9 L298.5,92.6 L300.3,95.4 L302.2,98.2 L304.0,101.1 L305.8,104.0 L307.7,107.0 L309.5,110.0 L311.3,113.0 L313.2,116.0 L315.0,119.0 L315.0,210.0 Z" fill="#f6b400" opacity="0.30"/><line x1="40" y1="210" x2="480" y2="210" stroke="#9aa3b0" stroke-width="1.5"/><path d="M60.0,209.8 L63.3,209.7 L66.7,209.7 L70.0,209.6 L73.3,209.5 L76.7,209.4 L80.0,209.3 L83.3,209.1 L86.7,209.0 L90.0,208.7 L93.3,208.5 L96.7,208.2 L100.0,207.8 L103.3,207.4 L106.7,206.9 L110.0,206.4 L113.3,205.7 L116.7,205.0 L120.0,204.1 L123.3,203.2 L126.7,202.1 L130.0,200.8 L133.3,199.4 L136.7,197.9 L140.0,196.1 L143.3,194.2 L146.7,192.1 L150.0,189.7 L153.3,187.1 L156.7,184.3 L160.0,181.3 L163.3,178.0 L166.7,174.5 L170.0,170.7 L173.3,166.7 L176.7,162.4 L180.0,157.9 L183.3,153.2 L186.7,148.3 L190.0,143.3 L193.3,138.0 L196.7,132.7 L200.0,127.3 L203.3,121.8 L206.7,116.3 L210.0,110.8 L213.3,105.3 L216.7,100.0 L220.0,94.9 L223.3,89.9 L226.7,85.2 L230.0,80.7 L233.3,76.6 L236.7,72.9 L240.0,69.6 L243.3,66.7 L246.7,64.3 L250.0,62.5 L253.3,61.1 L256.7,60.3 L260.0,60.0 L263.3,60.3 L266.7,61.1 L270.0,62.5 L273.3,64.3 L276.7,66.7 L280.0,69.6 L283.3,72.9 L286.7,76.6 L290.0,80.7 L293.3,85.2 L296.7,89.9 L300.0,94.9 L303.3,100.0 L306.7,105.3 L310.0,110.8 L313.3,116.3 L316.7,121.8 L320.0,127.3 L323.3,132.7 L326.7,138.0 L330.0,143.3 L333.3,148.3 L336.7,153.2 L340.0,157.9 L343.3,162.4 L346.7,166.7 L350.0,170.7 L353.3,174.5 L356.7,178.0 L360.0,181.3 L363.3,184.3 L366.7,187.1 L370.0,189.7 L373.3,192.1 L376.7,194.2 L380.0,196.1 L383.3,197.9 L386.7,199.4 L390.0,200.8 L393.3,202.1 L396.7,203.2 L400.0,204.1 L403.3,205.0 L406.7,205.7 L410.0,206.4 L413.3,206.9 L416.7,207.4 L420.0,207.8 L423.3,208.2 L426.7,208.5 L430.0,208.7 L433.3,209.0 L436.7,209.1 L440.0,209.3 L443.3,209.4 L446.7,209.5 L450.0,209.6 L453.3,209.7 L456.7,209.7 L460.0,209.8" fill="none" stroke="#2563eb" stroke-width="3"/><line x1="95" y1="210" x2="95" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="95" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−3σ</text><line x1="150" y1="210" x2="150" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="150" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−2σ</text><line x1="205" y1="210" x2="205" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="205" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−1σ</text><line x1="260" y1="210" x2="260" y2="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="260" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="800">μ</text><line x1="315" y1="210" x2="315" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="315" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+1σ</text><line x1="370" y1="210" x2="370" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="370" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+2σ</text><line x1="425" y1="210" x2="425" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="425" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+3σ</text><text x="260" y="64" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">~68 % à ±1σ</text><text x="260" y="60" text-anchor="middle" fill="#5b6675" font-size="10.5" dy="-6">~95 % à ±2σ · ~99,7 % à ±3σ</text></svg><figcaption>La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ. Le « niveau sigma » mesure la capacité d'un processus.</figcaption></figure>
+
+<h3>1. Le contexte : un monde qui change</h3>
+<p>L'entreprise fait face à de <strong>nouveaux défis</strong> qui rendent l'amélioration permanente indispensable :
+- <strong>Exigences clients élevées</strong> sur le triptyque <strong>Q.C.D.</strong> (Qualité, Coût, Délai) ;
+- <strong>Compétition mondiale</strong> ;
+- <strong>Diversité des références</strong> (gammes produits de plus en plus larges) ;
+- <strong>Cycles de vie des produits courts</strong> ;
+- <strong>Révolutions technologiques</strong> ;
+- <strong>Respect de l'environnement</strong>.</p>
+<p>Pour relever ces défis, deux démarches complémentaires se sont imposées : le <strong>Lean</strong> et le <strong>6 Sigma</strong>.</p>
+<hr />
+<h3>2. Qu'est-ce que le Lean ?</h3>
+<h4>2.1 Définition « en quelques mots »</h4>
+<blockquote>
+<p><strong>LEAN — Tendre vers le Zéro Muda.</strong>
+Chacune des étapes de la chaîne de valeur est réalisée de façon <strong>rapide</strong>, <strong>efficiente</strong>, avec un effort sur le <strong>zéro Muda</strong> (zéro gaspillage).</p>
+</blockquote>
+<p>Le <strong>Lean</strong> est une démarche d'<strong>amélioration de la performance des processus par l'élimination de la non-valeur ajoutée</strong> (les <strong>Muda</strong>) et par l'<strong>amélioration continue</strong>.</p>
+<h4>2.2 Un peu d'histoire</h4>
+<p>Le Lean n'est pas né du jour au lendemain : c'est l'aboutissement d'un siècle d'évolution industrielle.</p>
+<table>
+<thead>
+<tr>
+<th>Année</th>
+<th>Jalon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>À l'origine</td>
+<td>L'<strong>industrie textile</strong></td>
+</tr>
+<tr>
+<td><strong>1927</strong></td>
+<td>Henry <strong>Ford</strong> révolutionne l'industrie automobile grâce aux premières techniques de <strong>production de masse</strong></td>
+</tr>
+<tr>
+<td><strong>1936</strong></td>
+<td><strong>Toyota</strong> commence à produire des véhicules motorisés ; contraint d'adopter le <strong>Juste à Temps (JIT)</strong> pour l'approvisionnement des composants en <strong>1946</strong>, dans un souci de rentabilité</td>
+</tr>
+<tr>
+<td><strong>1950</strong></td>
+<td>L'ingénieur de production <strong>Taiichi Ohno</strong> commence à développer les techniques de production Toyota → naissance du <strong>Toyota Production System (TPS)</strong></td>
+</tr>
+<tr>
+<td><strong>1973</strong></td>
+<td><strong>Choc pétrolier</strong> → émergence de la notion de <strong>gaspillage</strong></td>
+</tr>
+<tr>
+<td><strong>Années 1980</strong></td>
+<td>Début des <strong>études</strong> sur le TPS dans le monde occidental</td>
+</tr>
+<tr>
+<td><strong>Années 1990</strong></td>
+<td>Adoption du concept <strong>« Lean Manufacturing »</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quelques noms clés</strong> (frise historique) : Eli <strong>Whitney</strong> (1800) · Frederick <strong>Taylor</strong> · Frank &amp; Lillian <strong>Gilbreth</strong> · Henry <strong>Ford</strong> (1900-1910) · Sakichi <strong>Toyoda</strong> · W. E. <strong>Deming</strong> (1930) · Taiichi <strong>Ohno</strong> (1950) · Shigeo <strong>Shingo</strong> · Masaaki <strong>Imai</strong> (1970-1985) · James <strong>Womack</strong> &amp; Dan <strong>Jones</strong> (1990).</p>
+<h4>2.3 Les enjeux du Lean</h4>
+<blockquote>
+<p>Une <strong>entreprise Lean</strong> est une entreprise <strong>svelte et agile</strong>, qui sait, par l'implication de ses équipes et par une démarche de changements structurée, relever tous ces nouveaux défis.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Enjeu</th>
+<th>Description</th>
+<th>Moyen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enjeu humain</strong></td>
+<td>Positionner l'<strong>Homme au cœur de l'entreprise</strong></td>
+<td>Mise en place d'un système, d'un mode de management et d'outils visant l'<strong>implication de tous</strong> dans la démarche</td>
+</tr>
+<tr>
+<td><strong>Enjeu économique</strong></td>
+<td>Assurer une <strong>croissance durable</strong> par l'amélioration globale des performances</td>
+<td>Démonstration, structuration et <strong>déploiement global</strong> de la démarche d'amélioration continue</td>
+</tr>
+</tbody>
+</table>
+<h4>2.4 Les défis du Lean : changer les processus</h4>
+<p>Le Lean consiste à <strong>changer les processus</strong>. Deux exigences fondamentales :
+- <strong>Savoir exactement ce que le client apprécie</strong> et <strong>ce pour quoi il paiera</strong> ;
+- <strong>Trouver la manière la meilleure, la plus sûre et la plus facile</strong> de fournir cette valeur.</p>
+<p>Le tout dans un environnement où les besoins <strong>évoluent</strong> et où la <strong>réaction des clients</strong> doit être anticipée.</p>
+<h4>2.5 Chaîne (ou flux) de valeur : la cible</h4>
+<p>On distingue dans tout processus :
+- la <strong>Valeur Ajoutée (VA)</strong> — ce pour quoi le client paie ;
+- la <strong>Non-Valeur Ajoutée (NVA)</strong> — attentes, déplacements, stocks… que le client ne valorise pas.</p>
+<p>Le <strong>Lead Time</strong> (temps de traversée / temps d'écoulement) est le temps total du processus. <strong>Objectif Lean : réduire radicalement la NVA</strong> pour rapprocher le Lead Time de la seule durée à valeur ajoutée.</p>
+<blockquote>
+<p><strong>Schéma source — « Chaîne ou Flux de Valeurs ».</strong> Un processus « Avant… » avec de longues plages d'<strong>attente / NVA</strong> entrecoupées de courts segments de <strong>VA</strong> ; le <strong>processus amélioré (cible)</strong> comprime la NVA pour réduire le Lead Time. <em>(Voir la fiche outil et le PDF source.)</em></p>
+</blockquote>
+<h4>2.6 « Faire mieux avec l'existant »</h4>
+<p>Le Lean, <strong>c'est quoi ?</strong> Faire un <strong>meilleur usage des ressources existantes</strong> pour rendre le travail :
+- <strong>plus productif</strong>,
+- <strong>moins fatigant</strong>,
+- <strong>plus efficace</strong>,
+- <strong>plus sûr</strong>.</p>
+<p>Et cela <strong>en optimisant d'abord ce que l'on a</strong> :
+- <strong>seulement avec le temps à disposition</strong> ;
+- <strong>seulement avec le personnel en place</strong> ;
+- <strong>seulement avec le budget prévu</strong>.</p>
+<h4>2.7 L'amélioration… en permanence</h4>
+<p>La dynamique Lean se déroule <strong>dans le temps</strong>, par étapes :
+1. <strong>Analyse de l'existant</strong> ;
+2. <strong>Vision</strong> (où veut-on aller) ;
+3. <strong>Améliorations</strong>, déclinées en trois leviers :
+   - <strong>3-A Standardisation</strong>,
+   - <strong>3-B Amélioration continue</strong>,
+   - <strong>3-C Innovation</strong>.</p>
+<h4>2.8 Kaizen = Amélioration continue</h4>
+<blockquote>
+<p><strong>KAI</strong> = Changer · <strong>ZEN</strong> = Bien (vers le mieux)
+<strong>KAIZEN</strong> = <strong>Changer continuellement pour le meilleur, dans l'action et dans la sérénité</strong> = <strong>Amélioration Continue</strong>.</p>
+</blockquote>
+<p><strong>Kaizen et Lean — processus vs résultat :</strong> le <strong>Kaizen</strong> est le <strong>processus</strong> (la démarche au quotidien) ; le <strong>Lean</strong> en est le <strong>résultat</strong>.</p>
+<blockquote>
+<p>« Quand on démarre une approche Kaizen, il faut bien comprendre que c'est un <strong>processus</strong> et non un <strong>projet</strong> que l'on démarre. » — <em>Frederick Portal, Delphi Automotive Systems.</em></p>
+</blockquote>
+<h4>2.9 L'organisation Lean</h4>
+<p>L'organisation Lean est tournée vers la <strong>satisfaction totale du client (Q.C.D.)</strong>. Elle s'articule autour :
+- des <strong>besoins du client (Q.C.D.)</strong> en entrée ;
+- d'une <strong>ligne de valeur ajoutée</strong> ;
+- du <strong>GEMBA</strong> (le terrain, le lieu réel où se crée la valeur), animé par trois rôles : <strong>Animation</strong>, <strong>Aide</strong>, et la recherche de la <strong>satisfaction totale du client</strong> ;
+- des <strong>fondements du Lean : 3 Principes et 7 Concepts</strong> (détaillés dans les modules suivants).</p>
+<h4>2.10 Gains / Coûts</h4>
+<ul>
+<li><strong>Gains :</strong> moins de stock, délais plus courts, moins de rebuts, plus de place, plus de sécurité, plus de confort…</li>
+<li><strong>Coûts :</strong> le <strong>seul véritable investissement</strong> lié à cette démarche est <strong>le temps qu'il faut y consacrer</strong>.</li>
+</ul>
+<h4>2.11 Une référence : la Maison TPS</h4>
+<p>Le <strong>Toyota Production System</strong> est souvent représenté comme une <strong>maison</strong> dont le toit est l'objectif et les piliers les moyens :
+- <strong>Toit / objectif :</strong> <strong>réduction des coûts par l'élimination radicale des MUDA</strong> ;
+- <strong>Pilier 1 — Juste à Temps</strong> (produire ce qu'il faut, quand il faut) ;
+- <strong>Pilier 2 — Jidoka / Auto-Activation</strong> (qualité intégrée, arrêt automatique en cas de défaut) ;
+- <strong>Fondations :</strong> <strong>fluidification de la production</strong>, <strong>lissage de la demande</strong>, <strong>perception des besoins</strong> et détermination des données d'entrée.</p>
+<blockquote>
+<p><strong>Schéma source — « Maison TPS ».</strong> Représentation en maison (toit = réduction des coûts par élimination des MUDA ; piliers JIT et Jidoka ; base = lissage/fluidification). <em>(Voir le PDF source.)</em></p>
+</blockquote>
+<h4>2.12 L'état d'esprit Lean (les 10 principes)</h4>
+<ol>
+<li><strong>Abandonner les idées fixes</strong>, refuser l'état actuel des choses.</li>
+<li>Au lieu d'expliquer ce que l'on <strong>ne peut pas</strong> faire, réfléchir <strong>comment</strong> faire.</li>
+<li><strong>Réaliser aussitôt</strong> les bonnes propositions d'amélioration.</li>
+<li><strong>Ne pas chercher la perfection : réaliser 60 % dès maintenant.</strong></li>
+<li><strong>Corriger l'erreur immédiatement.</strong></li>
+<li><strong>Trouver les idées dans la difficulté.</strong></li>
+<li><strong>Chercher la cause réelle</strong>, respecter les <strong>« 5 pourquoi ? »</strong>, et chercher <strong>ensuite</strong> la solution.</li>
+<li>Prendre en compte les idées de <strong>10 personnes</strong> au lieu d'attendre l'idée géniale d'une seule.</li>
+<li><strong>Essayer, puis valider.</strong></li>
+<li><strong>L'amélioration est infinie.</strong></li>
+</ol>
+<hr />
+<h3>3. Qu'est-ce que le 6 Sigma ?</h3>
+<h4>3.1 Définition « en quelques mots »</h4>
+<blockquote>
+<p><strong>6 SIGMA — Tendre vers le Zéro défaut, Zéro erreur.</strong>
+<strong>Amélioration des processus par la réduction de la variabilité, des défauts et des erreurs, orientée vers la satisfaction totale client.</strong></p>
+</blockquote>
+<h4>3.2 Les idées fondatrices</h4>
+<ul>
+<li><strong>Sigma « σ »</strong> est la <strong>lettre grecque</strong> utilisée pour désigner la <strong>variation</strong> (la dispersion des données).</li>
+<li>Un <strong>niveau de sigma</strong> est une <strong>mesure de la qualité</strong>.</li>
+<li>Un processus évalué <strong>6 sigma</strong> ne produit <strong>pratiquement pas de défauts</strong>.</li>
+<li><strong>6 Sigma est une méthode de résolution de problème</strong> :</li>
+<li><strong>orientée client</strong> ;</li>
+<li>qui utilise la méthode <strong>« DMAIC »</strong> ;</li>
+<li>qui <strong>s'appuie sur des tests statistiques</strong> pour prendre des décisions.</li>
+</ul>
+<h4>3.3 Une mesure 6 Sigma de la qualité : 3,4 DPMO</h4>
+<blockquote>
+<p><strong>Un processus 6 Sigma ne produit que 3,4 ppm (DPMO) !</strong>
+<em>(ppm = parties par million ; DPMO = Défauts Par Million d'Opportunités.)</em></p>
+</blockquote>
+<p>Pour situer ce qu'un <strong>niveau de sigma</strong> représente, voici des activités de la vie courante positionnées sur l'échelle 1σ → 7σ (du plus défaillant au plus fiable) :</p>
+<table>
+<thead>
+<tr>
+<th>Plus défaillant ◄───────────────────────► Plus fiable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Avis d'imposition aux USA</strong> (bas niveau de sigma) → <strong>Ordonnances médicales</strong> → <strong>Factures de restaurant</strong> → <strong>Processus de paye</strong> → <strong>Gestion des bagages</strong> → <strong>Sécurité aérienne</strong> (très haut niveau de sigma)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Schéma source — « PPM vs Niveau de sigma ».</strong> Courbe décroissante : l'axe vertical va de <strong>1 000 000</strong> à <strong>1</strong> PPM (échelle logarithmique : 1 000 000 / 100 000 / 10 000 / 1 000 / 100 / 10 / 1) ; l'axe horizontal de <strong>1σ à 7σ</strong>. Plus le niveau de sigma augmente, plus les PPM (défauts) chutent.</p>
+</blockquote>
+<h4>3.4 Parfois, 99 % ne suffit pas !</h4>
+<p>La performance des processus doit être <strong>plus élevée qu'on ne l'imagine généralement</strong>. Comparaison entre <strong>3,8 Sigma (99 %)</strong> et <strong>6 Sigma (99,9997 %)</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Activité</th>
+<th>Défauts @ 99 % (3,8 Sigma)</th>
+<th>Défauts @ 99,9997 % (6 Sigma)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Distribution du courrier</strong></td>
+<td>20 000 courriers perdus par heure</td>
+<td>7 courriers perdus par heure</td>
+</tr>
+<tr>
+<td><strong>Distribution d'eau potable</strong></td>
+<td>Eau non potable <strong>15 minutes par jour</strong></td>
+<td>Eau non potable <strong>2 minutes par an</strong></td>
+</tr>
+<tr>
+<td><strong>Interventions médicales</strong></td>
+<td>5 000 procédures incorrectes par semaine</td>
+<td>2 procédures incorrectes par semaine</td>
+</tr>
+</tbody>
+</table>
+<h4>3.5 Le 6 Sigma, c'est…</h4>
+<ul>
+<li>Un <strong>moyen de diminuer la variabilité</strong> et d'<strong>améliorer les processus</strong> ;</li>
+<li><strong>Orienté client</strong> ;</li>
+<li>Au service de la <strong>Qualité</strong> des <strong>Services &amp; Produits</strong> ;</li>
+<li>Une <strong>méthode systématique</strong> ;</li>
+<li><strong>Piloté par des données</strong>.</li>
+</ul>
+<h4>3.6 Une boîte à outils qui complète le Lean</h4>
+<p>La <strong>boîte à outils Lean</strong> (ex. <strong>5 pourquoi</strong>, <strong>Ishikawa</strong>…) est <strong>étendue</strong> par les <strong>outils du 6 Sigma</strong>, plus élaborés. L'efficacité est ainsi <strong>plus grande pour résoudre des problèmes plus complexes</strong>.</p>
+<blockquote>
+<p><strong>Schéma source — « Complexité des problèmes ».</strong> Un escalier de complexité croissante : à la base les outils Lean simples (<strong>5 pourquoi</strong>, <strong>Ishikawa</strong>), puis les <strong>outils LSS plus élaborés</strong> pour les problèmes complexes.</p>
+</blockquote>
+<h4>3.7 6 Sigma orienté client : parler avec des données</h4>
+<blockquote>
+<p>« <strong>Sans donnée, vous n'êtes qu'une personne avec une opinion.</strong> »
+La clé pour atteindre la satisfaction client est de <strong>parler avec des données</strong>.</p>
+</blockquote>
+<p>Quatre questions structurantes :
+- <strong>Qui est le client ?</strong>
+- Quelle est la <strong>« Voice of the Customer »</strong> (VOC) ?
+- Quels sont les <strong>« Critical to Quality »</strong> (CTQ) ?
+- Les projets sont <strong>amorcés</strong> par la satisfaction client et <strong>mesurés</strong> par cette même satisfaction client !</p>
+<h4>3.8 6 Sigma méthodique : un langage commun d'amélioration</h4>
+<p>Suivre une <strong>approche structurée</strong> <strong>lie les outils entre eux</strong> et <strong>renforce la puissance de chacun</strong>. Le 6 Sigma s'inscrit dans la même famille que d'autres démarches structurées :</p>
+<p><strong>La démarche 8D (8 étapes) :</strong>
+1. Former une équipe ;
+2. Décrire le problème ;
+3. Mettre en place les <strong>actions conservatoires</strong> ;
+4. Identifier les <strong>causes racines</strong> ;
+5. Choisir et appliquer les <strong>actions correctives</strong> ;
+6. Évaluer les résultats ;
+7. Empêcher la <strong>récurrence</strong> ;
+8. Féliciter l'équipe.</p>
+<p><strong>Correspondance entre les démarches d'amélioration :</strong></p>
+<table>
+<thead>
+<tr>
+<th>PDCA (4 phases)</th>
+<th>« 4 Steps »</th>
+<th><strong>6 Sigma — DMAIC</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Plan</strong> (Planifier)</td>
+<td>Comprendre le problème</td>
+<td><strong>Define</strong> (Définir)</td>
+</tr>
+<tr>
+<td><strong>Do</strong> (Faire)</td>
+<td>Décrire la situation actuelle</td>
+<td><strong>Measure</strong> (Mesurer)</td>
+</tr>
+<tr>
+<td><strong>Check</strong> (Vérifier)</td>
+<td>Fixer les attentes</td>
+<td><strong>Analyze</strong> (Analyser)</td>
+</tr>
+<tr>
+<td><strong>Act</strong> (Rendre durable)</td>
+<td>Assurer le suivi</td>
+<td><strong>Improve</strong> (Améliorer) + <strong>Control</strong> (Maîtriser)</td>
+</tr>
+</tbody>
+</table>
+<h4>3.9 6 Sigma, une structure : les outils par phase DMAIC</h4>
+<p>À chaque phase du <strong>DMAIC</strong> correspondent des livrables et des outils :</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Livrables / outils</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Define</strong> (Définir)</td>
+<td>Équipe · Charte de projet · « Qui est le client ? » · Identifier les <strong>CTQ</strong></td>
+</tr>
+<tr>
+<td><strong>Measure</strong> (Mesurer)</td>
+<td><strong>Process Map</strong> · Analyse des <strong>systèmes de mesure</strong> (MSA) · Études de <strong>capabilité</strong> · <strong>Cartes de contrôle</strong></td>
+</tr>
+<tr>
+<td><strong>Analyze</strong> (Analyser)</td>
+<td><strong>Matrice Cause-Effets</strong> · <strong>VMEA</strong> (analyse de mode de défaillance) · Tests sur une variable · <strong>Plans d'expérience</strong></td>
+</tr>
+<tr>
+<td><strong>Improve</strong> (Améliorer)</td>
+<td><strong>Améliorations process</strong> · Preuve de la performance · <strong>Capabilité améliorée</strong></td>
+</tr>
+<tr>
+<td><strong>Control</strong> (Maîtriser)</td>
+<td><strong>Control Plan</strong> du process · <strong>Anti-erreurs</strong> (Poka-Yoke) · <strong>Audits</strong> · <strong>Standards</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>3.10 6 Sigma, une approche : la responsabilité du système</h4>
+<blockquote>
+<p>« Un problème est généré dans <strong>85 % des cas par l'organisation des processus</strong>, et seulement dans <strong>15 % des cas par les collaborateurs</strong>. » — <em>W. Edwards Deming.</em></p>
+<p>« Les collaborateurs travaillent <strong>dans</strong> une organisation ; le rôle d'un manager est de travailler <strong>sur</strong> l'organisation, de l'améliorer <strong>avec l'aide</strong> des collaborateurs. » — <em>Myron Tribus.</em></p>
+</blockquote>
+<h4>3.11 6 Sigma piloté par les données : réduire la variabilité</h4>
+<p>Le cœur du 6 Sigma : <strong>réduire la variabilité</strong>.
+- <strong>Grande variabilité</strong> → <strong>mauvais process</strong>, beaucoup de <strong>rejets</strong> ;
+- <strong>Faible variabilité</strong> → <strong>bon process</strong>, <strong>pas de rejet</strong>.</p>
+<blockquote>
+<p><strong>Schéma source — « Variabilité et limites ».</strong> Deux courbes en cloche centrées sur la même <strong>moyenne (Average)</strong>, entre une <strong>limite basse (Lower Limit)</strong> et une <strong>limite haute (Upper Limit)</strong>. La courbe <strong>large</strong> (faible niveau de sigma) déborde des limites → <strong>défauts</strong> ; la courbe <strong>étroite</strong> (haut niveau de sigma) tient à l'intérieur → pas de défaut. <strong>« 6 Sigma conduit à l'amélioration par la réduction de la variabilité. »</strong></p>
+</blockquote>
+<h4>3.12 Le client ressent la variance, pas la moyenne</h4>
+<p>Point clé : <strong>la variation impacte le client — le client ressent la variance, pas la moyenne.</strong> Il faut donc <strong>capturer la performance du point de vue client</strong>.</p>
+<p><strong>Exemple — délai de livraison.</strong> Un processus a une <strong>moyenne de 25 jours</strong> et une <strong>limite supérieure de spécification (USL) de 30 jours</strong> :
+- <strong>Mesure basée sur la moyenne :</strong> « 25 jours en moyenne, <strong>nous sommes bons !</strong> » ;
+- <strong>Mesure basée sur la variance :</strong> une partie de la distribution <strong>dépasse 30 jours</strong> → <strong>clients insatisfaits</strong>, donc « <strong>nous ne sommes pas assez bons !</strong> ».</p>
+<blockquote>
+<p><strong>Deux façons de voir les données… deux conclusions différentes.</strong> Regarder la moyenne seule masque les clients qui, dans la queue de distribution, subissent un délai &gt; USL.</p>
+</blockquote>
+<h4>3.13 Décider à partir des données (Professeur Tsuda)</h4>
+<p><strong>L'impact des réunions sans données :</strong>
+- Les décisions se prennent sur la base d'<strong>impressions, d'opinions, de politique</strong> ;
+- Les gens <strong>ne cherchent pas</strong> à voir les problèmes, donc ils <strong>nient</strong> leur existence ;
+- On ne fait <strong>rien de très rationnel</strong>.</p>
+<p><strong>Les bénéfices des réunions avec des données</strong> présentées et correctement analysées :
+- Les décisions se prennent <strong>sur base de données et d'analyse</strong> ;
+- Les <strong>options et leur déploiement</strong> sont envisagés ;
+- Les gens <strong>cherchent à résoudre</strong> les problèmes au lieu de les <strong>ignorer</strong>.
+<em>(Source : Professor Tsuda's Meeting Chart.)</em></p>
+<h4>3.14 Trois exemples « basés sur des données »</h4>
+<p><strong>a) Le directeur d'usine et la « médaille ».</strong> On vous rapporte le <strong>taux de rejets</strong> d'un secteur ; vous lui donnez une <strong>médaille</strong> pour son record. Mais en regardant la <strong>série complète</strong> sur l'année, on constate <strong>5 mois de croissance des rejets</strong> → il faudrait plutôt <strong>redemander la médaille</strong>. <em>Leçon : une donnée isolée trompe ; il faut la tendance.</em></p>
+<table>
+<thead>
+<tr>
+<th>Mois</th>
+<th>Taux de rejets</th>
+<th>Mois</th>
+<th>Taux de rejets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jan-00</td>
+<td>3,69</td>
+<td>Sep-00</td>
+<td>2,66</td>
+</tr>
+<tr>
+<td>Feb-00</td>
+<td>2,36</td>
+<td>Oct-00</td>
+<td>4,13</td>
+</tr>
+<tr>
+<td>Mar-00</td>
+<td>3,12</td>
+<td>Nov-00</td>
+<td>2,35</td>
+</tr>
+<tr>
+<td>Apr-00</td>
+<td>3,67</td>
+<td>Dec-00</td>
+<td>2,80</td>
+</tr>
+<tr>
+<td>May-00</td>
+<td>4,33</td>
+<td>Jan-01</td>
+<td>2,97</td>
+</tr>
+<tr>
+<td>Jun-00</td>
+<td>3,49</td>
+<td>Feb-01</td>
+<td>3,65</td>
+</tr>
+<tr>
+<td>Jul-00</td>
+<td>2,94</td>
+<td>Mar-01</td>
+<td>3,71</td>
+</tr>
+<tr>
+<td>Aug-00</td>
+<td>2,15</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>b) Faut-il acheter la nouvelle machine ?</strong> Un fournisseur propose une machine à <strong>50 000 €</strong> ; un gain de <strong>2 secondes</strong> de temps de cycle ferait gagner <strong>100 000 €/an</strong>. Échantillons de temps de cycle (5 mesures) :</p>
+<table>
+<thead>
+<tr>
+<th>Ancienne</th>
+<th>Nouvelle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8,7</td>
+<td>9,4</td>
+</tr>
+<tr>
+<td>19,9</td>
+<td>13,9</td>
+</tr>
+<tr>
+<td>6,3</td>
+<td>5,9</td>
+</tr>
+<tr>
+<td>21,2</td>
+<td>16,8</td>
+</tr>
+<tr>
+<td>12,3</td>
+<td>11,8</td>
+</tr>
+<tr>
+<td><strong>Moyenne 13,68</strong></td>
+<td><strong>Moyenne 11,56</strong></td>
+</tr>
+</tbody>
+</table>
+<p>L'<strong>ancienne</strong> semble plus lente (13,68 vs 11,56). <strong>Faut-il acheter ? NON !</strong> Le <strong>test t à 2 échantillons</strong> donne une <strong>valeur de p = 0,716</strong> (≫ 0,05) : la différence <strong>n'est pas statistiquement significative</strong> ; au regard de la forte dispersion (écarts-types ≈ 6,64 et 4,17), l'écart de moyennes peut être dû au seul <strong>hasard</strong>. <em>Leçon : sans test statistique, on aurait dépensé 50 000 € à tort.</em></p>
+<p><strong>c) Quel facteur améliore la performance ?</strong> Sur des données d'écurie de course, un <strong>plan d'expérience</strong> teste 3 facteurs sur la <strong>vitesse de pointe (Top speed)</strong> : <strong>Fuel octane (A)</strong>, <strong>Tire brand (B)</strong>, <strong>Tire pressure (C)</strong>. Le <strong>diagramme de Pareto des effets normalisés</strong> (α = 0,05, seuil ≈ 12,71) et le tableau des effets montrent que ce sont surtout les <strong>interactions</strong> qui pèsent — l'interaction <strong>Tire brand × Tire pressure (BC)</strong> ressort comme l'effet le plus fort (effet ≈ −2,75, valeur de p = 0,023, la seule sous 0,05). <em>Leçon : l'effet déterminant n'est pas toujours le facteur « évident », et peut être une interaction.</em></p>
+<blockquote>
+<p>« <strong>Essayer de maîtriser la variation sans la comprendre et la quantifier ne fait qu'ajouter une cause au problème !</strong> »</p>
+</blockquote>
+<h4>3.15 Domaines d'application du 6 Sigma</h4>
+<p>Selon le type de problème et de produit/processus, on mobilise des <strong>familles d'outils</strong> différentes (du Lean d'abord, puis les outils 6 Sigma élaborés). « <strong>Maintenir le gain</strong> » est l'objectif transversal à chaque étape :</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Familles d'outils</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stabilisation &amp; standardisation de la production</strong></td>
+<td><strong>5S</strong>, standards, travail d'équipe &amp; implication, <strong>élimination du Muda</strong>, <strong>TPM</strong></td>
+</tr>
+<tr>
+<td><strong>Amélioration des processus (Kaizen / Lean)</strong></td>
+<td>Pièce à pièce, <strong>temps de takt</strong>, <strong>Kanban</strong>, <strong>Poka-Yoke</strong>, <strong>SMED</strong></td>
+</tr>
+<tr>
+<td><strong>Produits &amp; processus existants — problèmes durables &amp; difficiles</strong></td>
+<td><strong>Process Maps</strong>, <strong>cartes de contrôle (SPC)</strong>, <strong>capabilités</strong> processus, <strong>analyse multivariée</strong>, <strong>matrice Cause-Effet</strong>, <strong>VMEA</strong>, <strong>plans d'expérience</strong>, <strong>Control Plans</strong></td>
+</tr>
+<tr>
+<td><strong>Nouveaux produits</strong></td>
+<td>Outils d'ingénierie/conception élaborés pour faire <strong>bon du 1ᵉʳ coup</strong>, à temps et au bon coût : <strong>DFSS</strong>, <strong>QFD</strong>, <strong>Concept Engineering</strong>, <strong>Plateaux Projets</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>3.16 « Faire les choses mieux » = améliorations mesurables</h4>
+<blockquote>
+<p>« <strong>Faire les choses mieux</strong> » veut dire être capable de <strong>montrer des améliorations mesurables</strong> pour les <strong>clients</strong>, les <strong>employés</strong> et les <strong>actionnaires</strong>.</p>
+</blockquote>
+<p>Ces améliorations se traduisent par des <strong>évolutions significatives</strong> du <strong>chiffre d'affaires</strong>, des <strong>charges</strong>, des <strong>temps de cycle</strong>, des <strong>stocks</strong>, des <strong>rebuts</strong>, de la <strong>sécurité</strong>…</p>
+<h4>3.17 6 Sigma — résumé</h4>
+<ul>
+<li><strong>6 Sigma, c'est :</strong> orienté <strong>client</strong> · <strong>méthodique</strong> · <strong>basé sur des données</strong> · un <strong>moyen de s'améliorer</strong> ;</li>
+<li><strong>6 Sigma est un kit d'outils supplémentaires</strong> à la <strong>boîte à outils Lean</strong>.</li>
+</ul>
+<hr />
+<h3>4. La loi normale : l'outil statistique de fond</h3>
+<h4>4.1 Pourquoi la loi normale ?</h4>
+<p>La <strong>loi normale</strong> (courbe « en cloche » de Gauss) décrit la <strong>dispersion</strong> des données autour d'une <strong>moyenne (μ)</strong>. C'est le socle du 6 Sigma : un <strong>niveau de sigma</strong> mesure <strong>combien d'écarts-types (σ)</strong> séparent la moyenne des <strong>limites de spécification</strong>. Plus on en « loge » avant la limite, moins on produit de défauts.</p>
+<h4>4.2 La règle empirique (répartition autour de μ)</h4>
+<p>Pour une loi normale, la répartition des données par tranche d'un écart-type est (valeurs de la fiche outil 6 Sigma) :
+- entre <strong>μ−1σ et μ+1σ</strong> : <strong>34,1 % + 34,1 % ≈ 68,2 %</strong> des observations ;
+- la tranche suivante (de 1σ à 2σ de chaque côté) : <strong>13,6 %</strong> de chaque côté ;
+- la tranche de 2σ à 3σ : <strong>2,1 %</strong> de chaque côté ;
+- au-delà de 3σ : <strong>≈ 0,1 %</strong> de chaque côté.</p>
+<blockquote>
+<p><strong>Schéma source — courbe de Gauss annotée.</strong> Cloche symétrique centrée sur <strong>μ</strong>, graduée de <strong>−3σ à +3σ</strong>, avec les aires 0,1 % / 2,1 % / 13,6 % / 34,1 % / 34,1 % / 13,6 % / 2,1 % / 0,1 %.</p>
+</blockquote>
+<h4>4.3 La loi normale centrée réduite et sa table</h4>
+<p>On <strong>standardise</strong> une valeur en variable centrée réduite afin d'utiliser une <strong>table unique</strong>. La table donne <strong>F(x) = probabilité de trouver une valeur inférieure à x</strong>, c'est-à-dire l'aire sous la courbe à gauche de x :</p>
+<p>$$F(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}}\, e^{-\frac{u^{2}}{2}}\, du$$</p>
+<p><strong>Lecture de la table</strong> (extrait — la ligne donne le 1ᵉʳ décimal de x, la colonne le 2ᵉ) :</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>0,00</th>
+<th>0,01</th>
+<th>0,02</th>
+<th>0,03</th>
+<th>0,04</th>
+<th>0,05</th>
+<th>0,06</th>
+<th>0,07</th>
+<th>0,08</th>
+<th>0,09</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0,0</strong></td>
+<td>0,5000</td>
+<td>0,5040</td>
+<td>0,5080</td>
+<td>0,5120</td>
+<td>0,5160</td>
+<td>0,5199</td>
+<td>0,5239</td>
+<td>0,5279</td>
+<td>0,5319</td>
+<td>0,5359</td>
+</tr>
+<tr>
+<td><strong>0,5</strong></td>
+<td>0,6915</td>
+<td>0,6950</td>
+<td>0,6985</td>
+<td>0,7019</td>
+<td>0,7054</td>
+<td>0,7088</td>
+<td>0,7123</td>
+<td>0,7157</td>
+<td>0,7190</td>
+<td>0,7224</td>
+</tr>
+<tr>
+<td><strong>1,0</strong></td>
+<td>0,8413</td>
+<td>0,8438</td>
+<td>0,8461</td>
+<td>0,8485</td>
+<td>0,8508</td>
+<td>0,8531</td>
+<td>0,8554</td>
+<td>0,8577</td>
+<td>0,8599</td>
+<td>0,8621</td>
+</tr>
+<tr>
+<td><strong>1,5</strong></td>
+<td>0,9332</td>
+<td>0,9345</td>
+<td>0,9357</td>
+<td>0,9370</td>
+<td>0,9382</td>
+<td>0,9394</td>
+<td>0,9406</td>
+<td>0,9418</td>
+<td>0,9429</td>
+<td>0,9441</td>
+</tr>
+<tr>
+<td><strong>2,0</strong></td>
+<td>0,9772</td>
+<td>0,9778</td>
+<td>0,9783</td>
+<td>0,9788</td>
+<td>0,9793</td>
+<td>0,9798</td>
+<td>0,9803</td>
+<td>0,9808</td>
+<td>0,9812</td>
+<td>0,9817</td>
+</tr>
+<tr>
+<td><strong>2,5</strong></td>
+<td>0,9938</td>
+<td>0,9940</td>
+<td>0,9941</td>
+<td>0,9943</td>
+<td>0,9945</td>
+<td>0,9946</td>
+<td>0,9948</td>
+<td>0,9949</td>
+<td>0,9951</td>
+<td>0,9952</td>
+</tr>
+<tr>
+<td><strong>3,0</strong></td>
+<td>0,9987</td>
+<td>0,9987</td>
+<td>0,9987</td>
+<td>0,9988</td>
+<td>0,9988</td>
+<td>0,9989</td>
+<td>0,9989</td>
+<td>0,9989</td>
+<td>0,9990</td>
+<td>0,9990</td>
+</tr>
+<tr>
+<td><strong>3,5</strong></td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+<td>0,9998</td>
+</tr>
+</tbody>
+</table>
+<p><em>Exemple de lecture : F(1,96) ≈ 0,975 → 97,5 % des valeurs sont inférieures à 1,96σ ; il reste 2,5 % dans la queue de droite.</em></p>
+<p><strong>Table pour les grandes valeurs de x</strong> (utile pour comprendre les très hauts niveaux sigma) :</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>3</th>
+<th>3,2</th>
+<th>3,4</th>
+<th>3,6</th>
+<th>3,8</th>
+<th>4</th>
+<th>4,2</th>
+<th>4,4</th>
+<th>4,6</th>
+<th>4,8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>F(x)</strong></td>
+<td>0,99865003</td>
+<td>0,99931280</td>
+<td>0,99966302</td>
+<td>0,99984085</td>
+<td>0,99992763</td>
+<td>0,99996831</td>
+<td>0,99998665</td>
+<td>0,99999458</td>
+<td>0,99999789</td>
+<td>0,99999921</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Table complète et formelle : voir le PDF source <em>2.Loi_normale.pdf</em> (source : http://odlv.free.fr).</p>
+</blockquote>
+<hr />
+<h3>5. Lean Six Sigma : la combinaison</h3>
+<h4>5.1 L'essentiel du Lean (rappel synthétique)</h4>
+<p>Le Lean, c'est avant tout la <strong>vitesse et la fluidité du process</strong> :
+- <strong>Réduction des délais d'exécution</strong> des processus (<em>la réduction radicale du temps d'écoulement permet de supprimer les tâches sans valeur ajoutée</em>) ;
+- <strong>Identification et suppression des gaspillages</strong> et des <strong>activités sans valeur ajoutée</strong> ;
+- <strong>Obligation de passer par des phases d'identification et de résolution des problèmes</strong> (internes et externes) ;
+- <strong>Meilleure réactivité</strong> aux changements au sein d'un processus ;
+- <strong>Charge de travail bien répartie</strong> ;
+- <strong>Réduction des temps de changement de séries</strong> (SMED) ;
+- <strong>Optimisation du flux</strong> et <strong>amélioration de l'efficacité des cycles</strong> des processus ;
+- <strong>Maintenance Productive Totale (TPM)</strong> ;
+- <strong>Systèmes de contrôle du travail</strong>, <strong>limitation du travail en cours (WIP)</strong>, <strong>flux tiré</strong>.</p>
+<h4>5.2 L'essentiel du Six Sigma (rappel synthétique)</h4>
+<p>Le Six Sigma, c'est l'<strong>amélioration radicale de la qualité</strong> en se focalisant sur le client et en utilisant l'approche <strong>DMAIC</strong> :
+- <strong>Projets d'amélioration centrés sur le client</strong> ;
+- <strong>Nécessite l'évaluation de la capabilité du process (Cp)</strong> ;
+- <strong>Amélioration basée sur des données statistiques</strong> ;
+- <strong>Réduction de la variation</strong> et résolution des <strong>causes profondes</strong> ;
+- <strong>Réduction des défauts et du re-travail</strong> ;
+- Les <strong>contrôles et indicateurs de suivi</strong> garantissent des <strong>résultats durables</strong> (« stage-gating » : on s'assure que les hypothèses de départ tiennent tout au long du projet) ;
+- Création d'un <strong>« langage commun »</strong> pour toute optimisation de processus ;
+- <strong>Plans de déploiement duplicables</strong> dans l'entreprise.</p>
+<p><strong>Rappel des 5 phases DMAIC (point de vue Lean Six Sigma) :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Finalité</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Define</strong></td>
+<td>Définir les possibilités, tant d'un point de vue <strong>business</strong> que <strong>client</strong></td>
+</tr>
+<tr>
+<td><strong>Measure</strong></td>
+<td>Comprendre les <strong>processus</strong> et comment ils s'exécutent</td>
+</tr>
+<tr>
+<td><strong>Analyze</strong></td>
+<td>Rechercher les <strong>facteurs clés (les « X » critiques)</strong> qui ont le plus d'impact sur la performance et déterminer les <strong>causes profondes</strong></td>
+</tr>
+<tr>
+<td><strong>Improve</strong></td>
+<td>Élaborer des <strong>solutions</strong> pour améliorer les « X » critiques</td>
+</tr>
+<tr>
+<td><strong>Control</strong></td>
+<td><strong>Déployer</strong> les solutions retenues et les <strong>contrôler</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>5.3 Le niveau de sigma : la mesure universelle (DPMO)</h4>
+<p>Le <strong>niveau de sigma</strong> est une <strong>mesure universelle de la performance d'un processus</strong>. C'est l'origine de la terminologie « <strong>Six Sigma</strong> ».</p>
+<table>
+<thead>
+<tr>
+<th>Niveau Sigma</th>
+<th>Défauts par million de cas (DPMO)</th>
+<th>Pourcentage de bon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>690 000</td>
+<td>31 %</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>308 537</td>
+<td>69,2 %</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>66 807</td>
+<td>93,32 %</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>6 210</td>
+<td>99,379 %</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>233</td>
+<td>99,977 %</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td><strong>3,4</strong></td>
+<td><strong>99,9997 %</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>À chaque niveau gagné, les défauts chutent d'un <strong>ordre de grandeur</strong> (voire davantage). Passer de 4σ à 6σ, c'est passer de <strong>6 210</strong> à <strong>3,4</strong> défauts par million.</p>
+</blockquote>
+<h4>5.4 Contributions respectives : Six Sigma améliore, Lean élimine</h4>
+<blockquote>
+<p><strong>Six Sigma améliore la qualité ; Lean élimine les étapes à NVA dans le flux de valeur.</strong></p>
+</blockquote>
+<p>Point essentiel : la <strong>qualité d'un processus se dégrade avec le nombre d'étapes</strong>. Si chaque étape a un rendement r, le rendement global vaut r^(nombre d'étapes). D'où l'intérêt de <strong>réduire le nombre d'étapes (Lean)</strong> <strong>et</strong> d'<strong>élever la qualité de chaque étape (Six Sigma)</strong>.</p>
+<p><strong>Rendement global selon le nombre d'étapes à valeur ajoutée et le niveau de qualité de chaque étape :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Nbre d'étapes</th>
+<th>±3σ</th>
+<th>±4σ</th>
+<th>±5σ</th>
+<th>±6σ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>93,32 %</td>
+<td>99,379 %</td>
+<td>99,9767 %</td>
+<td>99,99966 %</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>61,63 %</td>
+<td>95,733 %</td>
+<td>99,839 %</td>
+<td>99,9976 %</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td>50,08 %</td>
+<td>93,96 %</td>
+<td>99,768 %</td>
+<td>99,9966 %</td>
+</tr>
+<tr>
+<td><strong>20</strong></td>
+<td>25,08 %</td>
+<td>88,29 %</td>
+<td>99,536 %</td>
+<td>99,9932 %</td>
+</tr>
+<tr>
+<td><strong>40</strong></td>
+<td>6,29 %</td>
+<td>77,94 %</td>
+<td>99,074 %</td>
+<td>99,9864 %</td>
+</tr>
+</tbody>
+</table>
+<p><em>Lecture : à </em><em>±3σ</em><em>, un processus de </em><em>40 étapes</em><em> ne sort « bon » que </em><em>6,29 %</em><em> du temps ; à </em><em>±6σ</em><em>, le même processus reste à </em><em>99,9864 %</em><em>. (Source : Six Sigma Research Institute, Motorola University, Motorola, Inc.)</em></p>
+<h4>5.5 La loi de Little : la relation fondamentale du Lean</h4>
+<blockquote>
+<p><strong>La loi de Little</strong> est la relation fondamentale au sein du Lean.</p>
+</blockquote>
+<p>$$\text{Délai d'exécution (Lead Time)} = \frac{\text{Nombre de tâches en cours (WIP)}}{\text{Taux moyen d'achèvement (vitesse de sortie du processus)}}$$</p>
+<p>Pour <strong>réduire le délai d'exécution</strong> d'un processus, il existe <strong>deux possibilités</strong> :
+1. <strong>Investir du capital financier</strong> dans les <strong>ressources et les équipements</strong> afin d'<strong>augmenter le taux moyen d'achèvement</strong> (le dénominateur) ;
+   <strong>OU</strong>
+2. <strong>Investir du capital intellectuel</strong> pour <strong>réduire le nombre de tâches en cours (WIP)</strong> — le numérateur — en utilisant :
+   - les <strong>outils Lean</strong> : <strong>flux tirés</strong>, <strong>méthode de démarrage rapide en 4 étapes</strong>, <strong>TQM</strong>, etc. ;
+   - les <strong>outils Six Sigma</strong> : <strong>réduction des variations</strong>.</p>
+<blockquote>
+<p>En clair : on accélère un flux soit en <strong>augmentant la vitesse</strong> (capital financier), soit, le plus souvent, en <strong>diminuant le travail en cours</strong> (capital intellectuel + outils LSS). La deuxième voie est généralement la moins coûteuse.</p>
+</blockquote>
+<h4>5.6 Lean (faire vite) + Six Sigma (faire bien) = combinaison vertueuse</h4>
+<blockquote>
+<p>Afin de produire les <strong>meilleurs résultats</strong>, <strong>Lean (faire vite)</strong> et <strong>Six Sigma (faire bien)</strong> doivent être <strong>combinés</strong>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Six Sigma</strong></th>
+<th><strong>Lean</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Focus</strong></td>
+<td><strong>Qualité</strong></td>
+<td><strong>Flux et vitesse d'écoulement</strong></td>
+</tr>
+<tr>
+<td><strong>Objectif</strong></td>
+<td>Améliorer l'efficacité par la <strong>réduction de la variabilité et du nombre de défauts</strong></td>
+<td>Améliorer l'efficacité par la <strong>réduction des étapes inutiles et non créatrices de valeur</strong></td>
+</tr>
+<tr>
+<td><strong>Méthode</strong></td>
+<td><strong>Projet DMAIC</strong></td>
+<td><strong>Chantier Kaizen</strong> (PDCA et flux de valeur)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>La puissance de la combinaison des deux approches</strong> repose sur une boucle vertueuse :
+- <strong>La vitesse de Lean permet la qualité de Six Sigma</strong> → cycles plus rapides d'expérimentation et de formation/apprentissage ;
+- <strong>La qualité de Six Sigma permet la vitesse de Lean</strong> → moins de défauts = moins de reprises (re-travail).</p>
+<blockquote>
+<p><strong>Formule à retenir : Vitesse + Précision = € (gains).</strong> Une combinaison <strong>Lean</strong> (<em>Vitesse + Coût bas</em>) et <strong>Six Sigma</strong> (<em>Culture + Qualité</em>) constitue une <strong>boîte à outils puissante</strong> permettant d'effectuer des <strong>percées stratégiques</strong> et d'obtenir le <strong>« WoW » des clients</strong>.</p>
+<p><strong>Représentation source — « LEAN SIX SIGMA ».</strong> Deux flèches qui convergent : <strong>LEAN — Tendre vers le Zéro Muda</strong> + <strong>6 SIGMA — Tendre vers le Zéro défaut, Zéro erreur</strong> = <strong>LEAN SIX SIGMA</strong>.</p>
+</blockquote>
+<h4>5.7 Illustration de bout en bout</h4>
+<p>Un même processus (Étapes 1 à 5 : 10 / 15 / 25 / 10 / 5 min, avec attentes de 1 à 3 jours entre étapes) est amélioré en <strong>deux temps</strong> :</p>
+<ol>
+<li><strong>Étape ❶ — état initial :</strong> temps de cycle long, <strong>limite = 15 jours</strong>, <strong>défauts = 15 % (≈ 1 σ)</strong> ; toutes les étapes A→F sont présentes ;</li>
+<li><strong>Étape ❷ — action LEAN :</strong> on <strong>réduit les délais et optimise les coûts</strong> (on supprime de la NVA, on resserre le flux) → <strong>défauts = 2,5 % (≈ 2 σ)</strong> ;</li>
+<li><strong>Étape ❸ — action 6 σ :</strong> on <strong>réduit la variabilité</strong> (il ne reste que les étapes à valeur A, C, F) → <strong>défauts = 0,00034 % (6 σ)</strong>.</li>
+</ol>
+<blockquote>
+<p><strong>Schéma source — illustration Lean puis 6σ.</strong> On y voit la chaîne <strong>Fournisseur → … → Client</strong>, la distinction <strong>Valeur ajoutée (A) / Sans valeur ajoutée (S)</strong> par étape (sur-processus, transport, attente/stock), la distribution avec <strong>LSL/USL</strong>, la <strong>moyenne</strong>, la <strong>zone de satisfaction client</strong> et les <strong>défauts</strong> en queue de distribution. <em>(Voir le PDF source.)</em></p>
+</blockquote>
+<h4>5.8 Définition de Lean Six Sigma &amp; bénéfices</h4>
+<blockquote>
+<p><strong>Lean Six Sigma</strong> = <strong>fusionner</strong> la stratégie axée sur la <strong>réduction des délais</strong> et l'<strong>élimination des gaspillages</strong> (inhérente au <strong>Lean</strong>) avec l'<strong>approche culturelle</strong>, les <strong>processus organisationnels</strong> et les <strong>outils analytiques</strong> du <strong>Six Sigma</strong>. Cela nous permet de <strong>mieux répondre aux clients, plus rapidement, avec moins de pertes</strong>.</p>
+</blockquote>
+<p><strong>Bénéfices, tangibles et immatériels :</strong></p>
+<table>
+<thead>
+<tr>
+<th>Gains tangibles</th>
+<th>Gains immatériels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Réduction des <strong>délais</strong> · réduction des <strong>coûts</strong> · <strong>gains financiers</strong> · <strong>qualité</strong> · <strong>sécurité</strong></td>
+<td><strong>Fidélisation des clients</strong> · <strong>implication des employés</strong> · <strong>confiance des actionnaires</strong> · <strong>image de marque</strong></td>
+</tr>
+</tbody>
+</table>
+<h4>5.9 Gagner en compétitivité : les impératifs stratégiques</h4>
+<p>Les objectifs de <strong>toute entreprise</strong> doivent être orientés vers l'<strong>amélioration de la qualité</strong> et la <strong>réduction des coûts et des délais</strong>, parce que :
+- la <strong>qualité</strong> est désormais une <strong>caractéristique standard</strong> sur le marché ;
+- les clients <strong>exigent des délais plus courts</strong> ;
+- la <strong>fidélité et la conservation des clients</strong> sont <strong>critiques</strong> ;
+- la <strong>pression permanente sur la baisse des prix</strong> impose de <strong>diminuer les coûts</strong> ;
+- de <strong>moins en moins de capitaux</strong> peuvent être investis → il faut <strong>produire toujours plus avec moins</strong>.</p>
+<blockquote>
+<p><strong>Lean Six Sigma permet d'optimiser la capacité, de réduire les délais d'exécution et d'éliminer la variabilité des processus.</strong></p>
+</blockquote>
+<h4>5.10 Le mode projet : « le moteur » du LSS</h4>
+<p>Le déploiement LSS se fait <strong>en cascade</strong>, du sommet vers le terrain :</p>
+<table>
+<thead>
+<tr>
+<th>Niveau</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top Management</strong></td>
+<td>Fixe les <strong>objectifs et cibles stratégiques</strong> ; définit la <strong>mesure des améliorations</strong> sur l'output du processus</td>
+</tr>
+<tr>
+<td><strong>Managers des processus &amp; Process Owner</strong></td>
+<td>Déclinent en <strong>objectifs par département</strong> ; <strong>sélectionnent le projet</strong> et le <strong>responsable de projet</strong></td>
+</tr>
+<tr>
+<td><strong>Process Pilot &amp; équipe projet</strong></td>
+<td>Réalisent la <strong>form-action par le projet</strong> avec le <strong>support du Process Owner</strong> ; produisent le <strong>résultat du projet</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Le mode projet est « le moteur » du LSS</strong> : c'est lui qui transforme les objectifs stratégiques (input) en améliorations mesurées (output).</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Le Lean — Fiche Outil</strong></td>
+<td>Mémo synthétique : définition, principes clés (élimination des Muda, amélioration continue), schéma de la chaîne de valeur et de l'organisation Lean</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1JFktu2WPG_w6SScnLdIbPocxl028I7Jt/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Le 6 Sigma — Fiche Outil</strong></td>
+<td>Mémo synthétique : définition, DMAIC, schéma variabilité (bon/mauvais process), courbe de Gauss</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/11rK5DfndCmqDEDjzWgVspu1Y6pmb7-T5/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Table de la loi normale centrée réduite</strong></td>
+<td>Lire la probabilité F(x) (aire à gauche de x) ; relier niveau sigma et % de bon</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1z70gfeB_XSPT4ZUzvL4_8E7BPkIyC6Od/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Qu'est-ce que le Lean (présentation)</strong></td>
+<td>Support complet : histoire, enjeux, Kaizen, Maison TPS, état d'esprit Lean</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1rz0D47faq6BqmckPs-yjLzvrg-__cCNs/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Qu'est-ce que le 6 Sigma (présentation)</strong></td>
+<td>Support complet : DMAIC, pilotage par les données, exemples statistiques</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1ScFJbzYOYIIBRaJn_NvnAA0JpY8Bot_M/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Qu'est-ce que le Lean Six Sigma (présentation)</strong></td>
+<td>Support complet : niveaux sigma, loi de Little, combinaison Lean+6σ, déploiement projet</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/12cR3orYDegkIdepXfR0mvf37ooXILY6B/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur <strong>votre propre terrain</strong> (choisi au Module 0), ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice 1 — Diagnostic Lean / 6 Sigma de mon processus</strong>
+1. Choisissez <strong>un processus réel</strong> de votre périmètre (ex. traitement d'une commande, montage d'un sous-ensemble, émission d'une facture).
+2. Listez ses <strong>étapes</strong> dans l'ordre. Pour chacune, classez-la <strong>VA</strong> (valeur ajoutée — le client paierait pour ça) ou <strong>NVA</strong> (attente, transport, stock, retouche, sur-processus).
+3. Estimez le <strong>Lead Time total</strong> (du début à la livraison) et le <strong>temps réellement à valeur ajoutée</strong>. Calculez le <strong>ratio VA = temps VA / Lead Time</strong> (souvent &lt; 10 % — c'est normal).
+4. Repérez <strong>un défaut/erreur récurrent</strong> du processus et estimez son <strong>taux</strong> (ex. 8 % de dossiers à reprendre).
+5. Décidez : ce problème relève-t-il plutôt du <strong>Lean</strong> (flux trop long, trop d'attente/NVA) ou du <strong>6 Sigma</strong> (trop de variabilité/défauts) — ou des <strong>deux</strong> ?</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une <strong>fiche d'une page</strong> : la liste des étapes annotées VA/NVA, le <strong>Lead Time</strong>, le <strong>ratio VA</strong>, le <strong>taux de défaut</strong> estimé, et votre <strong>verdict Lean / 6 Sigma / les deux</strong>.</li>
+<li><strong>Critères de réussite :</strong> chaque étape est classée VA ou NVA ; le ratio VA est chiffré ; au moins un défaut est quantifié ; le verdict est <strong>justifié</strong> par les chiffres (pas par une opinion).</li>
+<li><strong>Temps conseillé :</strong> 20 min.</li>
+</ul>
+<p><strong>Exercice 2 — Mini-décision « avec des données » (loi de Little)</strong>
+1. Sur le même processus, notez le <strong>WIP</strong> (nombre de dossiers/pièces « en cours » à un instant donné) et le <strong>taux de sortie</strong> (combien terminés par jour/heure).
+2. Appliquez la <strong>loi de Little</strong> : <code>Lead Time = WIP / Taux de sortie</code>. Comparez le résultat à votre estimation de l'exercice 1.
+3. Proposez <strong>une action de réduction du WIP</strong> (capital intellectuel) <strong>et</strong> chiffrez son effet attendu sur le Lead Time — au lieu de proposer d'acheter un équipement (capital financier).</p>
+<ul>
+<li><strong>Livrable attendu :</strong> le <strong>calcul de Little</strong> + <strong>une action de réduction du WIP</strong> avec l'effet chiffré attendu.</li>
+<li><strong>Critères de réussite :</strong> le calcul est cohérent (les 3 grandeurs s'accordent) ; l'action vise le <strong>numérateur (WIP)</strong> et son effet est <strong>quantifié</strong>.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>Lean = faire vite</strong> (flux, vitesse, <strong>zéro Muda</strong>) ; <strong>6 Sigma = faire bien</strong> (qualité, <strong>réduction de la variabilité</strong>, zéro défaut).</li>
+<li>**Lean Six Sigma = Vitesse + Précision = € ** : les deux approches se renforcent (la vitesse permet la qualité ; la qualité permet la vitesse).</li>
+<li>Le <strong>niveau de sigma</strong> est une <strong>mesure universelle</strong> : <strong>6σ = 3,4 DPMO = 99,9997 %</strong> de bon ; <strong>99 % (3,8σ) ne suffit souvent pas</strong>.</li>
+<li><strong>La qualité chute avec le nombre d'étapes</strong> : réduire les étapes (<strong>Lean</strong>) <strong>et</strong> fiabiliser chacune (<strong>6 Sigma</strong>).</li>
+<li><strong>Loi de Little : Lead Time = WIP / Taux d'achèvement.</strong> On accélère surtout en <strong>réduisant le WIP</strong>.</li>
+<li><strong>Le client ressent la variance, pas la moyenne</strong> : « <strong>Sans donnée, vous n'êtes qu'une personne avec une opinion.</strong> »</li>
+<li><strong>85 % des problèmes</strong> viennent de <strong>l'organisation des processus</strong>, 15 % des collaborateurs (Deming) → on travaille <strong>sur</strong> le système.</li>
+<li><strong>Kaizen = amélioration continue</strong>, infinie : « réaliser <strong>60 % dès maintenant</strong> » plutôt que viser la perfection.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quelle phrase résume le mieux le couple Lean / 6 Sigma ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Lean = qualité, 6 Sigma = vitesse</button><button type="button" class="opt" data-key="b"><b>b)</b> Lean = faire vite (flux, zéro Mud</button><button type="button" class="opt" data-key="a"><b>a)</b> , 6 Sigma = faire bien (variabilité, défauts)</button><button type="button" class="opt" data-key="c"><b>c)</b> Les deux servent uniquement à réduire les coûts salariaux</button><button type="button" class="opt" data-key="d"><b>d)</b> Ce sont deux noms d'une même méthode identique</button></div><div class="q-exp" hidden>Lean adresse la <strong>vitesse/le flux</strong> (zéro Muda) ; 6 Sigma la <strong>qualité</strong> (réduction de la variabilité et des défauts).</div></li><li class="q" data-correct="c"><div class="q-text">Un processus <strong>6 Sigma</strong> produit combien de défauts par million d'opportunités (DPMO) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 6 210</button><button type="button" class="opt" data-key="b"><b>b)</b> 233</button><button type="button" class="opt" data-key="c"><b>c)</b> 3,4</button><button type="button" class="opt" data-key="d"><b>d)</b> 66 807</button></div><div class="q-exp" hidden>un processus 6 Sigma ne produit que <strong>3,4 DPMO</strong> (99,9997 % de bon).</div></li><li class="q" data-correct="b"><div class="q-text">Écrivez correctement la <strong>loi de Little</strong>.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Lead Time = Taux d'achèvement × WIP</button><button type="button" class="opt" data-key="b"><b>b)</b> Lead Time = WIP / Taux d'achèvement</button><button type="button" class="opt" data-key="c"><b>c)</b> WIP = Lead Time × Taux d'achèvement / 2</button><button type="button" class="opt" data-key="d"><b>d)</b> Taux d'achèvement = WIP × Lead Time</button></div><div class="q-exp" hidden><strong>Lead Time = WIP / Taux moyen d'achèvement</strong> : on réduit le délai en baissant le WIP ou en augmentant la vitesse de sortie.</div></li><li class="q" data-correct="faux"><div class="q-text"><strong>Vrai ou faux :</strong> « Le client ressent la moyenne du processus, pas sa variance. »</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>c'est l'inverse : <strong>le client ressent la variance, pas la moyenne</strong> ; une bonne moyenne masque des clients servis hors spécification.</div></li><li class="q" data-correct="c"><div class="q-text">D'après Deming, quelle part des problèmes provient de <strong>l'organisation des processus</strong> (et non des collaborateurs) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 15 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 50 %</button><button type="button" class="opt" data-key="c"><b>c)</b> 85 %</button><button type="button" class="opt" data-key="d"><b>d)</b> 100 %</button></div><div class="q-exp" hidden><strong>85 %</strong> des problèmes viennent de l'organisation des processus, 15 % des collaborateurs.</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi le rendement global d'un processus de <strong>40 étapes à ±3σ</strong> n'est-il que de <strong>6,29 %</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Parce que 3σ correspond à 6,29 % de bon par étape</button><button type="button" class="opt" data-key="b"><b>b)</b> Parce que la qualité globale = (qualité d'une étape)^(nombre d'étapes), et 0,9332^40 ≈ 6,29 %</button><button type="button" class="opt" data-key="c"><b>c)</b> Parce que le Lean supprime 94 % des étapes</button><button type="button" class="opt" data-key="d"><b>d)</b> C'est une erreur de la table</button></div><div class="q-exp" hidden>la qualité se <strong>compose</strong> étape après étape : 93,32 % à la puissance 40 ≈ <strong>6,29 %</strong>. D'où l'intérêt de réduire le nombre d'étapes (Lean) <strong>et</strong> d'élever le niveau sigma (6 Sigma).</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>1. Qu'est-ce que le Lean.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1rz0D47faq6BqmckPs-yjLzvrg-__cCNs/view">Ouvrir dans Drive</a></li>
+<li>🖼️ <em>1. Le Lean — Fiche Outil.png</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1JFktu2WPG_w6SScnLdIbPocxl028I7Jt/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>2. Qu'est-ce que le 6 Sigma.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1ScFJbzYOYIIBRaJn_NvnAA0JpY8Bot_M/view">Ouvrir dans Drive</a></li>
+<li>🖼️ <em>2. Le 6 Sigma — Fiche Outil.png</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/11rK5DfndCmqDEDjzWgVspu1Y6pmb7-T5/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>2. Loi normale.pdf</em> (table complète, source http://odlv.free.fr) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1z70gfeB_XSPT4ZUzvL4_8E7BPkIyC6Od/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>3. Qu'est-ce que le Lean Six Sigma.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/12cR3orYDegkIdepXfR0mvf37ooXILY6B/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="00-demarrage.html"><small>← Module précédent</small>0 · Démarrage & cahier du stagiaire</a><a class="nx" href="02-muda-mura-muri-gemba.html"><small>Module suivant →</small>2 · Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

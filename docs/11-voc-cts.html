@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 11 — Voix du Client (VoC) & arbre des CTS — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="10-dmaic.html">← Préc.</a><a href="12-sipoc.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link active" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="11-voc-cts">Marquer ce module comme terminé</button></div><h1>Module 11 — Voix du Client (VoC) &amp; arbre des CTS</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
+⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Identifier</strong> qui sont vos clients (internes, externes, parties prenantes) et le propriétaire du processus.
+- <strong>Recueillir</strong> la Voix du Client (VoC) de manière factuelle, à partir de sources internes et externes.
+- <strong>Distinguer</strong> ce qui est critique pour le client de ce qui ne l'est pas.
+- <strong>Traduire</strong> un besoin client générique en exigence <strong>mesurable</strong> à l'aide de l'<strong>arbre des CTS</strong> (Critical To Satisfaction).
+- <strong>Construire</strong> un arbre des CTS complet : Besoin → Driver/Critère qualité → CTS mesurable → seuils (LSL/USL).</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Connaître la logique de la démarche <strong>DMAIC</strong> et plus particulièrement la phase <strong>Define</strong> (la VoC s'y inscrit).</li>
+<li>Notion de <strong>SIPOC</strong> (Fournisseur – Inputs – Processus – Outputs – Client) et de <strong>client interne / externe</strong>.</li>
+<li>Notion de spécifications / limites (LSL, USL) abordée avec la capabilité processus.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<h3>1. Qu'est-ce que la Voix du Client (VoC) ?</h3>
+<p>La <strong>Voix du Client</strong> (<strong>VoC</strong>, <em>Voice of Customer</em>) est <strong>l'expression des exigences et des attentes du client sur un produit, un processus et/ou un service</strong>.</p>
+<p>Cette expression peut prendre deux formes :
+- <strong>Spécifique</strong> — <em>« Je dois recevoir la livraison en moins de 3 jours »</em>.
+- <strong>Vague</strong> — <em>« Livrez rapidement !!! »</em>.</p>
+<p>Pour obtenir cette expression du besoin du client, il est nécessaire de :
+- <strong>Identifier qui est / sont le(s) client(s)</strong> (notion de clients internes et externes) ; plus généralement, on parle aussi des <strong>parties prenantes</strong>.
+- <strong>Recueillir de manière factuelle</strong> les exigences et attentes auprès du client.
+- <strong>Prioriser</strong> les différents niveaux d'exigences.</p>
+<blockquote>
+<p><strong>Règle clé.</strong> La VoC doit être <strong>comparée aux données du processus</strong> (<em>Voice of Process</em>, <strong>VoP</strong>) pour déterminer la <strong>performance</strong> ou <strong>l'aptitude actuelle</strong> du processus. C'est cette comparaison VoC vs VoP qui révèle l'écart (le problème).</p>
+</blockquote>
+<h3>2. Pourquoi la VoC est-elle importante ?</h3>
+<p>L'étude de la VoC permet de <strong>comprendre quelles sont les attentes du ou des clients du processus concerné</strong>.</p>
+<ul>
+<li><strong>Sans bonne compréhension de ce que veulent réellement les clients, il est impossible d'améliorer la qualité</strong> du produit livré ou du service fourni.</li>
+<li>La VoC permet de <strong>se concentrer sur les éléments clés du projet</strong>.</li>
+</ul>
+<p><strong>Les clients « paient les factures »</strong>, il est donc important de comprendre leurs besoins :
+- Le besoin des clients est une <strong>entrée clé</strong> dans l'établissement de la <strong>stratégie</strong> et du <strong>design du processus</strong>.
+- La dynamique d'<strong>excellence opérationnelle</strong> et d'<strong>amélioration des processus</strong> est aussi générée par les <strong>clients externes</strong>.</p>
+<p><strong>Les clients définissent le « terrain de jeu » :</strong>
+- Ils sont les <strong>arbitres</strong> pour chacun des compétiteurs.
+- Ils définissent la <strong>« valeur ajoutée »</strong> des produits et des services.</p>
+<p><strong>Ils ont toujours raison…</strong>
+- Même lorsque nous ne pouvons pas atteindre leurs attentes.
+- <strong>Replacer la VoC au centre des processus</strong> est le challenge quotidien de toute entreprise : c'est <strong>l'orientation Client !</strong></p>
+<h3>3. Quand utiliser la VoC ?</h3>
+<ul>
+<li>C'est la <strong>première étape de tout projet</strong> : en clarifiant <strong>VoC vs VoP</strong>, nous adressons l'<strong>écart (ou problème)</strong> par rapport aux exigences clients.</li>
+<li><strong>Identifier les clients impactés</strong> par cette déviance, ainsi que <strong>leurs exigences</strong>, est <strong>primordial en phase de définition (Define)</strong>.</li>
+</ul>
+<p>L'analyse de la VoC est donc une <strong>étape importante de la phase Define du projet DMAIC</strong>.</p>
+<h3>4. Identifier les parties prenantes : qui est le client ?</h3>
+<p>La plupart des processus <strong>comptent plusieurs clients</strong>. On distingue :</p>
+<table>
+<thead>
+<tr>
+<th>Type de client</th>
+<th>Exemples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Client externe</strong></td>
+<td>Acheteur de voiture · Fabricant de voitures · Fournisseur de rang N+1</td>
+</tr>
+<tr>
+<td><strong>Client interne</strong></td>
+<td>Processus aval · Ligne de production · Management</td>
+</tr>
+</tbody>
+</table>
+<p>Outre la VoC, on doit également prendre en compte :
+- la <strong>VoB</strong> (<em>Voice of Business</em> / voix du business : actionnaires, propriétaires) — aussi appelée <strong>Voice of Process owner</strong> : qui est le propriétaire du processus ;
+- la <strong>VoE</strong> (<em>Voice of Employees</em> / voix des employés).</p>
+<blockquote>
+<p><strong>Outil de cadrage.</strong> Le <strong>SIPOC</strong> aide à identifier les clients (le « C » de SIPOC) et l'ensemble des parties prenantes du processus.</p>
+</blockquote>
+<h4>Stratifier / segmenter vos clients</h4>
+<p>Il peut s'avérer nécessaire de <strong>segmenter les clients</strong>, particulièrement si le <strong>portefeuille client est conséquent</strong> et si les <strong>attentes diffèrent</strong>, afin de pouvoir <strong>prioriser</strong> leurs exigences (et la VoB). On peut stratifier ses segments de clients selon trois axes :</p>
+<table>
+<thead>
+<tr>
+<th>Axe de segmentation</th>
+<th>Critères</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Économiquement</strong></td>
+<td>Revenus · Fréquence · Taille des clients · Coûts · Objectifs stratégiques</td>
+</tr>
+<tr>
+<td><strong>De façon descriptive</strong></td>
+<td>Géographie · Démographie · Caractéristiques du produit · Industrie</td>
+</tr>
+<tr>
+<td><strong>Selon les habitudes</strong></td>
+<td>Prix · Valeur · Service</td>
+</tr>
+</tbody>
+</table>
+<p>D'autres axes descriptifs cités en exemple : <em>propriétaire unique, franchise, propriété publique, propriété privée, co-op</em>, segmentation <strong>géographique</strong>, segmentation <strong>prix et services</strong>.</p>
+<blockquote>
+<p><strong>Les clients définissent la qualité — vous devez comprendre ce qui est important à leurs yeux !</strong> Parmi les dimensions de qualité que les clients valorisent typiquement : <strong>fiabilité, rapidité, esthétisme, facilité d'emploi, flexibilité et options, prix et autres coûts</strong>. Ces attentes traversent tout le « monde des affaires » : méthodes, R&amp;D et production, services, logistique / supports, SAV.</p>
+</blockquote>
+<h3>5. Comment collecter la VoC ?</h3>
+<p>Les initiatives d'amélioration sont <strong>le plus souvent amorcées en réaction à des données qui expriment une non-satisfaction</strong>. Sources de données possibles (internes et externes) :</p>
+<table>
+<thead>
+<tr>
+<th>Sources « signaux d'alerte »</th>
+<th>Sources « écoute / marché »</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Défauts</td>
+<td>Discussions avec des clients</td>
+</tr>
+<tr>
+<td>Rapports d'audit</td>
+<td>Préférences produit / service</td>
+</tr>
+<tr>
+<td>Réclamations clients, retours garanties, plaintes</td>
+<td>Expositions commerciales</td>
+</tr>
+<tr>
+<td>Enquêtes de satisfaction</td>
+<td>Annulations de contrat</td>
+</tr>
+<tr>
+<td>Rapports de ventes</td>
+<td>Changements de part de marché</td>
+</tr>
+<tr>
+<td>Bilans annuels</td>
+<td>Taux de fermeture d'appel d'offre</td>
+</tr>
+<tr>
+<td>Tableaux de bord</td>
+<td>Lignes spéciales pour les problèmes ou services</td>
+</tr>
+<tr>
+<td>Analyses de processus clés</td>
+<td>Appels au support technique</td>
+</tr>
+<tr>
+<td>Problèmes internes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Principes de collecte :</strong>
+- Considérer <strong>à chaque fois</strong> les <strong>clients internes &amp; externes</strong> ainsi que <strong>l'ensemble des parties prenantes</strong>.
+- <strong>Segmenter les clients</strong> si nécessaire (portefeuille conséquent, attentes divergentes) pour <strong>prioriser</strong> leurs exigences et la VoB.
+- <strong>Établir ces exigences en utilisant le langage des clients</strong>, puis les <strong>traduire en caractéristiques critiques</strong> (historiquement nommées <strong>CTQ — <em>Critical to Quality</em></strong>, et plus largement <strong>CTS — <em>Critical to Satisfaction</em></strong>).</p>
+<h4>Les 4 outils VoC clés</h4>
+<table>
+<thead>
+<tr>
+<th>Outil</th>
+<th>À quoi il sert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entretiens clients</strong></td>
+<td>Connaître les attentes et exigences <strong>d'un client en particulier</strong>, son avis sur la qualité de service, les caractéristiques des produits / services et les <strong>indicateurs de performance</strong> qu'il utilise.</td>
+</tr>
+<tr>
+<td><strong>Groupes d'écoute clients</strong></td>
+<td>Organiser l'information à partir d'un <strong>avis collectif</strong> d'un groupe de clients représentatif d'un segment du marché ; <strong>définir les besoins d'un marché</strong> et <strong>prioriser les valeurs</strong> des clients.</td>
+</tr>
+<tr>
+<td><strong>Enquêtes clients</strong></td>
+<td><strong>Mesurer les attentes</strong> pour un produit / service ou pour des caractéristiques / performances ; <strong>fournir des évidences</strong> permettant de prendre des décisions.</td>
+</tr>
+<tr>
+<td><strong>Études internes</strong></td>
+<td><strong>Établir les attentes et spécifications clients</strong>, les caractéristiques produits / services, les valeurs clients et les indicateurs de performance <strong>à partir de sources internes / indirectes</strong>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Attention au coût.</strong> Réaliser une <strong>segmentation complète</strong> de la base clients et mener des <strong>enquêtes de satisfaction</strong> est <strong>consommateur de temps et de ressources</strong>, donc potentiellement coûteux. Ces techniques avancées doivent être utilisées <strong>avec parcimonie</strong>.</p>
+</blockquote>
+<h4>Communiquer avec le client par sondage — les 3 fondamentaux</h4>
+<p>Les fondamentaux du sondage client se résument en <strong>3 étapes</strong> :
+1. <strong>Poser les bonnes questions.</strong>
+2. <strong>Poser les questions de façon juste</strong> — éliminer les ambiguïtés.
+3. <strong>Interpréter / comprendre les réponses.</strong></p>
+<h3>6. De la VoC aux CTS : trois éléments à identifier</h3>
+<p>Dans le cadre de la VoC, <strong>trois niveaux</strong> sont à identifier :</p>
+<ol>
+<li><strong>La Voix du Client</strong> — expression <strong>générique</strong> des besoins.</li>
+<li><strong>Les critères qualité associés</strong> (<em>Quality Criteria</em>).</li>
+<li><strong>Les paramètres critiques pour la qualité : les CTS</strong> (<em>Critical To Satisfaction</em>).</li>
+</ol>
+<p>Nous devons <strong>traduire la VoC en termes mesurables</strong>. La logique :
+- Partir d'une <strong>approche « générale »</strong> pour tendre vers du <strong>« spécifique »</strong>.
+- Partir d'un <strong>élément difficile à mesurer</strong> vers un <strong>élément spécifique mesurable</strong>.</p>
+<p><strong>Ce que sont les CTS :</strong>
+- Ils <strong>permettent de mesurer la performance d'un processus</strong>.
+- Ils correspondent <strong>aux caractéristiques d'un produit, d'un processus ou d'un service qui doivent être respectées pour satisfaire les exigences clients</strong>.</p>
+<blockquote>
+<p><strong>Nuance importante.</strong> Les <strong>besoins</strong> (prix, qualité, délai) sont souvent des <strong>facteurs communs</strong> d'un client à l'autre, <strong>mais les exigences sont différentes</strong>. C'est précisément ce que l'arbre des CTS va expliciter.</p>
+</blockquote>
+<h4>Le processus de validation orienté par la VoC</h4>
+<p>L'enchaînement complet de l'orientation du projet par la VoC :</p>
+<ol>
+<li><strong>Recueillir la voix du client (VoC).</strong></li>
+<li><strong>Traduire la VoC en exigences critiques du client (CTS).</strong></li>
+<li><strong>Convertir les CTS en variables clés sortantes du processus (KPOV).</strong></li>
+<li><strong>Créer un diagramme macro-descriptif de type SIPOC</strong> (Fournisseur, Inputs, Processus, Outputs, Client).</li>
+<li><strong>Valider la description et le périmètre du problème</strong> en utilisant la VoC et le SIPOC.</li>
+</ol>
+<h3>7. L'arbre des CTS</h3>
+<figure class="svg-fig"><svg viewBox="0 0 720 320" role="img" class="svg-anim"><text x="110" y="26" text-anchor="middle" fill="#5b6675" font-size="11" font-weight="700">BESOIN (générique)</text><text x="360" y="26" text-anchor="middle" fill="#5b6675" font-size="11" font-weight="700">DRIVER / CRITÈRE QUALITÉ</text><text x="610" y="26" text-anchor="middle" fill="#5b6675" font-size="11" font-weight="700">CTS (mesurable + seuils)</text><path d="M192,159 C231,159 231,99 270,99" fill="none" stroke="#b6bdc7" stroke-width="2"/><path d="M192,159 C231,159 231,229 270,229" fill="none" stroke="#b6bdc7" stroke-width="2"/><path d="M450,99 C485,99 485,99 520,99" fill="none" stroke="#b6bdc7" stroke-width="2"/><path d="M450,229 C485,229 485,229 520,229" fill="none" stroke="#b6bdc7" stroke-width="2"/><rect x="28" y="128" width="164" height="62" rx="9" fill="#f6b400" class="seg"/><text x="110" y="153" text-anchor="middle" fill="#3a3320" font-size="12.5" font-weight="700">Besoin client (VoC)</text><text x="110" y="171" text-anchor="middle" fill="#6b5a1e" font-size="11.5">« être livré vite »</text><rect x="270" y="70" width="180" height="58" rx="9" fill="#2563eb" class="seg"/><text x="360" y="95" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Délai de livraison</text><text x="360" y="113" text-anchor="middle" fill="#eef2f7" font-size="11.5">critère qualité</text><rect x="270" y="200" width="180" height="58" rx="9" fill="#2563eb" class="seg"/><text x="360" y="225" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Fiabilité produit</text><text x="360" y="243" text-anchor="middle" fill="#eef2f7" font-size="11.5">critère qualité</text><rect x="520" y="70" width="180" height="58" rx="9" fill="#16a34a" class="seg"/><text x="610" y="95" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">≤ 48 h (98 % cmd)</text><text x="610" y="113" text-anchor="middle" fill="#eef2f7" font-size="11.5">CTS mesurable</text><rect x="520" y="200" width="180" height="58" rx="9" fill="#16a34a" class="seg"/><text x="610" y="225" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">&lt; 1 % de défauts</text><text x="610" y="243" text-anchor="middle" fill="#eef2f7" font-size="11.5">CTS mesurable</text></svg><figcaption>L'arbre des CTS : traduire un besoin client (VoC) en exigence mesurable (Driver → CTS avec seuils).</figcaption></figure>
+
+<p>L'<strong>arbre des CTS</strong> est l'outil de <strong>traduction du problème ou du besoin client en caractéristiques spécifiques et mesurables</strong>, en <strong>matérialisant les liens</strong> entre ces caractéristiques. Ces CTS <strong>serviront de base aux indicateurs clés de résultat du processus (KPOV)</strong>.</p>
+<blockquote>
+<p><strong>Définition — CTS.</strong> <em>Critical To Satisfaction</em>. Les CTS sont <strong>les principales caractéristiques mesurables d'un service ou d'un produit dont les limites de spécification doivent être respectées pour satisfaire le client</strong>. Les CTS sont définies <strong>en fonction de la Voix du Client</strong>.</p>
+</blockquote>
+<h4>Les objectifs de l'arbre des CTS</h4>
+<ul>
+<li><strong>S'assurer que tout le monde sait qui est le client.</strong></li>
+<li><strong>S'assurer que tout le monde sait quel est le problème</strong> (et ses <strong>limites</strong>).</li>
+<li><strong>S'assurer que l'analyse sera faite au bon niveau d'investigation</strong> (la bonne <strong>profondeur</strong>).</li>
+</ul>
+<p>La progression visée par l'arbre est toujours la même :
+- Du <strong>général</strong> vers le <strong>spécifique</strong>.
+- De <strong>l'impression</strong> au <strong>mesurable</strong>.
+- De la <strong>VoC</strong> aux <strong>paramètres CTS</strong> (<em>Critical to Satisfaction</em>).</p>
+<table>
+<thead>
+<tr>
+<th>Niveau de l'arbre</th>
+<th>Nature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Voix du client</strong> (<em>Voice of Customer</em>)</td>
+<td>Difficilement mesurable · Complexe · Non spécifique</td>
+</tr>
+<tr>
+<td><strong>Critères qualité</strong> (<em>Quality Criteria</em>)</td>
+<td>Reformulation intermédiaire, regroupement par thème</td>
+</tr>
+<tr>
+<td><strong>CTS</strong> (<em>Critical to Satisfaction Parameters</em>)</td>
+<td><strong>Mesurable · Simple · Spécifique</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>À retenir.</strong> La VoC est <strong>l'outil de traduction des besoins clients</strong> : on part des <strong>Besoins (VoC)</strong> — <em>difficilement mesurables, complexes, non spécifiques</em> — pour aboutir aux <strong>CTS</strong> — <em>mesurables, simples, spécifiques</em>.</p>
+</blockquote>
+<h4>Les bonnes caractéristiques d'un CTS</h4>
+<p>Un bon CTS répond aux critères suivants. Il(s) :
+- <strong>Sont spécifiques et mesurables</strong> (et <strong>la méthode de mesure est spécifiée</strong>).
+- <strong>Sont directement liés à une caractéristique</strong> du produit ou du service.
+- <strong>N'ont pas d'alternative</strong> et dont l'approche <strong>n'est pas biaisée</strong> en fonction d'une approche ou d'une technologie particulière.
+- <strong>Sont complets et non ambigus.</strong>
+- <strong>Décrivent le « quoi » et non le « comment ».</strong></p>
+<h4>Comment l'utiliser ?</h4>
+<ul>
+<li><strong>Identifier et hiérarchiser les facteurs</strong> auxquels nous attribuons le plus de poids sur l'<strong>impact Client</strong>, puis <strong>valider nos perceptions</strong> du problème avec des <strong>données vérifiées</strong> et des <strong>tests statistiques</strong> appropriés.</li>
+<li><strong>Démarrer par l'Exigence Client</strong>, puis <strong>stratifier</strong> ces exigences pour plus de détail, <strong>jusqu'à un niveau de détail suffisant</strong>.</li>
+<li>De cette manière, on <strong>sépare les exigences Client en caractéristiques détaillées (CTS)</strong>, <strong>converties en langage interne</strong>, pour chacune des exigences Client de départ.</li>
+<li>Enfin, <strong>rechercher les CTS communs à plusieurs exigences Client</strong> et <strong>y concentrer les efforts</strong>.</li>
+</ul>
+<h3>8. Exemples d'arbres des CTS</h3>
+<blockquote>
+<p>🖼️ <em>Schémas non transcriptibles intégralement.</em> Les exemples ci-dessous sont représentés sous forme d'arborescences dans le support source <strong>« 15. L'arbre des CTS »</strong>. Ils sont restitués ici en arborescence textuelle (indentation = niveau). Se reporter au PDF Drive pour la mise en forme graphique d'origine.</p>
+</blockquote>
+<h4>Exemple A — Traduire un besoin (du verbatim au mesurable)</h4>
+<table>
+<thead>
+<tr>
+<th>Voix du client</th>
+<th>Après clarification, les éléments clés sont…</th>
+<th>…en exigence mesurable (CTS Client)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>« Je déteste faire affaire avec cette compagnie »</em></td>
+<td>Les produits ne sont pas livrés à temps</td>
+<td><strong>10 jours de délais d'exécution ± 1 jour</strong></td>
+</tr>
+</tbody>
+</table>
+<p>C'est l'illustration parfaite du chemin <strong>Verbatim vague → Driver clarifié → CTS chiffré</strong>.</p>
+<h4>Exemple B — « Un service en chambre correct » (hôtel)</h4>
+<p>Besoin de départ : <em>« Lorsque je passe plusieurs nuits dans un hôtel, je pourrais être intéressé par le service en chambre. »</em> → <strong>Besoin : « Un service en chambre correct ».</strong></p>
+<pre><code>Un service en chambre correct
+├── Rapidité de service
+│   └── CTS : Temps entre l'appel et le service
+├── Variété des menus
+│   ├── CTS : Nombre de plats diététiques
+│   └── CTS : Nombre de plats
+└── Qualité des plats
+    ├── CTS : Température
+    ├── CTS : Présentation
+    └── CTS : Goût
+</code></pre>
+<p>Lecture : <strong>Besoin</strong> (« service en chambre correct ») → <strong>Drivers / critères qualité</strong> (Rapidité, Variété, Qualité) → <strong>CTS mesurables</strong> (temps, nombre de plats, température, etc.).</p>
+<h4>Exemple C — Call-center d'une entreprise (arbre complet avec seuils)</h4>
+<p>Cet exemple détaille les <strong>5 colonnes</strong> d'un arbre des CTS abouti : <strong>Besoin → Exigences (coût/qualité/délai) → Caractéristiques mesurables → Niveaux (seuils LSL/USL)</strong>, déclinés pour trois « Y » (sorties du processus).</p>
+<table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Exigences (coût, qualité, délai)</th>
+<th>Caractéristique mesurable</th>
+<th>Niveau (seuil)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Y1 — La prise en charge d'un problème par un call-center</strong></td>
+<td>Réponse d'une personne en charge de l'après-vente</td>
+<td><strong>Temps d'attente au téléphone avant prise d'appel</strong></td>
+<td><strong>USL : moins de 30 secondes</strong> avant mise en contact avec un technicien</td>
+</tr>
+<tr>
+<td><strong>Y2 — La résolution d'un problème au 1er appel</strong></td>
+<td>Niveau de connaissance suffisant pour résoudre le problème</td>
+<td><strong>Score au test de capacité en fin de formation</strong></td>
+<td><strong>LSL : 90 points</strong> sur les 100 que compte le test</td>
+</tr>
+<tr>
+<td><strong>Y3 — Trouver toutes les infos, sans effort</strong></td>
+<td>Temps nécessaire pour trouver l'information</td>
+<td><strong>Temps maximum pour trouver n'importe quelle information</strong></td>
+<td><strong>LSL : 1,5 minute</strong> <em>(temps maximum admissible pour trouver l'information ; se référer au support source pour la lecture exacte du seuil)</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>📌 <strong>Rappel sur les seuils.</strong> <strong>LSL</strong> = <em>Lower Specification Limit</em> (limite basse) ; <strong>USL</strong> = <em>Upper Specification Limit</em> (limite haute). Un CTS n'est complet <strong>que lorsqu'il porte sa caractéristique mesurable ET son/ses seuil(s)</strong>.</p>
+</blockquote>
+<h3>9. En synthèse : les CTS client</h3>
+<ul>
+<li><strong>CTS = « Critical to Quality / to Satisfaction »</strong> : identifier <strong>ce qui rend le produit ou le service « BON »</strong> aux yeux du client.</li>
+<li>C'est ce que l'on appelle la <strong>Voix du Client</strong> (<em>Voice of the Customer</em>).</li>
+<li><strong>Ne partez pas du principe que vous savez ce que le client veut :</strong></li>
+<li><strong>Demandez-le-lui.</strong></li>
+<li><strong>Ayez un représentant du client dans votre équipe.</strong></li>
+<li>Le projet va <strong>focaliser les efforts d'amélioration sur les CTS</strong> ; il est donc <strong>impératif</strong> qu'ils soient :</li>
+<li><strong>Liés aux attentes des clients</strong> ;</li>
+<li><strong>Mesurables et quantifiables.</strong></li>
+</ul>
+<p><strong>Synthèse générale du module :</strong>
+- La <strong>plus importante source d'exigences</strong> lors de la conception d'un processus est <strong>le client</strong>.
+- Les autres exigences peuvent venir des <strong>autres participants</strong> du processus : l'<strong>entreprise</strong>, les <strong>fournisseurs</strong>, la <strong>réglementation</strong>, les <strong>actionnaires</strong>, etc.
+- De <strong>multiples techniques</strong> existent pour obtenir la VoC : <strong>interviews, groupes de discussion, enquêtes</strong>, etc.
+- Les informations obtenues doivent être <strong>transformées en données utiles</strong> pour le concepteur du processus / service. Les outils à utiliser sont les <strong>diagrammes d'affinité</strong> et les <strong>arborescences</strong> (l'arbre des CTS).
+- Des outils complémentaires comme l'<strong>analyse de Kano</strong> permettent de <strong>valider la prise en compte de l'ensemble des données pertinentes</strong> du / des client(s).</p>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Support « La Voix du Client – VoC »</strong></td>
+<td>Comprendre, justifier et collecter la VoC ; identifier clients internes/externes et parties prenantes ; 4 outils clés de collecte</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/12bcflin4OZ48c7WBaClZ9ab93xoOuyls/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Fiche Outil « VoC and CTS »</strong></td>
+<td>Mémo synthétique : définitions VoC / VoP / VoB / VoE, 4 outils de collecte, principe de l'arbre des CTS</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1vHowUvvjWyRBqoIIhu2uVD9YgoyROC8i/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Support « L'arbre des CTS (Critical To Satisfaction) »</strong></td>
+<td>Construire l'arbre Besoin → Critère qualité → CTS mesurable ; bonnes caractéristiques d'un CTS ; exemples chiffrés (hôtel, call-center)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/109tbsoSPZ0bC-jUrfnukk8VU1y447Ed7/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>SIPOC</strong> (référencé dans le support)</td>
+<td>Identifier le « C » (clients) et les parties prenantes ; valider le périmètre du problème</td>
+<td>Voir support VoC ci-dessus</td>
+</tr>
+<tr>
+<td><strong>Analyse de Kano</strong> (citée en synthèse)</td>
+<td>Valider que l'ensemble des attentes client (de base, performance, attractives) est bien couvert</td>
+<td>Voir support Arbre des CTS ci-dessus</td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice 1 — Du verbatim client réel à l'arbre des CTS</strong></p>
+<ol>
+<li><strong>Recueillez un verbatim client réel</strong> de votre terrain (une phrase brute : réclamation, retour d'enquête, mail, remarque en réunion). Exemple attendu : <em>« On ne sait jamais quand la commande va arriver. »</em> Notez <strong>qui</strong> est le client (interne ou externe) et <strong>la source</strong> (réclamation, enquête, entretien…).</li>
+<li><strong>Identifiez le(s) besoin(s)</strong> sous-jacent(s) : reformulez le verbatim en un besoin générique exprimé dans le <strong>langage du client</strong> (ex. : « être livré dans un délai fiable »).</li>
+<li><strong>Déclinez en drivers / critères qualité</strong> : 2 à 4 sous-thèmes mesurables (ex. : <em>délai de traitement</em>, <em>fiabilité de la date annoncée</em>, <em>information de suivi</em>).</li>
+<li><strong>Convertissez chaque driver en CTS mesurable</strong> : nommez <strong>la caractéristique mesurée</strong> ET <strong>la méthode de mesure</strong>. Vérifiez chaque CTS contre les 5 critères (spécifique &amp; mesurable, lié à une caractéristique, sans alternative/biais, complet &amp; non ambigu, décrit le « quoi » pas le « comment »).</li>
+<li><strong>Ajoutez les seuils</strong> (LSL et/ou USL) pour chaque CTS (ex. : <em>délai d'exécution = 10 jours ± 1 jour</em> ; <em>date annoncée respectée dans 95 % des cas — LSL : 95 %</em>).</li>
+<li><strong>Dessinez l'arbre</strong> sous la forme : <code>Besoin → Driver → CTS (caractéristique + seuil)</code>, en reprenant la structure des exemples B et C.</li>
+</ol>
+<ul>
+<li><strong>Livrable attendu :</strong> un <strong>arbre des CTS</strong> d'une page partant d'<strong>un verbatim client réel</strong>, avec au moins <strong>3 CTS mesurables dotés de seuils</strong>, et la mention du client et de la source.</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>Le verbatim de départ est <strong>authentique</strong> (issu du terrain, pas inventé).</li>
+<li>Chaque CTS est <strong>mesurable, spécifique, non ambigu</strong> et porte une <strong>méthode de mesure</strong> + <strong>au moins un seuil</strong> (LSL ou USL).</li>
+<li>L'arbre va clairement <strong>du général (besoin) au spécifique (CTS chiffré)</strong>.</li>
+<li>Un tiers (collègue) <strong>comprend l'arbre sans explication orale</strong>.</li>
+<li><strong>Temps conseillé :</strong> 25 min.</li>
+</ul>
+<p><strong>Exercice 2 (bonus) — Plan de collecte VoC</strong></p>
+<ol>
+<li>Listez vos <strong>segments de clients</strong> (économique / descriptif / habitudes) et <strong>priorisez</strong> celui à écouter en premier.</li>
+<li>Choisissez <strong>l'outil de collecte adapté</strong> parmi les 4 (entretien, groupe d'écoute, enquête, étude interne) en justifiant le choix par le coût et l'objectif.</li>
+<li>Rédigez <strong>3 questions</strong> respectant les 3 fondamentaux du sondage (bonnes questions, sans ambiguïté, exploitables).</li>
+</ol>
+<ul>
+<li><strong>Livrable attendu :</strong> une mini-fiche « plan de collecte VoC » (segment ciblé + outil + 3 questions).</li>
+<li><strong>Critères de réussite :</strong> le choix de l'outil est <strong>justifié</strong>, les questions sont <strong>non ambiguës</strong> et <strong>interprétables</strong>.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li>La <strong>VoC = expression des exigences et attentes du client</strong> ; elle peut être <strong>spécifique</strong> ou <strong>vague</strong> : votre travail est de la <strong>rendre mesurable</strong>.</li>
+<li><strong>Comparez toujours VoC vs VoP</strong> : l'écart entre les deux <strong>est</strong> le problème à traiter (phase <strong>Define</strong>).</li>
+<li><strong>Considérez tous les clients</strong> : internes, externes, parties prenantes, sans oublier <strong>VoB</strong> (business) et <strong>VoE</strong> (employés).</li>
+<li><strong>4 outils clés</strong> pour collecter la VoC : <strong>entretiens, groupes d'écoute, enquêtes, études internes</strong> — les techniques lourdes (segmentation complète, enquêtes) s'utilisent <strong>avec parcimonie</strong>.</li>
+<li><strong>CTS = caractéristiques mesurables</strong> dont les <strong>limites de spécification</strong> doivent être respectées pour satisfaire le client ; un bon CTS décrit <strong>le « quoi », pas le « comment »</strong>.</li>
+<li><strong>L'arbre des CTS</strong> traduit le besoin <strong>du général au spécifique, de l'impression au mesurable</strong> : Besoin → Critère qualité → <strong>CTS (caractéristique + méthode de mesure + seuil LSL/USL)</strong>.</li>
+<li><strong>Ne supposez jamais</strong> ce que veut le client : <strong>demandez-lui</strong> et <strong>intégrez un représentant client</strong> dans l'équipe.</li>
+<li><strong>Cherchez les CTS communs</strong> à plusieurs exigences et <strong>concentrez-y les efforts</strong> d'amélioration.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Que signifie l'acronyme <strong>VoC</strong> et qu'exprime-t-il ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Value of Customer — la valeur financière du client</button><button type="button" class="opt" data-key="b"><b>b)</b> Voice of Customer — l'expression des exigences et attentes du client</button><button type="button" class="opt" data-key="c"><b>c)</b> Variation of Control — la variation pilotée du processus</button><button type="button" class="opt" data-key="d"><b>d)</b> Verification of Compliance — la conformité réglementaire</button></div><div class="q-exp" hidden>VoC = <em>Voice of Customer</em>, l'expression des exigences et des attentes du client sur un produit, un processus et/ou un service.</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert la comparaison <strong>VoC vs VoP</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À fixer le prix de vente</button><button type="button" class="opt" data-key="b"><b>b)</b> À identifier l'écart (le problème) entre attentes client et performance du processus</button><button type="button" class="opt" data-key="c"><b>c)</b> À recruter un représentant client</button><button type="button" class="opt" data-key="d"><b>d)</b> À supprimer les clients internes</button></div><div class="q-exp" hidden>En clarifiant VoC vs VoP, on <strong>adresse l'écart (le problème)</strong> par rapport aux exigences clients ; c'est la première étape (phase Define).</div></li><li class="q" data-correct="a"><div class="q-text">Quels sont les <strong>4 outils clés</strong> de collecte de la VoC ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Entretiens, groupes d'écoute, enquêtes, études internes</button><button type="button" class="opt" data-key="b"><b>b)</b> SIPOC, Pareto, Ishikawa, Kano</button><button type="button" class="opt" data-key="c"><b>c)</b> Audit, réclamation, garantie, plainte</button><button type="button" class="opt" data-key="d"><b>d)</b> LSL, USL, DPMO, sigma</button></div><div class="q-exp" hidden>Les 4 outils VoC clés sont : <strong>entretiens clients, groupes d'écoute clients, enquêtes clients, études internes</strong>.</div></li><li class="q" data-correct="c"><div class="q-text">Un bon <strong>CTS</strong> doit avant tout être…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vague et global pour couvrir un maximum de cas</button><button type="button" class="opt" data-key="b"><b>b)</b> Décrit en termes de « comment » (solution technique)</button><button type="button" class="opt" data-key="c"><b>c)</b> Spécifique, mesurable, non ambigu et décrire le « quoi »</button><button type="button" class="opt" data-key="d"><b>d)</b> Identique pour tous les clients</button></div><div class="q-exp" hidden>Un bon CTS est <strong>spécifique et mesurable</strong>, lié à une caractéristique, complet et non ambigu, et <strong>décrit le « quoi » et non le « comment »</strong>.</div></li><li class="q" data-correct="b"><div class="q-text">Dans l'exemple du <strong>call-center</strong>, le seuil « <strong>moins de 30 secondes</strong> avant mise en contact avec un technicien » est…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Un LSL (limite basse)</button><button type="button" class="opt" data-key="b"><b>b)</b> Un USL (limite haute)</button><button type="button" class="opt" data-key="c"><b>c)</b> Un DPMO</button><button type="button" class="opt" data-key="d"><b>d)</b> Un besoin générique non mesurable</button></div><div class="q-exp" hidden>C'est un <strong>USL</strong> (limite haute) : le temps d'attente ne doit <strong>pas dépasser</strong> 30 secondes.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux</strong> : on peut supposer ce que veut le client sans le lui demander, du moment qu'on a de l'expérience métier.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden><em>« Ne partez pas du principe que vous savez ce que le client veut : demandez-le-lui »</em> et ayez un représentant du client dans votre équipe.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <strong>14. VoC.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/12bcflin4OZ48c7WBaClZ9ab93xoOuyls/view">Ouvrir dans Drive</a></li>
+<li>📄 <strong>14. VoC and CTS Fiche Outil.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1vHowUvvjWyRBqoIIhu2uVD9YgoyROC8i/view">Ouvrir dans Drive</a></li>
+<li>📄 <strong>15. L'arbre des CTS (Critical To Satisfaction).pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/109tbsoSPZ0bC-jUrfnukk8VU1y447Ed7/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="10-dmaic.html"><small>← Module précédent</small>10 · La démarche DMAIC</a><a class="nx" href="12-sipoc.html"><small>Module suivant →</small>12 · Le SIPOC</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

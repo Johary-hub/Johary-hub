@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 12 — Le SIPOC — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="11-voc-cts.html">← Préc.</a><a href="13-types-de-donnees.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link active" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="12-sipoc">Marquer ce module comme terminé</button></div><h1>Module 12 — Le SIPOC</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
+⏱️ Durée estimée : 40 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Définir</strong> ce qu'est un SIPOC et nommer ses cinq composants (Suppliers, Inputs, Process, Outputs, Customers).
+- <strong>Expliquer</strong> à quoi sert le SIPOC : cadrer le <em>scope</em> d'un projet et passer du problème au processus à améliorer.
+- <strong>Cartographier</strong> un processus de bout en bout en suivant l'ordre de construction <strong>P – O – C – I – S</strong>.
+- <strong>Distinguer</strong> les mesures <strong>influentes</strong> des mesures <strong>influencées</strong> et privilégier les bonnes.
+- <strong>Construire</strong> un SIPOC complet pour un processus réel de votre propre terrain.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 0 — Démarrage (avoir choisi son <strong>terrain d'application</strong>).</li>
+<li>Notions de <strong>VOC</strong> (Voix du Client) et de <strong>CTQ</strong> (Critical To Quality) vues en séquence 3.</li>
+<li>Connaître la place du SIPOC dans le <strong>DMAIC</strong>, en phase <strong>Define</strong>.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 760 180" role="img" class="svg-anim"><rect x="12" y="46" width="126" height="96" rx="9" fill="#2563eb" class="seg"/><text x="75" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">S</text><text x="75" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Suppliers</text><text x="75" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Fournisseurs</text><text x="149" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="160" y="46" width="126" height="96" rx="9" fill="#0d9488" class="seg"/><text x="223" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">I</text><text x="223" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Inputs</text><text x="223" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Entrées</text><text x="297" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="308" y="46" width="126" height="96" rx="9" fill="#f6b400" class="seg"/><text x="371" y="86" text-anchor="middle" fill="#3a3320" font-size="32" font-weight="800">P</text><text x="371" y="108" text-anchor="middle" fill="#3a3320" font-size="12.5" font-weight="600">Process</text><text x="371" y="126" text-anchor="middle" fill="#3a3320" font-size="11" opacity="0.92">Processus</text><text x="445" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="456" y="46" width="126" height="96" rx="9" fill="#16a34a" class="seg"/><text x="519" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">O</text><text x="519" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Outputs</text><text x="519" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Sorties</text><text x="593" y="100" text-anchor="middle" fill="#9aa3b0" font-size="22" font-weight="700">›</text><rect x="604" y="46" width="126" height="96" rx="9" fill="#7c3aed" class="seg"/><text x="667" y="86" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">C</text><text x="667" y="108" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Customers</text><text x="667" y="126" text-anchor="middle" fill="#fff" font-size="11" opacity="0.92">Clients</text></svg><figcaption>Le SIPOC : Fournisseurs → Entrées → Processus → Sorties → Clients — la vue d'ensemble d'un processus.</figcaption></figure>
+
+<h3>1. Qu'est-ce que le SIPOC ?</h3>
+<p><strong>SIPOC</strong> est l'acronyme de <strong>S</strong>uppliers — <strong>I</strong>nputs — <strong>P</strong>rocess — <strong>O</strong>utputs — <strong>C</strong>ustomers
+(<em>Fournisseurs — Entrées — Processus — Sorties — Clients</em>).</p>
+<p>C'est une <strong>visualisation macro</strong> (cartographie de haut niveau) des flux principaux d'un processus,
+parcourus <strong>de vos Clients jusqu'à vos Fournisseurs</strong>. Le SIPOC sert à identifier :
+- <strong>Les limites du processus à améliorer</strong> (le <em>scope</em>) ;
+- <strong>Les acteurs / parties prenantes principaux</strong> en amont et en aval du processus ;
+- <strong>Les informations, produits et services clés</strong>, entrant et sortant.</p>
+<p>Une formule simple pour mémoriser la logique de lecture :</p>
+<blockquote>
+<p><em>De quel </em><em>process</em><em> parle-t-on, qu'est-ce qu'il en </em><em>sort</em><em> (Outputs), et à </em><em>qui</em><em> ça sert (Customers),
+de quoi a-t-il </em><em>besoin</em><em> pour fonctionner (Inputs), et </em><em>qui</em><em> va le lui donner (Suppliers) ?</em></p>
+</blockquote>
+<h3>2. Pourquoi est-ce important ?</h3>
+<p>Le SIPOC est <strong>essentiel pour définir le <em>scope</em> du projet</strong>. Il fait le pont entre la description
+du/des <strong>problème(s)</strong> et l'<strong>identification du processus</strong> à améliorer.</p>
+<p>Concrètement, une cartographie de haut niveau de type SIPOC :
+- <strong>aide à visualiser la VOC</strong> (Voix du Client) et à <strong>réaliser les relations entre les <em>outputs<em> et les
+  </em>inputs</em></strong> du processus ;
+- en s'appuyant sur les <strong>CTQ</strong>, <strong>sert à traduire les exigences clients en spécifications / données de
+  sorties</strong>, et à identifier les CTQ qui s'y rapportent ;
+- <strong>identifie</strong>, depuis les étapes <strong>en amont</strong> du processus les plus impactantes, <strong>jusqu'aux extrants</strong> ;
+- pousse à <strong>utiliser des mesures influentes plutôt que des mesures influencées</strong>, et à <strong>éliminer ou
+  réduire les influences</strong> (voir section 5).</p>
+<blockquote>
+<p><strong>Quand crée-t-on le SIPOC ?</strong> Lorsque les <strong>CTQ ont été identifiées</strong>, un SIPOC peut alors être créé.
+Il s'inscrit logiquement après la VOC/CTQ et avant la cartographie détaillée du processus.</p>
+</blockquote>
+<h3>3. Les cinq composants — définitions</h3>
+<p>Chaque lettre correspond à une colonne du SIPOC. Les définitions Progress Partners sont les suivantes :</p>
+<table>
+<thead>
+<tr>
+<th>Lettre</th>
+<th>Composant</th>
+<th>Définition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong></td>
+<td><strong>Suppliers — Fournisseurs</strong></td>
+<td><strong>Tous les fournisseurs</strong> du processus, à la fois <strong>internes et externes</strong>.</td>
+</tr>
+<tr>
+<td><strong>I</strong></td>
+<td><strong>Inputs — Intrants / Entrées</strong></td>
+<td><strong>Toutes les entrées</strong> du processus : matériels, formulaires, informations, etc.</td>
+</tr>
+<tr>
+<td><strong>P</strong></td>
+<td><strong>Process — Processus</strong></td>
+<td><strong>Un encadré représentant le processus entier</strong> (vue macro, pas le détail des tâches).</td>
+</tr>
+<tr>
+<td><strong>O</strong></td>
+<td><strong>Outputs — Extrants / Sorties</strong></td>
+<td><strong>Toutes les sorties</strong> destinées aux clients internes et externes (produits, services, données…).</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>Customers — Clients</strong></td>
+<td><strong>Tous les clients</strong> du processus, à la fois <strong>internes et externes</strong>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🧩 <strong>Astuce mémo :</strong> le SIPOC se <strong>lit</strong> de gauche à droite (S → I → P → O → C), mais il se
+<strong>construit</strong> de l'intérieur vers l'extérieur, en partant du Process et du Client (voir section 4).</p>
+</blockquote>
+<h3>4. Comment construire un SIPOC — étape par étape</h3>
+<p>Le SIPOC est une <strong>technique rapide de cartographie à haut niveau</strong> des processus, basée sur une
+<strong>méthodologie simple et rigoureuse</strong>. L'équipe construit le SIPOC en suivant un <strong>ordre bien précis</strong> :
+on <strong>détaille les colonnes dans l'ordre P – O – C – I – S</strong> (et non de gauche à droite).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Étape</th>
+<th>Question à se poser</th>
+<th>Colonne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Définir le but du processus</strong></td>
+<td>À quoi sert ce processus ?</td>
+<td>(cadrage)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Définir clairement l'étendue (scope)</strong></td>
+<td>Où commence et où finit le projet ? <strong>Début / Fin</strong></td>
+<td>Frontières du <strong>P</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Identifier les principaux extrants</strong></td>
+<td>« Que <strong>produit</strong> ce processus ? » (produits, services, <strong>toute la valeur ajoutée</strong> nécessaire au client interne ou externe)</td>
+<td><strong>O</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Identifier qui réceptionne les extrants</strong></td>
+<td>Qui sont les <strong>clients</strong> (internes ou externes) ?</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Identifier les CTQ</strong></td>
+<td>Quelles sont les exigences <strong>mesurables et validées par le client</strong> ?</td>
+<td><strong>O / C</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Identifier les principales données d'entrée</strong></td>
+<td>De quoi le processus a-t-il <strong>besoin</strong> pour fonctionner ?</td>
+<td><strong>I</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Identifier les fournisseurs</strong> de chaque intrant</td>
+<td><strong>Qui fournit</strong> chaque entrée ?</td>
+<td><strong>S</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Définir les grandes lignes du processus</strong></td>
+<td>Quelles sont les étapes ? <strong>Maximum de 5 à 10 étapes</strong></td>
+<td><strong>P</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Points de vigilance issus du support :
+- Le <strong>Process</strong> reste <strong>macro</strong> : on vise <strong>5 à 10 étapes maximum</strong>. Si vous en avez plus, vous faites
+  déjà une cartographie détaillée, ce qui n'est pas l'objet du SIPOC.
+- Les <strong>CTQ</strong> doivent être <strong>mesurables et validés client</strong> : ce sont eux qui relient les <em>outputs</em> aux
+  exigences réelles.
+- Bien <strong>poser les frontières</strong> (Frontière <em>Début du processus</em> / Frontière <em>Fin du processus</em>) avant tout :
+  c'est ce qui fixe le <em>scope</em> et évite de « déborder ».</p>
+<h4>Représentation graphique (à reconstituer)</h4>
+<p>Le support présente un <strong>schéma graphique de haut niveau</strong> (non transcriptible intégralement ici) :
+cinq colonnes alignées <strong>S | I | P | O | C</strong>, avec, au centre, l'encadré <strong>Processus</strong> délimité par deux
+frontières verticales — <strong>« début »</strong> à gauche et <strong>« fin »</strong> à droite. Les flèches « Exigences,
+spécifications et informations » circulent <strong>de la droite (Client) vers la gauche (Fournisseur)</strong>, ce qui
+illustre la lecture « du client vers le fournisseur ».
+👉 Schéma original à consulter dans : <em>16. Le SIPOC.pdf</em> (lien en sources).</p>
+<h3>5. Mesures influentes vs mesures influencées</h3>
+<p>Le SIPOC invite à choisir les <strong>bonnes mesures</strong> sur les entrées et les sorties. Le support distingue :</p>
+<ul>
+<li><strong>Mesures influentes</strong> — elles <strong>donnent les besoins en ajustements <em>avant</em> les faits</strong>.</li>
+<li>On <strong>évalue les entrées</strong> et on <strong>ajuste le flot d'exécution</strong> du processus pour obtenir des résultats
+    conformes au modèle d'évaluation.</li>
+<li>Elles permettent de <strong>comprendre les facteurs qui font varier la performance</strong>.</li>
+<li><strong>Mesures influencées</strong> — elles <strong>donnent de l'information sur la performance</strong> du processus et les
+  <strong>besoins en ajustements <em>après</em> les faits</strong>.</li>
+<li><strong>Certaines</strong> mesures influencées renvoient l'information <strong>immédiatement</strong> : elles rendent <strong>peu
+    probable</strong> la création d'un service hors contrôle.
+    ✓ <em>Évaluer les résultats d'une étape du processus et transmettre l'information en amont.</em></li>
+<li><strong>D'autres</strong> mesures influencées <strong>prennent tellement de temps</strong> à retourner l'information que la
+    <strong>prise de décision est trop longue ou indéfinissable</strong> → cela <strong>ouvre la porte à un service
+    inconstant</strong>.
+    ✓ <em>Évaluer les résultats par les sorties du processus et retourner l'information en amont.</em></li>
+</ul>
+<blockquote>
+<p>👉 <strong>Règle pratique :</strong> privilégier les <strong>mesures influentes</strong> (agir <em>avant</em>), et lorsqu'on utilise des
+mesures influencées, préférer celles qui <strong>renvoient l'information vite</strong>. <strong>Tenter d'éliminer ou de
+réduire les influences.</strong></p>
+</blockquote>
+<h3>6. Le template SIPOC (ordre des colonnes)</h3>
+<p>Le <strong>Template SIPOC</strong> matérialise l'ordre de construction directement dans l'en-tête du tableau. Les
+numéros indiquent <strong>dans quel ordre remplir</strong> :</p>
+<table>
+<thead>
+<tr>
+<th><strong>6.</strong> Suppliers of the inputs (Fournisseurs)</th>
+<th><strong>5.</strong> Input (Entrées)</th>
+<th><strong>1.</strong> Process (Processus)</th>
+<th><strong>2.</strong> Output (Sorties)</th>
+<th><strong>3.</strong> Customer of the Process (Client)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>7.</strong> Requirements from Process <em>(exigences du processus envers ses fournisseurs/entrées)</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>4.</strong> Expectation regarding output <em>(attentes vis-à-vis des sorties)</em></td>
+</tr>
+</tbody>
+</table>
+<p>Lecture du template :
+- On commence par <strong>(1) le Process</strong>, puis <strong>(2) les Outputs</strong>, <strong>(3) le Customer</strong>, <strong>(4) ses attentes</strong>
+  vis-à-vis des sorties, <strong>(5) les Inputs</strong>, <strong>(6) les Suppliers</strong> et enfin <strong>(7) les exigences</strong> du
+  processus envers ses entrées/fournisseurs.
+- Cet ordre <strong>1 → 7</strong> est la traduction concrète de la logique <strong>P – O – C – I – S</strong> de la section 4.</p>
+<p>👉 Template vierge à télécharger : <em>16. Template SIPOC.pdf</em> (lien en sources).</p>
+<h3>7. Exemple complet — SIPOC industriel (vaccin grippe / WHO)</h3>
+<p>Le support fournit un <strong>exemple réel et complet</strong> : le SIPOC industriel de la <strong>préparation d'un vaccin
+antigrippal</strong> (référence <em>« WHO — SIPOC Industrial - TTM2 (Preparation) »</em>, OMS = <em>World Health
+Organization</em>). Cet exemple suit une <strong>chaîne de processus</strong> (chaque ligne = une étape macro), du <em>Strain
+yield estimation</em> jusqu'à la <em>Release</em> (libération). Voici les lignes principales reconstituées dans
+l'ordre <strong>Fournisseurs → Entrées → Processus → Sorties → Clients</strong>, avec les exigences associées :</p>
+<table>
+<thead>
+<tr>
+<th>Process (étape)</th>
+<th>Suppliers (Fournisseurs)</th>
+<th>Inputs (Entrées)</th>
+<th>Outputs (Sorties)</th>
+<th>Customers (Clients)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strain yield estimation</strong> (estimation du rendement de souche)</td>
+<td>WHO Collaborative Center · IO Flu Franchise · Suppliers SPF Eggs (œufs <em>Specified Pathogen Free</em>) · Factory</td>
+<td>Candidate Virus Vaccine (nom, paramètres de souche) · Strain Priorities · Recommandations MTECH · Certificat d'analyse par lot · Capacités industrielles dédiées (Flu Zone)</td>
+<td><strong>Working seed lot</strong> (lot de semence de travail)</td>
+<td>Antigen Manufacturing &amp; QC · QA Batch release (interne) · Regulatory Affairs</td>
+</tr>
+<tr>
+<td><strong>Antigen Manufacturing</strong> (fabrication de l'antigène)</td>
+<td>Seed Manufacturing &amp; QC · Suppliers Eggs · Supply Chain &amp; Finance · Factory</td>
+<td>Working seed lot conforme aux <em>WHO Reco</em> · Paramètres de culture de semence · Certificat d'analyse par lot · Capacités industrielles</td>
+<td><strong>Monovalent Bulk</strong> (vrac monovalent) · Rendements biologiques estimés ⇒ durée de campagne</td>
+<td>Blending &amp; Formulation · QA Batch release · Regulatory Affairs</td>
+</tr>
+<tr>
+<td><strong>Blending &amp; Formulation</strong> (mélange &amp; formulation)</td>
+<td>Antigen Manufacturing &amp; QC · Supply Chain (planning) · Factory</td>
+<td>Conformité des tests critiques (Inactivation, stérilité…) · Titre de puissance (SRD) connu · Certificat d'analyse par lot · Séquence optimisée des souches (TTM le plus bas)</td>
+<td><strong>Final Bulk Product</strong> (vrac final) · Titre pour formulation disponible</td>
+<td>Filling &amp; Visual Inspection + QC · QA Batch release · Regulatory Affairs</td>
+</tr>
+<tr>
+<td><strong>Filling &amp; Visual Inspection</strong> (remplissage &amp; inspection visuelle)</td>
+<td>Suppliers Syringes/Vials/Cappers (seringues, flacons, bouchons) · Supply Chain (planning) · Factory</td>
+<td>Final Bulk conforme aux spécifications internes · Échantillons d'antigène en qté, à temps &amp; documentation requise · Certificat d'analyse par lot · Capacités industrielles</td>
+<td><strong>Filled product</strong> (produit rempli)</td>
+<td>Packaging · QA Batch release · Health Authority (ex. ANSM pour Vaxigrip) · CBER / COFEPRIS</td>
+</tr>
+<tr>
+<td><strong>Packaging</strong> (conditionnement)</td>
+<td>Suppliers Samples · Regulatory Affairs + équipe réglementaire locale + équipe packaging · Supply Chain (planning) · Factory</td>
+<td>Produit rempli conforme · Artworks (BAT) validés · Éléments de conditionnement · Capacités industrielles</td>
+<td><strong>Finished product</strong> (produit fini)</td>
+<td>Distribution Center · Health Authority — ANSM / CBER / COFEPRIS · Batch release / Quality Dept</td>
+</tr>
+<tr>
+<td><strong>Release</strong> (libération)</td>
+<td>Packaging · Batch release Quality Dept</td>
+<td>Produit fini conforme aux spécifications · Batch Record · Toutes déviations critiques &amp; CCR analysées</td>
+<td>Produits <strong>expédiés/libérés</strong> ou <strong>sous quarantaine</strong> · Certificat de conformité · Engagement de date (FFP)</td>
+<td>Distribution Center</td>
+</tr>
+</tbody>
+</table>
+<p>Exemples d'<strong>exigences (Requirements / Expectations)</strong> relevées dans le support :
+- côté <strong>entrées/fournisseurs</strong> : <em>« Working seed lot en conformité avec la WHO Reco »</em>, <em>« paramètres
+  critiques OK (statut de stérilité…) »</em>, <em>« conforme aux spécifications du dossier réglementaire (Core
+  Dossier) »</em>, <em>« capacité précise au regard de la demande &amp; du </em>timing<em> »</em>, <em>« toutes les déviations
+  critiques &amp; CCR analysées »</em> ;
+- côté <strong>sorties/clients</strong> : <em>« conformité aux spécifications »</em>, <em>« conformité des tests critiques du
+  produit »</em>, <em>« titre (SRD) connu »</em>, <em>« planification la plus précise possible »</em>.</p>
+<blockquote>
+<p>ℹ️ <strong>Remarque de lecture.</strong> Le fichier d'exemple est rédigé en <strong>anglais</strong> et son contenu d'origine est
+en <strong>mise en page tabulaire dense</strong> (la numérotation 1→7 des colonnes correspond à l'ordre de
+construction P-O-C-I-S). Le tableau ci-dessus en est une <strong>reconstitution synthétique fidèle</strong> ; pour la
+matrice complète, ligne par ligne, <strong>consulter l'original</strong> : <em>16. Exemple SIPOC.pdf</em> (lien en sources).</p>
+</blockquote>
+<h3>8. Mini-exemple didactique (pour s'entraîner)</h3>
+<p>Pour bien saisir la mécanique avant l'industriel, voici un exemple <strong>simple</strong> (à titre pédagogique) sur un
+processus de bureau : <strong>« Traiter une commande client »</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>S — Fournisseurs</th>
+<th>I — Entrées</th>
+<th>P — Processus (5–7 étapes)</th>
+<th>O — Sorties</th>
+<th>C — Clients</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Client · Service commercial · Magasin · ERP</td>
+<td>Bon de commande · Référence produit · Stock disponible · Conditions de prix</td>
+<td>1. Recevoir la commande → 2. Vérifier le stock → 3. Confirmer au client → 4. Préparer le colis → 5. Expédier → 6. Facturer</td>
+<td>Commande confirmée · Colis expédié · Facture · Accusé de livraison</td>
+<td>Client final · Comptabilité · Transporteur</td>
+</tr>
+</tbody>
+</table>
+<p>CTQ associés (exigences mesurables, validées client) : <em>délai de confirmation ≤ 2 h</em>, <em>commande complète
+et conforme</em>, <em>facture exacte</em>. Frontières : <strong>début</strong> = réception de la commande ; <strong>fin</strong> = émission de
+la facture.</p>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fiche Outil — SIPOC</strong></td>
+<td>Rappel synthétique : définition, composants, intérêt, étapes de construction (P-O-C-I-S)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1bNDsAQYTJRXm06-zQgVSyqxnOXh24Ih7/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Exemple SIPOC</strong> (industriel vaccin grippe / WHO)</td>
+<td>Modèle complet rempli, ligne par ligne, pour s'inspirer d'un cas réel</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1HctCe5GZtp7g2w7YNjtuvUO828ieN613/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Template SIPOC</strong> (matrice vierge numérotée 1→7)</td>
+<td>Trame à remplir, avec l'ordre de construction intégré dans l'en-tête</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1hJOUm0E8t4o9lxKByzM_TNHMavBqyF5v/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Support de cours — Le SIPOC</strong></td>
+<td>Diaporama source complet (schémas, frontières, mesures influentes/influencées)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1jlxB-L23Uimq0JbLDDBege2TOG5Mp6Bt/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice — Construire le SIPOC de mon processus réel</strong>
+Repartez du <strong>terrain d'application</strong> choisi au <strong>Module 0</strong> (votre processus, poste ou zone réel).
+1. <strong>Nommez le processus</strong> et <strong>fixez ses frontières</strong> : une phrase pour le <em>début</em>, une phrase pour la
+   <em>fin</em> (le <em>scope</em>).
+2. Suivez l'<strong>ordre de construction P – O – C – I – S</strong> :
+   - <strong>P</strong> : listez <strong>5 à 10 étapes</strong> macro du processus (pas plus).
+   - <strong>O</strong> : listez les <strong>sorties</strong> (« Que produit ce processus ? » — produits, services, données…).
+   - <strong>C</strong> : listez les <strong>clients</strong> (internes et externes) qui reçoivent ces sorties.
+   - Pour chaque sortie/client, notez <strong>1 à 3 CTQ</strong> (exigences <strong>mesurables et validées client</strong>).
+   - <strong>I</strong> : listez les <strong>entrées</strong> nécessaires (matériels, infos, formulaires…).
+   - <strong>S</strong> : pour chaque entrée, indiquez le <strong>fournisseur</strong> (interne ou externe).
+3. Remplissez le tableau ci-dessous (ou la matrice numérotée du <strong>Template SIPOC</strong>).
+4. <strong>Repérez les mesures</strong> : pour 2 entrées et 2 sorties, indiquez si votre mesure actuelle est
+   <strong>influente</strong> ou <strong>influencée</strong>, et notez une idée pour la rendre plus <strong>influente</strong> (agir <em>avant</em>).</p>
+<p><strong>Tableau SIPOC à remplir (livrable) :</strong></p>
+<table>
+<thead>
+<tr>
+<th>S — Fournisseurs</th>
+<th>I — Entrées</th>
+<th>P — Processus (5–10 étapes)</th>
+<th>O — Sorties</th>
+<th>C — Clients</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>1. …<br>2. …<br>3. …<br>4. …<br>5. …</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>CTQ (exigences mesurables, validées client)</th>
+<th>Sortie / Client concerné</th>
+<th>Type de mesure (influente / influencée)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Livrable attendu :</strong> <strong>un tableau SIPOC rempli</strong> (les 5 colonnes + au moins 3 CTQ) pour votre
+  processus, avec ses <strong>frontières début/fin</strong> explicitées.</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>le <strong>scope</strong> est clair (frontières début et fin écrites) ;</li>
+<li>le <strong>Process</strong> tient en <strong>5 à 10 étapes</strong> macro ;</li>
+<li>chaque <strong>Input</strong> a au moins <strong>un Supplier</strong> identifié ; chaque <strong>Output</strong> a au moins <strong>un Customer</strong> ;</li>
+<li>au moins <strong>3 CTQ mesurables et validés client</strong> sont reliés aux sorties ;</li>
+<li>vous avez classé au moins <strong>4 mesures</strong> en <em>influente</em> / <em>influencée</em> et proposé <strong>une amélioration</strong>.</li>
+<li><strong>Temps conseillé :</strong> 25 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>SIPOC = Suppliers · Inputs · Process · Outputs · Customers</strong> : une <strong>cartographie macro</strong> des flux.</li>
+<li>On le <strong>lit</strong> de gauche à droite, mais on le <strong>construit</strong> dans l'ordre <strong>P – O – C – I – S</strong> (1 → 7).</li>
+<li>Sa première mission : <strong>cadrer le <em>scope</em></strong> et passer du <strong>problème</strong> au <strong>processus à améliorer</strong>.</li>
+<li>On le crée <strong>une fois les CTQ identifiées</strong> ; il <strong>traduit les exigences client</strong> en sorties/CTQ.</li>
+<li>Le <strong>Process</strong> reste macro : <strong>5 à 10 étapes maximum</strong>.</li>
+<li>Toujours <strong>poser les frontières</strong> (début / fin) avant de remplir.</li>
+<li>Privilégier les <strong>mesures influentes</strong> (agir <em>avant</em> les faits) ; réduire/éliminer les influences.</li>
+<li><strong>Internes ET externes</strong> : fournisseurs comme clients incluent les deux.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="a"><div class="q-text">Que signifie l'acronyme <strong>SIPOC</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Suppliers, Inputs, Process, Outputs, Customers</button><button type="button" class="opt" data-key="b"><b>b)</b> Standard, Inspection, Process, Output, Control</button><button type="button" class="opt" data-key="c"><b>c)</b> Suppliers, Information, Production, Order, Customers</button></div><div class="q-exp" hidden>Suppliers, Inputs, Process, Outputs, Customers (Fournisseurs, Entrées, Processus, Sorties, Clients).</div></li><li class="q" data-correct="b"><div class="q-text">Dans quel <strong>ordre</strong> construit-on les colonnes d'un SIPOC ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> S → I → P → O → C</button><button type="button" class="opt" data-key="b"><b>b)</b> P → O → C → I → S</button><button type="button" class="opt" data-key="c"><b>c)</b> C → O → P → I → S</button></div><div class="q-exp" hidden>on détaille dans l'ordre <strong>P – O – C – I – S</strong> (numérotation 1→7 du template), même si on le lit S→C.</div></li><li class="q" data-correct="c"><div class="q-text">À quoi sert <strong>principalement</strong> le SIPOC ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À détailler chaque tâche élémentaire du processus</button><button type="button" class="opt" data-key="b"><b>b)</b> À calculer le niveau sigma</button><button type="button" class="opt" data-key="c"><b>c)</b> À <strong>cadrer le <em>scope</em></strong> et identifier le processus à améliorer</button></div><div class="q-exp" hidden>sa raison d'être est de <strong>définir le <em>scope</em></strong> et de passer du problème au processus à améliorer.</div></li><li class="q" data-correct="a"><div class="q-text">Combien d'étapes <strong>maximum</strong> pour la colonne Process ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 5 à 10</button><button type="button" class="opt" data-key="b"><b>b)</b> 15 à 20</button><button type="button" class="opt" data-key="c"><b>c)</b> autant que nécessaire</button></div><div class="q-exp" hidden>la colonne Process reste <strong>macro : 5 à 10 étapes maximum</strong>.</div></li><li class="q" data-correct="a"><div class="q-text">Une <strong>mesure influente</strong> se caractérise par :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Elle donne les besoins d'ajustement <strong>avant</strong> les faits</button><button type="button" class="opt" data-key="b"><b>b)</b> Elle informe sur la performance <strong>après</strong> les faits</button><button type="button" class="opt" data-key="c"><b>c)</b> Elle ne sert qu'à la documentation</button></div><div class="q-exp" hidden>la mesure <strong>influente</strong> donne les besoins d'ajustement <strong>avant</strong> les faits (la mesure <em>influencée</em> informe <em>après</em>).</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux ?</strong> Le SIPOC ne prend en compte que les fournisseurs et clients <strong>externes</strong>.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Faux : fournisseurs <strong>et</strong> clients sont à la fois <strong>internes et externes</strong>.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>16. Le SIPOC.pdf</em> (support de cours — <strong>fichier volumineux, contenu source tronqué</strong> : le diaporama
+  se termine sur l'étape « identifier les fournisseurs / définir le processus » sans page de clôture) —
+  <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1jlxB-L23Uimq0JbLDDBege2TOG5Mp6Bt/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>16. Exemple SIPOC.pdf</em> (cas industriel vaccin grippe / WHO) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1HctCe5GZtp7g2w7YNjtuvUO828ieN613/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>16. SIPOC Fiche Outil.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1bNDsAQYTJRXm06-zQgVSyqxnOXh24Ih7/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>16. Template SIPOC.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1hJOUm0E8t4o9lxKByzM_TNHMavBqyF5v/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="11-voc-cts.html"><small>← Module précédent</small>11 · Voix du Client (VoC) & arbre des CTS</a><a class="nx" href="13-types-de-donnees.html"><small>Module suivant →</small>13 · Les Types de données</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

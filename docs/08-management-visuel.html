@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 8 — Le Management Visuel — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="07-5s.html">← Préc.</a><a href="09-resolution-probleme-qqoqccp-ishikawa.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link active" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="08-management-visuel">Marquer ce module comme terminé</button></div><h1>Module 8 — Le Management Visuel</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
+<p>ℹ️ <strong>Note sur les sources.</strong> Le support principal <em>« 10. Management Visuel.pdf »</em> (9,5 Mo) est un diaporama très visuel : l'extraction automatique n'a restitué que les <strong>titres de slides</strong> et la structure récurrente du Triangle d'Or, le contenu détaillé des planches et les photos n'étant pas transcriptibles. <strong>Ce fichier est donc tronqué côté texte.</strong> Ce module reconstitue le déroulé complet à partir de cette structure, du contenu intégral de la fiche outil <em>« Le Triangle d'Or du Management Visuel »</em> et du socle Lean Six Sigma Yellow Belt. Les planches illustrées (photos d'ateliers, marquages, tableaux) sont <strong>décrites</strong> puis renvoyées au fichier source Drive.</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Définir</strong> le management visuel et expliquer en quoi il consiste (« gérer par la vue »).
+- <strong>Justifier</strong> son utilisation : à quoi il sert pour l'équipe, le manager et le pilotage.
+- <strong>Décrire le Triangle d'Or</strong> du management visuel (standard opératoire / standard de management / management visuel) et l'utiliser comme grille de cohérence.
+- <strong>Identifier les points clés</strong> d'un bon dispositif visuel (au sol, sur poste, sur tableau, sur les données).
+- <strong>Concevoir</strong> un affichage ou un dispositif de management visuel pour une zone ou un indicateur réel de votre terrain.
+- <strong>Évaluer</strong> un management visuel existant avec la logique « CONFIRMEZ VOTRE PROCESSUS » (standards appliqués / à jour / connus).</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Notions de base du Lean : gaspillages (<em>muda</em>), 5S, standard de travail.</li>
+<li>Familiarité avec la logique SQCDM (Sécurité, Qualité, Coût, Délai, Management/Moral) — abordée dans les modules indicateurs et résolution de problèmes.</li>
+<li>Aucun outil statistique requis.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<h3>1. Qu'appelle-t-on le Management Visuel ?</h3>
+<p>Le <strong>management visuel</strong> est la <strong>gestion par la vue</strong>. Comme son nom l'indique, c'est l'art de rendre une situation <strong>visible et compréhensible d'un seul coup d'œil</strong>.</p>
+<blockquote>
+<p><em>« Management visuel, comme son nom l'indique, c'est la gestion par la vue : rien qu'en jetant un coup d'œil autour de soi, les anomalies ou les défauts d'un tel système sont identifiés, puis intégrés dans un plan d'action pour être éradiqués. »</em> — Fiche outil Progress Partners.</p>
+</blockquote>
+<p>Trois idées clés se cachent dans cette définition :</p>
+<ol>
+<li><strong>Voir</strong> — l'information utile (état normal vs anormal, avance/retard, conforme/non conforme) est portée sur le lieu de travail, là où le travail se fait (le <em>Gemba</em>).</li>
+<li><strong>Comprendre sans expliquer</strong> — n'importe qui, même un nouveau venu, doit saisir la situation <strong>sans qu'on ait besoin de la lui commenter</strong>. Le visuel parle de lui-même.</li>
+<li><strong>Agir</strong> — détecter une anomalie n'a de valeur que si elle déclenche une <strong>réaction</strong> : l'écart repéré entre dans un <strong>plan d'action</strong> pour être traité, puis <strong>éradiqué</strong>.</li>
+</ol>
+<p>En résumé, le management visuel transforme un environnement de travail en un <strong>système qui se raconte lui-même</strong> : l'état réel y est lisible immédiatement, et tout écart au standard « saute aux yeux ».</p>
+<blockquote>
+<p>🖼️ <strong>Planche source non transcriptible.</strong> La slide <em>« Qu'appelle-t-on le Management Visuel ? »</em> illustre cette définition par des photos d'atelier (information portée sur le poste, signalisation d'état). Voir le fichier source : <code>https://drive.google.com/file/d/1ERZhSn7jZCCDOgqhL0QyfDMCBcSrcjAV/view</code>.</p>
+</blockquote>
+<h3>2. Pourquoi utiliser le Management Visuel ? (à quoi ça sert)</h3>
+<p>Le support y consacre <strong>deux planches</strong> (<em>« Pourquoi utiliser le Management Visuel ? »</em>), signe de l'importance du <em>pourquoi</em>. La fiche outil le formule ainsi : le management visuel sert à <strong>« encourager, faciliter la motivation et mobiliser vos collaborateurs, piloter le Gemba facilement par le VISUEL, favoriser le travail en équipe et l'autonomie, faire évoluer la position du manager »</strong>.</p>
+<p>On peut regrouper les bénéfices sur <strong>trois plans</strong> — qui sont aussi les trois grands axes des Systèmes de Progrès Progress Partners rappelés sur chaque planche :</p>
+<table>
+<thead>
+<tr>
+<th>Axe (Système de Progrès)</th>
+<th>Ce que le management visuel apporte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Développement des équipes</strong></td>
+<td>Mobilise et motive les collaborateurs ; favorise le <strong>travail en équipe</strong> et <strong>l'autonomie</strong> ; chacun voit sa contribution et l'état de sa zone.</td>
+</tr>
+<tr>
+<td><strong>Conduite du changement</strong></td>
+<td>Rend les écarts <strong>visibles</strong>, donc discutables ; aligne tout le monde sur le même état partagé ; soutient l'amélioration continue (l'anomalie vue → plan d'action).</td>
+</tr>
+<tr>
+<td><strong>Culture de l'excellence</strong></td>
+<td>Installe le <strong>standard</strong> comme référence visible ; rend l'anormal immédiatement détectable ; ancre le réflexe « voir → réagir → corriger ».</td>
+</tr>
+</tbody>
+</table>
+<p><strong>À quoi ça sert, concrètement :</strong></p>
+<ul>
+<li><strong>Détecter vite</strong> : l'anomalie est repérée à l'œil, sans rapport ni reporting différé.</li>
+<li><strong>Piloter le Gemba</strong> : le manager pilote la zone réelle « par le visuel », là où ça se passe.</li>
+<li><strong>Responsabiliser</strong> : chacun sait ce qui est attendu (le standard est affiché) et voit où il en est.</li>
+<li><strong>Gagner du temps</strong> : moins de questions, moins de réunions pour « savoir où on en est » ; l'information est déjà là.</li>
+<li><strong>Faire évoluer le rôle du manager</strong> : il passe du contrôleur qui collecte l'information à l'animateur qui s'appuie sur un état déjà visible par tous.</li>
+</ul>
+<h3>3. La Responsabilisation par le Management Visuel</h3>
+<p>La planche <em>« Responsabilisation par le Management Visuel »</em> met l'accent sur un effet majeur : <strong>le visuel responsabilise</strong>.</p>
+<p>Lorsque l'attendu (le <strong>standard</strong>) et le réel (l'<strong>état du moment</strong>) sont affichés côte à côte et lisibles par tous :</p>
+<ul>
+<li><strong>L'équipe</strong> devient propriétaire de sa zone et de ses résultats : elle voit, elle ajuste, elle alerte. C'est le passage à <strong>l'autonomie</strong>.</li>
+<li><strong>Le manager</strong> n'est plus le seul détenteur de l'information ; son rôle <strong>évolue</strong> vers l'animation, le coaching et le traitement des écarts remontés.</li>
+<li><strong>L'écart est dépersonnalisé</strong> : on ne pointe pas une personne, on regarde un <strong>écart au standard</strong> que l'équipe traite ensemble. Le visuel sert le <strong>fait</strong>, pas le reproche.</li>
+</ul>
+<p>C'est le ressort de la <strong>conduite du changement</strong> par le visuel : on ne change pas les gens par le discours, on change la situation en la rendant <strong>visible</strong>, et le comportement suit.</p>
+<h3>4. Le Triangle d'Or du Management Visuel</h3>
+<figure class="svg-fig"><svg viewBox="0 0 560 372" role="img" class="svg-anim"><polygon points="280,56 78,314 482,314" fill="#fff7e0" stroke="#f6b400" stroke-width="4"/><text x="280" y="222" text-anchor="middle" fill="#b45309" font-size="13" font-weight="700">L'écart au standard</text><text x="280" y="242" text-anchor="middle" fill="#b45309" font-size="13" font-weight="700">saute aux yeux → action</text><rect x="175" y="14" width="210" height="52" rx="9" fill="#0d9488" class="seg"/><text x="280" y="36" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Standard opératoire</text><text x="280" y="54" text-anchor="middle" fill="#eef2f7" font-size="11">la bonne façon de faire</text><rect x="15" y="318" width="210" height="52" rx="9" fill="#2563eb" class="seg"/><text x="120" y="340" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Standard de management</text><text x="120" y="358" text-anchor="middle" fill="#eef2f7" font-size="11">la bonne façon de piloter</text><rect x="335" y="318" width="210" height="52" rx="9" fill="#7c3aed" class="seg"/><text x="440" y="340" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Management visuel</text><text x="440" y="358" text-anchor="middle" fill="#eef2f7" font-size="11">rend l'écart visible</text><circle cx="280" cy="56" r="6" fill="#222b38"/><circle cx="78" cy="314" r="6" fill="#222b38"/><circle cx="482" cy="314" r="6" fill="#222b38"/></svg><figcaption>Le Triangle d'Or : relier standard opératoire, standard de management et management visuel pour que tout écart déclenche une action.</figcaption></figure>
+
+<p>C'est le <strong>cœur conceptuel</strong> du module. Le management visuel ne « tient » que s'il s'appuie sur des <strong>standards</strong>. Le <strong>Triangle d'Or</strong> articule trois sommets qui doivent être présents <strong>ensemble</strong> :</p>
+<pre><code>                  MANAGEMENT VISUEL
+                  (rend l'écart visible)
+                         /\
+                        /  \
+                       /    \
+                      /      \
+   STANDARD OPÉRATOIRE -------- STANDARD DE MANAGEMENT
+   (la bonne façon de faire)   (la bonne façon de piloter)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Sommet</th>
+<th>Définition</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standard opératoire</strong></td>
+<td>La <strong>bonne façon de faire</strong> le travail, formalisée et connue (mode opératoire, standard de poste).</td>
+<td>Mode opératoire de tri : « Trier les produits selon leur statut : <strong>Vert = CONFORME</strong>, <strong>Rouge = MAUVAIS</strong> ; mettre les emballages dans la poubelle blanche. »</td>
+</tr>
+<tr>
+<td><strong>Standard de management</strong></td>
+<td>La <strong>bonne façon de piloter</strong> : rituels, revues, règles d'animation et de réaction aux écarts.</td>
+<td>Revue <strong>Gemba</strong> régulière, animation devant le tableau, règle de déclenchement d'un plan d'action dès qu'un écart apparaît.</td>
+</tr>
+<tr>
+<td><strong>Management visuel</strong></td>
+<td>Le dispositif qui <strong>rend visible</strong> l'écart entre le standard et le réel, sur le terrain.</td>
+<td>Code couleur, marquage au sol, tableau d'indicateurs, signalisation d'état du poste.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pourquoi un triangle ?</strong> Parce que les trois sommets se tiennent mutuellement :
+- Sans <strong>standard opératoire</strong>, on ne sait pas ce qui est « normal » → le visuel ne peut pas signaler l'anormal.
+- Sans <strong>standard de management</strong>, l'écart est vu mais <strong>rien ne se passe</strong> → le visuel devient décoratif.
+- Sans <strong>management visuel</strong>, le standard existe sur le papier mais l'écart <strong>reste invisible</strong> → on pilote à l'aveugle.</p>
+<blockquote>
+<p>💡 Le management visuel n'est donc <strong>pas</strong> « faire de jolis tableaux ». C'est <strong>relier</strong> ce qu'on doit faire (standard opératoire), ce qu'on doit piloter (standard de management) et ce qu'on voit (visuel), pour que tout écart déclenche une action.</p>
+</blockquote>
+<h4>4.1 « CONFIRMEZ VOTRE PROCESSUS » — vérifier la solidité des standards</h4>
+<p>La fiche outil propose une logique de <strong>confirmation du processus</strong>, portée par <strong>les responsables ET le personnel</strong>. Les standards passent par trois temps :</p>
+<ul>
+<li><strong>Définition</strong> — le standard est écrit / clarifié.</li>
+<li><strong>Création</strong> — le standard est mis en place sur le terrain.</li>
+<li><strong>Amélioration</strong> — le standard est remis en question et amélioré (boucle continue).</li>
+</ul>
+<p>Et un bon standard se vérifie sur <strong>trois critères</strong> (à utiliser comme grille d'audit) :</p>
+<table>
+<thead>
+<tr>
+<th>Critère</th>
+<th>Question de contrôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standards appliqués</strong></td>
+<td>Le standard est-il réellement <strong>suivi</strong> sur le terrain, dans les faits ?</td>
+</tr>
+<tr>
+<td><strong>Standards à jour</strong></td>
+<td>Le standard reflète-t-il la <strong>réalité actuelle</strong> (dernière version, pas une feuille périmée) ?</td>
+</tr>
+<tr>
+<td><strong>Standards connus</strong></td>
+<td>Les personnes concernées <strong>connaissent-elles</strong> le standard et savent-elles où le trouver ?</td>
+</tr>
+</tbody>
+</table>
+<p>Le tout est piloté au regard de la <strong>mesure SQCDM</strong> (Sécurité, Qualité, Coût, Délai, Management/Moral) : le management visuel sert in fine à voir où l'on en est sur ces dimensions, et la <strong>Revue Gemba</strong> est le rituel d'animation qui fait vivre l'ensemble.</p>
+<blockquote>
+<p>🖼️ <strong>Schéma source.</strong> Le triangle « CONFIRMEZ VOTRE PROCESSUS » (sommets : Standards appliqués / à jour / connus, base : Mesure SQCDM) figure dans la fiche outil. Voir : <code>https://drive.google.com/file/d/1tkr4OV7e4HXqMhinZ4bmljuKDznF2bq_/view</code>.</p>
+</blockquote>
+<h3>5. Objectifs du Management Visuel</h3>
+<p>La planche <em>« Objectifs du Management Visuel »</em> fixe le « pour quoi faire ». On peut les énoncer ainsi :</p>
+<ul>
+<li><strong>Rendre la situation visible</strong> : état normal vs anormal, avance vs retard, conforme vs non conforme, d'un coup d'œil.</li>
+<li><strong>Rendre la situation pilotable</strong> : permettre de décider et de réagir <strong>immédiatement</strong> sur le terrain.</li>
+<li><strong>Faire ressortir les écarts</strong> au standard pour qu'ils déclenchent un <strong>plan d'action</strong>.</li>
+<li><strong>Responsabiliser et autonomiser</strong> l'équipe autour de sa zone et de ses indicateurs.</li>
+<li><strong>Soutenir l'amélioration continue</strong> en mesurant et en affichant les résultats (logique SQCDM).</li>
+<li><strong>Faire évoluer le rôle du manager</strong> vers l'animation et le coaching.</li>
+</ul>
+<blockquote>
+<p>🎯 <strong>Objectif synthèse du module :</strong> <em>rendre une situation visible et pilotable d'un coup d'œil grâce au management visuel et au Triangle d'Or.</em></p>
+</blockquote>
+<h3>6. Les points clés du Management Visuel</h3>
+<p>Le support y consacre <strong>trois planches</strong> (<em>« Les points clés du Management Visuel »</em>). Voici les principes à respecter pour qu'un dispositif visuel soit <strong>efficace</strong> :</p>
+<ol>
+<li><strong>Lisible d'un coup d'œil</strong> — l'information se saisit en quelques secondes, à distance utile, sans déchiffrage.</li>
+<li><strong>Standard d'abord</strong> — afficher d'abord <strong>l'attendu</strong> (le standard), puis le <strong>réel</strong>, pour que l'écart soit évident.</li>
+<li><strong>Normal / anormal immédiat</strong> — utiliser des <strong>codes couleur</strong> simples et constants (ex. <strong>Vert = conforme</strong>, <strong>Rouge = mauvais</strong>) pour distinguer instantanément l'état.</li>
+<li><strong>Au plus près du terrain</strong> — l'information est portée <strong>là où le travail se fait</strong> (sur le poste, au sol, sur la machine), pas enfermée dans un bureau.</li>
+<li><strong>Simple et épuré</strong> — un visuel surchargé ne se lit plus ; on affiche <strong>l'essentiel</strong> et on enlève le bruit.</li>
+<li><strong>À jour et tenu</strong> — un visuel faux ou périmé détruit la confiance ; il doit être <strong>actualisé</strong> et entretenu (lien direct avec « standards à jour »).</li>
+<li><strong>Orienté action</strong> — chaque écart visible doit pouvoir <strong>déclencher une réaction</strong> (plan d'action, alerte, escalade) : c'est le rôle du standard de management.</li>
+<li><strong>Partagé et approprié</strong> — construit avec et pour l'équipe, qui se l'approprie et le fait vivre.</li>
+</ol>
+<blockquote>
+<p>🖼️ <strong>Planches source non transcriptibles.</strong> Les trois slides « Les points clés » illustrent ces principes par des exemples photographiques. Voir : <code>https://drive.google.com/file/d/1ERZhSn7jZCCDOgqhL0QyfDMCBcSrcjAV/view</code>.</p>
+</blockquote>
+<h3>7. Exemples concrets de Management Visuel (galerie du support)</h3>
+<p>La dernière partie du diaporama enchaîne des <strong>exemples terrain</strong> (planches photo). Le texte des images n'étant pas transcriptible, en voici la <strong>description</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Exemple (titre de planche)</th>
+<th>Ce qu'il met en visuel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Marquage au sol</strong></td>
+<td>Délimitation des zones, allées et emplacements par des bandes au sol : chaque chose a une place visible.</td>
+</tr>
+<tr>
+<td><strong>Chemin, emplacements libres</strong></td>
+<td>Marquage des cheminements et repérage des emplacements <strong>libres / occupés</strong> d'un coup d'œil.</td>
+</tr>
+<tr>
+<td><strong>Marquage de chemins par le plafond</strong></td>
+<td>Signalisation des circulations <strong>par le plafond</strong> (utile quand le sol est encombré ou peu visible).</td>
+</tr>
+<tr>
+<td><strong>Positionnement de la presse (SMED)</strong></td>
+<td>Repères visuels pour <strong>positionner</strong> rapidement et correctement l'outil/la presse lors d'un changement de série (lien avec le <strong>SMED</strong>, réduction des temps de changement).</td>
+</tr>
+<tr>
+<td><strong>Consignes de fin de poste</strong></td>
+<td>Affichage standard des <strong>actions à réaliser en fin de poste</strong> (rangement, contrôles, passation), pour ne rien oublier et fiabiliser la passation.</td>
+</tr>
+<tr>
+<td><strong>Définir les standards / Visualiser les données</strong></td>
+<td>Deux volets complémentaires : <strong>formaliser le standard</strong> (la bonne façon de faire) et <strong>afficher les données</strong> (indicateurs, suivi), pour rendre la performance lisible.</td>
+</tr>
+</tbody>
+</table>
+<p>Ces exemples couvrent les <strong>quatre familles</strong> typiques du management visuel :
+- <strong>Au sol</strong> (zones, allées, emplacements, repères de positionnement),
+- <strong>Sur le poste / la machine</strong> (consignes, modes opératoires, repères SMED),
+- <strong>Sur les flux</strong> (cheminements, statut libre/occupé),
+- <strong>Sur les données</strong> (tableaux d'indicateurs, suivi SQCDM).</p>
+<blockquote>
+<p>🖼️ <strong>Galerie photo non transcriptible.</strong> Ces exemples sont des <strong>photos d'ateliers</strong> dans le support. Pour les visuels exacts (couleurs, formats, implantations), se reporter au fichier source : <code>https://drive.google.com/file/d/1ERZhSn7jZCCDOgqhL0QyfDMCBcSrcjAV/view</code>.</p>
+</blockquote>
+<h3>8. Résumé</h3>
+<ul>
+<li>Le <strong>management visuel = gérer par la vue</strong> : rendre une situation <strong>visible et pilotable d'un coup d'œil</strong>.</li>
+<li>Il sert à <strong>mobiliser</strong> l'équipe, <strong>piloter le Gemba</strong> facilement, favoriser <strong>autonomie et travail d'équipe</strong>, et <strong>faire évoluer le rôle du manager</strong>.</li>
+<li>Il <strong>responsabilise</strong> : l'attendu et le réel étant visibles, l'équipe s'approprie sa zone et l'écart est traité comme un fait, pas comme un reproche.</li>
+<li>Il repose sur le <strong>Triangle d'Or</strong> : <strong>standard opératoire</strong> + <strong>standard de management</strong> + <strong>management visuel</strong> ; les trois sommets sont indissociables.</li>
+<li>On <strong>confirme le processus</strong> en vérifiant que les standards sont <strong>appliqués, à jour et connus</strong>, au regard de la <strong>mesure SQCDM</strong>, animé par la <strong>Revue Gemba</strong>.</li>
+<li>Un bon visuel est <strong>lisible, simple, à jour, au plus près du terrain et orienté action</strong>.</li>
+</ul>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Support « Management Visuel »</strong> (diaporama)</td>
+<td>Comprendre le management visuel, ses objectifs, ses points clés et voir une galerie d'exemples terrain (marquage au sol, SMED, consignes de fin de poste…).</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1ERZhSn7jZCCDOgqhL0QyfDMCBcSrcjAV/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Fiche outil « Le Triangle d'Or du Management Visuel »</strong></td>
+<td>Relier standard opératoire / standard de management / management visuel ; confirmer le processus (standards appliqués, à jour, connus) au regard du SQCDM.</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1tkr4OV7e4HXqMhinZ4bmljuKDznF2bq_/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice 1 — Concevoir un management visuel pour une zone ou un indicateur réel</strong></p>
+<p>Choisissez <strong>une zone</strong> (un poste, une allée, un stock, une machine) <strong>ou un indicateur</strong> réel de votre activité (ex. nombre de pièces conformes du jour, retards de livraison, taux de remplissage, sécurité).</p>
+<ol>
+<li><strong>Décrivez l'attendu (le standard)</strong> : quelle est la « bonne situation » / la bonne façon de faire ? Écrivez-la en une ou deux phrases (ex. « Tout produit trié : Vert = conforme, Rouge = mauvais ; emballages dans la poubelle blanche »).</li>
+<li><strong>Définissez l'état à rendre visible</strong> : que doit-on voir d'un coup d'œil ? (conforme/non conforme, avance/retard, plein/vide, place libre/occupée…).</li>
+<li><strong>Choisissez le support visuel</strong> adapté : marquage au sol, code couleur, étiquette, tableau d'indicateur, signalétique sur poste, repère de positionnement.</li>
+<li><strong>Appliquez un code couleur simple et constant</strong> (ex. <strong>Vert / Rouge</strong>) et placez le visuel <strong>au plus près du terrain</strong>, là où la décision se prend.</li>
+<li><strong>Reliez-le au Triangle d'Or</strong> : notez le <strong>standard opératoire</strong> associé et le <strong>standard de management</strong> (qui regarde, à quelle fréquence, et que fait-on quand c'est « rouge » ?).</li>
+<li><strong>Vérifiez avec « CONFIRMEZ VOTRE PROCESSUS »</strong> : le standard est-il <strong>appliqué</strong>, <strong>à jour</strong>, <strong>connu</strong> ? Corrigez si besoin.</li>
+<li><strong>Faites le test « 5 secondes »</strong> : montrez votre visuel à quelqu'un qui ne connaît pas la zone ; comprend-il la situation en 5 secondes sans explication ?</li>
+</ol>
+<ul>
+<li><strong>Livrable attendu :</strong> une <strong>fiche de conception</strong> (1 page) ou une <strong>maquette/croquis</strong> du dispositif visuel, indiquant : la zone/l'indicateur, l'attendu (standard), l'état rendu visible, le support, le code couleur, le standard de management associé, et le résultat du test « 5 secondes ».</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>Un observateur <strong>non initié</strong> comprend la situation en <strong>moins de 5 secondes</strong>, sans explication.</li>
+<li>L'<strong>écart au standard</strong> est immédiatement visible (normal vs anormal).</li>
+<li>Les <strong>trois sommets du Triangle d'Or</strong> sont renseignés (opératoire, management, visuel).</li>
+<li>Une <strong>réaction</strong> est prévue en cas d'écart (qui fait quoi quand c'est « rouge »).</li>
+<li>Le standard est <strong>appliqué, à jour et connu</strong>.</li>
+<li><strong>Temps conseillé :</strong> 25 min.</li>
+</ul>
+<p><strong>Exercice 2 — Auditer un management visuel existant (Triangle d'Or)</strong></p>
+<p>Repérez <strong>un affichage / tableau / marquage déjà en place</strong> autour de vous et notez-le sur la grille du Triangle d'Or :</p>
+<ol>
+<li><strong>Standard opératoire</strong> présent et clair ? (oui/non + commentaire)</li>
+<li><strong>Standard de management</strong> : un rituel/une règle exploite-t-il ce visuel ? (qui ? quand ? quelle réaction aux écarts ?)</li>
+<li><strong>Management visuel</strong> : est-il <strong>lisible, simple, à jour, au plus près du terrain</strong> ?</li>
+<li><strong>Confirmation</strong> : standards <strong>appliqués / à jour / connus</strong> ? Lien avec <strong>SQCDM</strong> ?</li>
+<li>Listez <strong>2 améliorations</strong> concrètes et <strong>réalisables cette semaine</strong>.</li>
+</ol>
+<ul>
+<li><strong>Livrable attendu :</strong> une grille d'audit Triangle d'Or remplie + 2 actions d'amélioration datées.</li>
+<li><strong>Critères de réussite :</strong> les 3 sommets sont évalués, au moins un « maillon faible » est identifié, et les 2 actions sont <strong>concrètes et réalisables sans le formateur</strong>.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>Management visuel = gérer par la vue</strong> : voir l'anomalie → la mettre en plan d'action → l'éradiquer.</li>
+<li>Le but : <strong>rendre la situation visible ET pilotable d'un coup d'œil</strong>.</li>
+<li><strong>Triangle d'Or</strong> : standard opératoire <strong>+</strong> standard de management <strong>+</strong> management visuel — les trois ou rien.</li>
+<li>Un visuel sans <strong>réaction</strong> prévue est <strong>décoratif</strong> ; un standard sans <strong>visuel</strong> se pilote à l'aveugle.</li>
+<li><strong>Affichez l'attendu avant le réel</strong> : l'écart doit sauter aux yeux (code couleur <strong>Vert/Rouge</strong>).</li>
+<li>Un bon visuel est <strong>lisible, simple, à jour, au plus près du terrain</strong>.</li>
+<li>Confirmez vos standards : <strong>appliqués, à jour, connus</strong> — au regard de <strong>SQCDM</strong>, en <strong>Revue Gemba</strong>.</li>
+<li>Le visuel <strong>responsabilise</strong> l'équipe et <strong>fait évoluer</strong> le manager vers l'animation.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Que signifie « management visuel » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Décorer l'atelier avec des affiches</button><button type="button" class="opt" data-key="b"><b>b)</b> Gérer par la vue : rendre la situation visible et pilotable d'un coup d'œil</button><button type="button" class="opt" data-key="c"><b>c)</b> Surveiller les opérateurs par caméra</button><button type="button" class="opt" data-key="d"><b>d)</b> Faire des reportings hebdomadaires en réunion</button></div><div class="q-exp" hidden>Le management visuel, c'est « la gestion par la vue » : rendre la situation visible et pilotable d'un coup d'œil.</div></li><li class="q" data-correct="c"><div class="q-text">Quels sont les trois sommets du <strong>Triangle d'Or</strong> du management visuel ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Sécurité, Qualité, Coût</button><button type="button" class="opt" data-key="b"><b>b)</b> Définition, Création, Amélioration</button><button type="button" class="opt" data-key="c"><b>c)</b> Standard opératoire, Standard de management, Management visuel</button><button type="button" class="opt" data-key="d"><b>d)</b> Voir, Comprendre, Agir</button></div><div class="q-exp" hidden>Le Triangle d'Or relie <strong>standard opératoire</strong>, <strong>standard de management</strong> et <strong>management visuel</strong>. (Définition/Création/Amélioration est le cycle de vie des standards ; Sécurité/Qualité/Coût relève du SQCDM.)</div></li><li class="q" data-correct="b"><div class="q-text">Selon « CONFIRMEZ VOTRE PROCESSUS », un standard solide doit être :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Long, détaillé et signé</button><button type="button" class="opt" data-key="b"><b>b)</b> Appliqué, à jour et connu</button><button type="button" class="opt" data-key="c"><b>c)</b> Numérique, imprimé et plastifié</button><button type="button" class="opt" data-key="d"><b>d)</b> Validé par la direction uniquement</button></div><div class="q-exp" hidden>Les standards doivent être <strong>appliqués, à jour et connus</strong>, au regard du SQCDM.</div></li><li class="q" data-correct="b"><div class="q-text">Vrai ou faux : un management visuel où l'écart est visible mais <strong>n'entraîne aucune réaction</strong> remplit son rôle.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Sans réaction prévue (standard de management), le visuel devient <strong>décoratif</strong> : voir l'écart n'a de valeur que s'il déclenche un plan d'action.</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert principalement le management visuel pour le manager ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> À remplacer l'équipe</button><button type="button" class="opt" data-key="b"><b>b)</b> À piloter le Gemba par le visuel et faire évoluer son rôle vers l'animation/l'autonomie</button><button type="button" class="opt" data-key="c"><b>c)</b> À supprimer les standards</button><button type="button" class="opt" data-key="d"><b>d)</b> À centraliser toute l'information dans son bureau</button></div><div class="q-exp" hidden>Il permet de <strong>piloter le Gemba par le visuel</strong> et fait <strong>évoluer le rôle du manager</strong> vers l'animation, l'autonomie et le travail d'équipe.</div></li><li class="q" data-correct="b"><div class="q-text">Quel est le test simple pour valider qu'un visuel est lisible ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Qu'il soit en couleur</button><button type="button" class="opt" data-key="b"><b>b)</b> Qu'une personne non initiée comprenne la situation en quelques secondes, sans explication</button><button type="button" class="opt" data-key="c"><b>c)</b> Qu'il tienne sur un A4</button><button type="button" class="opt" data-key="d"><b>d)</b> Qu'il soit validé en réunion</button></div><div class="q-exp" hidden>Le bon critère est la lisibilité <strong>immédiate</strong> : compris en quelques secondes, sans explication.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>10. Management Visuel.pdf</em> (support / diaporama, <strong>texte tronqué à l'extraction</strong> — galerie d'exemples en images) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1ERZhSn7jZCCDOgqhL0QyfDMCBcSrcjAV/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>10. Le Triangle d'Or du Management Visuel — Fiche Outil.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1tkr4OV7e4HXqMhinZ4bmljuKDznF2bq_/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="07-5s.html"><small>← Module précédent</small>7 · Les 5S</a><a class="nx" href="09-resolution-probleme-qqoqccp-ishikawa.html"><small>Module suivant →</small>9 · Résolution de problème : QQOQCCP, Ishikawa, PDCA</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

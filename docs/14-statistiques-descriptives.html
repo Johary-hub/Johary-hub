@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 14 — Les Statistiques Descriptives — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="13-types-de-donnees.html">← Préc.</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link active" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="14-statistiques-descriptives">Marquer ce module comme terminé</button></div><h1>Module 14 — Les Statistiques Descriptives</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
+⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Distinguer</strong> une population d'un échantillon et choisir le bon vocabulaire (paramètres vs estimateurs).
+- <strong>Calculer</strong> les mesures du comportement du centre : moyenne, médiane et mode.
+- <strong>Calculer</strong> les mesures de dispersion : étendue (range), variance et écart-type.
+- <strong>Choisir</strong> l'indicateur le plus pertinent selon les données (notamment en présence de valeurs exceptionnelles / <em>outliers</em>).
+- <strong>Lire</strong> une distribution à l'aide des représentations graphiques (dotplot, histogramme, courbe de distribution).
+- <strong>Relier</strong> vos données à la loi normale et estimer des pourcentages grâce à la règle 68 / 95 / 99,7 %.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Notions de base du Lean Six Sigma et de la démarche 6 Sigma (collecter des données, mesurer un processus).</li>
+<li>Aucun prérequis mathématique avancé : les quatre opérations et la racine carrée suffisent.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 520 250" role="img" class="svg-anim"><path d="M205.0,210.0 L205.0,119.0 L206.8,116.0 L208.7,113.0 L210.5,110.0 L212.3,107.0 L214.2,104.0 L216.0,101.1 L217.8,98.2 L219.7,95.4 L221.5,92.6 L223.3,89.9 L225.2,87.3 L227.0,84.7 L228.8,82.2 L230.7,79.9 L232.5,77.6 L234.3,75.5 L236.2,73.4 L238.0,71.5 L239.8,69.8 L241.7,68.1 L243.5,66.6 L245.3,65.2 L247.2,64.0 L249.0,63.0 L250.8,62.1 L252.7,61.3 L254.5,60.7 L256.3,60.3 L258.2,60.1 L260.0,60.0 L261.8,60.1 L263.7,60.3 L265.5,60.7 L267.3,61.3 L269.2,62.1 L271.0,63.0 L272.8,64.0 L274.7,65.2 L276.5,66.6 L278.3,68.1 L280.2,69.8 L282.0,71.5 L283.8,73.4 L285.7,75.5 L287.5,77.6 L289.3,79.9 L291.2,82.2 L293.0,84.7 L294.8,87.3 L296.7,89.9 L298.5,92.6 L300.3,95.4 L302.2,98.2 L304.0,101.1 L305.8,104.0 L307.7,107.0 L309.5,110.0 L311.3,113.0 L313.2,116.0 L315.0,119.0 L315.0,210.0 Z" fill="#f6b400" opacity="0.30"/><line x1="40" y1="210" x2="480" y2="210" stroke="#9aa3b0" stroke-width="1.5"/><path d="M60.0,209.8 L63.3,209.7 L66.7,209.7 L70.0,209.6 L73.3,209.5 L76.7,209.4 L80.0,209.3 L83.3,209.1 L86.7,209.0 L90.0,208.7 L93.3,208.5 L96.7,208.2 L100.0,207.8 L103.3,207.4 L106.7,206.9 L110.0,206.4 L113.3,205.7 L116.7,205.0 L120.0,204.1 L123.3,203.2 L126.7,202.1 L130.0,200.8 L133.3,199.4 L136.7,197.9 L140.0,196.1 L143.3,194.2 L146.7,192.1 L150.0,189.7 L153.3,187.1 L156.7,184.3 L160.0,181.3 L163.3,178.0 L166.7,174.5 L170.0,170.7 L173.3,166.7 L176.7,162.4 L180.0,157.9 L183.3,153.2 L186.7,148.3 L190.0,143.3 L193.3,138.0 L196.7,132.7 L200.0,127.3 L203.3,121.8 L206.7,116.3 L210.0,110.8 L213.3,105.3 L216.7,100.0 L220.0,94.9 L223.3,89.9 L226.7,85.2 L230.0,80.7 L233.3,76.6 L236.7,72.9 L240.0,69.6 L243.3,66.7 L246.7,64.3 L250.0,62.5 L253.3,61.1 L256.7,60.3 L260.0,60.0 L263.3,60.3 L266.7,61.1 L270.0,62.5 L273.3,64.3 L276.7,66.7 L280.0,69.6 L283.3,72.9 L286.7,76.6 L290.0,80.7 L293.3,85.2 L296.7,89.9 L300.0,94.9 L303.3,100.0 L306.7,105.3 L310.0,110.8 L313.3,116.3 L316.7,121.8 L320.0,127.3 L323.3,132.7 L326.7,138.0 L330.0,143.3 L333.3,148.3 L336.7,153.2 L340.0,157.9 L343.3,162.4 L346.7,166.7 L350.0,170.7 L353.3,174.5 L356.7,178.0 L360.0,181.3 L363.3,184.3 L366.7,187.1 L370.0,189.7 L373.3,192.1 L376.7,194.2 L380.0,196.1 L383.3,197.9 L386.7,199.4 L390.0,200.8 L393.3,202.1 L396.7,203.2 L400.0,204.1 L403.3,205.0 L406.7,205.7 L410.0,206.4 L413.3,206.9 L416.7,207.4 L420.0,207.8 L423.3,208.2 L426.7,208.5 L430.0,208.7 L433.3,209.0 L436.7,209.1 L440.0,209.3 L443.3,209.4 L446.7,209.5 L450.0,209.6 L453.3,209.7 L456.7,209.7 L460.0,209.8" fill="none" stroke="#2563eb" stroke-width="3"/><line x1="95" y1="210" x2="95" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="95" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−3σ</text><line x1="150" y1="210" x2="150" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="150" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−2σ</text><line x1="205" y1="210" x2="205" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="205" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">−1σ</text><line x1="260" y1="210" x2="260" y2="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="260" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="800">μ</text><line x1="315" y1="210" x2="315" y2="119" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="315" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+1σ</text><line x1="370" y1="210" x2="370" y2="190" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="370" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+2σ</text><line x1="425" y1="210" x2="425" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/><text x="425" y="228" text-anchor="middle" fill="#3a3320" font-size="11" font-weight="500">+3σ</text><text x="260" y="64" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="700">~68 % à ±1σ</text><text x="260" y="60" text-anchor="middle" fill="#5b6675" font-size="10.5" dy="-6">~95 % à ±2σ · ~99,7 % à ±3σ</text></svg><figcaption>La loi normale : ~68 % des valeurs à ±1σ, ~95 % à ±2σ, ~99,7 % à ±3σ autour de la moyenne.</figcaption></figure>
+
+<h3>1. Pourquoi les statistiques descriptives ?</h3>
+<p>La statistique descriptive consiste à <strong>utiliser des méthodes scientifiques pour collecter, organiser, résumer et présenter des données</strong>. C'est l'un des enjeux clés du <strong>6 Sigma</strong> : avant d'améliorer un processus, il faut savoir le décrire objectivement avec des chiffres plutôt qu'avec des impressions.</p>
+<p>Décrire un jeu de données, c'est répondre à trois questions :</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Ce qu'on cherche</th>
+<th>Outils</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Comportement du centre</strong></td>
+<td>Où est le milieu ?</td>
+<td>Moyenne, médiane, mode</td>
+</tr>
+<tr>
+<td><strong>Dispersion</strong></td>
+<td>Comment les données sont-elles dispersées ?</td>
+<td>Étendue (range), variance, écart-type</td>
+</tr>
+<tr>
+<td><strong>Allure de la distribution</strong></td>
+<td>Comment les données sont-elles distribuées ?</td>
+<td>Histogramme, courbe de distribution, loi normale…</td>
+</tr>
+</tbody>
+</table>
+<h3>2. Population et échantillon</h3>
+<p><strong>Population</strong> — La population est constituée de <strong>toutes les valeurs</strong> (en nombre fini ou infini) définies par un certain paramètre.</p>
+<p>Exemples de populations :
+- Toutes les ceintures Renault faites sur la ligne A.
+- Toutes les demandes d'achats faites en 2003.
+- Toutes les pièces fabriquées sur la machine D depuis la dernière modification.
+- La taille de toutes les personnes aux USA.</p>
+<p><strong>Échantillon</strong> — Un échantillon est fait d'un <strong>nombre restreint de valeurs</strong> de la population. Il représente la population, sans pour autant être tenu à une représentation parfaite.</p>
+<p>Exemples d'échantillons (correspondant aux populations ci-dessus) :
+- 100 ceintures Renault de la ligne A.
+- 20 demandes d'achat de chaque mois de 2003.
+- Les 60 premières pièces faites sur la machine D après la dernière modification.
+- La taille de 3 000 personnes venant de tous les états des USA.</p>
+<blockquote>
+<p>💡 En pratique on travaille presque toujours sur un <strong>échantillon</strong> (mesurer toute la population coûte trop cher ou est impossible), puis on <strong>généralise</strong> à la population.</p>
+</blockquote>
+<h3>3. Notations : paramètres de la population vs estimateurs de l'échantillon</h3>
+<p>Une même grandeur se note différemment selon qu'elle décrit la <strong>population</strong> (lettres grecques) ou un <strong>échantillon</strong> (lettres romaines). L'échantillon <strong>estime</strong> le paramètre de la population.</p>
+<table>
+<thead>
+<tr>
+<th>Grandeur</th>
+<th>Estimateur de l'échantillon (lettres romaines)</th>
+<th>Paramètre de la population (lettres grecques)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Taille</td>
+<td>n</td>
+<td>N</td>
+</tr>
+<tr>
+<td>Moyenne</td>
+<td>X̄ (« X barre »)</td>
+<td>μ (mu)</td>
+</tr>
+<tr>
+<td>Étendue (Range)</td>
+<td>R</td>
+<td>R</td>
+</tr>
+<tr>
+<td>Écart-type (Standard Deviation)</td>
+<td>s</td>
+<td>σ (sigma)</td>
+</tr>
+<tr>
+<td>Variance</td>
+<td>s²</td>
+<td>σ²</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notation mathématique utile :</strong>
+- <strong>xᵢ</strong> = la i-ème donnée : x₁, x₂, x₃, … (chaque valeur de la série).
+- <strong>n</strong> = nombre de données dans l'échantillon.
+- <strong>Σ</strong> (sigma majuscule) = « somme de… ».</p>
+<h3>4. Mesures du comportement du centre</h3>
+<h4>4.1 La moyenne</h4>
+<p>La <strong>moyenne</strong> est <strong>la somme de toutes les valeurs divisée par le nombre de valeurs</strong>. C'est en général le <strong>meilleur indicateur</strong> du comportement du milieu.</p>
+<p><strong>Formule :</strong></p>
+<p>$$\bar{X} = \frac{x_1 + x_2 + \dots + x_n}{n} = \frac{1}{n}\sum_{i=1}^{n} x_i$$</p>
+<blockquote>
+<p>En clair : on additionne toutes les valeurs, puis on divise par leur nombre.</p>
+</blockquote>
+<p><strong>Exemple</strong> — Série : 5, 3, 6, 4, 7, 5, 9, 6, 4, 3, 2, 6 (n = 12).
+Somme = 60 ⟹ moyenne X̄ = 60 ÷ 12 = <strong>5</strong>.</p>
+<h4>4.2 La médiane</h4>
+<p>La <strong>médiane</strong> est <strong>la valeur du milieu</strong> : une fois les valeurs rangées dans l'ordre, il y a <strong>autant de valeurs au-dessus qu'en dessous</strong>.</p>
+<p><strong>Méthode :</strong>
+1. Ranger les valeurs dans l'ordre croissant.
+2. Si <strong>n est impair</strong>, la médiane est la valeur centrale. Exemple (1, 1, 1, 3, 4, 8, 9) → médiane = <strong>3</strong>.
+3. Si <strong>n est pair</strong>, la médiane est la moyenne des deux valeurs centrales.</p>
+<p><strong>Exemple</strong> — Série 5, 3, 6, 4, 7, 5, 9, 6, 4, 3, 2, 6 rangée : 9, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2.
+Les deux valeurs centrales (6ᵉ et 7ᵉ) sont 5 et 5 ⟹ médiane = <strong>5</strong>.</p>
+<h4>4.3 Le mode</h4>
+<p>Le <strong>mode</strong> est <strong>la valeur la plus fréquente</strong>, c'est-à-dire le <strong>pic de la distribution</strong>. C'est un <strong>indicateur faible</strong> du comportement du milieu. Une distribution qui présente <strong>deux pics</strong> est dite <strong>bimodale</strong>.</p>
+<p><strong>Exemple</strong> — Série 5, 3, 6, 4, 7, 5, 9, 6, 4, 3, 2, 6 : la valeur <strong>6</strong> apparaît trois fois ⟹ mode = <strong>6</strong>.</p>
+<h4>4.4 Moyenne ou médiane ? Le cas des valeurs exceptionnelles</h4>
+<p><strong>Parfois la médiane est un meilleur indicateur</strong> du comportement du milieu, en particulier <strong>quand il y a des valeurs exceptionnelles (« outliers »)</strong> dans les données.</p>
+<p>Illustration — Salaires de fonctionnaires US pris au hasard :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Cas 1</th>
+<th>Cas 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Travailleur 1</td>
+<td>30 000 $</td>
+<td>30 000 $</td>
+</tr>
+<tr>
+<td>Travailleur 2</td>
+<td>35 000 $</td>
+<td>35 000 $</td>
+</tr>
+<tr>
+<td>Travailleur 3</td>
+<td>40 000 $</td>
+<td>40 000 $</td>
+</tr>
+<tr>
+<td>Travailleur 4</td>
+<td>45 000 $</td>
+<td>45 000 $</td>
+</tr>
+<tr>
+<td>Travailleur 5 / Président</td>
+<td>50 000 $</td>
+<td><strong>400 000 $</strong></td>
+</tr>
+<tr>
+<td><strong>Moyenne</strong></td>
+<td>40 000 $</td>
+<td>110 000 $</td>
+</tr>
+<tr>
+<td><strong>Médiane</strong></td>
+<td>40 000 $</td>
+<td>40 000 $</td>
+</tr>
+</tbody>
+</table>
+<p>➡️ Dans le <strong>Cas 2</strong>, l'outlier (400 000 $) tire la <strong>moyenne</strong> vers le haut (110 000 $) et ne représente plus le « salarié type ». La <strong>médiane</strong> (40 000 $) reste, elle, fidèle au milieu réel. <em>Calculez moyenne et médiane dans les deux cas pour vous en convaincre.</em></p>
+<h3>5. Mesures de la dispersion</h3>
+<p>La dispersion répond à : « à quel point les valeurs s'écartent-elles les unes des autres ? ». Trois mesures principales :</p>
+<table>
+<thead>
+<tr>
+<th>Mesure</th>
+<th>Définition</th>
+<th>À retenir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Étendue (Range)</strong></td>
+<td>La plus grande valeur moins la plus petite</td>
+<td>Facile à calculer, bon pour les petits échantillons, <strong>très influencée par un outlier</strong></td>
+</tr>
+<tr>
+<td><strong>Variance</strong></td>
+<td>Une mesure de la distance des points à la moyenne</td>
+<td>Unité = unité des données <strong>élevée au carré</strong> ; utilisée dans les tests statistiques</td>
+</tr>
+<tr>
+<td><strong>Écart-type (Standard Deviation)</strong></td>
+<td>La <strong>racine carrée de la variance</strong></td>
+<td>Mesure de dispersion <strong>la plus courante</strong> ; <strong>peu influencée</strong> par les outliers</td>
+</tr>
+</tbody>
+</table>
+<h4>5.1 L'étendue (Range)</h4>
+<p>L'<strong>étendue</strong> est <strong>la plus grande valeur moins la plus petite</strong>. Elle est facile à calculer et adaptée aux petits échantillons, mais <strong>très influencée par une valeur anormalement grande</strong> (outlier).</p>
+<p><strong>Formule :</strong> R = (valeur max) − (valeur min)</p>
+<p><strong>Exemple</strong> — Série 9, 7, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2 : R = 9 − 2 = <strong>7</strong>.</p>
+<h4>5.2 La variance</h4>
+<p>La <strong>variance</strong> est <strong>une mesure de la distance entre les valeurs et la moyenne</strong>. Elle est utilisée dans les tests statistiques pour représenter la dispersion. Attention : <strong>son unité est l'unité des données initiales élevée au carré</strong> (d'où l'usage de l'écart-type pour revenir à l'unité d'origine).</p>
+<p><strong>Formule (variance d'un échantillon) :</strong></p>
+<p>$$s^2 = \frac{1}{n-1}\sum_{i=1}^{n}\left(x_i - \bar{X}\right)^2$$</p>
+<blockquote>
+<p>Le diviseur <strong>n − 1</strong> s'appelle le nombre de <strong>degrés de liberté</strong>. On l'utilise pour la variance d'un <strong>échantillon</strong>.</p>
+</blockquote>
+<h4>5.3 L'écart-type (Standard Deviation)</h4>
+<p>L'<strong>écart-type</strong> est <strong>la racine carrée de la variance</strong>. C'est la mesure de dispersion <strong>la plus courante</strong> pour les collections de <strong>plus de 10 objets</strong>, elle <strong>marche aussi pour les petits échantillons</strong> et elle est <strong>peu influencée par les valeurs fortes</strong> (outliers).</p>
+<p><strong>Formule :</strong></p>
+<p>$$s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}\left(x_i - \bar{X}\right)^2} = \sqrt{s^2}$$</p>
+<h4>5.4 Calculer la variance et l'écart-type — méthode pas à pas</h4>
+<p>Procédure issue du support (à reproduire dans un tableau) :</p>
+<ol>
+<li><strong>Compter</strong> les valeurs (n) et les <strong>additionner</strong> pour obtenir le total.</li>
+<li><strong>Diviser</strong> le total par n pour trouver la <strong>moyenne</strong> X̄.</li>
+<li>Pour chaque valeur, <strong>retrancher la moyenne</strong> (xᵢ − X̄) : c'est la distance à la moyenne.</li>
+<li><strong>Élever au carré</strong> chacune de ces distances : (xᵢ − X̄)².</li>
+<li><strong>Additionner</strong> tous les carrés pour obtenir la <strong>« Sum of Squares »</strong> Σ(xᵢ − X̄)².</li>
+<li><strong>Diviser</strong> la Sum of Squares par <strong>n − 1</strong> (degrés de liberté) → <strong>variance</strong> s².</li>
+<li><strong>Prendre la racine carrée</strong> de la variance → <strong>écart-type</strong> s.</li>
+</ol>
+<p><strong>Exercice résolu</strong> — Échantillon : 8, 13, 7, 10, 12, 11, 10, 9.</p>
+<table>
+<thead>
+<tr>
+<th>Xᵢ</th>
+<th>8</th>
+<th>13</th>
+<th>7</th>
+<th>10</th>
+<th>12</th>
+<th>11</th>
+<th>10</th>
+<th>9</th>
+<th><strong>Total</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xᵢ</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>80</strong></td>
+</tr>
+<tr>
+<td>Xᵢ − X̄</td>
+<td>−2</td>
+<td>3</td>
+<td>−3</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>−1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>(Xᵢ − X̄)²</td>
+<td>4</td>
+<td>9</td>
+<td>9</td>
+<td>0</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td><strong>28</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>n = 8, total = 80 ⟹ <strong>moyenne X̄ = 80 ÷ 8 = 10</strong>.</li>
+<li><strong>Sum of Squares = 28</strong>.</li>
+<li><strong>Variance s² = 28 ÷ (8 − 1) = 28 ÷ 7 = 4</strong>.</li>
+<li><strong>Écart-type s = √4 = 2</strong>.</li>
+</ul>
+<h4>5.5 Quelle mesure choisir ? (exercice d'entraînement)</h4>
+<p>Pour chaque collection, repérez quelle(s) mesure(s) du <strong>milieu</strong> et de la <strong>dispersion</strong> sont les plus pertinentes (plusieurs réponses possibles). Indice : repérez d'abord la présence d'un <strong>outlier</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Collection</th>
+<th>Milieu (Moyenne / Médiane / Mode)</th>
+<th>Dispersion (Étendue / Variance / Écart-type)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2, 5, 3</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td>3, 4, 6, 1, 4, 5, 7, 2, 4, 1, <strong>1000</strong>, 5, 7, 3</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td>3, 4, 6, 1, 4, 5, 7, 2, 4, 1, 5, 7, 3, 3, 7, 4</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td>2, 4, 6, <strong>651</strong></td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🔑 Repère de lecture : dès qu'une valeur extrême (1000, 651…) apparaît, la <strong>médiane</strong> est plus fiable que la moyenne et l'<strong>écart-type</strong> est préférable à l'étendue (l'étendue est dominée par l'outlier).</p>
+<p>⚠️ <strong>Important :</strong> Moyenne, médiane, étendue, écart-type et variance <strong>s'appliquent quelle que soit l'allure de la distribution</strong> des valeurs. On peut donc toujours les calculer, même si la distribution n'est pas normale.</p>
+</blockquote>
+<h3>6. Allure de la distribution</h3>
+<p>L'<strong>allure de la distribution</strong> décrit <strong>comment les données sont dispersées</strong>. Principaux types de distributions :</p>
+<ul>
+<li><strong>Normale</strong> (aussi appelée <strong>Gaussienne</strong> ou <em>« Bell curve »</em> — courbe en cloche).</li>
+<li>Distribution <strong>F</strong>.</li>
+<li>Distribution <strong>T</strong>.</li>
+<li>Distribution du <strong>Chi deux</strong> (χ²).</li>
+<li>Distribution <strong>uniforme</strong>.</li>
+<li>Distribution de <strong>Weibull</strong>.</li>
+</ul>
+<h4>6.1 Des points à la courbe : dotplot, histogramme, courbe</h4>
+<p>Exemple fil rouge : <em>un sac de billes est trié en fonction du diamètre</em> (échelle 0,5 → 1,5 cm).</p>
+<ul>
+<li><strong>Dotplot</strong> — On place un point (ou on empile des points) pour chaque bille, en fonction de son diamètre : on obtient la <strong>fréquence</strong> (nombre de cas) en fonction du diamètre. C'est le graphe le plus <strong>naturel</strong>.</li>
+<li><strong>Histogramme</strong> — Si l'on remplace les points empilés par des <strong>barres</strong> dont la hauteur représente le nombre de billes, on obtient un <strong>histogramme</strong>.</li>
+<li><strong>Courbe de distribution</strong> — Si l'on mesurait un <strong>nombre infini</strong> de billes avec un incrément de taille <strong>infiniment petit</strong>, l'histogramme deviendrait une <strong>courbe de distribution</strong> continue.</li>
+<li><strong>Fréquence estimée</strong> — Le nombre de cas qui se produisent <strong>entre deux valeurs</strong> correspond approximativement à la <strong>surface sous la courbe</strong> entre ces deux valeurs.</li>
+</ul>
+<blockquote>
+<p>🖼️ <em>Schémas non transcriptibles :</em> le support illustre la progression dotplot → histogramme → courbe en cloche sur l'axe 0,5–1,5 cm, ainsi que la surface sous la courbe entre deux bornes. Voir le PDF source « 18. Statistiques Descriptives.pdf » (lien en bas de module).</p>
+</blockquote>
+<h4>6.2 Modèles mathématiques</h4>
+<p>Lorsqu'une distribution connue (un <strong>modèle mathématique</strong>) <strong>coïncide avec vos données</strong>, ce modèle peut servir à représenter la population. Intérêts :
+- On utilise des <strong>formules mathématiques pré-établies</strong>.
+- La population <strong>toute entière</strong> peut être définie avec <strong>peu de paramètres</strong> (par ex. moyenne et écart-type pour la loi normale).
+- On peut <strong>prédire les futurs points</strong> de cette population.</p>
+<h3>7. La loi normale (Gaussienne)</h3>
+<p>La <strong>distribution normale</strong> est la plus importante en Six Sigma :</p>
+<ul>
+<li><strong>Fréquente dans la nature.</strong></li>
+<li><strong>Symétrique</strong> : la moitié gauche est le miroir de la moitié droite.</li>
+<li><strong>La moyenne, la médiane et le mode</strong> se produisent tous les trois <strong>exactement au milieu</strong> de la courbe.</li>
+<li><strong>Quand vous connaissez la moyenne et l'écart-type, vous connaissez la courbe entière.</strong></li>
+</ul>
+<h4>7.1 La règle 68 / 95 / 99,7 %</h4>
+<p>Pour une distribution normale, autour de la moyenne :</p>
+<table>
+<thead>
+<tr>
+<th>Intervalle autour de la moyenne</th>
+<th>Pourcentage des cas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>± 1 écart-type (±1σ)</td>
+<td>≈ <strong>68 %</strong></td>
+</tr>
+<tr>
+<td>± 2 écarts-types (±2σ)</td>
+<td>≈ <strong>95 %</strong></td>
+</tr>
+<tr>
+<td>± 3 écarts-types (±3σ)</td>
+<td>≈ <strong>99,7 %</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🖼️ <em>Schéma non transcriptible :</em> courbe en cloche centrée sur la moyenne, avec les bandes −3σ, −2σ, −1σ, +1σ, +2σ, +3σ et les aires 68 % / 95 % / 99,7 %. Voir le PDF source.</p>
+</blockquote>
+<h4>7.2 Application : le jeu de billes (estimer un taux de rejet)</h4>
+<p>Si la taille des billes est distribuée <strong>normalement</strong>, quel pourcentage de billes sera <strong>rejeté</strong> selon les spécifications ? (Solutions ci-dessous.)</p>
+<details>
+<summary>👉 Voir les réponses du jeu de billes</summary>
+<ol>
+<li><strong>Spécifications à ±2 écarts-types autour de la moyenne</strong> : ±2σ contient 95 % des billes ⟹ rejet = 100 % − 95 % = <strong>5 %</strong>.</li>
+<li><strong>Limite haute = moyenne, limite basse = −12 écarts-types</strong> : la moitié des billes est sous la moyenne et quasiment aucune au-delà de 12σ ⟹ rejet = 50 % − 0 % = <strong>50 %</strong>.</li>
+<li><strong>De −6σ à +1σ</strong> : 6σ sous la moyenne contient ≈ 50 % des billes ; +1σ au-dessus contient 68 % ÷ 2 = 34 %. Acceptées = 50 % + 34 % = 84 % ⟹ rejet = 100 % − 84 % = <strong>16 %</strong>.</li>
+<li><strong>Probabilité d'avoir une bille à plus de 6σ sous la moyenne</strong> (si rien ne perturbe le processus) : <strong>à peu près zéro</strong>.</li>
+</ol>
+</details>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fiche Outil « Statistique Descriptive »</td>
+<td>Mémo de synthèse : définitions population/échantillon, mesures du centre et de dispersion, règle 68/95/99,7 % de la loi normale</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1dOJQHYrqXvon3spme7oIoHAVgNZFOWcn/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Support de formation « Statistiques Descriptives »</td>
+<td>Cours complet avec exemples, exercices et schémas (dotplot, histogramme, courbe normale)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13sJMTpQpoUkoyYJxOhriZy4Zy6M2fV93/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td>Tableau de calcul de la variance (Xᵢ / Xᵢ−X̄ / (Xᵢ−X̄)²)</td>
+<td>Gabarit pas à pas pour calculer moyenne, Sum of Squares, variance et écart-type</td>
+<td>Voir § 5.4 (reproductible dans un tableur)</td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre.</p>
+</blockquote>
+<p><strong>Exercice 1 — Décrire un jeu de données de votre terrain</strong>
+1. <strong>Collectez ~10 valeurs</strong> mesurables sur votre propre activité (ex. : durée d'une étape en minutes, nombre de défauts par lot, temps d'attente client, longueur d'une pièce, nombre d'appels par heure…). Notez l'unité.
+2. <strong>Rangez</strong> vos valeurs dans l'ordre croissant.
+3. Calculez la <strong>moyenne</strong> : X̄ = (somme des valeurs) ÷ n.
+4. Calculez la <strong>médiane</strong> : valeur centrale (n impair) ou moyenne des deux valeurs centrales (n pair).
+5. Calculez l'<strong>étendue</strong> : R = valeur max − valeur min.
+6. Calculez l'<strong>écart-type</strong> en suivant le tableau du § 5.4 :
+   - colonne 1 : vos valeurs Xᵢ ; colonne 2 : Xᵢ − X̄ ; colonne 3 : (Xᵢ − X̄)² ;
+   - <strong>Sum of Squares</strong> = Σ(Xᵢ − X̄)² ; <strong>variance</strong> s² = Sum of Squares ÷ (n − 1) ; <strong>écart-type</strong> s = √s².
+7. <strong>Interprétez</strong> : la moyenne et la médiane sont-elles proches ? Si elles diffèrent nettement, cherchez un <strong>outlier</strong> et indiquez quel indicateur est le plus représentatif. Que dit l'écart-type sur la <strong>régularité</strong> de votre processus (faible = régulier, élevé = dispersé) ?</p>
+<ul>
+<li><strong>Livrable attendu :</strong> un petit tableau (10 valeurs + colonnes Xᵢ−X̄ et (Xᵢ−X̄)²) accompagné des 4 résultats chiffrés (moyenne, médiane, étendue, écart-type) et de 2–3 phrases d'interprétation.</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>les 4 indicateurs sont calculés avec les <strong>bonnes formules</strong> et les bonnes unités (l'écart-type est dans l'unité des données, la variance dans l'unité²) ;</li>
+<li>le diviseur <strong>n − 1</strong> est bien utilisé pour la variance de l'échantillon ;</li>
+<li>la présence (ou l'absence) d'un <strong>outlier</strong> est signalée et le choix moyenne/médiane est justifié ;</li>
+<li>l'interprétation relie l'écart-type à la <strong>dispersion</strong> réelle du processus.</li>
+<li><strong>Temps conseillé :</strong> 25 min.</li>
+</ul>
+<p><strong>Exercice 2 — Estimer un pourcentage avec la loi normale (« taille des participants »)</strong>
+1. Recueillez la <strong>taille</strong> (ou une autre grandeur continue) de plusieurs personnes / pièces autour de vous.
+2. Déterminez <strong>moyenne, médiane, étendue et écart-type</strong> de cette série.
+3. En <strong>supposant</strong> les valeurs distribuées <strong>normalement</strong> et l'échantillon représentatif, estimez, à l'aide de la règle 68/95/99,7 %, <strong>quel pourcentage dépasse un seuil donné</strong> (par ex. : quel % de la population fait plus de 1 m 80 ?).
+- <strong>Livrable attendu :</strong> les 4 indicateurs + une estimation chiffrée du pourcentage au-delà du seuil, avec le raisonnement (combien de σ sépare le seuil de la moyenne).
+- <strong>Critères de réussite :</strong> le seuil est correctement converti en nombre d'écarts-types et le pourcentage est déduit de façon cohérente de la règle 68/95/99,7 %.
+- <strong>Temps conseillé :</strong> 15 min.</p>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>Décrire un jeu de données = répondre à 3 questions</strong> : centre, dispersion, allure.</li>
+<li>La <strong>moyenne</strong> = somme ÷ nombre de valeurs ; c'est souvent le meilleur indicateur du centre… <strong>sauf en présence d'outliers</strong>, où la <strong>médiane</strong> est plus fiable.</li>
+<li>Le <strong>mode</strong> (valeur la plus fréquente) est un indicateur <strong>faible</strong> du centre ; deux pics ⟹ distribution <strong>bimodale</strong>.</li>
+<li><strong>Dispersion</strong> : étendue (max − min, sensible aux outliers), variance (distance au carré à la moyenne), <strong>écart-type = √variance</strong> (le plus utilisé, peu sensible aux outliers).</li>
+<li>Pour un <strong>échantillon</strong>, on divise la Sum of Squares par <strong>n − 1</strong> (degrés de liberté).</li>
+<li><strong>Variance en unité², écart-type en unité d'origine</strong> : c'est pour cela qu'on préfère l'écart-type pour communiquer.</li>
+<li>Lettres <strong>romaines</strong> = échantillon (X̄, s, s²) ; lettres <strong>grecques</strong> = population (μ, σ, σ²).</li>
+<li>Pour une <strong>loi normale</strong> : moyenne = médiane = mode au centre ; <strong>68 % à ±1σ, 95 % à ±2σ, 99,7 % à ±3σ</strong> ; connaître moyenne + écart-type suffit à connaître toute la courbe.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">La <strong>moyenne</strong> se calcule en…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> prenant la valeur du milieu</button><button type="button" class="opt" data-key="b"><b>b)</b> divisant la somme des valeurs par leur nombre</button><button type="button" class="opt" data-key="c"><b>c)</b> prenant la valeur la plus fréquente</button><button type="button" class="opt" data-key="d"><b>d)</b> soustrayant le min du max</button></div><div class="q-exp" hidden>La moyenne = somme de toutes les valeurs ÷ nombre de valeurs.</div></li><li class="q" data-correct="b"><div class="q-text">En présence d'une <strong>valeur exceptionnelle (outlier)</strong>, quel indicateur du centre est généralement le plus représentatif ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> La moyenne</button><button type="button" class="opt" data-key="b"><b>b)</b> La médiane</button><button type="button" class="opt" data-key="c"><b>c)</b> Le mode</button><button type="button" class="opt" data-key="d"><b>d)</b> L'étendue</button></div><div class="q-exp" hidden>La médiane n'est pas tirée par les valeurs extrêmes, contrairement à la moyenne.</div></li><li class="q" data-correct="b"><div class="q-text">L'<strong>écart-type</strong> est…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> le carré de la variance</button><button type="button" class="opt" data-key="b"><b>b)</b> la racine carrée de la variance</button><button type="button" class="opt" data-key="c"><b>c)</b> le max moins le min</button><button type="button" class="opt" data-key="d"><b>d)</b> la valeur la plus fréquente</button></div><div class="q-exp" hidden>L'écart-type est la racine carrée de la variance (s = √s²).</div></li><li class="q" data-correct="c"><div class="q-text">Pour l'échantillon <strong>8, 13, 7, 10, 12, 11, 10, 9</strong> (moyenne = 10, Sum of Squares = 28), la <strong>variance</strong> vaut :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 28</button><button type="button" class="opt" data-key="b"><b>b)</b> 3,5</button><button type="button" class="opt" data-key="c"><b>c)</b> 4</button><button type="button" class="opt" data-key="d"><b>d)</b> 2</button></div><div class="q-exp" hidden>Variance d'échantillon = Sum of Squares ÷ (n − 1) = 28 ÷ 7 = 4 (et l'écart-type = √4 = 2).</div></li><li class="q" data-correct="b"><div class="q-text">Dans une distribution <strong>normale</strong>, le pourcentage de cas compris entre <strong>±2 écarts-types</strong> autour de la moyenne est d'environ :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 68 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 95 %</button><button type="button" class="opt" data-key="c"><b>c)</b> 99,7 %</button><button type="button" class="opt" data-key="d"><b>d)</b> 50 %</button></div><div class="q-exp" hidden>Règle 68/95/99,7 % : ±2σ ≈ 95 % des cas.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux ?</strong> Moyenne, médiane, étendue, variance et écart-type ne peuvent se calculer que si la distribution est normale.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>Ces mesures s'appliquent <strong>quelle que soit l'allure</strong> de la distribution ; la normalité n'est requise que pour appliquer la règle 68/95/99,7 %.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <strong>18. Statistiques Descriptives.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/13sJMTpQpoUkoyYJxOhriZy4Zy6M2fV93/view">Ouvrir dans Drive</a></li>
+<li>📄 <strong>18. Statistique Descriptive Fiche Outil.pdf</strong> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1dOJQHYrqXvon3spme7oIoHAVgNZFOWcn/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="13-types-de-donnees.html"><small>← Module précédent</small>13 · Les Types de données</a><span></span></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

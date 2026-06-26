@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 10 — La démarche DMAIC — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="09-resolution-probleme-qqoqccp-ishikawa.html">← Préc.</a><a href="11-voc-cts.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link active" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="10-dmaic">Marquer ce module comme terminé</button></div><h1>Module 10 — La démarche DMAIC</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 3
+⏱️ Durée estimée : 35 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Décrire</strong> la vision d'ensemble d'un projet <strong>DMAIC</strong> et la philosophie de l'approche dans sa globalité.
+- <strong>Situer</strong> un projet ou un problème réel dans les <strong>5 grandes phases</strong> : Define, Measure, Analyze, Improve, Control.
+- <strong>Énoncer</strong> l'objectif, le <strong>livrable</strong> et les <strong>outils associés</strong> de chacune des 5 phases.
+- <strong>Expliquer</strong> la logique « entonnoir » qui fait passer de <strong>100+ variables d'entrée</strong> à <strong>1 à 3 variables clés</strong>.
+- <strong>Appliquer</strong> la logique de <strong>stage-gating</strong> (revue de fin de phase) pour décider si l'on passe ou non à la phase suivante.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 8 — Introduction au DMAIC &amp; à la méthode PDCA (recommandé).</li>
+<li>Notions utiles : le <strong>SIPOC</strong>, la <strong>VOC / CTS</strong>, la charte de projet, les types de données.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 760 210" role="img" class="svg-anim"><text x="380" y="24" text-anchor="middle" fill="#222b38" font-size="14" font-weight="700">De 100+ variables d'entrée (X) vers 1 à 3 X clés — logique « entonnoir »</text><polygon points="14,46 124,46 146,89 124,132 14,132 36,89" fill="#2563eb" class="seg"/><text x="80" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">D</text><text x="80" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Define</text><text x="80" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Définir</text><text x="80" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">100+</tspan></text><polygon points="158,46 268,46 290,89 268,132 158,132 180,89" fill="#0d9488" class="seg"/><text x="224" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">M</text><text x="224" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Measure</text><text x="224" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Mesurer</text><text x="224" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">25–30</tspan></text><polygon points="302,46 412,46 434,89 412,132 302,132 324,89" fill="#d97706" class="seg"/><text x="368" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">A</text><text x="368" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Analyze</text><text x="368" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Analyser</text><text x="368" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">8–10</tspan></text><polygon points="446,46 556,46 578,89 556,132 446,132 468,89" fill="#16a34a" class="seg"/><text x="512" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">I</text><text x="512" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Improve</text><text x="512" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Améliorer</text><text x="512" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">3–6</tspan></text><polygon points="590,46 700,46 722,89 700,132 590,132 612,89" fill="#7c3aed" class="seg"/><text x="656" y="80" text-anchor="middle" fill="#fff" font-size="30" font-weight="800">C</text><text x="656" y="102" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="600">Control</text><text x="656" y="118" text-anchor="middle" fill="#eaf0ff" font-size="10.5">Maîtriser</text><text x="656" y="154" text-anchor="middle" fill="#5b6675" font-size="11.5">X restants : <tspan font-weight="700" fill="#222b38">1–3</tspan></text><path d="M720,40 q24,-22 -12,-26 M708,14 l-8,-2 6,8" fill="none" stroke="#9aa3b0" stroke-width="2"/></svg><figcaption>La démarche DMAIC : 5 phases en « entonnoir », de 100+ variables d'entrée vers les 1 à 3 X clés.</figcaption></figure>
+
+<h3>1. Qu'est-ce que le DMAIC ?</h3>
+<p><strong>DMAIC</strong> est la démarche structurée de résolution de problèmes du <strong>Lean Six Sigma (6σ)</strong>.
+C'est l'acronyme de ses cinq phases, parcourues <strong>dans l'ordre</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Lettre</th>
+<th>Phase</th>
+<th>Question centrale de la phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D</strong></td>
+<td><strong>Define</strong> (Définir)</td>
+<td><em>« Plusieurs projets potentiels »</em> → quel <strong>projet</strong> choisir ?</td>
+</tr>
+<tr>
+<td><strong>M</strong></td>
+<td><strong>Measure</strong> (Mesurer)</td>
+<td><em>« Où en sommes-nous ? »</em></td>
+</tr>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>Analyze</strong> (Analyser)</td>
+<td><em>« Plusieurs causes fondamentales possibles »</em> → quelle <strong>cause</strong> ?</td>
+</tr>
+<tr>
+<td><strong>I</strong></td>
+<td><strong>Improve</strong> (Améliorer)</td>
+<td><em>« Quelle est la solution ? »</em></td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>Control</strong> (Maîtriser)</td>
+<td><em>« Comment maintenir les gains ? »</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Schéma source (non transcriptible) — la roue DMAIC.</strong> Le support présente les 5 phases
+disposées <strong>en cercle autour du symbole 6σ</strong>, dans l'ordre Define → Measure → Analyze →
+Improve → Control, pour signifier que la démarche est <strong>cyclique</strong> : la fin d'un projet
+(Control) alimente le choix du suivant (Define). Voir la diapositive d'ouverture du fichier
+<em>13.DMAIC Define Mesure Analyze Improve Control.pdf</em>.</p>
+</blockquote>
+<h3>2. À quoi sert le DMAIC ? (les objectifs)</h3>
+<p>Le DMAIC est <strong>avant tout une structure</strong>. Concrètement, il sert à :</p>
+<ul>
+<li><strong>Stratifier (ordonner) les étapes</strong> nécessaires pour <strong>réduire la variabilité</strong>, <strong>résoudre les
+  problèmes</strong>, <strong>améliorer la qualité</strong> et donc <strong>éliminer les gaspillages</strong>.</li>
+<li><strong>Identifier les outils pertinents</strong> pour vos problématiques — le bon outil, au bon moment.</li>
+<li><strong>Créer une liaison efficiente entre chacun des outils</strong> au fil des phases : la sortie d'un
+  outil devient l'<strong>entrée</strong> du suivant (enchaînement d'outils).</li>
+</ul>
+<p>En une phrase : le DMAIC garantit qu'on <strong>résout le bon problème, dans le bon ordre, avec les
+bons outils</strong>, et qu'on <strong>conserve</strong> les gains obtenus.</p>
+<h3>3. La logique de fond : du problème concret au problème statistique</h3>
+<p>Le DMAIC fait passer un <strong>problème concret</strong> (vécu sur le terrain) par une <strong>traduction
+statistique</strong>, puis revient à une <strong>solution concrète</strong>. C'est le cœur de la « puissance » de
+l'approche.</p>
+<table>
+<thead>
+<tr>
+<th>Monde <strong>concret</strong> (terrain)</th>
+<th>⟷</th>
+<th>Monde <strong>statistique</strong> (analyse)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Problème concret</strong> : quels sont les <strong>Inputs (X)</strong> ?</td>
+<td>→</td>
+<td><strong>Problème statistique</strong> : <code>Y = f(X1, X2, X3 …)</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Quelles <strong>relations</strong> entre les différents <strong>X</strong> ?</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Quelles <strong>limites optimales</strong> pour chacun des <strong>X clés</strong> ?</td>
+</tr>
+<tr>
+<td><strong>Solution concrète</strong></td>
+<td>←</td>
+<td><strong>Solution statistique</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lecture de la formule <code>Y = f(X1, X2, X3 …)</code></strong> : le résultat qui nous intéresse (<strong>Y</strong>, la
+sortie : un défaut, un délai, un coût…) est <strong>fonction</strong> d'un ensemble de variables d'entrée
+(<strong>les X</strong>). Le projet consiste à <strong>découvrir quels X comptent vraiment</strong> et à <strong>fixer leurs
+limites optimales</strong> pour piloter Y. On ne « pilote » pas Y directement : on agit sur ses causes,
+les X.</p>
+<h3>4. L'approche « entonnoir » : de 100+ variables à 1–3 variables clés</h3>
+<p>Le DMAIC fonctionne comme un <strong>entonnoir</strong> : à chaque phase, on <strong>réduit le nombre de variables
+candidates</strong> jusqu'à isoler les <strong>quelques X clés</strong> sur lesquels agir. C'est ce qui rend la
+démarche efficace : on ne traite pas tout, on <strong>converge</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Question « entonnoir »</th>
+<th>Variables d'entrée encore en jeu</th>
+<th>Outils typiques (extrait source)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Define</strong></td>
+<td>« Plusieurs projets potentiels » → un projet choisi</td>
+<td><strong>100+</strong> (toutes les variables d'entrée possibles)</td>
+<td><strong>Charte de projet</strong>, <strong>SIPOC</strong> …</td>
+</tr>
+<tr>
+<td><strong>Measure</strong></td>
+<td>« Où en sommes-nous ? » → mesure de la situation de référence</td>
+<td><strong>25 à 30</strong></td>
+<td><strong>Cartographie</strong> du processus, <strong>Matrice C&amp;E</strong> (Causes &amp; Effets), <strong>Système de mesure</strong> …</td>
+</tr>
+<tr>
+<td><strong>Analyze</strong></td>
+<td>« Plusieurs causes fondamentales possibles » → cause identifiée et vérifiée</td>
+<td><strong>8 à 10</strong></td>
+<td><strong>VMEA / AMDEC</strong>, <strong>Analyse statistique</strong> …</td>
+</tr>
+<tr>
+<td><strong>Improve</strong></td>
+<td>« Quelle est la solution ? » → améliorations testées et mesurées</td>
+<td><strong>3 à 6</strong></td>
+<td><strong>Processus cible</strong> …</td>
+</tr>
+<tr>
+<td><strong>Control</strong></td>
+<td>« Comment maintenir les gains ? » → processus déployé et sous contrôle</td>
+<td><strong>1 à 3</strong> (X clés, le « processus optimisé »)</td>
+<td><strong>Plan de surveillance</strong> (plan de contrôle) …</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Schéma source (non transcriptible) — l'entonnoir des variables.</strong> Le support représente un
+<strong>entonnoir</strong> : large en haut (Define, <em>100+</em> variables) et étroit en bas (Control, <em>1 à 3</em>
+variables → <em>processus optimisé</em>). Les outils sont positionnés le long de l'entonnoir
+(Charte de projet, SIPOC, Cartographie, Matrice C&amp;E, VMEA/AMDEC, Processus cible, Plan de
+surveillance), avec le <strong>système de mesure</strong> mis en place à hauteur de la phase Measure. Voir
+la diapositive « Approche entonnoir » du fichier source.</p>
+</blockquote>
+<h3>5. Les 5 phases, étape par étape</h3>
+<p>Pour chaque phase : son <strong>objectif</strong>, son <strong>livrable de sortie</strong> et ses <strong>outils</strong>. Les livrables
+sont la matérialisation directe des étapes « entonnoir » de la section 4.</p>
+<h4>D — <strong>Define</strong> (Définir) : cadrer le projet</h4>
+<ul>
+<li><strong>Objectif :</strong> parmi <em>« plusieurs projets potentiels »</em>, <strong>choisir et cadrer un projet</strong> :
+  préciser le problème, son périmètre, l'objectif chiffré, le client et sa <strong>voix (VOC)</strong>.</li>
+<li><strong>Livrable :</strong> <strong>un projet choisi</strong>, formalisé par la <strong>charte de projet</strong> et un <strong>SIPOC</strong>.</li>
+<li><strong>Outils associés :</strong> <strong>Charte de projet</strong>, <strong>SIPOC</strong>, <strong>VOC / CTS</strong>.</li>
+<li><strong>Variables encore en jeu :</strong> <strong>100+</strong> (toutes les entrées possibles).</li>
+</ul>
+<h4>M — <strong>Measure</strong> (Mesurer) : établir la situation de référence</h4>
+<ul>
+<li><strong>Objectif :</strong> répondre à <em>« Où en sommes-nous ? »</em> en <strong>mesurant la situation de référence
+  (baseline)</strong> du processus, de façon <strong>fiable</strong>.</li>
+<li><strong>Livrable :</strong> une <strong>mesure de la situation de référence</strong> et un <strong>système de mesure</strong> validé ;
+  une cartographie détaillée du processus.</li>
+<li><strong>Outils associés :</strong> <strong>Cartographie</strong> du processus, <strong>Matrice C&amp;E</strong> (Causes &amp; Effets),
+  <strong>système de mesure</strong>.</li>
+<li><strong>Variables encore en jeu :</strong> <strong>25 à 30</strong>.</li>
+</ul>
+<h4>A — <strong>Analyze</strong> (Analyser) : trouver la cause fondamentale</h4>
+<ul>
+<li><strong>Objectif :</strong> parmi <em>« plusieurs causes fondamentales possibles »</em>, <strong>identifier et vérifier
+  la (les) cause(s) racine(s)</strong> qui pilote(nt) réellement le <strong>Y</strong>.</li>
+<li><strong>Livrable :</strong> une <strong>cause fondamentale identifiée et vérifiée</strong> (par les données).</li>
+<li><strong>Outils associés :</strong> <strong>VMEA / AMDEC</strong>, <strong>analyse statistique</strong>.</li>
+<li><strong>Variables encore en jeu :</strong> <strong>8 à 10</strong>.</li>
+</ul>
+<h4>I — <strong>Improve</strong> (Améliorer) : concevoir et tester la solution</h4>
+<ul>
+<li><strong>Objectif :</strong> répondre à <em>« Quelle est la solution ? »</em> en <strong>concevant, testant et mesurant</strong>
+  des améliorations qui agissent sur les <strong>X clés</strong>.</li>
+<li><strong>Livrable :</strong> des <strong>améliorations testées et mesurées</strong>, et un <strong>processus cible</strong> défini.</li>
+<li><strong>Outils associés :</strong> définition du <strong>processus cible</strong>.</li>
+<li><strong>Variables encore en jeu :</strong> <strong>3 à 6</strong>.</li>
+</ul>
+<h4>C — <strong>Control</strong> (Maîtriser) : pérenniser les gains</h4>
+<ul>
+<li><strong>Objectif :</strong> répondre à <em>« Comment maintenir les gains ? »</em> en <strong>déployant le processus
+  optimisé</strong> et en le <strong>mettant sous contrôle</strong> dans la durée.</li>
+<li><strong>Livrable :</strong> un <strong>processus déployé et sous contrôle</strong> (le <strong>processus optimisé</strong>, piloté par
+  ses <strong>1 à 3 X clés</strong>).</li>
+<li><strong>Outils associés :</strong> <strong>plan de surveillance</strong> (plan de contrôle).</li>
+<li><strong>Variables encore en jeu :</strong> <strong>1 à 3</strong>.</li>
+</ul>
+<h3>6. La logique de « stage-gating » (revue de fin de phase)</h3>
+<p>Le DMAIC se parcourt <strong>dans l'ordre, sans sauter d'étape</strong>. Entre deux phases se trouve une
+<strong>porte (gate)</strong> : une <strong>revue</strong> qui vérifie que la phase est réellement aboutie <strong>avant</strong>
+d'autoriser le passage à la suivante.</p>
+<ul>
+<li><strong>Principe :</strong> chaque phase a un <strong>livrable</strong> (cf. sections 4 et 5). On ne <strong>franchit la porte</strong>
+  que si <strong>ce livrable existe et tient la route</strong>. Sinon, on <strong>reste dans la phase</strong> ou on
+  <strong>revient en arrière</strong>.</li>
+<li><strong>Pourquoi ?</strong> Sans porte, on risque de <strong>chercher des solutions (Improve) avant d'avoir
+  prouvé la cause (Analyze)</strong>, ou d'<strong>analyser avant d'avoir des mesures fiables (Measure)</strong> :
+  on traite alors le <strong>mauvais X</strong>, et les gains ne tiennent pas.</li>
+<li><strong>C'est aussi la logique entonnoir :</strong> chaque porte n'autorise à descendre que les <strong>variables
+  qui ont survécu</strong> au filtre de la phase. On <strong>rétrécit</strong> à chaque gate.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Porte (gate)</th>
+<th>Critère de passage (le livrable doit être prêt)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fin de Define → Measure</strong></td>
+<td>Un <strong>projet choisi</strong> et cadré : charte de projet + SIPOC validés.</td>
+</tr>
+<tr>
+<td><strong>Fin de Measure → Analyze</strong></td>
+<td>Une <strong>mesure de référence</strong> fiable + <strong>système de mesure</strong> validé.</td>
+</tr>
+<tr>
+<td><strong>Fin de Analyze → Improve</strong></td>
+<td>Une <strong>cause fondamentale identifiée <em>et vérifiée</em></strong> par les données.</td>
+</tr>
+<tr>
+<td><strong>Fin de Improve → Control</strong></td>
+<td>Des <strong>améliorations testées et mesurées</strong> (le gain est prouvé).</td>
+</tr>
+<tr>
+<td><strong>Fin de Control → (clôture)</strong></td>
+<td>Un <strong>processus déployé et sous contrôle</strong>, gains <strong>maintenus</strong>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>À noter :</strong> comme la roue DMAIC est cyclique, la <strong>clôture</strong> d'un projet (Control) nourrit le
+<strong>choix du projet suivant</strong> (retour en Define).</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Support <strong>DMAIC — Define, Measure, Analyze, Improve, Control</strong></td>
+<td>Vision d'ensemble : roue DMAIC, approche entonnoir, outils par phase</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Charte de projet</strong></td>
+<td>Cadrer le projet en phase <strong>Define</strong> (problème, périmètre, objectif, client)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>SIPOC</strong></td>
+<td>Vue macro du processus (Suppliers-Inputs-Process-Outputs-Customers) en <strong>Define</strong></td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Cartographie de processus</strong></td>
+<td>Détailler le processus pour la <strong>mesure de référence</strong> (Measure)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Matrice C&amp;E (Causes &amp; Effets)</strong></td>
+<td>Hiérarchiser les entrées X selon leur impact sur Y (Measure)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>VMEA / AMDEC</strong></td>
+<td>Évaluer/prioriser les modes de défaillance et causes racines (Analyze)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Analyse statistique</strong></td>
+<td>Vérifier par les données la cause fondamentale (Analyze)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Processus cible</strong></td>
+<td>Concevoir le processus amélioré à tester (Improve)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Plan de surveillance (plan de contrôle)</strong></td>
+<td>Maintenir les gains et garder le processus sous contrôle (Control)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre —
+<strong>situer un vrai problème dans les 5 phases du DMAIC</strong>.</p>
+</blockquote>
+<p><strong>Exercice — Mon problème dans le tunnel DMAIC</strong>
+1. Choisissez <strong>un problème réel</strong> de votre terrain d'application (ex. : <em>« le délai de traitement
+   des commandes dépasse souvent 48 h »</em>). Nommez le <strong>Y</strong> mesurable (ici : le délai en heures).
+2. Pour <strong>chacune des 5 phases</strong>, rédigez <strong>en UNE phrase</strong> l'<strong>objectif</strong> appliqué à <em>votre</em> cas.
+   Exemple (à adapter) :
+   - <strong>Define :</strong> <em>« Cadrer un projet visant à ramener le délai de traitement sous 24 h pour le
+     client interne Logistique. »</em>
+   - <strong>Measure :</strong> <em>« Mesurer le délai réel actuel (baseline) sur 4 semaines avec un comptage
+     fiable. »</em>
+   - <strong>Analyze :</strong> <em>« Identifier et vérifier par les données la cause principale des retards. »</em>
+   - <strong>Improve :</strong> <em>« Concevoir et tester une solution qui réduit cette cause et mesurer le gain. »</em>
+   - <strong>Control :</strong> <em>« Déployer la nouvelle façon de faire et la mettre sous plan de surveillance. »</em>
+3. En face de chaque phase, notez le <strong>livrable de sortie</strong> attendu (projet choisi · mesure de
+   référence · cause vérifiée · améliorations testées · processus sous contrôle) et <strong>un outil</strong>
+   que vous utiliseriez (charte, SIPOC, cartographie, matrice C&amp;E, AMDEC, plan de surveillance…).
+4. Tracez les <strong>4 portes (gates)</strong> entre les phases et écrivez, pour chacune, <strong>le critère</strong> qui
+   vous autoriserait à passer à la phase suivante.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> un tableau <strong>« Mon problème → 5 phases DMAIC »</strong> (1 page) : par ligne, la
+  phase, son objectif en 1 phrase, le livrable, l'outil, et le critère de porte.</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>le <strong>Y</strong> est mesurable et le problème est <strong>réel</strong> ;</li>
+<li>les <strong>5 objectifs</strong> sont distincts et respectent <strong>l'ordre logique</strong> (on ne propose pas la
+    solution en Define, on ne mesure pas en Analyze) ;</li>
+<li>chaque <strong>porte</strong> a un <strong>critère vérifiable</strong> (« le livrable existe et tient la route »).</li>
+<li><strong>Temps conseillé :</strong> 20 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>DMAIC</strong> = <strong>D</strong>efine · <strong>M</strong>easure · <strong>A</strong>nalyze · <strong>I</strong>mprove · <strong>C</strong>ontrol, <strong>dans l'ordre</strong>.</li>
+<li>C'est <strong>avant tout une structure</strong> : stratifier les étapes, choisir les <strong>bons outils</strong> et les
+  <strong>enchaîner</strong> (la sortie d'un outil = l'entrée du suivant).</li>
+<li>Logique de fond : <strong>problème concret → problème statistique <code>Y = f(X…)</code> → solution concrète</strong>.
+  On pilote <strong>les X (causes)</strong>, pas Y directement.</li>
+<li><strong>Approche entonnoir</strong> : on passe de <strong>100+</strong> variables (Define) à <strong>1 à 3</strong> X clés (Control).</li>
+<li><strong>Livrables par phase :</strong> projet choisi → mesure de référence → cause vérifiée → améliorations
+  testées → processus sous contrôle.</li>
+<li><strong>Stage-gating</strong> : à chaque <strong>porte</strong>, on ne passe à la phase suivante <strong>que si le livrable est
+  prêt</strong> ; sinon on reste ou on revient.</li>
+<li>La roue DMAIC est <strong>cyclique</strong> : Control alimente le prochain Define.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Que signifie l'acronyme <strong>DMAIC</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Define · Manage · Audit · Improve · Close</button><button type="button" class="opt" data-key="b"><b>b)</b> Define · Measure · Analyze · Improve · Control</button><button type="button" class="opt" data-key="c"><b>c)</b> Decide · Measure · Act · Implement · Control</button><button type="button" class="opt" data-key="d"><b>d)</b> Define · Model · Analyze · Iterate · Confirm</button></div><div class="q-exp" hidden>Define, Measure, Analyze, Improve, Control.</div></li><li class="q" data-correct="d"><div class="q-text">Dans l'approche « entonnoir », combien de variables d'entrée reste-t-il <strong>en fin de Control</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 100+</button><button type="button" class="opt" data-key="b"><b>b)</b> 25 à 30</button><button type="button" class="opt" data-key="c"><b>c)</b> 8 à 10</button><button type="button" class="opt" data-key="d"><b>d)</b> 1 à 3</button></div><div class="q-exp" hidden>l'entonnoir converge de 100+ (Define) vers <strong>1 à 3</strong> X clés (Control).</div></li><li class="q" data-correct="b"><div class="q-text">La formule <code>Y = f(X1, X2, X3 …)</code> signifie que…</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> on agit directement sur Y</button><button type="button" class="opt" data-key="b"><b>b)</b> Y (la sortie) est fonction des X (les entrées), donc on agit sur les X</button><button type="button" class="opt" data-key="c"><b>c)</b> les X sont sans effet sur Y</button><button type="button" class="opt" data-key="d"><b>d)</b> il faut autant de X que de Y</button></div><div class="q-exp" hidden>la sortie Y dépend des entrées X ; on pilote Y <strong>via</strong> ses causes, les X.</div></li><li class="q" data-correct="d"><div class="q-text">À quelle phase associe-t-on le <strong>plan de surveillance</strong> (plan de contrôle) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Define</button><button type="button" class="opt" data-key="b"><b>b)</b> Measure</button><button type="button" class="opt" data-key="c"><b>c)</b> Analyze</button><button type="button" class="opt" data-key="d"><b>d)</b> Control</button></div><div class="q-exp" hidden>le <strong>plan de surveillance</strong> sert à <strong>maintenir les gains</strong> en phase <strong>Control</strong>.</div></li><li class="q" data-correct="b"><div class="q-text">Qu'est-ce que la logique de <strong>stage-gating</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> On peut sauter une phase si on est pressé</button><button type="button" class="opt" data-key="b"><b>b)</b> On ne passe à la phase suivante que si le <strong>livrable</strong> de la phase en cours est prêt</button><button type="button" class="opt" data-key="c"><b>c)</b> On traite toutes les phases en parallèle</button><button type="button" class="opt" data-key="d"><b>d)</b> On commence toujours par Improve</button></div><div class="q-exp" hidden>la <strong>porte</strong> n'autorise le passage que si le livrable de la phase est abouti.</div></li><li class="q" data-correct="vrai"><div class="q-text">Vrai ou faux : le <strong>livrable</strong> de la phase <strong>Analyze</strong> est <em>« une cause fondamentale identifiée et vérifiée »</em>.</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>c'est exactement le livrable de sortie d'<strong>Analyze</strong>.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>13.DMAIC Define Mesure Analyze Improve Control.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1XvmPWqSwqT3e0-iomUv_9AzX_Orilx2m/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="09-resolution-probleme-qqoqccp-ishikawa.html"><small>← Module précédent</small>9 · Résolution de problème : QQOQCCP, Ishikawa, PDCA</a><a class="nx" href="11-voc-cts.html"><small>Module suivant →</small>11 · Voix du Client (VoC) & arbre des CTS</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5 — Management Lean & Diagramme de Nemoto — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="04-paradigmes.html">← Préc.</a><a href="06-standards-standardisation.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link active" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="05-management-lean-nemoto">Marquer ce module comme terminé</button></div><h1>Module 5 — Management Lean &amp; Diagramme de Nemoto</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 45 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Adopter</strong> l'état d'esprit Lean (les 10 préceptes) et l'attitude positive face aux problèmes.
+- <strong>Poser</strong> les 6 questions du manager Lean devant un problème réel.
+- <strong>Décrire</strong> le rôle du manager sur le <strong>Gemba</strong> et le <strong>triangle d'or du management</strong>.
+- <strong>Distinguer</strong> les rôles et responsabilités de chaque niveau (direction, encadrement, maîtrise, opérateurs).
+- <strong>Situer</strong> chaque acteur dans le <strong>diagramme de Nemoto</strong> et l'utiliser pour connecter la vision à l'action.
+- <strong>Planifier</strong> une tournée terrain managériale et appliquer Nemoto à un problème concret.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 1 — Introduction au Lean, au 6 Sigma et au Lean 6 Sigma.</li>
+<li>Notions des <strong>MUDA</strong> (gaspillages) et des <strong>3 principes / 7 concepts</strong> du Lean (paradigmes Lean).</li>
+<li>Notion de <strong>Q.C.D.</strong> (Qualité – Coût – Délai) comme expression des besoins du client.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 700 372" role="img" class="svg-anim"><polygon points="350,34 272,120 428,120" fill="#334155" class="seg"/><polygon points="272,120 428,120 511,212 189,212" fill="#2563eb" class="seg"/><polygon points="189,212 511,212 590,300 110,300" fill="#16a34a" class="seg"/><text x="350" y="103" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="700">TOP MANAGEMENT</text><text x="350" y="117" text-anchor="middle" fill="#cdd6e2" font-size="10">Vision &amp; sens</text><text x="350" y="165" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Management intermédiaire</text><text x="350" y="182" text-anchor="middle" fill="#dbe5ff" font-size="10.5">Objectifs &amp; standards · fait le pont</text><text x="350" y="254" text-anchor="middle" fill="#fff" font-size="12.5" font-weight="700">Opérationnels</text><text x="350" y="271" text-anchor="middle" fill="#dcfce7" font-size="10.5">Création de valeur (Gemba) · remontent les idées</text><line x1="56" y1="70" x2="56" y2="296" stroke="#64748b" stroke-width="2.5"/><polygon points="0,-5 10,0 0,5" fill="#64748b" transform="translate(56,296) rotate(90)"/><text x="42" y="186" fill="#475569" font-size="11" font-weight="600" transform="rotate(-90 42 186)" text-anchor="middle">Top-Down : déployer la vision</text><line x1="644" y1="296" x2="644" y2="70" stroke="#64748b" stroke-width="2.5"/><polygon points="0,-5 10,0 0,5" fill="#64748b" transform="translate(644,70) rotate(-90)"/><text x="658" y="186" fill="#475569" font-size="11" font-weight="600" transform="rotate(90 658 186)" text-anchor="middle">Bottom-Up : remonter les idées</text></svg><figcaption>Le diagramme de Nemoto relie les 3 niveaux : la direction porte la vision, l'encadrement fait le pont (objectifs & standards), les opérationnels créent la valeur et remontent les idées.</figcaption></figure>
+
+<h3>1. De quoi parle-t-on ? Les comportements managériaux Lean</h3>
+<p>Le Lean n'est pas seulement une boîte à outils : c'est d'abord une <strong>culture</strong> portée par le
+<strong>comportement des managers</strong>. Les comportements managériaux Lean se construisent autour de
+trois axes permanents, présents en filigrane de tout le module :</p>
+<ul>
+<li><strong>Accompagnement du changement</strong></li>
+<li><strong>Culture de l'excellence</strong></li>
+<li><strong>Développement des équipes</strong></li>
+</ul>
+<p>Le périmètre du sujet couvre :</p>
+<table>
+<thead>
+<tr>
+<th>Thème</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aptitude au changement</strong></td>
+<td>Conduire le changement de culture au quotidien</td>
+</tr>
+<tr>
+<td><strong>Attitude Gemba</strong></td>
+<td>Attitude positive face aux problèmes · management Top down / Bottom up · le triangle d'or</td>
+</tr>
+<tr>
+<td><strong>Le paradigme Lean</strong></td>
+<td>3 principes / 7 concepts (voir module spécifique)</td>
+</tr>
+<tr>
+<td><strong>Rôles &amp; responsabilités</strong></td>
+<td>Le manager Lean et ses équipes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Rappel de cadrage.</strong> Tout part des <strong>besoins du client (Q.C.D.)</strong> et vise la <strong>satisfaction
+totale du client</strong>. L'organisation Lean s'articule autour de la <strong>ligne de valeur ajoutée</strong> et
+du <strong>Gemba</strong>, animés et aidés par le management.</p>
+</blockquote>
+<h3>2. L'état d'esprit Lean — les 10 préceptes</h3>
+<p>Avant tout outil, le manager Lean adopte un <strong>état d'esprit</strong>. Ce sont les règles de pensée à
+intérioriser :</p>
+<ol>
+<li><strong>Abandonner les idées fixes</strong>, refuser l'état actuel des choses.</li>
+<li>Au lieu d'expliquer ce que l'on <strong>ne peut pas</strong> faire, réfléchir <strong>comment</strong> faire.</li>
+<li>Réaliser <strong>aussitôt</strong> les bonnes propositions d'amélioration.</li>
+<li><strong>Ne pas chercher la perfection</strong> : réaliser <strong>60 % dès maintenant</strong>.</li>
+<li><strong>Corriger l'erreur immédiatement, sur place</strong>.</li>
+<li><strong>Trouver les idées dans la difficulté</strong>.</li>
+<li>Chercher la <strong>cause réelle</strong>, respecter les <strong>« 5 pourquoi ? »</strong>, puis chercher la solution.</li>
+<li>Prendre en compte les <strong>idées de 10 personnes</strong> au lieu d'attendre l'idée géniale d'une seule.</li>
+<li><strong>Essayer</strong>, et ensuite <strong>valider</strong>.</li>
+<li><strong>L'amélioration est infinie.</strong></li>
+</ol>
+<h3>3. Accueillir positivement les problèmes — les 6 questions du manager Lean</h3>
+<p>Dans la culture Lean, <strong>un problème n'est pas une faute, c'est une opportunité d'amélioration</strong>.
+Le manager l'accueille positivement et le structure avec <strong>6 questions</strong> :</p>
+<ol>
+<li>Quel est le problème avec <strong>le travail tel qu'il est fait réellement</strong> ?</li>
+<li>Quel est le <strong>problème réel</strong> ?</li>
+<li>Quelle est la <strong>cause</strong> de ce problème ?</li>
+<li>Que <strong>devons-nous faire</strong> pour régler ce problème ?</li>
+<li><strong>Pourquoi cette solution</strong> et pas une autre ?</li>
+<li><strong>Comment saurons-nous</strong> que ce problème est <strong>définitivement résolu</strong> ?</li>
+</ol>
+<blockquote>
+<p>Ces 6 questions forment une mini-démarche de résolution : du fait réel observé → cause →
+contre-mesure → preuve de l'efficacité. Elles préparent le réflexe <strong>5 pourquoi / PDCA</strong>.</p>
+</blockquote>
+<h3>4. Management Top Down et Bottom Up</h3>
+<p>Le management Lean combine deux flux complémentaires, qui se rencontrent <strong>sur le Gemba</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Flux</th>
+<th>Position du manager</th>
+<th>Logique</th>
+<th>Outils associés</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top Down</strong> (descendant)</td>
+<td><strong>Position de direction</strong></td>
+<td>Donner le cap : objectifs, <strong>Policy Management</strong></td>
+<td>Objectifs → Gemba</td>
+</tr>
+<tr>
+<td><strong>Bottom Up</strong> (montant)</td>
+<td><strong>Position d'aide et d'animation</strong></td>
+<td>Faire remonter les <strong>idées</strong> : <strong>Daily Management</strong></td>
+<td>Idées ← Gemba</td>
+</tr>
+</tbody>
+</table>
+<p>Le manager doit savoir alterner ces deux postures. Le socle qui rend cela possible est le
+<strong>travail standard</strong> et le <strong>management visuel</strong>, qui permettent de :</p>
+<ul>
+<li><strong>Avoir un suivi régulier</strong>,</li>
+<li><strong>Savoir ce qui se passe</strong>,</li>
+<li><strong>Tenir sous contrôle</strong>.</li>
+</ul>
+<h3>5. Le triangle d'or du management</h3>
+<p>Le <strong>triangle d'or</strong> relie trois capacités fondamentales du management Lean. Chaque sommet
+combine ce que l'on doit <em>savoir</em> et ce que l'on doit <em>rendre possible</em> :</p>
+<table>
+<thead>
+<tr>
+<th>Sommet</th>
+<th>Pour l'équipe</th>
+<th>Pour le manager</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Savoir ce qu'on a à faire et comment le faire</strong></td>
+<td>Comprendre l'attendu</td>
+<td><strong>Rendre évident</strong></td>
+</tr>
+<tr>
+<td><strong>Savoir le faire et produire ce qui est attendu</strong></td>
+<td>Exécuter le standard</td>
+<td><strong>Se repérer / comprendre</strong></td>
+</tr>
+<tr>
+<td><strong>Voir ce qui se passe</strong></td>
+<td>Visualiser l'écart</td>
+<td><strong>Voir ce qui se passe</strong> sur le terrain</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Le triangle d'or résume pourquoi <strong>standards</strong> + <strong>management visuel</strong> + <strong>présence terrain</strong>
+sont indissociables : sans visibilité, on ne sait pas, on ne fait pas, on ne progresse pas.</p>
+<p>🖼️ <strong>Schéma non transcriptible.</strong> Le support présente le triangle d'or sous forme de schéma
+à trois sommets (« savoir quoi faire / savoir le faire / voir ce qui se passe »). Reportez-vous
+à la diapositive 7 du fichier source <em>Comportements_Manageriaux_Lean</em> pour le visuel complet.</p>
+</blockquote>
+<h3>6. Le Gemba — là où la valeur est créée</h3>
+<p><strong>Gemba = là où la valeur est créée</strong> (le terrain réel). C'est le lieu central du management Lean.
+Les <strong>rôles et responsabilités</strong> s'y organisent autour de l'élimination des gaspillages :</p>
+<ul>
+<li><strong>Innover</strong> → <strong>Concevoir la valeur</strong>.</li>
+<li><strong>Améliorer l'existant</strong> → <strong>Éliminer les gaspillages du Gemba</strong>.</li>
+<li><strong>Travail standard</strong> → <strong>Garder les gaspillages hors du Gemba</strong>.</li>
+</ul>
+<p>Autrement dit : on <strong>conçoit</strong> la valeur, on <strong>élimine</strong> les MUDA déjà présents sur le terrain,
+puis on <strong>standardise</strong> pour <strong>empêcher</strong> les gaspillages de revenir.</p>
+<blockquote>
+<p>🖼️ <strong>Schéma non transcriptible.</strong> La diapositive 8 du support positionne ces rôles autour du
+Gemba (opérateurs au centre, middle management, top management) en regard de la boucle
+innover / améliorer / standardiser. Voir le fichier source pour le visuel.</p>
+</blockquote>
+<h3>7. Rôles et responsabilités par niveau hiérarchique</h3>
+<p>Le management Lean répartit clairement les responsabilités sur <strong>trois (à quatre) niveaux</strong>, des
+opérateurs jusqu'au top management.</p>
+<h4>7.1 Le rôle de la <strong>direction</strong> Lean</h4>
+<ul>
+<li><strong>Prévoir les tendances</strong> et l'évolution à <strong>long terme</strong>.</li>
+<li><strong>Gérer les activités d'innovation</strong>.</li>
+<li><strong>Piloter (Top Down)</strong> et <strong>animer (Bottom Up)</strong> l'amélioration continue.</li>
+<li><strong>Soutenir par l'action</strong> les concepts et la philosophie Lean.</li>
+<li><strong>Établir, maintenir et améliorer continuellement</strong> les systèmes de gestion des processus.</li>
+</ul>
+<h4>7.2 Le rôle de l'<strong>encadrement</strong> Lean (faire équipe avec la maîtrise)</h4>
+<ul>
+<li><strong>Orienter et développer</strong> les activités d'innovation.</li>
+<li><strong>Intégrer</strong> les activités d'amélioration continue au travers des systèmes et fonctions.</li>
+<li><strong>Déployer les données</strong> des besoins clients.</li>
+<li><strong>Appliquer</strong> les principes et concepts Lean.</li>
+<li><strong>Maintenir et améliorer</strong> son propre processus de travail.</li>
+<li><strong>Exiger et mettre en œuvre</strong> les meilleurs processus de travail, les plus sûrs et les plus faciles.</li>
+<li><strong>Solliciter les idées</strong> d'amélioration et favoriser leur application.</li>
+</ul>
+<h4>7.3 Le rôle de la <strong>maîtrise</strong> Lean (faire équipe avec l'encadrement)</h4>
+<ul>
+<li><strong>Appliquer</strong> les principes et concepts Lean.</li>
+<li><strong>Mettre en pratique</strong> les données des besoins clients.</li>
+<li><strong>Maintenir et améliorer</strong> son propre processus de travail.</li>
+<li><strong>Faire respecter</strong> les meilleurs processus de travail, les plus faciles, les plus sûrs.</li>
+<li><strong>Solliciter des idées</strong> d'amélioration et <strong>organiser leur mise en œuvre</strong>.</li>
+<li><strong>Développer la polyvalence et la polycompétence</strong> du personnel.</li>
+</ul>
+<h4>7.4 Le rôle des <strong>opérateurs</strong> Lean</h4>
+<ul>
+<li><strong>Utiliser et respecter</strong> le meilleur processus de travail, le plus sûr et le plus facile, tel
+  que le définit le <strong>Standard</strong>.</li>
+<li><strong>Identifier et améliorer</strong> le processus de travail.</li>
+<li><strong>Produire et mettre en œuvre</strong> l'essentiel des suggestions d'amélioration.</li>
+<li><strong>Chercher constamment à progresser</strong>.</li>
+</ul>
+<h4>7.5 La mission de l'<strong>encadrement (middle management)</strong> — 11 points</h4>
+<ol>
+<li><strong>Connaître les attentes de son client.</strong></li>
+<li><strong>Connaître le Gemba</strong> (sa valeur ajoutée).</li>
+<li><strong>Assurer la production.</strong></li>
+<li><strong>Faire respecter les Standards.</strong></li>
+<li><strong>Faire la planification mensuelle.</strong></li>
+<li><strong>Gérer le personnel.</strong></li>
+<li><strong>Maintenir les équipements et l'environnement.</strong></li>
+<li><strong>Gérer les flux</strong> matières, composants, produits.</li>
+<li><strong>Contribuer à l'amélioration continue.</strong></li>
+<li><strong>Déployer les objectifs.</strong></li>
+<li><strong>Participer à la conception</strong> de nouveaux moyens et de nouveaux produits.</li>
+</ol>
+<h3>8. Le système de management Lean — conduire le changement au quotidien</h3>
+<p>La conduite du changement <strong>au quotidien</strong> repose sur quatre leviers :</p>
+<ul>
+<li><strong>Cercle du changement de culture</strong></li>
+<li><strong>Travail d'équipe</strong></li>
+<li><strong>Système de suggestions</strong></li>
+<li><strong>Confirmation de processus</strong></li>
+</ul>
+<h4>8.1 Changer la culture — le cercle en 6 étapes</h4>
+<p>Le changement de culture suit une boucle : on agit sur les comportements pour, in fine, faire
+évoluer la culture.</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Élément</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Culture</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Perception</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Mode de pensée</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Comportement au travail</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Habitudes</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Organisation</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Le mot d'ordre central du schéma est <strong>CHANGER</strong> : agir sur la perception et le mode de pensée
+transforme le comportement, puis les habitudes, puis l'organisation et la culture.</p>
+</blockquote>
+<h4>8.2 Les fondements du changement de culture</h4>
+<p>Le changement s'appuie sur quatre fondements, soutenus par un <strong>partenariat DRH ↔ Équipe Lean ↔
+Management</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Fondement</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Formation</strong></td>
+<td>Formation aux outils · <strong>One Point Lesson</strong> · formation permanente aux standards</td>
+</tr>
+<tr>
+<td><strong>Chantiers</strong></td>
+<td><strong>PDCA</strong>, Groupe de Résolution de Problème, <strong>Cercle qualité</strong>, <strong>TRS</strong>, <strong>Suggestions</strong></td>
+</tr>
+<tr>
+<td><strong>Amélioration continue</strong></td>
+<td>Processus d'intégration et de formation continue · <strong>matrice de polyvalence et de polycompétence</strong></td>
+</tr>
+<tr>
+<td><strong>Processus d'intégration</strong></td>
+<td>Intégration des nouveaux embauchés <strong>dans la culture</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>Règle des Hommes / de la culture.</strong> <em>« Les Hommes passent, la culture reste… à condition
+de les former en nombre suffisant ! »</em> La <strong>masse critique</strong> pour déclencher un changement de
+culture est estimée à <strong>50 % de la population de l'entreprise</strong>.</p>
+</blockquote>
+<h4>8.3 Le travail d'équipe — la réunion courte quotidienne</h4>
+<p>Le manager Lean <strong>anime une réunion courte, quotidienne et debout</strong> :</p>
+<ul>
+<li><strong>Résolution de problèmes</strong> (en système global).</li>
+<li><strong>Pilote les indicateurs de performance visuels</strong>.</li>
+<li><strong>Sponsorise les chantiers</strong> d'amélioration continue (Secteur X).</li>
+<li><strong>Gère la polyvalence et la polycompétence</strong> des membres de son équipe.</li>
+<li><strong>Observe quotidiennement le Gemba</strong> : <em>observation prolongée sur une zone réduite</em>.</li>
+<li><strong>Définit les priorités à court terme</strong> (pour être réactif), <strong>en SQDCM</strong> (processus &amp; résultats).</li>
+</ul>
+<p>Le pilotage visuel s'appuie sur des <strong>indicateurs PDCA</strong> et des <strong>plans d'action PDCA</strong>
+(Maintenance / Production / Qualité / Méthodes), formalisés dans un <strong>plan d'action PDCA de la
+semaine</strong>, au service du <strong>QCD</strong>.</p>
+<blockquote>
+<p><strong>SQDCM</strong> = Sécurité, Qualité, Délai (<em>Delivery</em>), Coût, Moral/Management — l'extension
+« managériale » du QCD pour le pilotage quotidien d'équipe.</p>
+</blockquote>
+<h3>9. Le Manager Lean et ses équipes — le bon dosage du leadership</h3>
+<p>Le style de management Lean se situe <strong>entre deux extrêmes à éviter</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Phrase typique</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Directif extrême</strong></td>
+<td>« Vous faites ce que je vous dis et c'est tout ! »</td>
+<td>Tue l'initiative</td>
+</tr>
+<tr>
+<td><strong>Manager Lean</strong> ✅</td>
+<td>« <strong>Trouvons ensemble des solutions à nos problèmes !</strong> »</td>
+<td>Engage et responsabilise</td>
+</tr>
+<tr>
+<td><strong>Délégation extrême</strong></td>
+<td>« Peu importe comment vous faites, tant que vous obtenez les résultats ! »</td>
+<td>Abandonne l'équipe</td>
+</tr>
+</tbody>
+</table>
+<p>Le <strong>Manager Lean</strong> :
+- <strong>Fait en sorte que chacun prenne des initiatives</strong> pour résoudre des problèmes et améliorer son travail.
+- <strong>Fait en sorte que chacun œuvre pour apporter de la VA</strong> et satisfaire <strong>in fine</strong> le client.</p>
+<p>Son <strong>leadership</strong> s'appuie sur quatre piliers :
+- <strong>Rôles et responsabilités</strong> (clairs).
+- <strong>Outils et techniques</strong>.
+- <strong>Situation actuelle, vision et étapes</strong> (le chemin).
+- <strong>Implication du personnel</strong>.</p>
+<blockquote>
+<p>🧭 <strong>Conclusion (Progress Partners).</strong> Le comportement Lean des managers doit être <strong>construit
+et intégré</strong> de façon homogène, en formant les managers et leurs équipes pour qu'ils adoptent
+naturellement ce comportement standardisé. Le choix des managers doit reposer non seulement sur
+les capacités techniques, mais aussi sur <strong>l'aptitude à motiver</strong>.</p>
+<p><em>« Définir la cible, en faire partager les raisons, expliquer le chemin pour l'atteindre, et
+aider les gens à enlever les obstacles du voyage — voilà le management. »</em>
+— <strong>Gary Convis</strong>, <em>Role of Management in a Lean Manufacturing Environment</em>.</p>
+</blockquote>
+<h3>10. Le diagramme de Nemoto</h3>
+<p>Le <strong>diagramme de Nemoto</strong> donne une <strong>vision claire des rôles et responsabilités de chacun</strong>
+selon les <strong>trois principaux niveaux hiérarchiques</strong> présents dans l'organisation. C'est l'outil
+qui <strong>relie la vision stratégique à la création de valeur sur le terrain</strong>.</p>
+<h4>10.1 Les trois niveaux et leur rôle</h4>
+<table>
+<thead>
+<tr>
+<th>Niveau</th>
+<th>Rôle dans le diagramme de Nemoto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Top management</strong></td>
+<td><strong>Délivre sa vision stratégique et crée du sens</strong>, créant la <strong>dynamique</strong> indispensable à toute transformation.</td>
+</tr>
+<tr>
+<td><strong>Management intermédiaire</strong></td>
+<td><strong>Distribue les objectifs et définit les standards.</strong> Coordonne l'activité opérationnelle, cherche à <strong>améliorer les standards et les conditions de travail</strong> grâce à une <strong>analyse permanente de la réalité du terrain</strong>.</td>
+</tr>
+<tr>
+<td><strong>Opérationnels</strong></td>
+<td><strong>Concrétisent la vision en produits et services</strong> pour <strong>« créer la valeur ajoutée »</strong> en appliquant les standards. <strong>Remontent les idées d'amélioration</strong>, <strong>résolvent les problèmes</strong> et contribuent ainsi à <strong>l'amélioration des standards</strong>.</td>
+</tr>
+</tbody>
+</table>
+<h4>10.2 Intérêt et objectifs de l'outil</h4>
+<ul>
+<li><strong>Gestion du temps pour faire vivre la dynamique.</strong> Chaque niveau a un rôle important dans
+  l'amélioration continue. <strong>L'encadrement doit passer une grande partie de son temps à aider les
+  opérateurs à mieux travailler</strong> (et non à les commander).</li>
+<li><strong>Connecter la vision à la mise en œuvre concrète.</strong></li>
+<li><strong>Savoir se situer dans la matrice</strong> : chacun identifie sa place et sa contribution.</li>
+</ul>
+<h4>10.3 Comment lire le diagramme (description du visuel)</h4>
+<blockquote>
+<p>🖼️ <strong>Schéma non transcriptible.</strong> Le diagramme de Nemoto se présente comme une <strong>matrice</strong>
+croisant les <strong>3 niveaux hiérarchiques</strong> (top management, management intermédiaire,
+opérationnels) et leur <strong>part de temps / de contribution</strong> aux différentes activités (vision,
+objectifs &amp; standards, création de valeur, amélioration). La lecture clé : plus on descend vers
+le terrain, plus la <strong>création de valeur</strong> domine ; plus on monte, plus la <strong>vision / le sens</strong>
+dominent — et le <strong>management intermédiaire</strong> fait le <strong>pont</strong> entre les deux, en consacrant
+l'essentiel de son temps à <strong>soutenir les opérateurs</strong>. Reportez-vous à la <strong>fiche outil source
+<em>Diagramme de NEMOTO</em></strong> pour la matrice complète.</p>
+<p><strong>Lien avec ce module.</strong> Le diagramme de Nemoto est la <strong>représentation synthétique</strong> des
+rôles vus en §7 : il met en image que la direction <em>pilote/anime</em>, l'encadrement <em>déploie et
+aide</em>, et les opérateurs <em>créent la valeur et remontent les idées</em>.</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Comportements Managériaux Lean</strong> (support de cours)</td>
+<td>Adopter l'état d'esprit Lean, les 6 questions, le triangle d'or, les rôles par niveau, la conduite du changement</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-8jEuw6_kvQnryJHlmKeyd6I6zJ95TOS/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Diagramme de NEMOTO</strong> (fiche outil)</td>
+<td>Visualiser les rôles des 3 niveaux et connecter la vision à la création de valeur</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1QdsT8ruO4zcauhQnpE1Is8lEX5HwXLW_/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Les 6 questions du manager Lean</strong></td>
+<td>Structurer l'accueil et la résolution d'un problème (cf. §3)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-8jEuw6_kvQnryJHlmKeyd6I6zJ95TOS/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Triangle d'or du management</strong></td>
+<td>Relier standards + management visuel + présence terrain (cf. §5)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-8jEuw6_kvQnryJHlmKeyd6I6zJ95TOS/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Cercle du changement de culture (6 étapes)</strong></td>
+<td>Conduire le changement de culture au quotidien (cf. §8.1)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-8jEuw6_kvQnryJHlmKeyd6I6zJ95TOS/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, les comportements managériaux
+Lean et le diagramme de Nemoto.</p>
+</blockquote>
+<p><strong>Exercice 1 — Planifier et réaliser une tournée terrain managériale (Gemba walk)</strong>
+1. Choisissez <strong>une zone réduite</strong> de votre périmètre (une ligne, un poste, un guichet, un process).
+2. Bloquez <strong>15 à 20 minutes</strong> dans votre agenda pour une <strong>observation prolongée</strong> de cette zone
+   (rituel quotidien recommandé).
+3. Sur place, <strong>posez les 6 questions du manager Lean</strong> (§3) à propos <strong>du travail tel qu'il est
+   fait réellement</strong> — pas du travail « tel qu'il devrait être ».
+4. Adoptez la posture <strong>« Trouvons ensemble des solutions ! »</strong> : faites <strong>parler les opérateurs</strong>
+   et notez <strong>au moins 3 idées</strong> d'amélioration remontées par eux.
+5. Identifiez <strong>un gaspillage (MUDA)</strong> visible et décidez d'une <strong>action immédiate</strong> (principe :
+   <em>réaliser 60 % dès maintenant</em>, corriger sur place).</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une <strong>fiche de tournée terrain</strong> (1 page) : zone observée, faits réels
+  constatés, réponses aux 6 questions, 3 idées remontées, 1 action immédiate + responsable + date.</li>
+<li><strong>Critères de réussite :</strong> les faits décrivent le <strong>réel observé</strong> (pas une opinion) ; au moins
+  <strong>3 idées viennent des opérateurs</strong> ; <strong>1 action</strong> est lancée le jour même avec un responsable
+  et une date ; vous adoptez la posture Manager Lean (ni directif extrême, ni délégation extrême).</li>
+<li><strong>Temps conseillé :</strong> 20 min sur le terrain + 10 min de mise au propre.</li>
+</ul>
+<p><strong>Exercice 2 — Appliquer le diagramme de Nemoto à un problème réel</strong>
+1. Prenez <strong>un problème concret</strong> de votre périmètre (qualité, délai, sécurité, coût).
+2. Tracez un tableau à <strong>3 lignes</strong> : <strong>Top management / Management intermédiaire / Opérationnels</strong>.
+3. Pour ce problème, <strong>répartissez les responsabilités</strong> par niveau, selon Nemoto :
+   - <em>Top</em> → quelle <strong>vision / quel sens / quel arbitrage</strong> ?
+   - <em>Intermédiaire</em> → quels <strong>objectifs, standards, conditions de travail</strong> à ajuster, et quel
+     <strong>temps consacré à aider les opérateurs</strong> ?
+   - <em>Opérationnels</em> → quels <strong>standards appliquer</strong>, quelles <strong>idées remonter</strong>, quelle
+     <strong>résolution</strong> au plus près du terrain ?
+4. Repérez <strong>votre propre place</strong> dans la matrice et <strong>une action</strong> que vous, à votre niveau,
+   devez porter cette semaine.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une <strong>matrice de Nemoto</strong> remplie pour votre problème (½ page) + votre
+  action personnelle.</li>
+<li><strong>Critères de réussite :</strong> chaque niveau a <strong>au moins une responsabilité explicite</strong> ; le rôle
+  du <strong>management intermédiaire comme pont</strong> (aider les opérateurs) apparaît clairement ; vous
+  avez identifié <strong>votre contribution</strong> et <strong>une action datée</strong>.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li>Le Lean est d'abord une <strong>culture portée par le comportement des managers</strong> (changement, excellence, développement des équipes).</li>
+<li><strong>État d'esprit Lean :</strong> refuser l'état actuel, faire <strong>60 % maintenant</strong>, corriger <strong>sur place</strong>, chercher la <strong>cause réelle (5 pourquoi)</strong>, <strong>10 idées valent mieux qu'une</strong>.</li>
+<li>Devant un problème : <strong>accueillir positivement</strong> et dérouler les <strong>6 questions</strong> (du fait réel à la preuve de résolution).</li>
+<li>Le manager alterne <strong>Top Down</strong> (cap, objectifs) et <strong>Bottom Up</strong> (aide, animation, idées) — et tout se joue <strong>sur le Gemba</strong>, là où la valeur est créée.</li>
+<li><strong>Triangle d'or :</strong> standards + management visuel + présence terrain rendent le travail <strong>évident, faisable et visible</strong>.</li>
+<li>Chaque <strong>niveau</strong> a un rôle précis ; <strong>l'encadrement doit passer l'essentiel de son temps à aider les opérateurs à mieux travailler</strong>.</li>
+<li>Le <strong>diagramme de Nemoto</strong> relie <strong>vision (top)</strong>, <strong>objectifs &amp; standards (intermédiaire)</strong> et <strong>création de valeur (opérationnels)</strong> : il permet à chacun de <strong>se situer</strong>.</li>
+<li>Style cible : <strong>« Trouvons ensemble des solutions ! »</strong> — ni directif extrême, ni délégation extrême. <strong>Masse critique de changement : 50 %</strong> de l'effectif.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Selon l'état d'esprit Lean, que faut-il viser plutôt que la perfection ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 100 % parfaitement planifié</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>60 % réalisés dès maintenant</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Attendre l'idée géniale d'une seule personne</button><button type="button" class="opt" data-key="d"><b>d)</b> Ne rien faire avant validation finale</button></div><div class="q-exp" hidden>« Ne pas chercher la perfection, réaliser 60 % dès maintenant. »</div></li><li class="q" data-correct="c"><div class="q-text">Combien de questions le manager Lean se pose-t-il face à un problème ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 3</button><button type="button" class="opt" data-key="b"><b>b)</b> 5</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>6</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> 10</button></div><div class="q-exp" hidden>les <strong>6 questions</strong> du manager Lean, du travail réel jusqu'à la preuve de résolution.</div></li><li class="q" data-correct="b"><div class="q-text">Dans le management Lean, le flux <strong>Bottom Up</strong> correspond surtout à :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Donner les objectifs (Policy Management)</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>Faire remonter les idées (Daily Management), position d'aide et d'animation</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Sanctionner les écarts</button><button type="button" class="opt" data-key="d"><b>d)</b> Définir la stratégie long terme</button></div><div class="q-exp" hidden>Bottom Up = <strong>position d'aide et d'animation</strong>, remontée des idées via le <strong>Daily Management</strong> ; le Top Down (objectifs/Policy Management) est descendant.</div></li><li class="q" data-correct="c"><div class="q-text">Dans le <strong>diagramme de Nemoto</strong>, quel est le rôle du <strong>management intermédiaire</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Créer directement la valeur ajoutée</button><button type="button" class="opt" data-key="b"><b>b)</b> Délivrer la vision stratégique</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>Distribuer les objectifs, définir/améliorer les standards et passer beaucoup de temps à aider les opérateurs</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> Aucun rôle dans l'amélioration</button></div><div class="q-exp" hidden>le management intermédiaire <strong>distribue les objectifs, définit/améliore les standards</strong> et consacre <strong>une grande partie de son temps à aider les opérateurs</strong>.</div></li><li class="q" data-correct="c"><div class="q-text">Quelle phrase caractérise le <strong>Manager Lean</strong> (et non un extrême) ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> « Vous faites ce que je vous dis et c'est tout ! »</button><button type="button" class="opt" data-key="b"><b>b)</b> « Peu importe comment, tant que vous avez les résultats ! »</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>« Trouvons ensemble des solutions à nos problèmes ! »</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> « Je m'occupe de tout moi-même. »</button></div><div class="q-exp" hidden>le Manager Lean engage et responsabilise : « Trouvons ensemble des solutions ! », à mi-chemin du directif extrême et de la délégation extrême.</div></li><li class="q" data-correct="c"><div class="q-text">La masse critique estimée pour déclencher un changement de culture est de :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 10 %</button><button type="button" class="opt" data-key="b"><b>b)</b> 25 %</button><button type="button" class="opt" data-key="c"><b>c)</b> <strong>50 %</strong></button><button type="button" class="opt" data-key="d"><b>d)</b> 100 % de l'effectif</button></div><div class="q-exp" hidden>la masse critique est estimée à <strong>50 %</strong> de la population de l'entreprise.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>7. Comportements_Manageriaux_Lean_MGT_v4.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-8jEuw6_kvQnryJHlmKeyd6I6zJ95TOS/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>7. Diagramme de NEMOTO.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1QdsT8ruO4zcauhQnpE1Is8lEX5HwXLW_/view">Ouvrir dans Drive</a></li>
+</ul>
+<blockquote>
+<p>ℹ️ <em>Note de transcription.</em> Les <strong>schémas</strong> (triangle d'or, organisation autour du Gemba, cercle
+du changement de culture, <strong>matrice du diagramme de Nemoto</strong>) ne sont pas transcriptibles
+intégralement en texte : ils sont <strong>décrits</strong> ci-dessus et <strong>renvoyés aux fichiers source</strong> Drive
+pour le visuel exact. La <strong>fiche outil Nemoto</strong> source est une fiche synthétique d'une page
+(définition, niveaux, intérêt) ; le <strong>détail graphique de la matrice</strong> figure sur le visuel du
+support, à consulter dans Drive.</p>
+</blockquote>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="04-paradigmes.html"><small>← Module précédent</small>4 · Les Paradigmes</a><a class="nx" href="06-standards-standardisation.html"><small>Module suivant →</small>6 · Standards & Standardisation</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

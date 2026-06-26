@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 7 — Les 5S — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="06-standards-standardisation.html">← Préc.</a><a href="08-management-visuel.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link active" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="07-5s">Marquer ce module comme terminé</button></div><h1>Module 7 — Les 5S</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 35 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Nommer</strong> les 5S dans l'ordre et <strong>expliquer</strong> le rôle de chaque étape (Seiri, Seiton, Seiso, Seiketsu, Shitsuke).
+- <strong>Justifier</strong> pourquoi les 5S sont « la première des techniques de management » et la base de toute amélioration.
+- <strong>Reconnaître</strong> les symptômes visibles d'une zone qui a besoin d'un chantier 5S.
+- <strong>Lancer</strong> un chantier 5S sur un poste réel, étape par étape, en produisant les livrables clés (audit, zone d'objets inutiles, étiquettes rouges, photos avant/après, standards).
+- <strong>Auditer</strong> chaque étape à l'aide des grilles de cotation (cotation 0 / 1 / 2).</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module sur les <strong>MUDA</strong> (gaspillages) : les 5S servent à éliminer les Muda.</li>
+<li>Notions de <strong>standards</strong> et de <strong>management visuel</strong> (les 5S en sont le socle).</li>
+<li>À défaut, aucun prérequis bloquant : le module se lit seul.</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 380 380" role="img" class="svg-anim"><path d="M190.0,12.0 A178.0,178.0 0 0 1 357.3,129.1 L282.1,156.5 A98.0,98.0 0 0 0 190.0,92.0 Z" fill="#dc2626" class="seg"><title>1S — Éliminer · Seiri</title></path><text x="276" y="67" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">1S</text><text x="257" y="95" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Éliminer · Seiri</text><path d="M359.3,135.0 A178.0,178.0 0 0 1 299.6,330.3 L250.3,267.2 A98.0,98.0 0 0 0 283.2,159.7 Z" fill="#d97706" class="seg"><title>2S — Ranger · Seiton</title></path><text x="333" y="234" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">2S</text><text x="301" y="224" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Ranger · Seiton</text><path d="M294.6,334.0 A178.0,178.0 0 0 1 90.5,337.6 L135.2,271.2 A98.0,98.0 0 0 0 247.6,269.3 Z" fill="#0d9488" class="seg"><title>3S — Nettoyer · Seiso</title></path><text x="193" y="340" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">3S</text><text x="192" y="306" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Nettoyer · Seiso</text><path d="M85.4,334.0 A178.0,178.0 0 0 1 18.9,140.9 L95.8,163.0 A98.0,98.0 0 0 0 132.4,269.3 Z" fill="#2563eb" class="seg"><title>4S — Standardiser · Seiketsu</title></path><text x="48" y="239" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">4S</text><text x="80" y="228" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Standardiser · Seiketsu</text><path d="M20.7,135.0 A178.0,178.0 0 0 1 183.8,12.1 L186.6,92.1 A98.0,98.0 0 0 0 96.8,159.7 Z" fill="#7c3aed" class="seg"><title>5S — Respecter · Shitsuke</title></path><text x="100" y="70" text-anchor="middle" fill="#fff" font-size="26" font-weight="800" dy="2">5S</text><text x="120" y="97" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Respecter · Shitsuke</text><circle cx="190.0" cy="190.0" r="92.0" fill="#222b38"/><text x="190.0" y="184.0" text-anchor="middle" fill="#f6b400" font-size="30" font-weight="800">5S</text><text x="190.0" y="208.0" text-anchor="middle" fill="#cbd2db" font-size="12">poste rangé & tenu</text><text x="190.0" y="26" text-anchor="middle" fill="#222b38" font-size="20">↻</text></svg><figcaption>Les 5S : un cycle en 5 étapes pour un poste rangé, propre et tenu dans la durée.</figcaption></figure>
+
+<h3>1. Pourquoi les 5S ? Le nouvel objectif</h3>
+<p>Dans l'ère concurrentielle, <strong>réduire le coût de production par l'élimination des Muda est indispensable</strong>. Les 5S sont l'outil de base pour y parvenir : ils instaurent un environnement de travail clair et organisé, condition préalable à toute performance.</p>
+<blockquote>
+<p><strong>Définition.</strong> Les <strong>5S</strong> sont une <strong>méthode</strong> qui permet d'obtenir un environnement de travail <strong>clair et organisé dont vous pouvez être fier</strong>. Étape par étape, c'est une bonne façon <strong>d'établir des règles</strong> et de <strong>maintenir</strong> l'organisation de l'environnement de travail, <strong>où chaque problème se voit facilement</strong>.</p>
+</blockquote>
+<p>Les 5S sont un <strong>socle</strong> pour la mise en place de trois démarches majeures :
+- la <strong>Standardisation</strong>,
+- le <strong>Management Visuel</strong>,
+- la <strong>TPM</strong> (maintenance productive totale),</p>
+<p>… au service de la <strong>Performance (SQCDME)</strong> — Sécurité, Qualité, Coût, Délai, Motivation, Environnement.</p>
+<h3>2. Les 5S = 5 étapes, à réaliser DANS L'ORDRE</h3>
+<p>Le nom vient de cinq mots japonais commençant par « S ». <strong>Par tous, partout, pour tout.</strong> Le tableau ci-dessous donne le terme japonais, sa traduction d'action et ce qu'on fait concrètement.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Terme (japonais)</th>
+<th>Action</th>
+<th>Ce qu'on fait</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1S</strong></td>
+<td><strong>SEIRI</strong> — <em>Supprimer / Éliminer / Débarrasser</em></td>
+<td>S'organiser</td>
+<td><strong>Identifier tout ce qui est inutile et l'éliminer</strong>. Ôter l'inutile.</td>
+</tr>
+<tr>
+<td><strong>2S</strong></td>
+<td><strong>SEITON</strong> — <em>Ranger</em></td>
+<td>Simplifier</td>
+<td><strong>Ranger les éléments nécessaires dans l'ordre</strong> pour qu'ils soient facilement accessibles. Une place pour chaque chose, chaque chose à sa place.</td>
+</tr>
+<tr>
+<td><strong>3S</strong></td>
+<td><strong>SEISO</strong> — <em>Nettoyer / Inspecter</em></td>
+<td>(Décrasser)</td>
+<td><strong>Inspecter et nettoyer régulièrement, identifier les problèmes et leurs causes</strong>. Prévenir les défauts et éliminer les situations récurrentes. Décrasser <strong>et</strong> détecter les anomalies.</td>
+</tr>
+<tr>
+<td><strong>4S</strong></td>
+<td><strong>SEIKETSU</strong> — <em>Standardiser</em></td>
+<td>(Rendre évident)</td>
+<td><strong>Rendre évident, standardiser et former</strong> le personnel au standard.</td>
+</tr>
+<tr>
+<td><strong>5S</strong></td>
+<td><strong>SHITSUKE</strong> — <em>Respecter / Pérenniser</em></td>
+<td>S'améliorer</td>
+<td><strong>Se discipliner au respect des standards</strong>. Être discipliné, rechercher l'<strong>amélioration continue</strong>.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Le processus 5S est infini.</strong> Une fois la 5ᵉ étape atteinte, on recommence : c'est une boucle d'amélioration continue, pas une opération « one-shot ».</p>
+</blockquote>
+<p><strong>Les 3 phases du déploiement</strong> (vision d'ensemble, du sol vers la culture) :
+- <strong>1ʳᵉ phase</strong> — <em>SEIRI</em> (ôter l'inutile) puis <em>SEITON</em> (ranger).
+- <strong>2ᵉ phase</strong> — <em>SEISO</em> (décrasser et détecter les anomalies) puis <em>SEIKETSU</em> (rendre évident).
+- <strong>3ᵉ phase</strong> — <em>SHITSUKE</em> (être discipliné).</p>
+<h3>3. Le 1S — SEIRI : Éliminer / Débarrasser (« Ôter l'inutile »)</h3>
+<p><strong>But : ne garder sur le poste que ce qui est utile, et éliminer le reste.</strong> Tout ce qui est inutile est identifié, sorti, puis éliminé selon le tri sélectif des déchets.</p>
+<p><strong>Comment on procède (méthode du chantier, étape 1) :</strong>
+1. <strong>Former</strong> toute l'équipe à la méthodologie 5S et la faire participer à la phase ÉLIMINER.
+2. <strong>Délimiter la zone</strong> du chantier 5S (le périmètre exact à traiter).
+3. Réaliser un <strong>audit 5S préliminaire</strong> (état des lieux, photos avant).
+4. Créer une <strong>« Zone d'objets inutiles »</strong> respectant le tri sélectif des déchets, avec une <strong>date-butoir</strong> pour la vider.
+5. Passer en revue <strong>tiroirs, armoires et étagères</strong> : il ne doit plus rien rester d'inutile.
+6. Réviser <strong>outils, outillages et machines</strong> (en bureau : <strong>dossiers, chemises et disques durs</strong>) : plus rien d'inutile.
+7. Donner à <strong>chaque plan d'action un responsable et un délai</strong>.
+8. Vérifier qu'<strong>il ne manque aucun objet ou outil utile</strong> (on n'a pas jeté l'utile par excès de zèle).</p>
+<blockquote>
+<p><strong>Outil clé : l'étiquette rouge.</strong> On colle une étiquette (rouge) sur chaque objet dont l'utilité est douteuse. S'il n'est pas réclamé / utilisé avant la date-butoir, il quitte définitivement la zone. C'est le moteur concret du 1S.</p>
+</blockquote>
+<p><strong>Dans l'usine.</strong> Sur une ligne d'assemblage : on sort les gabarits d'un ancien produit qui ne tourne plus, les cartons vides empilés derrière la machine, les outils en double dans la servante, les rebuts entreposés « au cas où ». On crée une zone d'objets inutiles avec bacs de tri (carton / plastique / DIB / DEEE) et une date-butoir affichée.</p>
+<p><strong>Audit du 1S (grille ÉLIMINER).</strong> Cotation par item : <strong>0 = insuffisant · 1 = moyen · 2 = bien</strong>. On reporte la date de chaque passage.
+- <strong>Ligne :</strong> 8 items, <strong>résultat sur 16 points</strong> (puis converti en %).
+- <strong>Bureau :</strong> 7 items, <strong>résultat sur 14 points</strong> (l'item « outils/machines » est remplacé par « dossiers, chemises et disques durs »).
+On vise un <strong>résultat à la fermeture du 1ᵉʳ S</strong> exprimé en % avant de passer au 2S.</p>
+<h3>4. Le 2S — SEITON : Ranger (« Une place pour chaque chose »)</h3>
+<p><strong>But : ranger les éléments nécessaires dans l'ordre pour qu'ils soient immédiatement accessibles.</strong> On ne range bien que ce qui a survécu au 1S.</p>
+<p><strong>Comment on procède (méthode du chantier, étape 2) :</strong>
+1. <strong>Former</strong> l'équipe et la faire participer à la phase RANGER.
+2. <strong>Identifier</strong> les outils et outillages (si nécessaire), leur <strong>définir un rangement</strong> et les ranger — <em>astuce : silhouettes découpées dans de la mousse ou dans des blocs de résine</em> (chaque outil a son empreinte).
+3. <strong>Délimiter les zones d'affichage.</strong>
+4. <strong>Délimiter et ranger les zones de stocks</strong> (si elles existent), en assurant le <strong>FIFO</strong> (premier entré, premier sorti) — <strong>hauteur des piles &lt; 1,5 m</strong>.
+5. Donner à chaque plan d'action un <strong>responsable et un délai</strong>.
+6. <strong>Aucune pièce au sol.</strong>
+7. <strong>Dégager l'accès aux éléments de sécurité</strong> (extincteurs, arrêts d'urgence…).
+8. <strong>Identifier les moyens de contrôle et modèles</strong> et définir leur emplacement.
+9. <strong>Délimiter et identifier chaque emplacement.</strong>
+10. <strong>Identifier la documentation</strong> (classeurs, chemises) présente sur la ligne et lui définir un emplacement.
+11. <strong>Dégager l'accès aux allées.</strong>
+12. Donner un <strong>emplacement défini</strong> aux <strong>fiches 5F</strong> et les ranger.</p>
+<p><strong>Dans l'usine.</strong> Marquage au sol des allées et des zones de stockage ; tableaux à outils avec silhouettes (on voit d'un coup d'œil l'outil manquant) ; emplacement repéré et dégagé pour l'extincteur et l'arrêt d'urgence ; bacs FIFO pour les composants ; aucun carton ni pièce traînant au sol.</p>
+<p><strong>Audit du 2S (grille RANGER).</strong> Cotation <strong>0 / 1 / 2</strong>.
+- <strong>Ligne :</strong> 12 items, <strong>résultat sur 24 points</strong>.
+- <strong>Bureau :</strong> 13 items, <strong>résultat sur 26 points</strong> (range les classeurs et chemises : armoires et servantes, zone manteaux/blouses/talonnettes, tables de travail et de réunion rangées, dessus d'armoires dégagé…).</p>
+<h3>5. Le 3S — SEISO : Nettoyer / Inspecter (« Décrasser et détecter »)</h3>
+<p><strong>But : nettoyer pour rendre visibles les anomalies.</strong> Le 3S n'est pas une corvée de propreté : <strong>nettoyer, c'est inspecter</strong>. En décrassant, on <strong>détecte</strong> fuites, jeux, usures, fissures, desserrages — donc on prévient les défauts et on élimine les situations récurrentes. On identifie les problèmes <strong>et leurs causes</strong>.</p>
+<p><strong>Comment on procède (méthode du chantier, étape 3) :</strong>
+1. <strong>Former</strong> l'équipe et la faire participer à la phase NETTOYER-INSPECTER.
+2. Disposer d'un <strong>matériel de nettoyage</strong> adapté, disponible, en état, avec un <strong>rangement défini</strong>.
+3. <strong>Nettoyer et inspecter</strong> tous les postes de travail et machines de la zone 5S.
+4. <strong>Aucun objet</strong> ne fait obstacle au passage.
+5. <strong>Tous les équipements fonctionnent et sont en bon état</strong> : éclairage, rampes d'approvisionnement, outil de contrôle, caisse, équipement électrique et mécanique.
+6. <strong>Aucun câble ni objet</strong> ne traîne au sol (sinon nettoyage impossible).
+7. <strong>Affichages et supports</strong> propres et en bon état.
+8. <strong>Sols</strong> propres et en bon état.
+9. <strong>Poubelles de tri sélectif</strong> disponibles, rangées et en bon état.</p>
+<p><strong>Dans l'usine.</strong> Pendant le nettoyage d'une machine, on repère une <strong>fuite d'huile</strong> sous un carter et un <strong>flexible fissuré</strong> : on les traite (ou on ouvre un plan d'action) avant qu'ils ne provoquent une panne. On peint le sol clair pour que la moindre tache de fuite saute aux yeux. Le matériel de nettoyage est rangé sur un tableau dédié.</p>
+<p><strong>Audit du 3S (grille NETTOYER-INSPECTER).</strong> Cotation <strong>0 / 1 / 2</strong>.
+- <strong>Ligne :</strong> 9 items, <strong>résultat sur 18 points</strong>.
+- <strong>Bureau :</strong> 16 items, <strong>résultat sur 32 points</strong> (ajoute murs, plafonds, vitres intérieur/extérieur, matériels/mobiliers — PC, imprimante, téléphone, chaise —, intérieur des meubles et tiroirs, décorations, et un <strong>plan de nettoyage existant et respecté</strong>).</p>
+<h3>6. Le 4S — SEIKETSU : Standardiser (« Rendre évident »)</h3>
+<p><strong>But : figer les acquis des 3 premiers S dans des standards visuels, et former le personnel à ces standards.</strong> On rend l'état normal <strong>évident</strong> : tout écart se voit immédiatement.</p>
+<p><strong>Comment on procède (méthode du chantier, étape 4).</strong> On crée un <strong>standard</strong> pour chaque sujet, <strong>puis on vérifie qu'il est respecté</strong> :
+1. <strong>Former</strong> l'équipe et la faire participer à la phase STANDARDISER.
+2. Établir un <strong>schéma d'implantation</strong> de la zone (en bureau : implantation du <strong>mobilier</strong>).
+3. Standard <strong>« ÉLIMINER »</strong> existe <strong>et</strong> est respecté.
+4. Standard <strong>« RANGER »</strong> existe <strong>et</strong> est respecté.
+5. Standard <strong>« NETTOYER-INSPECTER »</strong> existe <strong>et</strong> est respecté.
+6. Standard <strong>« affichage »</strong> existe <strong>et</strong> est respecté.
+7. <strong>Standards de couleurs</strong> respectés (marquage au sol + sol + couleur des machines).
+8. Standard <strong>« poste de travail »</strong> existe <strong>et</strong> est respecté.
+9. Standard <strong>« traitement des rejets »</strong> existe <strong>et</strong> est respecté.
+10. Standard <strong>« modèles »</strong> existe <strong>et</strong> est respecté.
+11. Standard <strong>« patron poka-yoke »</strong> (détrompeur) existe <strong>et</strong> est respecté.</p>
+<p><em>(En bureau, les standards spécifiques portent plutôt sur : environnement de travail, rangement — armoires, servantes —, et salle de réunion.)</em></p>
+<p><strong>Dans l'usine.</strong> Un panneau au poste affiche la photo de l'« état rangé » de référence, le code couleur du marquage au sol, le standard de poste (5F), le plan de nettoyage et le standard de traitement des rejets. Un détrompeur (poka-yoke) empêche le montage d'une pièce à l'envers : l'erreur devient physiquement impossible.</p>
+<p><strong>Audit du 4S (grille STANDARDISER).</strong> Cotation <strong>0 / 1 / 2</strong>.
+- <strong>Ligne :</strong> 19 items, <strong>résultat sur 38 points</strong>.
+- <strong>Bureau :</strong> 16 items, <strong>résultat sur 32 points</strong>.</p>
+<h3>7. Le 5S — SHITSUKE : Respecter / Pérenniser (« Être discipliné »)</h3>
+<p><strong>But : faire vivre les standards dans la durée et viser l'amélioration continue.</strong> C'est l'étape qui transforme l'effort ponctuel en <strong>habitude</strong>, puis en <strong>culture</strong>.</p>
+<p>On <strong>se discipline au respect des standards</strong> : audits réguliers, ré-affichage des résultats, ré-engagement de l'équipe, traitement systématique des écarts. Comme <strong>le processus 5S est infini</strong>, on <strong>recommence la boucle</strong> en relevant le niveau d'exigence à chaque tour. Le 5S relève de la <strong>2ᵉ / 3ᵉ phase</strong> du déploiement : c'est le plus difficile car il dépend du <strong>management</strong> (voir §9).</p>
+<p><strong>Dans l'usine.</strong> Un <strong>audit 5S hebdomadaire</strong> est tenu par l'animateur ; le résultat (en %) est affiché sur le tableau de la ligne ; un rituel court en début d'équipe rappelle les standards ; les écarts repérés alimentent les plans d'action. L'équipe propose elle-même des améliorations (kaizen) du rangement et du nettoyage.</p>
+<blockquote>
+<p>💡 Les grilles d'audit fournies couvrent explicitement les étapes <strong>1S à 4S</strong>. Le <strong>5S (Shitsuke)</strong> se pilote en <strong>répétant et en faisant progresser</strong> ces mêmes audits dans le temps (fréquence régulière + relèvement du score cible), plutôt que par une grille dédiée distincte.</p>
+</blockquote>
+<h3>8. Qui fait les 5S ? Les acteurs</h3>
+<p>Les 5S concernent <strong>toute la ligne hiérarchique</strong>, sans exception — <em>par tous, partout, pour tout</em> :</p>
+<ul>
+<li>Les <strong>Opérateurs</strong></li>
+<li>Les <strong>Agents de Maîtrise</strong></li>
+<li>Les <strong>Employés</strong></li>
+<li>Les <strong>Cadres Administratifs</strong></li>
+<li>Les <strong>Cadres Techniques</strong></li>
+<li>Les <strong>Directeurs</strong></li>
+<li>Le <strong>P.D.G.</strong></li>
+</ul>
+<h3>9. Les 5S efficaces — « le bon dosage » et les obstacles</h3>
+<p>Réussir les 5S, c'est trouver <strong>le bon dosage</strong> entre trois dimensions : la <strong>technique</strong>, la <strong>pratique</strong> et la <strong>« philosophie »</strong> (l'état d'esprit).</p>
+<p><strong>Les obstacles sont une question de MANAGEMENT.</strong> Trois profils de managers font échouer les 5S :
+- <strong>Le paradoxe des managers et des 5S</strong> : « <em>c'est difficile parce que c'est trop simple !</em> » — on néglige ce qui paraît évident.
+- <strong>Les managers pompiers</strong> : toujours à éteindre des feux, ils « n'ont pas le temps d'affûter leur hache ».
+- <strong>Les managers studieux</strong> : « croient savoir, mais ne savent pas faire car ils ont beaucoup lu et peu fait ».</p>
+<h3>10. Pourquoi les 5S sont efficaces (les arguments à retenir)</h3>
+<ul>
+<li>Les 5S = <strong>la première des techniques de management</strong>, avant toutes les autres.</li>
+<li><strong>Rien</strong> ne peut se mettre en place dans la confusion et le désordre ; <strong>rien n'est efficace dans un milieu non contrôlé</strong>.</li>
+<li>Les 5S = <strong>la maîtrise de l'objet et de l'environnement du travail</strong>. <em>Comment être efficace quand on n'a pas la maîtrise de ce qu'on fait ?</em></li>
+<li>Les 5S = <strong>le premier indicateur d'efficacité du service</strong> : tout est évident, <strong>les anomalies sont visibles même pour les profanes</strong>.</li>
+<li>Les 5S = <strong>l'hygiène de vie de l'entreprise</strong> : la prévention vaut mieux que la guérison — <em>éviter les erreurs coûte moins cher que les corriger</em>.</li>
+<li>Les 5S = <strong>prototype du management participatif</strong> : une entreprise qui réussit les 5S réussira le reste.</li>
+<li>Les 5S = <strong>l'entraînement des champions</strong> : endurance, exercice collectif, efficacité au quotidien.</li>
+<li>Les 5S = <strong>JUST DO IT !</strong></li>
+</ul>
+<p><strong>La chaîne de valeur visée :</strong> <strong>SÉCURITÉ → EFFICACITÉ → PROSPÉRITÉ.</strong>
+- <strong>Sécurité</strong> : travailler dans un environnement propre et sous contrôle, diminuer les risques Qualité, repérer rapidement les anomalies.
+- <strong>Efficacité</strong> : travailler efficacement dans tout domaine.
+- <strong>Prospérité</strong> : un environnement plaisant, rester professionnel pour nos clients.</p>
+<h3>11. Les symptômes visibles (quand lancer un chantier 5S)</h3>
+<p>Une zone « mûre » pour un chantier 5S présente des symptômes repérables sur quatre plans :</p>
+<table>
+<thead>
+<tr>
+<th>Domaine</th>
+<th>Symptômes visibles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Les collaborateurs</strong></td>
+<td>Manque d'intérêt pour le travail, découragement, récriminations, <strong>taux élevé d'absentéisme</strong>, manque d'autodiscipline et de rigueur, apathie face aux problèmes quotidiens, mauvaise communication, <strong>faible participation à l'amélioration continue</strong>, esprit d'équipe peu développé, compétences en friche, peu d'enthousiasme pour la polyvalence.</td>
+</tr>
+<tr>
+<td><strong>Qualité</strong></td>
+<td>Nombreux <strong>problèmes récurrents</strong>, difficulté à reconnaître les <strong>causes</strong> des problèmes.</td>
+</tr>
+<tr>
+<td><strong>Résolution des problèmes</strong></td>
+<td>Démarches inefficaces, <strong>limitée aux dépannages</strong>, prend beaucoup de temps, manque de visibilité.</td>
+</tr>
+<tr>
+<td><strong>Machines</strong></td>
+<td>Sales et bruyantes, <strong>pannes fréquentes</strong>, nombreuses anomalies de fonctionnement, difficultés de redémarrage.</td>
+</tr>
+<tr>
+<td><strong>Environnement</strong></td>
+<td>Sale et malsain, <strong>dangereux</strong>, encombré.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🖼️ <strong>Schéma non transcriptible.</strong> Le support source illustre la démarche par un visuel <strong>« AVANT 5S / APRÈS 5S »</strong> (poste encombré vs poste rangé et balisé) et par le schéma des <strong>3 phases empilées</strong> (1ʳᵉ phase Seiri+Seiton, 2ᵉ phase Seiso+Seiketsu, 3ᵉ phase Shitsuke). Pour les visuels exacts, se reporter au fichier source <em>« 9. Les 5S dans l'Usine.pdf »</em> et à la <em>Fiche Outil</em>.</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Les 5S dans l'usine</strong> (support de cours)</td>
+<td>Comprendre la méthode, les acteurs, les symptômes et les 3 phases</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1lDvTOW_MB9OLj42JNbigtx928311MmMu/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Les 5S — Fiche Outil</strong></td>
+<td>Mémo synthétique : définition, intérêt, 5 étapes dans l'ordre, AVANT/APRÈS</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1t9LkMdTQeedg4pz5HJsPT3LbHJRbvgsN/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Audit 1S — ÉLIMINER</strong> (grille Ligne /16 &amp; Bureau /14)</td>
+<td>Coter l'avancement de l'étape Éliminer</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1g-RrD-NIg_v5PZtEManCLCoUTdh4HwN2/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Audit 2S — RANGER</strong> (grille Ligne /24 &amp; Bureau /26)</td>
+<td>Coter l'avancement de l'étape Ranger</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1o4BeTp5IWccs5bHcyESdnvA3hmNaHwRd/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Audit 3S — NETTOYER-INSPECTER</strong> (grille Ligne /18 &amp; Bureau /32)</td>
+<td>Coter l'avancement de l'étape Nettoyer-Inspecter</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1psZBkeHXNq0zNSoegxD-4xWajF99Y4g5/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>Audit 4S — STANDARDISER</strong> (grille Ligne /38 &amp; Bureau /32)</td>
+<td>Coter l'avancement de l'étape Standardiser</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1_nT1bgQkvc0wrT-GBWup2ldfUm3l7R28/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre. Lancer <strong>pour de vrai</strong> un chantier 5S sur <strong>un seul poste</strong>.</p>
+</blockquote>
+<p><strong>Exercice 1 — Lancer le 1S (ÉLIMINER) sur un poste réel</strong>
+1. <strong>Choisissez un poste / une zone</strong> précise (une machine, une servante, un bureau, une étagère). Délimitez-en visiblement le périmètre.
+2. <strong>Photo « AVANT »</strong> : prenez 2 ou 3 photos de l'état initial.
+3. <strong>Audit préliminaire</strong> : cotez la zone avec la grille <strong>Audit 1S</strong> (0 / 1 / 2 par item) et notez le <strong>% de départ</strong>.
+4. <strong>Créez la « Zone d'objets inutiles »</strong> : un emplacement balisé, avec <strong>tri sélectif</strong> (carton, plastique, DIB, DEEE…) et une <strong>date-butoir affichée</strong> pour la vider.
+5. <strong>Posez des étiquettes rouges</strong> sur chaque objet douteux ; passez en revue <strong>tiroirs, armoires, étagères, outils et machines</strong>.
+6. <strong>Plan d'action</strong> : pour chaque objet « à statuer », inscrivez un <strong>responsable</strong> et un <strong>délai</strong>.
+7. <strong>Photo « APRÈS »</strong> une fois l'inutile sorti — sans avoir retiré le moindre outil <strong>utile</strong>.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une fiche A4 « Chantier 5S — 1S » avec <strong>photos avant/après</strong>, la <strong>grille d'audit 1S remplie</strong> (% avant), la <strong>liste des objets étiquetés rouge</strong> et le <strong>plan d'action</strong> (qui / quand).</li>
+<li><strong>Critères de réussite :</strong> la zone est délimitée ; la zone d'objets inutiles existe avec une date-butoir ; il ne reste <strong>rien d'inutile</strong> ; il ne <strong>manque aucun objet utile</strong> ; chaque action a un responsable et un délai ; le <strong>% d'audit progresse</strong> par rapport au départ.</li>
+<li><strong>Temps conseillé :</strong> 30 min.</li>
+</ul>
+<p><strong>Exercice 2 — Programmer les 4 S suivants</strong>
+1. Planifiez dans l'agenda une session courte pour <strong>2S (Ranger)</strong>, <strong>3S (Nettoyer-Inspecter)</strong> et <strong>4S (Standardiser)</strong>, chacune avec sa grille d'audit dédiée.
+2. Pour le <strong>2S</strong>, listez 3 rangements à créer (silhouettes mousse, marquage au sol, FIFO &lt; 1,5 m, accès sécurité dégagé).
+3. Pour le <strong>3S</strong>, fixez l'objectif « nettoyer = inspecter » : notez les anomalies détectées pendant le nettoyage (fuites, jeux, usures).
+4. Pour le <strong>4S</strong>, choisissez <strong>2 standards</strong> à créer (ex. photo de l'état rangé + code couleur du marquage au sol) et <strong>affichez-les</strong> au poste.
+5. Pour le <strong>5S (Pérenniser)</strong>, fixez une <strong>fréquence d'audit</strong> (ex. hebdo) et la personne qui le tient.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> un <strong>planning 5S</strong> du poste (dates des 5 étapes), 2 standards affichés et une <strong>fréquence d'audit</strong> définie.</li>
+<li><strong>Critères de réussite :</strong> chaque étape a une date et un responsable ; les standards sont <strong>visibles au poste</strong> ; l'audit est <strong>récurrent</strong> (sinon le 5S/Shitsuke ne tient pas).</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li><strong>5S = 5 étapes, dans l'ordre</strong> : <strong>Seiri</strong> (Éliminer) → <strong>Seiton</strong> (Ranger) → <strong>Seiso</strong> (Nettoyer-Inspecter) → <strong>Seiketsu</strong> (Standardiser) → <strong>Shitsuke</strong> (Respecter/Pérenniser).</li>
+<li><strong>On ne range bien (2S) que ce qu'on a d'abord trié (1S).</strong> L'ordre n'est pas négociable.</li>
+<li><strong>Nettoyer, c'est inspecter</strong> : le 3S sert à <strong>rendre les anomalies visibles</strong>, pas seulement à faire propre.</li>
+<li>Le 4S <strong>fige</strong> les acquis en <strong>standards visuels</strong> ; le 5S les <strong>fait vivre dans la durée</strong>.</li>
+<li><strong>Le processus 5S est infini</strong> : c'est une boucle d'amélioration continue (Just Do It !).</li>
+<li>Les 5S sont <strong>la première des techniques de management</strong> : rien n'est efficace dans un milieu non contrôlé.</li>
+<li><strong>Par tous, partout, pour tout</strong> : de l'opérateur au P.D.G.</li>
+<li>On <strong>mesure</strong> chaque étape avec les grilles d'audit (cotation <strong>0 / 1 / 2</strong>) et on suit le <strong>% à la fermeture</strong> de chaque S.</li>
+<li><strong>Sécurité → Efficacité → Prospérité.</strong></li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Quel est le <strong>bon ordre</strong> des 5S ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Ranger · Éliminer · Nettoyer · Standardiser · Pérenniser</button><button type="button" class="opt" data-key="b"><b>b)</b> Éliminer (Seiri) · Ranger (Seiton) · Nettoyer-Inspecter (Seiso) · Standardiser (Seiketsu) · Respecter/Pérenniser (Shitsuke)</button><button type="button" class="opt" data-key="c"><b>c)</b> Nettoyer · Ranger · Éliminer · Pérenniser · Standardiser</button></div><div class="q-exp" hidden>Seiri → Seiton → Seiso → Seiketsu → Shitsuke, dans cet ordre.</div></li><li class="q" data-correct="b"><div class="q-text">À quoi sert principalement le <strong>3S (Seiso)</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Uniquement à faire briller les surfaces</button><button type="button" class="opt" data-key="b"><b>b)</b> À <strong>nettoyer pour inspecter</strong> et <strong>détecter les anomalies</strong> (fuites, jeux, usures)</button><button type="button" class="opt" data-key="c"><b>c)</b> À jeter les objets inutiles</button></div><div class="q-exp" hidden>« nettoyer, c'est inspecter » : le 3S rend les anomalies visibles et en cherche les causes.</div></li><li class="q" data-correct="b"><div class="q-text">Lors du <strong>1S (Seiri)</strong>, que met-on en place pour les objets douteux ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Une étagère définitive supplémentaire</button><button type="button" class="opt" data-key="b"><b>b)</b> Une <strong>« Zone d'objets inutiles »</strong> avec tri sélectif et <strong>date-butoir</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Rien, on jette tout immédiatement</button></div><div class="q-exp" hidden>une zone d'objets inutiles, avec tri sélectif des déchets et une date-butoir pour la vider.</div></li><li class="q" data-correct="b"><div class="q-text"><strong>Vrai ou faux :</strong> les 5S sont une opération ponctuelle qui se termine une fois la 4ᵉ étape atteinte.</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Vrai</button><button type="button" class="opt" data-key="b"><b>b)</b> Faux</button></div><div class="q-exp" hidden>le processus 5S est <strong>infini</strong> ; le 5S (Shitsuke) entretient et fait progresser la boucle.</div></li><li class="q" data-correct="b"><div class="q-text">Dans la grille d'audit, que signifie la cotation <strong>0 / 1 / 2</strong> ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> 0 = bien, 1 = moyen, 2 = insuffisant</button><button type="button" class="opt" data-key="b"><b>b)</b> <strong>0 = insuffisant, 1 = moyen, 2 = bien</strong></button><button type="button" class="opt" data-key="c"><b>c)</b> Un pourcentage d'avancement</button></div><div class="q-exp" hidden>0 = insuffisant, 1 = moyen, 2 = bien ; le total est ensuite converti en %.</div></li><li class="q" data-correct="b"><div class="q-text">Pourquoi dit-on que les obstacles aux 5S sont « une question de <strong>management</strong> » ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Parce que les opérateurs refusent de participer</button><button type="button" class="opt" data-key="b"><b>b)</b> Parce que les managers (pompiers, studieux, « c'est trop simple ») ne s'y engagent pas vraiment</button><button type="button" class="opt" data-key="c"><b>c)</b> Parce que les 5S coûtent trop cher</button></div><div class="q-exp" hidden>le support cite le paradoxe « c'est trop simple », les managers pompiers et les managers studieux.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>9. Les 5S dans l'Usine.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1lDvTOW_MB9OLj42JNbigtx928311MmMu/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>9. Les 5S Fiche Outil.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1t9LkMdTQeedg4pz5HJsPT3LbHJRbvgsN/view">Ouvrir dans Drive</a> — <em>Note : le texte extrait de cette fiche est partiel (fichier tronqué côté source) ; se reporter au PDF original pour la mise en page complète.</em></li>
+<li>📄 <em>9. 1S_ ELIMINER.pdf</em> (grille d'audit) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1g-RrD-NIg_v5PZtEManCLCoUTdh4HwN2/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>9. 2S_ RANGER.pdf</em> (grille d'audit) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1o4BeTp5IWccs5bHcyESdnvA3hmNaHwRd/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>9. 3S_ NETTOYER INSPECTER.pdf</em> (grille d'audit) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1psZBkeHXNq0zNSoegxD-4xWajF99Y4g5/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>9. 4S_ STANDARDISER.pdf</em> (grille d'audit) — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1_nT1bgQkvc0wrT-GBWup2ldfUm3l7R28/view">Ouvrir dans Drive</a></li>
+</ul>
+<blockquote>
+<p>ℹ️ Les supports source fournissent les grilles d'audit <strong>1S à 4S</strong>. Il n'existe pas, dans ce jeu de fichiers, de grille distincte pour le <strong>5S (Shitsuke)</strong> : cette étape se pilote en <strong>répétant et en relevant</strong> les audits précédents dans le temps.</p>
+</blockquote>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="06-standards-standardisation.html"><small>← Module précédent</small>6 · Standards & Standardisation</a><a class="nx" href="08-management-visuel.html"><small>Module suivant →</small>8 · Le Management Visuel</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>

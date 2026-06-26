@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4 — Les Paradigmes — LSS Yellow Belt</title>
+<style>
+:root{
+  --ink:#1f2733; --muted:#5b6675; --line:#e6e8ec; --bg:#f5f6f8;
+  --slate:#222b38; --gold:#f6b400; --gold-soft:#fff7e0;
+  --obj:#2563eb; --prereq:#64748b; --content:#0ea5a4;
+  --tools:#0d9488; --action:#16a34a; --key:#d97706; --quiz:#7c3aed; --src:#64748b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px}
+a{color:var(--obj);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;padding:10px 18px;background:var(--slate);
+  color:#fff;border-bottom:3px solid var(--gold)}
+.topbar a{color:#fff}
+.brand{font-weight:700;font-size:18px}
+.topnav a{display:inline-block;padding:6px 10px;border-radius:8px;font-size:14px}
+.topnav a:hover{background:rgba(255,255,255,.12);text-decoration:none}
+.layout{display:flex;gap:0;align-items:flex-start;max-width:1180px;margin:0 auto}
+.sidebar{position:sticky;top:58px;flex:0 0 270px;height:calc(100vh - 58px);
+  overflow-y:auto;padding:18px 14px;background:#fff;border-right:1px solid var(--line)}
+.sidebar .side-home{display:block;font-weight:700;margin-bottom:8px}
+.side-group{margin:14px 0 6px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);font-weight:700}
+.sidebar a.side-link{display:flex;align-items:center;gap:9px;padding:7px 9px;
+  border-radius:9px;color:var(--ink);font-size:14px}
+.sidebar a.side-link:hover{background:var(--bg);text-decoration:none}
+.sidebar a.side-link.active{background:var(--gold-soft);font-weight:600}
+.badge{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:var(--slate);
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;
+  justify-content:center}
+.side-link.active .badge{background:var(--gold);color:#1f2733}
+.side-link.is-done .badge{background:var(--action)}
+.side-link .chk{margin-left:auto;color:var(--action);font-weight:800}
+.side-extra{display:block;margin-top:12px;padding:7px 9px;border-radius:9px;
+  color:var(--ink);font-size:14px}
+.side-extra:hover{background:var(--bg);text-decoration:none}
+.content{flex:1 1 auto;min-width:0;padding:26px clamp(18px,4vw,46px) 90px;max-width:880px}
+.content h1{font-size:30px;line-height:1.25;margin:.2em 0 .6em;
+  padding-bottom:.3em;border-bottom:2px solid var(--gold)}
+.content h3{font-size:19px;margin:1.3em 0 .4em}
+.content h4{font-size:16px;margin:1.1em 0 .3em}
+.card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--line);
+  border-radius:12px;padding:14px 20px;margin:16px 0;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.card>h2{margin:.1em 0 .5em;font-size:21px}
+.card.sec-obj{border-left-color:var(--obj)}
+.card.sec-prereq{border-left-color:var(--prereq);background:#fbfbfc}
+.card.sec-content{border-left-color:var(--content)}
+.card.sec-tools{border-left-color:var(--tools)}
+.card.sec-action{border-left-color:var(--action);background:#f2fbf5}
+.card.sec-action>h2{color:#15803d}
+.card.sec-key{border-left-color:var(--key);background:#fffaf0}
+.card.sec-key>h2{color:#b45309}
+.card.sec-quiz{border-left-color:var(--quiz);background:#faf7ff}
+.card.sec-quiz>h2{color:#6d28d9}
+.card.sec-src{border-left-color:var(--src);background:#fbfbfc;font-size:.95em}
+blockquote{margin:14px 0;padding:10px 16px;background:var(--gold-soft);
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0;color:#3a3320}
+blockquote p{margin:.4em 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+thead th{background:var(--slate);color:#fff;font-weight:600}
+tbody tr:nth-child(even){background:#fafbfc}
+code{background:#eef1f4;padding:.12em .4em;border-radius:5px;font-size:.9em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:10px;overflow-x:auto;line-height:1.45}
+pre code{background:none;color:inherit;padding:0;font-size:13px;white-space:pre}
+ul,ol{padding-left:1.4em}
+li{margin:.25em 0}
+hr{border:none;border-top:1px solid var(--line);margin:26px 0}
+/* ---- figures SVG ---- */
+.svg-fig{margin:18px 0;padding:16px;background:#fff;border:1px solid var(--line);
+  border-radius:14px;text-align:center;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.svg-fig svg{max-width:min(100%,560px);height:auto}
+.svg-fig figcaption{margin-top:8px;color:var(--muted);font-size:13.5px;font-style:italic}
+.svg-anim .seg{transition:transform .15s ease,filter .15s ease;transform-origin:center;cursor:default}
+.svg-anim:hover .seg{filter:saturate(1.05)}
+.svg-anim .seg:hover{filter:brightness(1.08)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.svg-fig{animation:fadeUp .5s ease both}
+@media (prefers-reduced-motion:reduce){.svg-fig,.svg-anim .seg{animation:none!important;transition:none!important;opacity:1!important}}
+/* ---- quiz interactif ---- */
+.quiz{margin:8px 0}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:10px;flex-wrap:wrap}
+.quiz-score{font-weight:700;color:#6d28d9;background:#f1e9ff;padding:4px 12px;border-radius:999px}
+.quiz-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;
+  cursor:pointer;font-size:13px;color:var(--muted)}
+.quiz-reset:hover{border-color:var(--quiz);color:var(--quiz)}
+.quiz-list{list-style:none;padding:0;counter-reset:q}
+.quiz .q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.quiz .q-text{font-weight:600;margin:0 0 10px}
+.quiz .q-text::before{counter-increment:q;content:"Q" counter(q) ". ";color:var(--quiz);font-weight:800}
+.quiz .opts{display:flex;flex-direction:column;gap:8px}
+.quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;
+  border-radius:9px;padding:9px 13px;cursor:pointer;font-size:14.5px;color:var(--ink);
+  transition:border-color .12s,background .12s}
+.quiz .opt:hover{border-color:#c7b3f0;background:#faf7ff}
+.quiz .opt b{color:var(--quiz);margin-right:4px}
+.quiz .q.answered .opt{cursor:default}
+.quiz .opt.correct{border-color:var(--action);background:#eafaf0}
+.quiz .opt.correct b{color:var(--action)}
+.quiz .opt.wrong{border-color:#dc2626;background:#fdecec}
+.quiz .opt.wrong b{color:#dc2626}
+.quiz .q-exp{margin:10px 0 0;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);
+  border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.quiz .q-static details{border:1px solid var(--line);border-radius:9px}
+.quiz .q-static summary{cursor:pointer;padding:8px 12px;color:var(--quiz);font-weight:600}
+.quiz-final{margin-top:12px;font-weight:800;color:var(--action);font-size:16px}
+/* details génériques (repli) */
+details{margin:12px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+summary{cursor:pointer;padding:11px 15px;font-weight:600;background:#f3eefc;list-style:none;color:#6d28d9}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";font-weight:700}
+details[open] summary::before{content:"▾ "}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>*:not(summary){padding-left:15px;padding-right:15px}
+details>ol,details>ul{padding-left:2.2em}
+/* ---- progression ---- */
+.mod-toolbar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.btn-done{border:1.5px solid var(--action);background:#fff;color:var(--action);font-weight:700;
+  border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px;transition:.15s}
+.btn-done:hover{background:#eafaf0}
+.btn-done.on{background:var(--action);color:#fff}
+.progress-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 18px}
+.progress-panel .ptext{font-weight:700;font-size:14px}
+.progress-panel .bar{height:12px;background:#eef1f4;border-radius:999px;overflow:hidden;margin:8px 0 10px}
+.progress-panel .bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#16a34a);
+  transition:width .4s ease}
+.btn-reset{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 12px;cursor:pointer;
+  font-size:13px;color:var(--muted)}
+.btn-reset:hover{border-color:#dc2626;color:#dc2626}
+/* ---- pager + back-to-top ---- */
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.pager a{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pager a:hover{border-color:var(--gold);text-decoration:none}
+.pager .nx{text-align:right}
+.pager small{display:block;color:var(--muted);font-size:12px}
+#totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;border:none;
+  background:var(--slate);color:#fff;font-size:20px;cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s;box-shadow:0 3px 10px rgba(0,0,0,.2);z-index:30}
+#totop.show{opacity:.9;pointer-events:auto}
+.hero{background:linear-gradient(135deg,#222b38,#384355);color:#fff;border-radius:16px;
+  padding:30px 32px;margin:6px 0 22px;border:1px solid #2c3543}
+.hero h1{border:none;color:#fff;margin:0 0 .3em}
+.hero .tag{display:inline-block;background:var(--gold);color:#1f2733;font-weight:700;font-size:12px;
+  padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+.hero p{color:#d7dbe2;margin:.5em 0 0;max-width:60ch}
+.module-block{scroll-margin-top:64px;border-top:3px dashed var(--line);margin-top:40px;padding-top:8px}
+.module-block:first-of-type{border-top:none}
+.toc-back{font-size:13px;color:var(--muted)}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{position:static;height:auto;flex-basis:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .content{max-width:none}
+}
+/* ---- examen final & attestation ---- */
+.exam-cta{display:block;margin:0 0 18px;padding:16px 20px;background:linear-gradient(135deg,#f6b400,#f59e0b);color:#3a2f06;font-weight:800;border-radius:14px;text-align:center;font-size:16px}
+.exam-cta:hover{text-decoration:none;filter:brightness(1.03)}
+.exam-name{display:block;margin:4px 0 16px;font-weight:700}
+.exam-name-in{display:block;margin-top:6px;width:100%;max-width:380px;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px}
+.exam-list{list-style:none;padding:0;counter-reset:eq}
+.exam-q{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:12px 0}
+.exam-q .q-text{font-weight:600;margin:0 0 10px}
+.exam-q .q-text::before{counter-increment:eq;content:"Q" counter(eq) ". ";color:var(--quiz);font-weight:800}
+.exam-q .opts{display:flex;flex-direction:column;gap:8px}
+.exam-q .opt{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--ink)}
+.exam-q .opt:hover{border-color:#c7b3f0}
+.exam-q .opt.selected{border-color:var(--quiz);background:#faf7ff;font-weight:600}
+.exam-q .opt b{color:var(--quiz)}
+.exam-q .opt.correct{border-color:var(--action);background:#eafaf0}
+.exam-q .opt.correct b{color:var(--action)}
+.exam-q .opt.wrong{border-color:#dc2626;background:#fdecec}
+.exam-q .opt.wrong b{color:#dc2626}
+.exam-q .q-exp{margin-top:10px;padding:9px 12px;background:#f6f8fa;border-left:3px solid var(--action);border-radius:0 8px 8px 0;font-size:13.5px;color:#33404f}
+.exam-controls{margin:18px 0;display:flex;gap:10px;flex-wrap:wrap}
+.exam-submit{border:none;background:#16a34a;color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;font-size:15px}
+.exam-submit:disabled{opacity:.5;cursor:default}
+.exam-reset{border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 16px;border-radius:10px;cursor:pointer}
+.exam-result{margin:8px 0;padding:14px 16px;border-radius:11px;font-size:15px}
+.exam-result.ok{background:#eafaf0;border:1px solid #16a34a}
+.exam-result.ko{background:#fdecec;border:1px solid #dc2626}
+.exam-result .warn{color:#b45309;font-weight:600}
+.certificate{display:none;margin:22px 0}
+.certificate.show{display:block;animation:fadeUp .5s ease both}
+.cert-inner{border:6px double var(--gold);border-radius:16px;padding:32px 28px;text-align:center;background:#fffdf6}
+.cert-seal{font-size:46px;line-height:1}
+.cert-kicker{color:#9a7b12;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.cert-title{font-size:30px;margin:8px 0 0;color:var(--slate);border:none}
+.cert-sub{color:#b45309;font-weight:700;margin:2px 0 14px}
+.cert-line{color:var(--muted);margin:10px 0 4px}
+.cert-name{font-size:26px;font-weight:800;color:#0d9488;border-bottom:2px solid #e6d8ad;display:inline-block;padding:2px 26px 8px;min-width:55%}
+.cert-body{max-width:50ch;margin:16px auto;color:#33404f}
+.cert-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;color:var(--muted);font-size:13px}
+.cert-print{margin-top:18px;border:none;background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;cursor:pointer;font-weight:700}
+.cert-print:hover{background:#0d9488}
+@media print{
+  .topbar,.sidebar,.pager,.topnav,.mod-toolbar,#totop,.quiz-reset{display:none!important}
+  .content{max-width:none;padding:0}
+  .card{break-inside:avoid;box-shadow:none}
+  .quiz .q-exp{display:block!important}
+  .exam-page-body{display:none!important}
+  .certificate.show{display:block!important;animation:none;margin:0}
+  .cert-inner{box-shadow:none}
+  .cert-print{display:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html">🟡 LSS Yellow Belt</a>
+  <div class="topnav"><a href="03-fondements-du-lean.html">← Préc.</a><a href="05-management-lean-nemoto.html">Suiv. →</a></div>
+</header>
+<div class="layout">
+  <aside class="sidebar"><nav><a class="side-home" href="index.html">🏠 Accueil du parcours</a><div class="side-group">Démarrage</div><a class="side-link" data-slug="00-demarrage" href="00-demarrage.html"><span class="badge">0</span><span>Démarrage & cahier du stagiaire</span><span class="chk"></span></a><div class="side-group">Séquence 1 — Fondamentaux</div><a class="side-link" data-slug="01-lean-6sigma-lean-six-sigma" href="01-lean-6sigma-lean-six-sigma.html"><span class="badge">1</span><span>Lean, 6 Sigma & Lean Six Sigma</span><span class="chk"></span></a><a class="side-link" data-slug="02-muda-mura-muri-gemba" href="02-muda-mura-muri-gemba.html"><span class="badge">2</span><span>Chasse aux gaspillages : VA/NVA, MUDA, MURA, MURI & Gemba</span><span class="chk"></span></a><a class="side-link" data-slug="03-fondements-du-lean" href="03-fondements-du-lean.html"><span class="badge">3</span><span>Les Fondements du Lean</span><span class="chk"></span></a><a class="side-link active" data-slug="04-paradigmes" href="04-paradigmes.html"><span class="badge">4</span><span>Les Paradigmes</span><span class="chk"></span></a><a class="side-link" data-slug="05-management-lean-nemoto" href="05-management-lean-nemoto.html"><span class="badge">5</span><span>Management Lean & Diagramme de Nemoto</span><span class="chk"></span></a><a class="side-link" data-slug="06-standards-standardisation" href="06-standards-standardisation.html"><span class="badge">6</span><span>Standards & Standardisation</span><span class="chk"></span></a><a class="side-link" data-slug="07-5s" href="07-5s.html"><span class="badge">7</span><span>Les 5S</span><span class="chk"></span></a><a class="side-link" data-slug="08-management-visuel" href="08-management-visuel.html"><span class="badge">8</span><span>Le Management Visuel</span><span class="chk"></span></a><div class="side-group">Séquence 3 — Résolution de problèmes</div><a class="side-link" data-slug="09-resolution-probleme-qqoqccp-ishikawa" href="09-resolution-probleme-qqoqccp-ishikawa.html"><span class="badge">9</span><span>Résolution de problème : QQOQCCP, Ishikawa, PDCA</span><span class="chk"></span></a><a class="side-link" data-slug="10-dmaic" href="10-dmaic.html"><span class="badge">10</span><span>La démarche DMAIC</span><span class="chk"></span></a><a class="side-link" data-slug="11-voc-cts" href="11-voc-cts.html"><span class="badge">11</span><span>Voix du Client (VoC) & arbre des CTS</span><span class="chk"></span></a><a class="side-link" data-slug="12-sipoc" href="12-sipoc.html"><span class="badge">12</span><span>Le SIPOC</span><span class="chk"></span></a><a class="side-link" data-slug="13-types-de-donnees" href="13-types-de-donnees.html"><span class="badge">13</span><span>Les Types de données</span><span class="chk"></span></a><a class="side-link" data-slug="14-statistiques-descriptives" href="14-statistiques-descriptives.html"><span class="badge">14</span><span>Les Statistiques Descriptives</span><span class="chk"></span></a><a class="side-extra" href="examen.html">🏅 Examen final &amp; attestation</a><a class="side-extra" href="ressources.html">📂 Ressources &amp; modèles</a><a class="side-extra" href="formation-complete.html">📖 Tout en un fichier</a></nav></aside>
+  <main class="content">
+<div class="mod-toolbar"><button class="btn-done" data-slug="04-paradigmes">Marquer ce module comme terminé</button></div><h1>Module 4 — Les Paradigmes</h1>
+<blockquote>
+<p><strong>Parcours Lean Six Sigma — Yellow Belt (SSYB)</strong> · Séquence 1
+⏱️ Durée estimée : 25 min · 🎓 Niveau : Yellow Belt</p>
+</blockquote>
+<section class="card sec-obj"><h2>🎯 Objectifs du module</h2>
+<p>À la fin de ce module, vous serez capable de :
+- <strong>Définir</strong> ce qu'est un paradigme et reconnaître ses deux types de règles (explicites et implicites).
+- <strong>Expliquer</strong> comment un paradigme influence la perception, le comportement et, in fine, freine le changement et l'amélioration.
+- <strong>Repérer</strong> un paradigme limitant à l'œuvre dans votre équipe ou votre processus.
+- <strong>Remettre en cause</strong> un paradigme en adoptant un « regard extérieur » et en le reformulant pour ouvrir de nouvelles possibilités.
+- <strong>Relier</strong> la notion de paradigme au <strong>Cercle du changement</strong> pour comprendre par où démarre une transformation durable.</p>
+</section><section class="card sec-prereq"><h2>🧭 Prérequis</h2>
+<ul>
+<li>Module 0 — Démarrage &amp; cahier du stagiaire (terrain d'application choisi).</li>
+<li>Utile : avoir vu l'introduction au Lean / 6 Sigma et la notion de MUDA (un paradigme limitant est souvent la cause cachée d'un gaspillage qu'on « ne voit plus »).</li>
+</ul>
+</section><section class="card sec-content"><h2>📚 Contenu</h2>
+<figure class="svg-fig"><svg viewBox="0 0 600 392" role="img" class="svg-anim"><line x1="372" y1="86" x2="402" y2="168" stroke="#9aa3b0" stroke-width="2.5"/><polygon points="0,-5 11,0 0,5" fill="#9aa3b0" transform="translate(402,168) rotate(70)"/><line x1="402" y1="208" x2="372" y2="290" stroke="#9aa3b0" stroke-width="2.5"/><polygon points="0,-5 11,0 0,5" fill="#9aa3b0" transform="translate(372,290) rotate(110)"/><line x1="228" y1="290" x2="198" y2="208" stroke="#9aa3b0" stroke-width="2.5"/><polygon points="0,-5 11,0 0,5" fill="#9aa3b0" transform="translate(198,208) rotate(-110)"/><line x1="198" y1="168" x2="228" y2="86" stroke="#9aa3b0" stroke-width="2.5"/><polygon points="0,-5 11,0 0,5" fill="#9aa3b0" transform="translate(228,86) rotate(-70)"/><rect x="210" y="40" width="180" height="52" rx="10" fill="#7c3aed" class="seg"/><text x="300" y="62" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Paradigme</text><text x="300" y="79" text-anchor="middle" fill="#eef2f7" font-size="10.5">croyance · règle · habitude</text><rect x="384" y="162" width="180" height="52" rx="10" fill="#2563eb" class="seg"/><text x="474" y="184" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Perception</text><text x="474" y="201" text-anchor="middle" fill="#eef2f7" font-size="10.5">ce que je vois (ou pas)</text><rect x="210" y="284" width="180" height="52" rx="10" fill="#0d9488" class="seg"/><text x="300" y="306" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Comportement</text><text x="300" y="323" text-anchor="middle" fill="#eef2f7" font-size="10.5">ce que je fais</text><rect x="36" y="162" width="180" height="52" rx="10" fill="#d97706" class="seg"/><text x="126" y="184" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Résultats</text><text x="126" y="201" text-anchor="middle" fill="#eef2f7" font-size="10.5">ce que j'obtiens</text><text x="300" y="184" text-anchor="middle" fill="#7c3aed" font-size="12.5" font-weight="800">BOUCLE QUI</text><text x="300" y="201" text-anchor="middle" fill="#7c3aed" font-size="12.5" font-weight="800">SE RENFORCE</text><text x="300" y="384" text-anchor="middle" fill="#b45309" font-size="11.5" font-weight="600">Changer durablement = sortir du paradigme (regard extérieur, reformuler)</text></svg><figcaption>Le paradigme s'auto-renforce : il filtre la perception, oriente le comportement et produit des résultats qui le confirment. Changer durablement, c'est en sortir.</figcaption></figure>
+
+<h3>1. Pourquoi parler de paradigmes dans une démarche Lean Six Sigma ?</h3>
+<p>La démarche Progress Partners place les paradigmes au cœur de trois leviers :
+<strong>Développement des équipes</strong>, <strong>Conduite du changement</strong> et <strong>Culture de l'excellence</strong>.
+La raison est simple : avant de changer un processus, il faut changer <strong>la manière de le
+regarder</strong>. Trois citations posent le décor du module :</p>
+<blockquote>
+<p><em>« Nous ne pouvons espérer résoudre nos problèmes majeurs avec le même mode de pensée
+qui les a générés. »</em> — <strong>Albert Einstein</strong></p>
+<p><em>« La manière de voir le problème, c'est le problème lui-même. »</em> — <strong>Anonyme</strong></p>
+<p><em>« La vraie découverte ne consiste pas dans la recherche de terres nouvelles, mais dans le
+fait de voir avec des yeux nouveaux. »</em> — <strong>Marcel Proust</strong></p>
+</blockquote>
+<p>Message commun : <strong>le frein principal au progrès n'est pas la situation, c'est notre façon de
+la percevoir.</strong> D'où le mot d'ordre du support : <strong>« Pas d'a priori ! »</strong></p>
+<h3>2. Qu'est-ce qu'un paradigme ? (définition)</h3>
+<p>Un <strong>paradigme</strong> est un <strong>modèle, une règle ou une habitude qui influence notre manière
+d'interpréter une situation ou une information</strong>. Dit autrement, c'est un <strong>système de règles
+ou de normes</strong>, qui peut être :</p>
+<ul>
+<li><strong>explicite</strong> — une règle écrite, formalisée, énoncée (procédure, consigne, norme) ;</li>
+<li><strong>implicite</strong> — une règle non dite, intériorisée, « ça se fait comme ça ici » (habitude, croyance, réflexe collectif).</li>
+</ul>
+<blockquote>
+<p>🔑 <strong>À reconnaître sur le terrain :</strong> quand nous <strong>réagissons d'une manière habituelle, voire
+stéréotypée, à un évènement</strong>, c'est un paradigme qui agit. On répond « automatiquement »,
+sans réexaminer la situation.</p>
+</blockquote>
+<p>L'influence d'un paradigme <strong>n'est pas mauvaise en soi</strong> :
+- elle est <strong>bénéfique</strong> quand l'habitude fait gagner du temps et fiabilise l'action (un bon standard, un réflexe de sécurité) ;
+- elle devient <strong>nuisible</strong> quand elle nous empêche de voir une meilleure solution, de remettre en cause un problème récurrent, ou d'accepter une idée nouvelle.</p>
+<blockquote>
+<p>🎬 <strong>Renvoi au support (vidéo) :</strong> le fichier source <em>6. Les Paradigmes.pdf</em> introduit un
+<strong>programme vidéo</strong> dont le rôle est de montrer <strong>à quel point les paradigmes influencent les
+comportements</strong> — tantôt de façon bénéfique, tantôt de façon nuisible. Cette vidéo n'est pas
+transcriptible ici ; reportez-vous au support Drive (voir <em>Sources</em>) pour la visionner avec
+votre formateur.</p>
+</blockquote>
+<h3>3. Le mécanisme : pourquoi un paradigme freine le changement</h3>
+<p>Le support résume la dynamique du paradigme par une chaîne de cause à effet :</p>
+<p><code>Perception → Mode de pensée → Habitudes → Comportement au travail → Culture</code></p>
+<p>Chaque maillon <strong>renforce le suivant</strong> : ce que je perçois oriente ma pensée, qui se fige en
+habitudes, qui dictent mes comportements, lesquels finissent par former une <strong>culture</strong>
+partagée par toute l'équipe. Un paradigme limitant <strong>se solidifie</strong> donc avec le temps et
+devient invisible : on ne le perçoit plus comme un choix, mais comme « la réalité ».</p>
+<p>C'est pourquoi vouloir améliorer un processus en restant <strong>dans</strong> le paradigme actuel échoue
+souvent : on optimise à la marge ce que l'on continue de mal regarder.</p>
+<h4>Le « Cercle du changement »</h4>
+<p>Le support représente cette dynamique sous forme d'un <strong>cercle</strong> (schéma circulaire numéroté
+de 1 à 6) qui doit se lire dans le sens du changement :</p>
+<ol>
+<li><strong>Perception</strong></li>
+<li><strong>Culture</strong></li>
+<li><strong>Mode de pensée</strong></li>
+<li><strong>Habitudes</strong></li>
+<li><strong>Comportement au travail</strong></li>
+<li><strong>CHANGER</strong></li>
+</ol>
+<blockquote>
+<p>🖼️ <strong>Schéma non transcriptible.</strong> Le <strong>Cercle du changement</strong> est un visuel circulaire reliant
+les six éléments ci-dessus, avec le verbe <strong>« CHANGER »</strong> au point de bascule. L'idée
+illustrée : pour <strong>changer durablement le comportement au travail</strong>, il faut <strong>remonter à la
+source</strong> — agir sur la <strong>perception</strong> et le <strong>mode de pensée</strong> (le paradigme), pas seulement
+sur les comportements visibles. Voir l'image d'origine dans <em>6. Les Paradigmes.pdf</em> (Drive).</p>
+</blockquote>
+<p><strong>Lecture utile pour le Yellow Belt :</strong> un plan d'action qui ne touche qu'aux comportements
+(maillon 5) sans questionner la perception (maillon 1) produit un changement <strong>fragile</strong>, qui
+régresse dès qu'on relâche la pression. Le changement <strong>durable</strong> part du paradigme.</p>
+<h3>4. Changer de paradigme : le principe clé</h3>
+<p>La <strong>Fiche Outil</strong> énonce les principes opérationnels :</p>
+<ul>
+<li><strong>Ce qui n'est pas possible dans un paradigme peut devenir possible dans un autre.</strong>
+  Beaucoup de « c'est impossible » ne sont vrais <strong>que dans le cadre de pensée actuel</strong>.</li>
+<li><strong>Quand la résolution de problème devient difficile, il faut se poser la question du
+  changement de paradigme.</strong> La difficulté persistante est un <strong>signal</strong> : ce n'est peut-être
+  pas le problème qui est dur, c'est le cadre dans lequel on le pose.</li>
+<li><strong>Les innovations sont issues d'un changement de paradigme.</strong> L'innovation ne naît pas en
+  poussant plus fort sur l'ancien modèle, mais en changeant de modèle.</li>
+<li><strong>Les changements de paradigme sont généralement provoqués par des personnes qui ont un
+  regard extérieur sur le système.</strong> Celui qui est dedans ne voit plus la règle implicite ;
+  un regard neuf (nouvel arrivant, client, collègue d'un autre service, ou soi-même en se
+  forçant à « voir avec des yeux nouveaux ») la rend visible et discutable.</li>
+</ul>
+<h3>5. Comment remettre en cause un paradigme (méthode pratique)</h3>
+<p>À partir des principes ci-dessus, voici une démarche concrète, exploitable seul·e :</p>
+<ol>
+<li><strong>Détecter le signal.</strong> Repérez un problème <strong>récurrent</strong> ou un « <strong>on a toujours fait comme
+   ça</strong> » : c'est souvent là que se cache un paradigme limitant.</li>
+<li><strong>Rendre la règle explicite.</strong> Formulez à voix haute la règle implicite (« Ici, on croit
+   que… », « On suppose que… »). Tant qu'elle reste implicite, on ne peut pas la discuter.</li>
+<li><strong>Adopter le regard extérieur.</strong> Demandez-vous : <em>« Qu'en penserait un nouvel arrivant ? un
+   client ? un concurrent ? quelqu'un d'un autre métier ? »</em> — c'est le moteur n°1 du
+   changement de paradigme.</li>
+<li><strong>Tester le « et si… ». Reformuler.</strong> Remplacez le « c'est impossible » par <em>« Dans quel
+   cadre cela deviendrait-il possible ? »</em>. Reformulez la règle limitante en une <strong>règle
+   ouvrante</strong>.</li>
+<li><strong>Vérifier l'effet.</strong> Une bonne reformulation <strong>ouvre des possibilités</strong> d'action qui
+   n'existaient pas avant — c'est le critère de réussite.</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>Garde-fou « Pas d'a priori ! » :</strong> tous les paradigmes ne sont pas à supprimer. On ne
+remet en cause que les paradigmes <strong>limitants</strong>. Les paradigmes utiles (sécurité, standards
+efficaces) sont à conserver — d'où l'importance de bien distinguer <em>bénéfique</em> vs <em>nuisible</em>.</p>
+</blockquote>
+</section><section class="card sec-tools"><h2>🧰 Outils &amp; modèles associés</h2>
+<table>
+<thead>
+<tr>
+<th>Outil / modèle</th>
+<th>À quoi ça sert</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>6. Les Paradigmes</strong> (support de cours)</td>
+<td>Comprendre la notion, les citations, le mécanisme et le <em>Cercle du changement</em> ; lien vers la vidéo de démonstration</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/173YKgfMMQt0HNmC38dyQtDpNiNztx5X2/view">Ouvrir</a></td>
+</tr>
+<tr>
+<td><strong>6. Les Paradigmes — Fiche Outil</strong></td>
+<td>Mémo des principes clés pour détecter et provoquer un changement de paradigme (regard extérieur, signal de difficulté, innovation)</td>
+<td><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1RSfdN6wRMHEbGJPhM9FDSVMoKCYtbr13/view">Ouvrir</a></td>
+</tr>
+</tbody>
+</table>
+</section><section class="card sec-action"><h2>✅ Application directe — « À faire maintenant »</h2>
+<blockquote>
+<p>Objectif : appliquer immédiatement, sur votre propre terrain, ce que vous venez d'apprendre —
+<strong>repérer un paradigme limitant dans votre équipe et le reformuler.</strong></p>
+</blockquote>
+<p><strong>Exercice — Débusquer et reformuler un paradigme limitant</strong>
+1. Sur votre <strong>terrain d'application</strong> (choisi au Module 0), repérez <strong>un</strong> « on a toujours fait
+   comme ça » ou <strong>un problème récurrent</strong> que personne ne remet plus en cause.
+2. <strong>Rendez la règle explicite</strong> : écrivez-la en une phrase commençant par <em>« Dans mon équipe,
+   on suppose que… »</em> ou <em>« Ici, on croit qu'il est impossible de… »</em>. Indiquez si elle est
+   <strong>explicite</strong> (écrite) ou <strong>implicite</strong> (sous-entendue).
+3. <strong>Adoptez le regard extérieur</strong> : notez ce qu'en diraient (a) un <strong>nouvel arrivant</strong>, (b) un
+   <strong>client</strong>, (c) <strong>quelqu'un d'un autre service</strong>. Au moins une de ces voix doit révéler une
+   faille dans la règle.
+4. <strong>Reformulez</strong> la règle limitante en une <strong>règle ouvrante</strong> (du « c'est impossible » vers le
+   « dans quel cadre cela devient-il possible ? ») et listez <strong>2 actions</strong> que cette nouvelle
+   formulation rend désormais envisageables.
+5. <strong>Reliez au Cercle du changement</strong> : indiquez sur quel maillon (perception / mode de pensée /
+   habitudes / comportement) il faudra agir en premier pour que le changement tienne.</p>
+<ul>
+<li><strong>Livrable attendu :</strong> une fiche « Mon paradigme limitant » (½ page) contenant : la règle
+  limitante reformulée, son type (explicite/implicite), les 3 regards extérieurs, la règle
+  ouvrante et les 2 actions débloquées.</li>
+<li><strong>Critères de réussite :</strong></li>
+<li>la règle de départ est <strong>réellement bloquante</strong> et reconnue par l'équipe ;</li>
+<li>la reformulation <strong>ouvre au moins une possibilité</strong> d'action qui n'existait pas avant ;</li>
+<li>au moins un <strong>regard extérieur</strong> a servi à faire bouger la règle ;</li>
+<li>vous pouvez nommer le <strong>maillon du Cercle du changement</strong> par lequel commencer.</li>
+<li><strong>Temps conseillé :</strong> 15 min.</li>
+</ul>
+</section><section class="card sec-key"><h2>🧠 À retenir</h2>
+<ul>
+<li>Un <strong>paradigme</strong> = un modèle/règle/habitude qui <strong>filtre notre interprétation</strong> d'une situation.</li>
+<li>Il existe des règles <strong>explicites</strong> (écrites) et <strong>implicites</strong> (non dites) — les plus dangereuses sont les implicites, car invisibles.</li>
+<li>L'influence d'un paradigme peut être <strong>bénéfique</strong> (réflexe utile) ou <strong>nuisible</strong> (frein au progrès).</li>
+<li><strong>La manière de voir le problème, c'est souvent le problème.</strong> « Pas d'a priori ! »</li>
+<li>Chaîne du frein : <strong>perception → pensée → habitudes → comportement → culture</strong> ; on change durablement en remontant à la <strong>perception</strong> (Cercle du changement).</li>
+<li><strong>Ce qui est impossible dans un paradigme peut devenir possible dans un autre.</strong></li>
+<li>Quand un problème <strong>résiste</strong>, c'est le signal qu'il faut <strong>changer de paradigme</strong>, pas pousser plus fort.</li>
+<li>Les <strong>innovations</strong> et les changements de paradigme viennent le plus souvent d'un <strong>regard extérieur</strong> au système.</li>
+</ul>
+</section><section class="card sec-quiz"><h2>📝 Quiz de validation</h2>
+<div class="quiz" data-quiz><div class="quiz-top"><span class="quiz-score"></span><button type="button" class="quiz-reset">↺ Recommencer</button></div><ol class="quiz-list"><li class="q" data-correct="b"><div class="q-text">Qu'est-ce qu'un paradigme, selon la définition du support ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Une procédure qualité certifiée</button><button type="button" class="opt" data-key="b"><b>b)</b> Un modèle, une règle ou une habitude qui influence notre manière d'interpréter une situation ou une information</button><button type="button" class="opt" data-key="c"><b>c)</b> Un indicateur de performance</button><button type="button" class="opt" data-key="d"><b>d)</b> Une étape de la méthode DMAIC</button></div><div class="q-exp" hidden>c'est la définition exacte du support : un modèle/règle/habitude qui influence notre interprétation.</div></li><li class="q" data-correct="c"><div class="q-text">Les deux types de règles d'un paradigme sont :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Internes et externes</button><button type="button" class="opt" data-key="b"><b>b)</b> Bénéfiques et nuisibles</button><button type="button" class="opt" data-key="c"><b>c)</b> Explicites et implicites</button><button type="button" class="opt" data-key="d"><b>d)</b> Écrites et orales</button></div><div class="q-exp" hidden>un paradigme est un système de règles <strong>explicites ou implicites</strong>.</div></li><li class="q" data-correct="c"><div class="q-text">L'influence d'un paradigme est :</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Toujours nuisible</button><button type="button" class="opt" data-key="b"><b>b)</b> Toujours bénéfique</button><button type="button" class="opt" data-key="c"><b>c)</b> Parfois bénéfique, parfois nuisible</button><button type="button" class="opt" data-key="d"><b>d)</b> Sans effet sur le comportement</button></div><div class="q-exp" hidden>elle est parfois <strong>bénéfique</strong>, parfois <strong>nuisible</strong> : tout l'enjeu est de distinguer les deux.</div></li><li class="q" data-correct="b"><div class="q-text">Que faut-il faire, d'après la Fiche Outil, quand la résolution d'un problème devient difficile ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> Augmenter les moyens sans rien changer d'autre</button><button type="button" class="opt" data-key="b"><b>b)</b> Se poser la question d'un changement de paradigme</button><button type="button" class="opt" data-key="c"><b>c)</b> Abandonner le problème</button><button type="button" class="opt" data-key="d"><b>d)</b> Attendre le formateur</button></div><div class="q-exp" hidden>la difficulté persistante est un <strong>signal</strong> invitant à changer de paradigme (Fiche Outil).</div></li><li class="q" data-correct="a"><div class="q-text">D'où viennent généralement les changements de paradigme ?</div><div class="opts"><button type="button" class="opt" data-key="a"><b>a)</b> De personnes ayant un regard extérieur sur le système</button><button type="button" class="opt" data-key="b"><b>b)</b> De la direction uniquement</button><button type="button" class="opt" data-key="c"><b>c)</b> D'un logiciel</button><button type="button" class="opt" data-key="d"><b>d)</b> Du hasard</button></div><div class="q-exp" hidden>ils sont généralement <strong>provoqués par un regard extérieur</strong> au système.</div></li><li class="q" data-correct="faux"><div class="q-text">Vrai ou faux : pour obtenir un changement <strong>durable</strong>, il suffit d'agir sur les comportements visibles sans toucher à la perception.</div><div class="opts"><button type="button" class="opt" data-key="vrai">Vrai</button><button type="button" class="opt" data-key="faux">Faux</button></div><div class="q-exp" hidden>selon le Cercle du changement, le changement durable part de la <strong>perception / du mode de pensée</strong> ; agir seulement sur les comportements donne un changement fragile.</div></li></ol><p class="quiz-final" hidden></p></div>
+
+</section><section class="card sec-src"><h2>🔗 Sources &amp; pour aller plus loin</h2>
+<ul>
+<li>📄 <em>6. Les Paradigmes.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/173YKgfMMQt0HNmC38dyQtDpNiNztx5X2/view">Ouvrir dans Drive</a></li>
+<li>📄 <em>6.Les Paradigmes Fiche Outil.pdf</em> — <a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1RSfdN6wRMHEbGJPhM9FDSVMoKCYtbr13/view">Ouvrir dans Drive</a></li>
+</ul>
+<hr />
+<p><em>Contenu pédagogique d'après les supports Progress Partners — « La passion de la performance ».
+Réorganisé en module de formation autoportant.</em></p></section><nav class="pager"><a href="03-fondements-du-lean.html"><small>← Module précédent</small>3 · Les Fondements du Lean</a><a class="nx" href="05-management-lean-nemoto.html"><small>Module suivant →</small>5 · Management Lean & Diagramme de Nemoto</a></nav>
+  </main>
+</div>
+<button id="totop" title="Haut de page">↑</button>
+<script>
+(function(){
+  var KEY='lss-progress-v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function applySidebar(){var d=load();document.querySelectorAll('.side-link').forEach(function(a){
+    var s=a.getAttribute('data-slug');var c=a.querySelector('.chk');
+    if(c)c.textContent=d[s]?'✓':'';a.classList.toggle('is-done',!!d[s]);});}
+  function applyPanel(){var p=document.querySelector('.progress-panel');if(!p)return;
+    var links=document.querySelectorAll('.side-link');var total=links.length;var d=load();var done=0;
+    links.forEach(function(a){if(d[a.getAttribute('data-slug')])done++;});
+    var pct=total?Math.round(done/total*100):0;var bar=p.querySelector('.bar>i');if(bar)bar.style.width=pct+'%';
+    var t=p.querySelector('.ptext');if(t)t.textContent=done+' / '+total+' modules terminés ('+pct+'%)';}
+  function wireDone(){var b=document.querySelector('.btn-done');if(!b)return;var s=b.getAttribute('data-slug');
+    function upd(){var d=load();b.classList.toggle('on',!!d[s]);
+      b.textContent=d[s]?'✓ Module terminé':'Marquer ce module comme terminé';}
+    b.addEventListener('click',function(){var d=load();d[s]=!d[s];save(d);upd();applySidebar();applyPanel();});upd();}
+  function wireReset(){var r=document.querySelector('.btn-reset');if(!r)return;
+    r.addEventListener('click',function(){if(confirm('Réinitialiser votre progression ?')){save({});applySidebar();applyPanel();}});}
+  function wireQuiz(){document.querySelectorAll('[data-quiz]').forEach(function(quiz){
+    var qs=quiz.querySelectorAll('.q:not(.q-static)');var total=qs.length;var answered=0,score=0;
+    var scoreEl=quiz.querySelector('.quiz-score');var fin=quiz.querySelector('.quiz-final');
+    function upd(){if(scoreEl)scoreEl.textContent='Score : '+score+' / '+total;}
+    qs.forEach(function(q){var correct=q.getAttribute('data-correct');
+      q.querySelectorAll('.opt').forEach(function(btn){btn.addEventListener('click',function(){
+        if(q.classList.contains('answered'))return;q.classList.add('answered');
+        var good=btn.getAttribute('data-key')===correct;
+        if(good){btn.classList.add('correct');score++;}
+        else{btn.classList.add('wrong');var cb=q.querySelector('.opt[data-key="'+correct+'"]');if(cb)cb.classList.add('correct');}
+        var e=q.querySelector('.q-exp');if(e)e.hidden=false;answered++;upd();
+        if(answered===total&&fin){fin.hidden=false;
+          fin.textContent=(score===total?'🏆 Parfait ! ':'✅ Terminé — ')+score+' / '+total;}});});});
+    var rst=quiz.querySelector('.quiz-reset');
+    if(rst)rst.addEventListener('click',function(){answered=0;score=0;
+      qs.forEach(function(q){q.classList.remove('answered');
+        q.querySelectorAll('.opt').forEach(function(b){b.classList.remove('correct','wrong');});
+        var e=q.querySelector('.q-exp');if(e)e.hidden=true;});if(fin)fin.hidden=true;upd();});
+    upd();});}
+  function wireTop(){var b=document.getElementById('totop');if(!b)return;
+    b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    window.addEventListener('scroll',function(){b.classList.toggle('show',window.scrollY>500);});}
+  document.addEventListener('DOMContentLoaded',function(){
+    applySidebar();applyPanel();wireDone();wireReset();wireQuiz();wireTop();});
+})();
+</script>
+</body>
+</html>
