@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évaluation Qualité — AOSOM FR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;0,6..12,900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#eaeef5; --side1:#102a47; --side2:#0a1c31; --card:#ffffff;
+  --txt:#1f2b3d; --muted:#67768c; --faint:#6e7c91; --line:#eceff4;
+  --blue:#2f6bed; --blue-d:#1e54d6; --blue-soft:#e9f0ff;
+  --green:#1eb980; --green-soft:#e6f8f0; --amber:#f59e0b; --amber-soft:#fef3e2;
+  --purple:#8b5cf6; --purple-soft:#f1ecfe; --orange:#f5a623; --orange-soft:#fff2dd;
+  --red:#ef4444; --red-soft:#fdecec;
+  /* variantes texte (contraste AA sur fonds clairs) — les vives restent pour fills/icônes */
+  --green-text:#0a7d54; --amber-text:#b45309; --red-text:#cc2626;
+  /* premium : accents cyan ABL + verre + halos */
+  --cyan:#22d3ee; --cyan-d:#06b6d4; --cyan-soft:#e2f8fc;
+  --glass:rgba(255,255,255,.93); --glass-brd:rgba(255,255,255,.9);
+  --glow-blue:rgba(47,107,237,.38); --glow-cyan:rgba(34,211,238,.45);
+  --radius:18px; --r-sm:12px; --shadow:0 8px 28px rgba(31,43,61,.06),0 1px 3px rgba(31,43,61,.05);
+  --shadow-h:0 14px 40px rgba(31,43,61,.12);
+  font-family:"Nunito Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:4px}
+body{margin:0;color:var(--txt);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1100px 560px at 112% -8%, rgba(34,211,238,.13), transparent 58%),
+    radial-gradient(900px 480px at -8% 108%, rgba(47,107,237,.12), transparent 58%),
+    radial-gradient(700px 400px at 50% 120%, rgba(34,211,238,.07), transparent 60%),
+    var(--bg);
+  background-repeat:no-repeat}
+.layout{display:flex;min-height:100vh}
+
+/* ============ SIDEBAR ============ */
+aside{width:256px;flex-shrink:0;background:linear-gradient(180deg,var(--side1),var(--side2));
+  color:#cdd9e8;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden}
+aside::after{content:"";position:absolute;left:-40px;bottom:60px;width:340px;height:300px;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(47,107,237,.22),transparent 70%);filter:blur(6px)}
+aside::before{content:"";position:absolute;right:-60px;top:-30px;width:280px;height:280px;pointer-events:none;z-index:0;
+  background:radial-gradient(closest-side,var(--glow-cyan),transparent 70%);filter:blur(10px);opacity:.7}
+.brand{display:flex;align-items:center;gap:13px;padding:24px 22px 22px}
+.brand .mk{position:relative;width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-weight:900;font-size:22px;color:#fff;
+  background:linear-gradient(135deg,var(--cyan),var(--blue) 55%,var(--blue-d));
+  box-shadow:0 8px 22px var(--glow-cyan),inset 0 1px 0 rgba(255,255,255,.35)}
+.brand .mk::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 1px rgba(255,255,255,.18) inset;
+  background:linear-gradient(160deg,rgba(255,255,255,.35),transparent 45%)}
+.brand h1{font-size:16.5px;margin:0;color:#fff;font-weight:800;letter-spacing:.2px}
+.brand p{margin:1px 0 0;font-size:12px;color:#7e93ab;font-weight:600;letter-spacing:.5px}
+.menu{padding:8px 14px;display:flex;flex-direction:column;gap:3px;flex:1}
+.menu a{display:flex;align-items:center;gap:13px;padding:12px 15px;border-radius:12px;color:#9fb1c7;
+  text-decoration:none;font-weight:700;font-size:14px;cursor:pointer;transition:.16s;position:relative;z-index:1}
+.menu a svg{width:19px;height:19px;flex-shrink:0;stroke-width:2.1}
+.menu a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.menu a.active{color:#fff;background:linear-gradient(120deg,var(--blue),var(--cyan-d));box-shadow:0 8px 22px var(--glow-blue)}
+.menu a.active::before{content:"";position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:4px;height:22px;border-radius:0 4px 4px 0;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.menu a.active svg{filter:drop-shadow(0 0 5px rgba(34,211,238,.8))}
+.side-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);position:relative;z-index:1}
+.user{display:flex;align-items:center;gap:11px;padding:11px;border-radius:13px;background:rgba(255,255,255,.05)}
+.user .av{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#f5a623,#ef7d3b);
+  display:grid;place-items:center;font-weight:800;color:#fff;font-size:15px}
+.user .nm{flex:1;min-width:0}.user .nm b{display:block;color:#fff;font-size:13.5px;font-weight:800}
+.user .nm span{font-size:11.5px;color:#7e93ab;font-weight:600}
+.user{cursor:pointer;transition:.15s;user-select:none}
+.user:hover{background:rgba(255,255,255,.09)}
+.user .cv{color:#7e93ab;transition:transform .2s}
+.user.open .cv{transform:rotate(180deg)}
+.usermenu{position:absolute;left:14px;right:14px;bottom:118px;background:#11243c;border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;box-shadow:0 -10px 30px rgba(0,0,0,.4);padding:7px;z-index:5;
+  opacity:0;visibility:hidden;transform:translateY(8px);transition:.18s}
+.usermenu.show{opacity:1;visibility:visible;transform:translateY(0)}
+.usermenu .hd{font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#7e93ab;padding:7px 11px 5px}
+.usermenu button{display:flex;align-items:center;gap:11px;width:100%;border:none;background:none;color:#cdd9e8;
+  font-family:inherit;font-weight:700;font-size:13.5px;padding:10px 11px;border-radius:10px;cursor:pointer;text-align:left;transition:.13s}
+.usermenu button:hover{background:rgba(255,255,255,.07);color:#fff}
+.usermenu button.cur{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff}
+.usermenu button .av{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#3b82f6,#1e54d6);
+  display:grid;place-items:center;font-weight:800;color:#fff;font-size:12px;flex-shrink:0}
+.usermenu button.cur .av{background:rgba(255,255,255,.22)}
+.usermenu button .ck{margin-left:auto;width:16px;height:16px;opacity:0}
+.usermenu button.cur .ck{opacity:1}
+.logout{display:flex;align-items:center;gap:11px;padding:13px 15px;color:#7e93ab;font-weight:700;font-size:13.5px;cursor:pointer}
+.logout svg{width:18px;height:18px}
+.abl{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 8px 4px;position:relative;z-index:1}
+.abl-sw{position:relative;width:23px;height:23px;border-radius:50%;flex-shrink:0;
+  background:conic-gradient(from 210deg,var(--cyan),var(--blue),var(--cyan-d),var(--cyan));box-shadow:0 0 16px var(--glow-cyan)}
+.abl-sw::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--side2)}
+.abl-tx{display:flex;flex-direction:column;line-height:1.05}
+.abl-tx b{font-size:15px;font-weight:900;letter-spacing:1.5px;background:linear-gradient(90deg,#ffffff,#9fdcff);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.abl-tx i{font-size:9.5px;font-style:italic;color:#8298b0;letter-spacing:.5px}
+
+/* ============ MAIN ============ */
+main{flex:1;min-width:0;padding:26px 32px 60px}
+.topbar{display:flex;align-items:flex-start;gap:18px;margin-bottom:26px;flex-wrap:wrap}
+.hello h2{margin:0;font-size:25px;font-weight:900;letter-spacing:-.5px}
+.hello p{margin:4px 0 0;color:var(--muted);font-weight:600}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:12px}
+.pill{display:flex;align-items:center;gap:9px;background:var(--glass);
+  border:1px solid var(--glass-brd);border-radius:12px;
+  padding:11px 15px;font-weight:700;font-size:13.5px;color:var(--txt);box-shadow:var(--shadow);cursor:pointer}
+.pill svg{width:16px;height:16px;color:var(--muted)}
+.btn-new{position:relative;overflow:hidden;display:flex;align-items:center;gap:9px;
+  background:linear-gradient(120deg,var(--blue),var(--cyan-d) 92%);color:#fff;
+  border:none;border-radius:12px;padding:12px 19px;font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;
+  box-shadow:0 8px 22px var(--glow-blue),0 0 0 1px rgba(255,255,255,.08) inset;transition:.18s}
+.btn-new:hover{transform:translateY(-2px);box-shadow:0 12px 30px var(--glow-cyan)}
+.btn-new::after,.btn-primary::after{content:"";position:absolute;top:0;left:-120%;width:55%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);transition:left .6s ease}
+.btn-new:hover::after,.btn-primary:hover::after{left:160%}
+.btn-primary{position:relative;overflow:hidden}
+.bell{position:relative;width:46px;height:46px;border-radius:13px;background:var(--glass);
+  border:1px solid var(--glass-brd);display:grid;place-items:center;box-shadow:var(--shadow);cursor:pointer;transition:.18s}
+.bell:hover{box-shadow:0 10px 26px var(--glow-cyan);border-color:rgba(34,211,238,.4)}
+.bell svg{width:19px;height:19px;color:var(--muted)}
+.bell b{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;
+  min-width:19px;height:19px;border-radius:10px;display:grid;place-items:center;border:2px solid var(--bg)}
+
+.view{display:none}.view.active{display:block}
+
+/* KPI cards */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:22px}
+.kpi{position:relative;overflow:hidden;background:var(--glass);
+  border:1px solid var(--glass-brd);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:14px;transition:.22s}
+.kpi::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(135deg,rgba(34,211,238,.10),transparent 42%);opacity:0;transition:.22s}
+.kpi:hover{box-shadow:0 20px 48px rgba(34,211,238,.18),0 4px 14px rgba(31,43,61,.08);transform:translateY(-3px);border-color:rgba(34,211,238,.35)}
+.kpi:hover::before{opacity:1}
+.kpi:hover .ic{transform:scale(1.07)}
+.kpi .ic{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;transition:transform .22s;
+  box-shadow:0 8px 20px rgba(31,43,61,.10),inset 0 0 0 1px rgba(255,255,255,.4)}
+.kpi .ic svg{width:26px;height:26px;stroke-width:2.2}
+.kpi .val{font-size:30px;font-weight:900;letter-spacing:-1px;line-height:1}
+.kpi .lbl{font-weight:800;font-size:14px;margin-top:2px}
+.kpi .sub{display:flex;align-items:center;justify-content:space-between;color:var(--faint);font-weight:700;font-size:12.5px}
+.trend{display:flex;align-items:center;gap:3px;font-weight:800;font-size:12px}
+.trend.up{color:var(--green-text)} .trend svg{width:13px;height:13px}
+
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:start}
+.card{background:var(--glass);
+  border:1px solid var(--glass-brd);border-radius:var(--radius);box-shadow:var(--shadow);transition:box-shadow .25s,transform .25s}
+.card:hover{box-shadow:0 18px 46px rgba(34,211,238,.14),0 6px 18px rgba(31,43,61,.08)}
+.card-h{display:flex;align-items:center;justify-content:space-between;padding:19px 22px 13px}
+.card-h h3{margin:0;font-size:16.5px;font-weight:900;letter-spacing:-.3px}
+.card-h .more{color:var(--blue);font-weight:800;font-size:13px;text-decoration:none;cursor:pointer}
+.card-h .mini-sel{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--bg);border:1px solid var(--line);
+  border-radius:9px;padding:7px 11px}
+
+/* recent table */
+.rtab{width:100%;border-collapse:collapse}
+.rtab th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--faint);font-weight:800;
+  padding:10px 22px;border-bottom:1px solid var(--line)}
+.rtab td{padding:13px 22px;border-bottom:1px solid var(--line);font-weight:600}
+.rtab tr:last-child td{border-bottom:none}
+.rtab tr:hover td{background:#fafbfc}
+.tico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center}
+.tico svg{width:18px;height:18px}
+.tico.mail{background:var(--blue-soft);color:var(--blue)} .tico.appel{background:var(--purple-soft);color:var(--purple)}
+.evcell{display:flex;align-items:center;gap:10px}
+.evcell .av{width:30px;height:30px;border-radius:50%;background:#dfe6f0;display:grid;place-items:center;color:#5b6b82;font-weight:800;font-size:12px}
+.score-cell{display:flex;align-items:center;gap:7px;font-weight:900}
+.score-cell svg{width:15px;height:15px;color:var(--orange);fill:var(--orange)}
+.badge{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}
+.badge.ok{background:var(--green-soft);color:var(--green-text)} .badge.rev{background:var(--amber-soft);color:var(--amber-text)}
+.badge.im{background:var(--red-soft);color:var(--red-text)} .badge.si{background:#f1ecfe;color:#7c3aed}
+.badge.ce{background:#e7f0ff;color:#1d4ed8} .badge.ce-maj{background:var(--red-soft);color:var(--red-text)}
+.badge.ce-min{background:var(--amber-soft);color:var(--amber-text)} .badge.ce-ok{background:var(--green-soft);color:var(--green-text)}
+.ce-banner{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,#0B2440,#005DA8);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:16px;box-shadow:0 8px 24px rgba(11,36,64,.22)}
+.ce-banner .ce-t{font-weight:900;font-size:14px;letter-spacing:.2px}
+.ce-banner .ce-s{font-size:12.5px;opacity:.85;font-weight:600}
+.ce-banner .ce-acts{margin-left:auto;display:flex;gap:9px}
+.ce-banner button{border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-family:inherit;font-weight:800;font-size:12px;padding:8px 14px;border-radius:9px;cursor:pointer}
+.ce-banner button:hover{background:rgba(255,255,255,.24)}
+.orig-chip{display:inline-block;margin-left:9px;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:900;letter-spacing:.3px;background:#eef2f7;color:#475569;vertical-align:middle}
+.orig-chip.C{background:var(--green-soft);color:var(--green-text)} .orig-chip.PC{background:var(--amber-soft);color:var(--amber-text)}
+.orig-chip.NC{background:var(--red-soft);color:var(--red-text)} .orig-chip.IM{background:#fbd9d9;color:#8c1d18}
+.orig-chip.SI{background:#f1ecfe;color:#7c3aed} .orig-chip.NA{background:#f1f3f4;color:#5f6368}
+.crit.diverge{border-color:#f5a623;box-shadow:inset 3px 0 0 #f5a623}
+.btn-ce{border:1.5px solid var(--line);background:#fff;color:#7c3aed;font-family:inherit;font-weight:800;font-size:11px;padding:5px 9px;border-radius:8px;cursor:pointer;margin-left:5px;white-space:nowrap}
+#view-evals .ftab th,#view-evals .ftab td{padding-left:9px;padding-right:9px;font-size:12.5px}
+#view-evals .ftab td:nth-child(4),#view-evals .ftab td:nth-child(3){max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#view-evals .ftab td:nth-child(6){max-width:118px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#view-evals .ftab td:nth-child(5){max-width:104px}
+/* la colonne Actions reste accessible même si la table déborde */
+#view-evals .ftab th:last-child,#view-evals .ftab td:last-child{position:sticky;right:0;background:#fff;box-shadow:-6px 0 10px -8px rgba(15,27,45,.35)}
+#view-evals .ftab tbody tr:hover td:last-child{background:#f7f9fc}
+#view-evals .ftab td:last-child{white-space:nowrap}
+.btn-ce:hover{background:#7c3aed;color:#fff;border-color:transparent}
+.kpi-mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:13px;margin-bottom:18px}
+.kpi-mini .b{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:15px 17px}
+.kpi-mini .b .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:800}
+.kpi-mini .b .v{font-size:26px;font-weight:900;letter-spacing:-.6px;margin-top:4px}
+.dt{font-weight:700}.dt small{display:block;color:var(--faint);font-weight:600;font-size:12px}
+
+/* donut + legend */
+.donut-wrap{display:flex;align-items:center;gap:18px;padding:8px 22px 22px;flex-wrap:wrap}
+.donut{position:relative;width:150px;height:150px;flex-shrink:0}
+.donut .ctr{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.donut .ctr b{font-size:26px;font-weight:900;display:block;line-height:1}
+.donut .ctr span{font-size:11.5px;color:var(--faint);font-weight:700}
+.legend{flex:1;min-width:160px;display:flex;flex-direction:column;gap:11px}
+.legend .row{display:flex;align-items:center;gap:9px;font-weight:700;font-size:13.5px}
+.legend .row .dot{width:11px;height:11px;border-radius:50%}
+.legend .row .nm{flex:1;color:var(--muted)} .legend .row .pc{font-weight:900}
+
+/* area chart */
+.chart-box{padding:6px 14px 18px}
+/* progress (critères) */
+.prg-card{padding:6px 22px 20px}
+.prg{margin-bottom:16px}
+.prg:last-child{margin-bottom:0}
+.prg .top{display:flex;justify-content:space-between;font-weight:700;font-size:13.5px;margin-bottom:7px}
+.prg .top b{font-weight:900}
+.bar{height:7px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%;border-radius:5px}
+
+/* activité */
+.feed{padding:4px 22px 18px}
+.fitem{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.fitem:last-child{border-bottom:none}
+.fic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.fic svg{width:16px;height:16px}
+.fic.g{background:var(--green-soft);color:var(--green)} .fic.b{background:var(--blue-soft);color:var(--blue)} .fic.p{background:var(--purple-soft);color:var(--purple)}
+.fitem .tx{font-weight:600;font-size:13.5px}.fitem .tx b{font-weight:800}
+.fitem .tm{color:var(--faint);font-size:12px;font-weight:600;margin-top:1px}
+
+/* ====== forms / grille ====== */
+.section-title{font-size:21px;font-weight:900;letter-spacing:-.4px;margin:0 0 4px}
+.section-sub{color:var(--muted);font-weight:600;margin:0 0 22px}
+.fcard{background:var(--glass);
+  border:1px solid var(--glass-brd);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+.fcard h4{margin:0 0 16px;font-size:12px;text-transform:uppercase;letter-spacing:1.3px;color:var(--blue);font-weight:900}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.field input,.field select,.field textarea{background:#f8fafc;border:1.5px solid var(--line);border-radius:11px;
+  color:var(--txt);font-family:inherit;font-size:14px;padding:11px 13px;transition:.15s;font-weight:600}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(47,107,237,.12)}
+.field textarea{resize:vertical;min-height:70px}
+.bloc-head{display:flex;align-items:center;gap:12px;margin:6px 0 14px}
+.bloc-head .t{font-weight:900;font-size:15.5px}
+.bloc-head .coef{margin-left:auto;font-size:12px;font-weight:800;color:var(--amber-text);background:var(--orange-soft);padding:5px 13px;border-radius:20px}
+.crit{padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;margin-bottom:11px;transition:.16s}
+.crit.done{border-color:rgba(47,107,237,.35);background:#fbfcff}
+.crit-top{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.crit-name{font-weight:800;font-size:14.5px;flex:1;min-width:190px}
+.crit-name .num{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:7px;background:var(--blue-soft);
+  color:var(--blue);font-size:11.5px;font-weight:900;margin-right:10px}
+.crit-max{font-size:12px;color:var(--faint);font-weight:800;white-space:nowrap}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1.5px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-weight:800;font-size:12px;
+  padding:8px 13px;border-radius:9px;cursor:pointer;transition:.13s}
+.seg button:hover{border-color:var(--muted);color:var(--txt)}
+.seg button.on{color:#fff;border-color:transparent}
+.seg button.on.C{background:var(--green-text)} .seg button.on.PC{background:var(--amber);color:#3a2a05}
+.seg button.on.NC{background:var(--red-text)} .seg button.on.IM{background:#b91c1c} .seg button.on.SI{background:#7c3aed} .seg button.on.NA{background:#475569}
+.crit-pts{font-size:12.5px;font-weight:900;min-width:46px;text-align:right;color:var(--green-text)}
+.crit-pts.zero{color:var(--faint)} .crit-pts.na{color:#475569} .crit-pts.im{color:var(--red-text)} .crit-pts.si{color:#7c3aed}
+.crit-comment{margin-top:11px;width:100%;background:#f8fafc;border:1.5px solid var(--line);border-radius:10px;
+  color:var(--txt);font-family:inherit;font-size:13px;padding:9px 12px;font-weight:600;display:none}
+.crit-comment.show{display:block}
+.legend-app{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:2px}
+.legend-app span{display:flex;align-items:center;gap:6px}.legend-app i{width:11px;height:11px;border-radius:4px;display:inline-block}
+
+/* sticky score */
+.scorebar{position:sticky;bottom:18px;margin-top:8px;z-index:10}
+.scorewrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+  background:rgba(255,255,255,.96);
+  border:1.5px solid var(--glass-brd);border-radius:var(--radius);padding:17px 24px;
+  box-shadow:0 18px 44px rgba(34,211,238,.16),0 8px 24px rgba(31,43,61,.10)}
+.score-pct{font-size:38px;font-weight:900;letter-spacing:-1.5px;line-height:1}
+.score-pct.good{color:var(--green-text)} .score-pct.mid{color:var(--amber-text)} .score-pct.bad{color:var(--red-text)} .score-pct.si{color:#7c3aed}
+.score-sub{font-size:13px;color:var(--muted);font-weight:700}
+.score-meta{display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);font-weight:700}
+.score-meta b{color:var(--txt)}
+.im-badge{background:#b91c1c;color:#fff;padding:7px 14px;border-radius:10px;font-weight:900;font-size:12.5px}
+.si-badge{background:#7c3aed;color:#fff;padding:7px 14px;border-radius:10px;font-weight:900;font-size:12.5px}
+.fcard.bloc-im{border-color:rgba(204,38,38,.55);background:#fff7f7}
+.fcard.bloc-im .bloc-head .t{color:var(--red-text)}
+.fcard.bloc-im .bloc-head .coef{background:var(--red-soft);color:var(--red-text)}
+.gver{display:flex;gap:7px;margin:0 0 16px;flex-wrap:wrap}
+.gver button{border:1.5px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 15px;border-radius:10px;cursor:pointer}
+.gver button.on{background:var(--blue);border-color:transparent;color:#fff}
+.sb-actions{margin-left:auto;display:flex;gap:11px}
+.btn{border:none;border-radius:11px;font-family:inherit;font-weight:800;font-size:13.5px;padding:12px 21px;cursor:pointer;transition:.15s}
+.btn-primary{background:linear-gradient(135deg,var(--green),#15a06f);color:#fff;box-shadow:0 8px 20px rgba(30,185,128,.32)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:#f1f4f8;color:var(--muted);border:1.5px solid var(--line)}.btn-ghost:hover{color:var(--txt)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* evaluations table full */
+.ftab{width:100%;border-collapse:collapse;font-size:13.5px}
+.ftab th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:800;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ftab td{padding:13px 16px;border-bottom:1px solid var(--line);font-weight:600}
+.ftab tr:hover td{background:#fafbfc}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:16px 20px}
+.empty{text-align:center;color:var(--faint);padding:50px 0;font-weight:700}
+.btn-pdf{border:1.5px solid var(--line);background:#fff;color:var(--blue);font-family:inherit;font-weight:800;font-size:11px;padding:5px 11px;border-radius:8px;cursor:pointer;transition:.13s}
+.btn-pdf:hover{background:linear-gradient(120deg,var(--blue),var(--cyan-d));color:#fff;border-color:transparent;box-shadow:0 4px 12px var(--glow-cyan)}
+.ftab th.srt{cursor:pointer;user-select:none;white-space:nowrap}
+.ftab th.srt::after{content:"⇅";opacity:.35;margin-left:5px;font-size:10px}
+.ftab th.srt.asc::after{content:"▲";opacity:.85}
+.ftab th.srt.desc::after{content:"▼";opacity:.85}
+#print_area{display:none}
+@media print{
+  body{background:#fff!important;animation:none!important}
+  .layout,.toast{display:none!important}
+  #print_area{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{margin:13mm}
+}
+.hint{font-size:12.5px;color:var(--faint);padding:0 22px 18px;line-height:1.5}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(130px);z-index:200;background:#0f2a47;color:#fff;
+  border-radius:13px;padding:14px 24px;font-weight:800;box-shadow:var(--shadow-h);transition:.35s cubic-bezier(.2,1,.3,1);max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}.toast.ok{background:#15a06f}.toast.err{background:#c0392b}
+.placeholder{padding:60px 22px;text-align:center}
+.placeholder svg{width:46px;height:46px;color:var(--faint);margin-bottom:14px}
+.placeholder h3{margin:0 0 6px;font-size:18px;font-weight:900}.placeholder p{margin:0;color:var(--muted);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:6px 8px 6px 13px;font-weight:700;font-size:13px;color:var(--txt)}
+.chip button{border:none;background:#dde3ec;color:var(--muted);width:19px;height:19px;border-radius:50%;cursor:pointer;font-weight:900;font-size:13px;line-height:1;font-family:inherit;display:grid;place-items:center;transition:.13s}
+.chip button:hover{background:var(--red);color:#fff}
+
+@media(max-width:1080px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:760px){aside{display:none}main{padding:18px}}
+
+.help-btn{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--muted);
+  font-family:inherit;font-weight:900;font-size:12px;line-height:1;cursor:pointer;flex-shrink:0;margin-left:8px;transition:.13s;vertical-align:middle}
+.help-btn:hover{border-color:var(--blue);color:var(--blue)}
+.help-btn.on{background:var(--blue);color:#fff;border-color:transparent}
+.crit-help{display:none;margin-top:12px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:#fbfcfe}
+.crit-help.show{display:block}
+.hrow{display:flex;border-bottom:1px solid var(--line)}.hrow:last-child{border-bottom:none}
+.hlab{flex-shrink:0;width:128px;padding:11px 13px;font-weight:800;font-size:11.5px;color:#fff;letter-spacing:.2px}
+.hlab.C{background:var(--green-text)}.hlab.PC{background:var(--amber);color:#3a2a05}.hlab.NC{background:var(--red-text)}
+.hlab.IM{background:#b91c1c}.hlab.SI{background:#7c3aed}.hlab.NA{background:#475569}
+.htxt{padding:11px 14px;font-size:12.5px;color:var(--txt);font-weight:600;line-height:1.55;white-space:pre-line}
+@media(max-width:620px){.hrow{flex-direction:column}.hlab{width:auto}}
+/* ===== CALIBRAGE ===== */
+.ce-banner.cal-banner{background:linear-gradient(120deg,#0B2440,#0e7490)}
+.cal-mx{border-collapse:collapse;width:100%;font-size:12.5px}
+.cal-mx th,.cal-mx td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.cal-mx th{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--faint);font-weight:800}
+.cal-mx th:first-child,.cal-mx td:first-child{text-align:left;white-space:normal;min-width:200px;position:sticky;left:0;background:#fff;font-weight:700}
+.cal-mx .ref{background:#f1f7ff}
+.cal-mx tr.cal-split td:first-child{box-shadow:inset 3px 0 0 #f5a623}
+.cal-mx tr.sum td{font-weight:900;background:#fafbfc}
+.cal-mx tr.sum td:first-child{background:#fafbfc;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.orig-chip.cal-off{outline:2px solid #f5a623;outline-offset:1px}
+#cal_body tr.cal-sel td{background:#f1f7ff}
+.cal-h{font-size:12px;text-transform:uppercase;letter-spacing:1.1px;color:var(--blue);font-weight:900;margin-bottom:10px}
+.cal-talk{border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:10px;background:#fff}
+.cal-talk .t{font-weight:900;font-size:13.5px;margin-bottom:5px}
+.cal-talk ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--muted);font-weight:600}
+.cal-talk li b{color:var(--txt)}
+.cal-acts{display:flex;gap:9px;flex-wrap:wrap}
+.cal-acts .btn{padding:9px 15px;font-size:12.5px}
+@media print{#view-calibrage .cal-acts{display:none}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="brand">
+      <div class="mk">A</div>
+      <div><h1>Évaluation Qualité</h1><p>AOSOM FR</p></div>
+    </div>
+    <nav class="menu" id="menu">
+      <a data-v="dash" class="active"><i data-ic="grid"></i>Tableau de bord</a>
+      <a data-v="mail"><i data-ic="mail"></i>Grille Mail</a>
+      <a data-v="appel"><i data-ic="phone"></i>Grille Appel</a>
+      <a data-v="evals"><i data-ic="list"></i>Évaluations</a>
+      <a data-v="calib"><i data-ic="users"></i>Contre-évaluations</a>
+      <a data-v="calibrage"><i data-ic="target"></i>Calibrage</a>
+      <a data-v="rapports"><i data-ic="chart"></i>Rapports</a>
+      <a data-v="param"><i data-ic="cog"></i>Paramètres</a>
+    </nav>
+    <div class="side-foot">
+      <div class="usermenu" id="usermenu"></div>
+      <div class="user" id="userCard"><div class="av" id="u_av">A</div>
+        <div class="nm"><b id="u_name">Évaluateur</b><span id="u_role">AOSOM FR</span></div><i data-ic="chevron" class="cv"></i></div>
+      <div class="logout"><i data-ic="logout"></i>Déconnexion</div>
+      <div class="abl"><span class="abl-sw"></span><span class="abl-tx"><b>ABL</b><i>outsourcing</i></span></div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="hello"><h2 id="hello">👋 Bonjour&nbsp;!</h2><p>Voici un aperçu de votre activité qualité aujourd'hui.</p></div>
+      <div class="top-actions">
+        <div class="pill"><i data-ic="cal"></i><span id="today"></span></div>
+        <button class="btn-new" id="b_new"><i data-ic="plus"></i>Nouvelle évaluation</button>
+        <div class="bell"><i data-ic="bell"></i><b id="bell_n">0</b></div>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section id="view-dash" class="view active">
+      <div class="kpis">
+        <div class="kpi"><div class="ic" style="background:var(--blue-soft);color:var(--blue)"><i data-ic="doc"></i></div>
+          <div><div class="val" id="k_total">0</div><div class="lbl">Évaluations</div></div>
+          <div class="sub"><span>Au total</span><span class="trend up" id="k_total_t"></span></div></div>
+        <div class="kpi"><div class="ic" style="background:var(--green-soft);color:var(--green)"><i data-ic="check"></i></div>
+          <div><div class="val" id="k_avg">—</div><div class="lbl">Qualité moyenne</div></div>
+          <div class="sub"><span>Toutes évals</span><span class="trend up" id="k_avg_t"></span></div></div>
+        <div class="kpi"><div class="ic" style="background:var(--purple-soft);color:var(--purple)"><i data-ic="users"></i></div>
+          <div><div class="val" id="k_evtr">0</div><div class="lbl">Évaluateurs</div></div>
+          <div class="sub"><span>Actifs</span><span class="trend up" id="k_evtr_t"></span></div></div>
+        <div class="kpi"><div class="ic" style="background:var(--orange-soft);color:var(--orange)"><i data-ic="star"></i></div>
+          <div><div class="val" id="k_glob">—</div><div class="lbl">Score global</div></div>
+          <div class="sub"><span>sur 5</span><span class="trend up" id="k_glob_t"></span></div></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h"><h3>Évaluations récentes</h3><a class="more" data-go="evals">Voir tout</a></div>
+          <table class="rtab"><thead><tr><th>Type</th><th>Référence</th><th>Évaluateur</th><th>Score</th><th>Date</th><th>Statut</th></tr></thead>
+          <tbody id="recent_body"></tbody></table>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div class="card">
+            <div class="card-h"><h3>Répartition des scores</h3></div>
+            <div class="donut-wrap">
+              <div class="donut"><canvas id="donut_canvas"></canvas>
+                <div class="ctr"><b id="donut_n">0</b><span>Évaluations</span></div></div>
+              <div class="legend" id="donut_legend"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><h3>Évolution de la qualité</h3><span class="mini-sel">6 derniers mois</span></div>
+            <div class="chart-box" style="position:relative;height:170px"><canvas id="line_canvas"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:18px;grid-template-columns:1fr 1fr">
+        <div class="card">
+          <div class="card-h"><h3>Critères à améliorer</h3><a class="more" data-go="rapports">Voir tout</a></div>
+          <div class="prg-card" id="crit_low"></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Activité en temps réel</h3></div>
+          <div class="feed" id="feed"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GRILLE (Mail/Appel) ===== -->
+    <section id="view-grille" class="view">
+      <h2 class="section-title" id="g_title">Grille Mail</h2>
+      <p class="section-sub" id="g_sub">Évaluation d'un échange — 30 points.</p>
+      <div class="gver" id="g_ver"></div>
+      <div class="ce-banner" id="ce_banner" style="display:none"></div>
+      <div class="fcard"><h4>Informations</h4>
+        <div class="formgrid">
+          <div class="field"><label>Évaluateur</label><select id="f_eval"></select></div>
+          <div class="field"><label>Conseiller</label><select id="f_cons"></select></div>
+          <div class="field"><label>Date de contact</label><input type="date" id="f_date"></div>
+          <div class="field"><label>Opération</label><select id="f_op"></select></div>
+          <div class="field"><label>Typologie</label><input type="text" id="f_typo" list="typo_list" placeholder="Saisir la typologie…" autocomplete="off"><datalist id="typo_list"></datalist></div>
+          <div class="field"><label>Référence / Lien</label><input type="text" id="f_ref" placeholder="407-1269213-3538725"></div>
+        </div>
+      </div>
+      <div class="fcard"><div class="legend-app">
+        <span><i style="background:var(--green)"></i>Conforme</span><span><i style="background:var(--amber)"></i>Part. conforme (½)</span>
+        <span><i style="background:var(--red)"></i>Non conforme</span><span id="lg_im"><i style="background:#b91c1c"></i>Impact Majeur → 0%</span>
+        <span id="lg_si" style="display:none"><i style="background:#7c3aed"></i>Situation Inacceptable → évaluation 0%</span>
+        <span><i style="background:#64748b"></i>N/A (retiré)</span></div></div>
+      <div id="grid-host"></div>
+      <div class="fcard"><h4>Synthèse</h4>
+        <div class="formgrid" style="grid-template-columns:1fr 1fr">
+          <div class="field"><label>Points forts</label><textarea id="f_forts" placeholder="Points forts observés…"></textarea></div>
+          <div class="field"><label>Axes d'amélioration</label><textarea id="f_axes" placeholder="Axes de progression…"></textarea></div>
+        </div>
+      </div>
+      <div class="scorebar"><div class="scorewrap">
+        <div style="display:flex;align-items:baseline;gap:11px"><span class="score-pct good" id="s_pct">100,00%</span>
+          <div class="score-sub" id="s_brut">30 / 30 pts</div></div>
+        <span class="im-badge" id="s_im" style="display:none">⚠ IMPACT MAJEUR</span>
+        <span class="si-badge" id="s_si" style="display:none">⛔ SITUATION INACCEPTABLE</span>
+        <div class="score-meta"><span>Base : <b id="s_base">30</b> pts</span><span>Notés : <b id="s_cnt">0/0</b></span></div>
+        <div class="sb-actions"><button class="btn btn-ghost" id="b_reset">Réinitialiser</button><button class="btn btn-primary" id="b_save">Enregistrer</button></div>
+      </div></div>
+    </section>
+
+    <!-- ===== ÉVALUATIONS ===== -->
+    <section id="view-evals" class="view">
+      <h2 class="section-title">Évaluations</h2><p class="section-sub">Historique des évaluations enregistrées.</p>
+      <div class="card">
+        <div class="toolbar" style="gap:10px;flex-wrap:wrap">
+          <input type="search" id="ev_q" class="mini-sel" placeholder="🔍 Référence, conseiller…" style="min-width:190px">
+          <select id="ev_canal" class="mini-sel"><option value="ALL">Tous canaux</option><option value="MAIL">Mail</option><option value="APPEL">Appel</option></select>
+          <select id="ev_cons" class="mini-sel"><option value="ALL">Tous conseillers</option></select>
+          <select id="ev_evtr" class="mini-sel"><option value="ALL">Tous évaluateurs</option></select>
+          <select id="ev_typo" class="mini-sel"><option value="ALL">Toutes typologies</option></select>
+          <select id="ev_stat" class="mini-sel"><option value="ALL">Tous statuts</option><option value="OK">Validée</option><option value="IM">Impact majeur</option><option value="SI">Situation inacceptable</option></select>
+          <span style="font-weight:800;font-size:12px;color:var(--muted)">Du</span><input type="date" id="ev_du" class="mini-sel">
+          <span style="font-weight:800;font-size:12px;color:var(--muted)">au</span><input type="date" id="ev_au" class="mini-sel">
+          <button class="btn btn-ghost" id="ev_reset">Réinitialiser</button>
+        </div>
+        <div class="toolbar" style="gap:10px;padding-top:0;flex-wrap:wrap">
+          <button class="btn btn-ghost" id="b_refresh">↻ Recharger (Sheet)</button>
+          <button class="btn btn-ghost" id="b_csv">⤓ Export CSV (vue filtrée)</button>
+          <button class="btn btn-ghost" id="b_import_toggle">⎘ Importer une évaluation (IA)</button>
+          <span class="hint" id="ev_count" style="padding:0;margin-left:auto"></span>
+        </div>
+        <div id="import_box" style="display:none;padding:0 20px 14px">
+          <textarea id="import_json" style="width:100%;min-height:120px;background:#f8fafc;border:1.5px solid var(--line);border-radius:11px;color:var(--txt);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;padding:11px 13px" placeholder='Colle ici le JSON produit par la skill, ex. { "canal": "APPEL", "record": { … } }'></textarea>
+          <div style="display:flex;gap:10px;margin-top:9px;align-items:center"><button class="btn btn-primary" id="b_import_send">Envoyer au Sheet</button><span class="hint" id="import_hint" style="padding:0"></span></div>
+        </div>
+        <div style="overflow-x:auto"><table class="ftab"><thead><tr>
+          <th class="srt desc" data-k="_ts">Date</th>
+          <th class="srt" data-k="Canal">Canal</th>
+          <th class="srt" data-k="Conseiller">Conseiller</th>
+          <th class="srt" data-k="Évaluateur">Évaluateur</th>
+          <th class="srt" data-k="Typologie">Typologie</th>
+          <th class="srt" data-k="Référence">Référence</th>
+          <th class="srt" data-k="_pct">Note</th>
+          <th>Statut</th><th>Contre-éval</th><th>Actions</th>
+        </tr></thead><tbody id="evals_body"></tbody></table></div>
+        <div class="hint" id="evals_hint"></div>
+      </div>
+    </section>
+
+    <!-- ===== RAPPORTS ===== -->
+    <section id="view-rapports" class="view">
+      <h2 class="section-title">Rapports</h2><p class="section-sub">Non-conformités par critère et identification des items les plus impactants (Pareto).</p>
+      <div class="card" style="margin-bottom:18px"><div class="toolbar" style="gap:13px">
+        <span style="font-weight:800;font-size:12px;color:var(--muted)">Du</span><input type="date" id="rap_du" class="mini-sel">
+        <span style="font-weight:800;font-size:12px;color:var(--muted)">au</span><input type="date" id="rap_au" class="mini-sel">
+        <select id="rap_grid" class="mini-sel"><option value="MAIL">Grille Mail</option><option value="APPEL">Grille Appel</option></select>
+        <select id="rap_crit" class="mini-sel"><option value="ALL">Tous les critères</option></select>
+        <button class="btn btn-ghost" id="rap_reset">Réinitialiser</button>
+        <span class="hint" id="rap_count" style="padding:0;margin-left:auto"></span>
+      </div></div>
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-h"><h3>Pareto — items impactant la note globale</h3><span class="mini-sel" id="rap_grid_lbl">Grille Mail</span></div>
+        <div class="chart-box" style="position:relative;height:300px;padding:6px 18px 18px"><canvas id="pareto_canvas"></canvas></div>
+        <div class="hint">Barres : points perdus par critère (Non conforme = coef, Partiel = ½ coef, Impact Majeur = coef), triés par impact décroissant. Courbe : % cumulé — les premiers critères concentrent l'essentiel des pertes de note.</div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Détail des non-conformités par critère</h3></div>
+        <div style="overflow-x:auto"><table class="ftab" id="rap_table">
+          <thead><tr><th>Critère</th><th>Notés</th><th>Conforme</th><th>Partiel</th><th>Non conf.</th><th>Imp. Majeur</th><th>N/A</th><th>Conformité</th><th>Pts perdus</th></tr></thead>
+          <tbody id="rap_tbody"></tbody>
+        </table></div>
+        <div class="hint">« Pts perdus » = somme des points retirés sur la période (pondérés par le coefficient du critère). Trié du plus impactant au moins impactant.</div>
+      </div>
+    </section>
+
+    <!-- ===== CALIBRATIONS ===== -->
+    <section id="view-calib" class="view">
+      <h2 class="section-title">Contre-évaluations</h2><p class="section-sub">Concordance entre l'évaluation initiale et la contre-évaluation — fiabilité de la notation.</p>
+      <div class="kpi-mini" id="ce_kpi"></div>
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-h"><h3>Critères les plus divergents</h3><span class="mini-sel" id="ce_n"></span></div>
+        <div style="overflow-x:auto"><table class="ftab"><thead><tr><th>Critère</th><th>Divergences</th><th>Comparaisons</th><th>Concordance</th></tr></thead><tbody id="ce_crit_body"></tbody></table></div>
+        <div class="hint">Un critère qui diverge souvent est un critère mal calibré : c'est là qu'il faut reprendre la définition avec le CFQ, plutôt que sur la note globale.</div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Historique des contre-évaluations</h3></div>
+        <div style="overflow-x:auto"><table class="ftab"><thead><tr><th>Date</th><th>Canal</th><th>Conseiller</th><th>Évaluateur initial</th><th>Contre-évaluateur</th><th>Note init.</th><th>Note contre</th><th>Écart</th><th>Concordance</th><th>Verdict</th></tr></thead><tbody id="ce_body"></tbody></table></div>
+        <div class="hint">Verdict — <b>Concordant</b> : écart ≤ 5 pts et au plus 2 critères divergents. <b>Écart mineur</b> : écart ≤ 10 pts. <b>Écart majeur</b> : écart &gt; 10 pts, ou désaccord sur un Impact Majeur / une Situation Inacceptable.</div>
+      </div>
+    </section>
+
+    <!-- ===== CALIBRAGE ===== -->
+    <section id="view-calibrage" class="view">
+      <h2 class="section-title">Calibrage</h2><p class="section-sub">Plusieurs évaluateurs notent le même contact à l'aveugle, puis une note de référence est arrêtée en séance : alignement de chaque évaluateur et critères à recalibrer.</p>
+      <div class="kpi-mini" id="cal_kpi"></div>
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-h"><h3>Sessions de calibrage</h3>
+          <div class="cal-acts"><button class="btn btn-ghost" id="cal_refresh">↻ Recharger</button><button class="btn btn-primary" id="cal_new_toggle">+ Nouvelle session</button></div></div>
+        <div id="cal_new" style="display:none;padding:0 22px 18px">
+          <div class="formgrid">
+            <div class="field"><label>Canal</label><select id="cal_canal"><option value="MAIL">Mail</option><option value="APPEL">Appel</option></select></div>
+            <div class="field"><label>Version de grille</label><select id="cal_grille"></select></div>
+            <div class="field"><label>Conseiller évalué</label><select id="cal_cons"></select></div>
+            <div class="field"><label>Date de contact</label><input type="date" id="cal_date"></div>
+            <div class="field"><label>Typologie</label><input type="text" id="cal_typo" list="typo_list" placeholder="Saisir la typologie…" autocomplete="off"></div>
+            <div class="field"><label>Référence</label><input type="text" id="cal_ref" placeholder="407-1269213-3538725"></div>
+            <div class="field" style="grid-column:1/-1"><label>Lien vers le contact (ticket, enregistrement…)</label><input type="text" id="cal_lien" placeholder="https://…"></div>
+            <div class="field" style="grid-column:1/-1"><label>Consigne (facultatif)</label><input type="text" id="cal_consigne" placeholder="Ex. : focus sur la résolution et le respect des process"></div>
+          </div>
+          <div class="cal-acts" style="margin-top:14px"><button class="btn btn-primary" id="cal_create">Créer la session</button><button class="btn btn-ghost" id="cal_cancel">Annuler</button></div>
+        </div>
+        <div style="overflow-x:auto"><table class="ftab"><thead><tr><th>Session</th><th>Créée le</th><th>Canal</th><th>Conseiller</th><th>Référence</th><th>Animateur</th><th>Notations</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="cal_body"></tbody></table></div>
+        <div class="hint">Chaque évaluateur note le contact de son côté (« Noter »), sans voir les notes des autres. Une fois les notations reçues, l'animateur clique « Définir la référence » : la grille est pré-remplie avec la notation majoritaire, à arbitrer en séance.</div>
+      </div>
+      <div class="card" id="cal_detail" style="display:none;margin-bottom:18px">
+        <div class="card-h" style="align-items:flex-start;gap:14px;flex-wrap:wrap"><div><h3 id="cal_d_title"></h3><div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-top:4px" id="cal_d_sub"></div></div>
+          <div class="cal-acts"><button class="btn btn-ghost" id="cal_d_note"></button><button class="btn btn-primary" id="cal_d_ref"></button><button class="btn btn-ghost" id="cal_d_csv">⤓ CSV</button><button class="btn btn-ghost" id="cal_d_close">Fermer</button></div></div>
+        <div class="kpi-mini" id="cal_d_kpi" style="padding:0 22px"></div>
+        <div id="cal_d_body"></div>
+        <div class="hint">Cellule entourée en orange : notation différente de la référence (ou de la majorité tant que la référence n'est pas définie). 💬 : commentaire au survol. Verdict par évaluateur — <b>Aligné</b> : écart ≤ 5 pts et au plus 2 critères divergents. <b>Écart mineur</b> : écart ≤ 10 pts. <b>Écart majeur</b> : écart &gt; 10 pts, ou désaccord sur un Impact Majeur / une Situation Inacceptable.</div>
+      </div>
+      <div class="grid2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+        <div class="card">
+          <div class="card-h"><h3>Alignement par évaluateur</h3></div>
+          <div style="overflow-x:auto"><table class="ftab"><thead><tr><th>Évaluateur</th><th>Sessions</th><th>Critères alignés</th><th>Écart moyen</th><th>Écart abs.</th><th>Alignés</th><th>Dernier</th></tr></thead><tbody id="cal_ev_body"></tbody></table></div>
+          <div class="hint">Calculé sur les sessions clôturées (référence définie). Écart moyen négatif : l'évaluateur note plus sévèrement que la référence.</div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Critères à recalibrer</h3><span class="mini-sel" id="cal_crit_n"></span></div>
+          <div style="overflow-x:auto"><table class="ftab"><thead><tr><th>Critère</th><th>Divergences</th><th>Notations</th><th>Accord</th></tr></thead><tbody id="cal_crit_body"></tbody></table></div>
+          <div class="hint">Nombre de notations différentes de la référence, toutes sessions clôturées confondues.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PARAMÈTRES ===== -->
+    <section id="view-param" class="view">
+      <h2 class="section-title">Paramètres</h2><p class="section-sub">Connexion au Google Sheet et identité.</p>
+      <div class="fcard"><h4>Identité évaluateur</h4>
+        <div class="formgrid"><div class="field"><label>Nom affiché (sidebar)</label><select id="p_me"></select></div></div></div>
+      <div class="fcard"><h4>Conseillers &amp; évaluateurs</h4>
+        <div class="formgrid" style="grid-template-columns:1fr 1fr">
+          <div class="field"><label>Ajouter un évaluateur</label>
+            <div style="display:flex;gap:9px"><input type="text" id="p_new_eval" placeholder="Nom de l'évaluateur" style="flex:1"><button class="btn btn-primary" id="b_add_eval" style="padding:11px 16px">Ajouter</button></div>
+            <div class="chips" id="eval_chips"></div></div>
+          <div class="field"><label>Ajouter un conseiller</label>
+            <div style="display:flex;gap:9px"><input type="text" id="p_new_cons" placeholder="Nom du conseiller" style="flex:1"><button class="btn btn-primary" id="b_add_cons" style="padding:11px 16px">Ajouter</button></div>
+            <div class="chips" id="cons_chips"></div></div>
+        </div>
+        <div class="hint" style="padding:12px 0 0">Les ajouts/retraits sont enregistrés sur ce navigateur (localStorage) et apparaissent aussitôt dans les listes des grilles. Au moins un nom doit rester dans chaque liste.</div>
+      </div>
+      <div class="fcard"><h4>Référentiels (grilles &amp; agents)</h4>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-ghost" id="b_cfg_refresh">Rafraîchir depuis le Sheet</button>
+          <span class="hint" style="flex:1;min-width:260px">Grilles, définitions et listes d'agents sont lues depuis les onglets GRILLES / CRITERES / MOTIFS / AGENTS du Sheet, avec cache local de 4 h.</span>
+        </div></div>
+      <div class="fcard"><h4>Connexion Google Sheet</h4>
+        <div style="display:flex;gap:11px;align-items:flex-end;flex-wrap:wrap">
+          <div class="field" style="flex:1;min-width:300px"><label>URL Web App Apps Script (…/exec)</label><input type="text" id="p_url" placeholder="https://script.google.com/macros/s/XXXX/exec"></div>
+          <button class="btn btn-ghost" id="b_test">Tester</button></div>
+        <div class="hint" style="padding:12px 0 0">Déployer ▸ Application Web ▸ accès « Tout le monde ». Écriture en <i>no-cors</i> (fiable). Pour fixer l'URL en dur, renseigne <b>GAS_URL</b> en haut du fichier.</div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="print_area" aria-hidden="true"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ ICONS (lucide-style inline) ============ */
+function ic(n,cls){const P={
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+ mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/>',
+ phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+ list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1.2"/><circle cx="3.5" cy="12" r="1.2"/><circle cx="3.5" cy="18" r="1.2"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+ chart:'<line x1="3" y1="21" x2="21" y2="21"/><rect x="5" y="11" width="3.4" height="7" rx="1"/><rect x="10.3" y="6" width="3.4" height="12" rx="1"/><rect x="15.6" y="14" width="3.4" height="4" rx="1"/>',
+ cog:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+ chevron:'<path d="m6 9 6 6 6-6"/>', logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+ cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+ plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+ bell:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+ doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+ check:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+ star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+ up:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+ comment:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>'
+};return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"'+(cls?' class="'+cls+'"':'')+'>'+(P[n]||'')+'</svg>';}
+
+/* ============ CONFIG ============ */
+const GAS_URL="";   // à renseigner (ou via Paramètres ▸ Connexion Google Sheet)
+const SHEET_URL="";
+const URL_KEY="aosom_gas_url_v1";
+let runtimeUrl=GAS_URL||(()=>{try{return localStorage.getItem(URL_KEY)||"";}catch(e){return"";}})();
+
+/* ============ RÉFÉRENTIELS ============ */
+const DEFAULT_EVALUATEURS=["Calibrage","Mickael","Abraham","Irène","Sandratra"];
+const DEFAULT_CONSEILLERS=["Jessica","Anisah","Tiavina","Mélanie","Miantsa","Hortancia","Patricia","Franck","Faramalala","Midera","Narindra","Mialy","Sandra","Diadema","Judichael","Lael","Nancy","Carole"];
+const LIST_KEYS={eval:"aosom_evaluateurs_v1",cons:"aosom_conseillers_v1"};
+function loadList(k,def){try{const r=localStorage.getItem(k);if(r){const a=JSON.parse(r);if(Array.isArray(a)&&a.length)return a;}}catch(e){}return def.slice();}
+let EVALUATEURS=loadList(LIST_KEYS.eval,DEFAULT_EVALUATEURS);
+let CONSEILLERS=loadList(LIST_KEYS.cons,DEFAULT_CONSEILLERS);
+const OPERATIONS=["AOSOM FR"];
+let TYPOLOGIES=["rétractation","presales","produit endommagé","colis endommagé","demande de dispo enlèvement","modalité de retour","suivi colis","demande d'info commande","contestation de livraison","demande d'info produit","Geste co","Pièce manquante","Accessoire manquant","Demande d'info remboursement","Réexpédition","Modification d'adresse de livraison","Remboursement","Remerciement","proposition de solution"];
+function normTypo(t){return String(t||"").trim().replace(/\s+/g," ");}
+function typoKnown(){
+  const seen=new Map();
+  TYPOLOGIES.concat(store.map(e=>e.Typologie||"")).forEach(t=>{
+    const v=normTypo(t);if(!v)return;
+    const k=v.toLowerCase();if(!seen.has(k))seen.set(k,v);
+  });
+  return[...seen.values()].sort((a,b)=>a.localeCompare(b,"fr"));
+}
+function updateTypoList(){const dl=$("#typo_list");if(dl)dl.innerHTML=typoKnown().map(t=>`<option value="${escHtml(t)}">`).join("");}
+const APP={C:{short:"Conforme",factor:1,cls:"C"},PC:{short:"Part.",factor:.5,cls:"PC"},NC:{short:"Non conf.",factor:0,cls:"NC"},IM:{short:"Imp. Majeur",factor:0,cls:"IM",im:1},SI:{short:"Sit. Inacceptable",factor:0,cls:"SI",si:1},NA:{short:"N/A",na:1,cls:"NA"}};
+const APP_LABEL={C:"CONFORME",PC:"PARTIELLEMENT CONFORME",NC:"NON CONFORME",IM:"IMPACT MAJEUR",SI:"SITUATION INACCEPTABLE",NA:"NON APPLICABLE"};
+const GRIDS={"MAIL":{"label":"Mail","channel":"MAIL","version":"V4","rules":{"im":"eval","si":false},"blocs":[{"title":"Maîtrise de la structure du mail","coef":9,"criteria":[{"id":"charte_accueil","name":"Charte d'accueil","coef":2,"allowed":["C","NC"]},{"id":"identification","name":"Identification de la commande","coef":4,"allowed":["C","NC","NA"]},{"id":"mise_attente","name":"Mise en attente de son dossier","coef":2,"allowed":["C","NC","NA"]},{"id":"prise_conge","name":"Prise de congé","coef":1,"allowed":["C","NC"]}]},{"title":"Qualité rédactionnelle","coef":5,"criteria":[{"id":"expression_ecrite","name":"Expression écrite","coef":4,"allowed":["C","PC","NC","NA"]},{"id":"personnalisation","name":"Personnalisation du message","coef":1,"allowed":["C","NC"]}]},{"title":"Savoir-faire","coef":16,"criteria":[{"id":"lecture_360","name":"Lecture 360° et compréhension de la demande","coef":2,"allowed":["C","NC"]},{"id":"manipulation_outils","name":"Manipulation des outils","coef":4,"allowed":["C","NC"]},{"id":"respect_process","name":"Respect des process","coef":4,"allowed":["C","NC","IM"]},{"id":"resolution","name":"Résolution adaptée, efficace et pertinente","coef":2,"allowed":["C","NC"]},{"id":"historisation","name":"Historisation et qualification","coef":4,"allowed":["C","PC","NC","IM"]}]}]},"APPEL":{"label":"Appel","channel":"APPEL","version":"V4","rules":{"im":"eval","si":false},"blocs":[{"title":"Maîtrise du schéma d'appel","coef":9,"criteria":[{"id":"accueil","name":"Accueil du client","coef":1,"allowed":["C","NC"]},{"id":"identification","name":"Identification de la commande","coef":1,"allowed":["C","IM","NA"]},{"id":"decouverte","name":"Découverte des attentes client","coef":2,"allowed":["C","PC","NC","NA"]},{"id":"reformulation","name":"Reformulation","coef":2,"allowed":["C","NC"]},{"id":"mise_attente","name":"Mise en attente","coef":1,"allowed":["C","NC","NA"]},{"id":"prise_conge","name":"Prise de congé","coef":1,"allowed":["C","NC","NA"]},{"id":"enquete","name":"Enquête de satisfaction","coef":1,"allowed":["C","NC","NA"]}]},{"title":"Savoir-être","coef":9,"criteria":[{"id":"ecoute_active","name":"Écoute active et compréhension de la demande","coef":2,"allowed":["C","NC"]},{"id":"courtoisie","name":"Courtoisie, sourire, disponibilité, empathie","coef":2,"allowed":["C","PC","NC","IM"]},{"id":"directivite","name":"Directivité — contrôle de l'appel","coef":2,"allowed":["C","PC","NC"]},{"id":"expression_orale","name":"Expression orale","coef":2,"allowed":["C","PC","NC"]},{"id":"personnalisation","name":"Personnalisation de l'échange","coef":1,"allowed":["C","PC","NC","NA"]}]},{"title":"Savoir-faire","coef":12,"criteria":[{"id":"manipulation_outils","name":"Manipulation des outils","coef":4,"allowed":["C","NC"]},{"id":"respect_process","name":"Respect des process","coef":4,"allowed":["C","NC","IM"]},{"id":"traitement_objections","name":"Traitement des objections","coef":2,"allowed":["C","PC","NC","NA"]},{"id":"resolution","name":"Résolution adaptée, efficace et pertinente","coef":2,"allowed":["C","NC"]}]}]},"MAIL_V5":{"label":"Mail","channel":"MAIL","version":"V5 Superviseur","rules":{"im":"bloc","si":true},"blocs":[{"title":"Maîtrise de la structure du mail","coef":8,"criteria":[{"id":"charte_accueil","name":"Charte d'accueil","coef":2,"allowed":["C","NC"]},{"id":"identification","name":"Identification de la commande","coef":4,"allowed":["C","NC","NA"]},{"id":"prise_conge","name":"Prise de congé","coef":2,"allowed":["C","NC"]}]},{"title":"Qualité rédactionnelle","coef":4,"criteria":[{"id":"expression_ecrite","name":"Expression écrite","coef":2,"allowed":["C","PC","NC","NA"]},{"id":"personnalisation","name":"Personnalisation du message","coef":2,"allowed":["C","NC"]}]},{"title":"Savoir-faire","coef":18,"criteria":[{"id":"lecture_360","name":"Lecture 360° et compréhension de la demande","coef":4,"allowed":["C","NC"]},{"id":"manipulation_outils","name":"Manipulation des outils","coef":2,"allowed":["C","NC"]},{"id":"respect_process","name":"Respect des process","coef":4,"allowed":["C","NC","SI"]},{"id":"resolution","name":"Résolution adaptée, efficace et pertinente","coef":4,"allowed":["C","NC"]},{"id":"historisation","name":"Historisation et qualification","coef":4,"allowed":["C","NC","IM","NA"]}]}]},"APPEL_V5":{"label":"Appel","channel":"APPEL","version":"V5 Superviseur","rules":{"im":"bloc","si":true},"blocs":[{"title":"Maîtrise du schéma d'appel","coef":9,"criteria":[{"id":"accueil","name":"Accueil du client","coef":1,"allowed":["C","NC"]},{"id":"identification","name":"Identification de la commande","coef":1,"allowed":["C","IM","NA"]},{"id":"decouverte","name":"Découverte des attentes client","coef":2,"allowed":["C","PC","NC","NA"]},{"id":"reformulation","name":"Reformulation","coef":2,"allowed":["C","NC"]},{"id":"mise_attente","name":"Mise en attente","coef":1,"allowed":["C","NC","NA"]},{"id":"prise_conge","name":"Prise de congé","coef":1,"allowed":["C","NC","NA"]},{"id":"enquete","name":"Enquête de satisfaction","coef":1,"allowed":["C","NC","NA"]}]},{"title":"Savoir-être","coef":9,"criteria":[{"id":"ecoute_active","name":"Écoute active et compréhension de la demande","coef":2,"allowed":["C","NC"]},{"id":"courtoisie","name":"Courtoisie, sourire, disponibilité, adaptabilité et empathie","coef":2,"allowed":["C","PC","NC","SI"]},{"id":"directivite","name":"Directivité — contrôle de l'appel","coef":2,"allowed":["C","PC","NC"]},{"id":"expression_orale","name":"Expression orale","coef":2,"allowed":["C","PC","NC"]},{"id":"personnalisation","name":"Personnalisation de l'échange","coef":1,"allowed":["C","PC","NC","NA"]}]},{"title":"Savoir-faire","coef":12,"criteria":[{"id":"manipulation_outils","name":"Manipulation des outils","coef":1,"allowed":["C","NC"]},{"id":"resolution_premier_contact","name":"Résolution au premier contact","coef":1,"allowed":["C","NC","NA"]},{"id":"respect_process","name":"Respect des process","coef":5,"allowed":["C","NC","SI"]},{"id":"traitement_objections","name":"Traitement des objections","coef":1,"allowed":["C","PC","NC","NA"]},{"id":"resolution","name":"Résolution adaptée, efficace et pertinente","coef":4,"allowed":["C","NC"]}]}]}};
+
+const REASONS={"MAIL":{"charte_accueil":{"C":"L’agent assure l’accueil du client et prend en compte son mail\nExemple : \"Bonjour Monsieur/Madame X, j'accuse réception de votre demande\"\"Bonjour Madame/Monsieur X, suite à votre demande\"","NC":"L'agent ne respecte pas les éléments attendus dans la phase d'accueil."},"identification":{"C":"Si le client n'a pas donné sa référence de commande et que l'agent n'a pas réussi à retrouver la commande sur OMS avec les autres éléments présents dans le mail ou dans l'historique de conversation, l'agent demande au client sur quel site il a passé commande ainsi que sa référence de commande.\nExemple: « Pourriez vous me communiquez le site sur lequel vous avez passé commande, ainsi que la référence de votre commande».« Afin que je puisse consulter votre dossier/commande, pourriez vous me confirmer la référence de votre commande SVP »","NC":"L'agent n'a pas réussi à identifier la commande alors qu'il avait les éléments nécessaire dans le mail ou dans l'historique de conversation > L'agent a redemandé les éléments lui permettant d'identifier la commande, alors qu'ils étaient déjà disponibles","NA":"L'agent avait tous les éléments nécessaires à l'identification de la commande dans OMS"},"mise_attente":{"C":"L'agent annonce au client que nous sommes dans l'attente des éléments avant de revenir vers lui Exemple : Enquête transporteur, retour logistique pour l'annulation/modification de commande, retour pour rétractation> L'agent reprend le client en confirmant sa présence par la personnalisation et en lui remerciant de sa patience\nExemple :\"Je reviens vers vous au sujet de...je vous remercie pour votre patience.\"","NC":"L'agent n'annonce pas au client que nous sommes dans l'attente des éléments avant de revenir vers lui > L'agent recontacte le client sans reprendre l'objet de son mail et sans le remercier d'avoir patienter","NA":"La mise en attente du dossier n'était pas nécessaire pour traiter la demande client."},"prise_conge":{"C":"L'agent  précise la suite donnée ou à donner.>L'agent se montre disponible pour tout autres questions/demandes>L'agent a fait le nécessaire pour que le client ne nous recontacte pas pour la même demande si le sujet est clos\nExemple :\n- \"Nous restons à votre disposition pour tout autre question ou demande\"-\"N'hésitez pas à nous contacter si vous avez d'autres questions/demandes\">L'agent assure une prise de congé courtoise avec au minimum une formule de politesse\nExemple : -\"Vous souhaitant une bonne journée.\"-\"Excellente journée.\"-\"Bon week-end.\"","NC":"L'agent ne précise pas la suite donnée ou à donner.>Le mail contient une incompréhension ou des informations erronnées >L'agent ne se montre pas disponible pour tout autres questions/demandes>L'agent n'a pas fait le nécessaire pour éviter un nouveau contact pour la même demande après cloture du dossier>L'agent n'assure pas une prise de congé courtoise avec au minimum une formule de politesse"},"expression_ecrite":{"C":"L'agent utilise :\n- des phrases courtes/claires et formulées correctement\n- utilisation des majuscules conformes\n- respecte la mise en page et les règles de ponctuation\n- respecte les sauts de ligne, un paragraphe= un saut de ligne\n- aucune faute de grammaire ou d'orthographe\n- respecte la template des mail et l'adapte en fonction de la situation\n- un vocabulaire simple et compréhensible\n- un vocabulaire positif\n- Si l'agent utilise un terme technique, Il est en capacité de l’expliquer clairement au client, sinon c’est impertinent,","PC":"L'agent présente une expression écrite perfectible : \n- Quelques maladresses de vocabulaire, grammaire ou de syntaxe,\n- Jargon technique ou interne maladroit mais compréhensible par l'interlocuteur\n- un oubli de mot sans impact sur le sens de la phrase - utilisation des majuscules non conforme (1 faute)\n- une faute de grammaire ou d'orthographe\n- une faute de frappe/ mot en double","NC":"L'expression écrite de l'agent présente des insuffisances nombreuses de types : - phrases confuses, non correctement formulées\n- utilisation des majuscules non conforme (2 minimum)\n- je copie-colle des éléments d'OMS ou de la fiche produit sans les mettre en forme (exemple je copie le SKU)\n- pas d'espace entre deux mots\n- 2 fautes de mise en page et/ou ponctuation\n- 3 fautes d'orthographe ou de grammaire\n- vocabulaire non adapté (jargon technique ou interne non expliqué clairement).\n- utilisation abusive du futur ou du conditionnel générant le doute.\n- expressions négatives, familières ou inappropriées, mail non professionel.\n- un oubli de mot avec impact sur le sens de la phrase.\n- absence de relecture","NA":"Aucune modification à faire car la template est suffisantNe pas impacter de nouveau l'item si l'agent a suivi le mauvais process"},"personnalisation":{"C":"Le message est personnalisé selon les informations demandées (client)La template a été personnaliséL'agent a utilisé le nom du client dans son mail (si disponible)","NC":"Le message n'est pas personnaliséL'agent n'a pas utilisé le nom du client dans son mail alors qu'il était disponible"},"lecture_360":{"C":"Bonne lecture de tous les éléments présents sur les outils (historique des échanges, OMS, Shulex, lecture suivi transporteur) afin d'avoir une compréhension globale de la demande client.L'agent oriente le client si besoin et utilise un questionnement cohérent avec la problématique et la situation.\nExemple:Faire le nécessaire pour reformuler la demande client et lui demander de nous fournir plus d'éléments pour répondre à sa demandeL'agent explique que le produit est expédié en plusieurs colis avec plusieurs numéros de suivi et le client a donc reçu un colis sur X.","NC":"L'agent redemande des éléments déjà présent dans le mail/message ou historique de conversationMauvaise interprétation/analyse de la demande clientL'agent ne demande pas au client les éléments nécessaire pour le bon traitement de sa demandeLes questions sont posées de manière intensive et/ou de manière inapropriée et incohérentes par rapport à la demande du client"},"manipulation_outils":{"C":"L'agent sait manipuler les outils à sa disposition : OMS/Shulex/Back Office Marketplace/lien transporteurs\nExemple :-Créer un RMA\n- Localisation du colis-Sait remplir les informations complémentaires si besoin (à la demande du transporteur ou dans OMS)-Rembourser partiellement ou complétement une commande -Mettre une commande en attente","NC":"L'agent ne sait pas manipuler les différents outils à sa disposition.\nExemple:-Ne manipule pas correctement les outils-Ne valide pas entièrement un RMA"},"respect_process":{"C":"L'agent renseigne correctement l'ensemble des informations nécessaires à la prise en charge de la demande du clientL'agent à connaissance des dernières consignes et derniers process et les applique à juste titre à la demande du client","NC":"L'agent ne renseigne pas l'ensemble des informations nécessaires à la prise en charge de la demande du clientLes informations renseignées par l'agent sont erronnées, incomplètes et/ou inadaptées.L'agent n'applique pas les évolutions de consignes et de process Exemple : L'agent n'a pas laissé de notes dans OMS quand cela était nécessaire-Le client souhaite reporter la livraison de son colis à plus tard (commande encore non expédiée), l'agent ne prend pas en compte les obligations en terme de délais d'expédition demandées par les marketplaces et propose de mettre la commande en attente.-L'agent ne remplit pas le tableau d'annulation ou de modification de commande et/ou ne laisse pas de commentaire alors que cela était nécessaire-Valide un échange sur OMS sans avoir vérifié les informations de livraison et compléter le numéro de téléphone portable-Proposer un échange sans avoir vérifier le stock disponible au préalable","IM":"L'agent n'a pas respecté les process ayant pour résultat de porter préjudice au client et/ou à Aosom.\nExemple:-Avoir validé un montant à rembourser erronné sans avoir vérifié au préalable-N'a pas escaladé une situation où un produit qui peut potentiellement porter atteinte à la santé ou à la sécurité d'un client-L'agent a donné une mauvaise date d'enlèvement pour le retour de son colis-L'agent ne respecte pas le choix du client et a remboursé la commande au lieu d'expédier une nouveau produit-L'agent annule la commande au lieu de la modifier"},"resolution":{"C":"La réponse apportée est conforme, pertinente et complète par rapport à la demande/situation du client\nExemple:S'engage à obtenir une réponse ou à résoudre sa problématique","NC":"La réponse apportée à la demande est inexacte et ne porte pas préjudice au client.L'agent ne fait pas l'action nécessaire à la bonne poursuite du dossier\nExemple : -Ne reconnait pas ou ne tente pas de résoudre le problème rencontré par le client-Ne prend pas en compte les problèmes rencontrés par le client-L'agent explique au client qu'il va recevoir une pièce détachée alors qu'il n'y en a pas en stock."},"historisation":{"C":"L'opérateur ajoute des notes pertinantes en commentaire de la commande ou du RMA :\nExemple:Partie commande :L'opérateur indique : \"Annulation client\", \"Demande de modification d'adresse (indiquer la nouvelle adresse\",\"Pièce 5 manquante > pas de pièce en stock, mais pièce trouvable dans le commerce > proposition remise ou échange\",\"Rétractation, enlèvement prévu le XX/XX, (indiquer le numéro de retour), 9€\"Partie RMA :\"La pièce 4 est arrivée endommagée à l'arrivée > envoie pièce de remplacement\"\"Retard de 2 jours du fait du transporteur > remise de 5€\"\"La fonction chauffante ne fonctionne plus > échange\"","IM":"L'opérateur ne laisse pas de notes ou des notes non pertinantes en commantaire de la commande ou du RMA :\nExemple : Partie commande :L'operateur n'indique pas pourquoi il a mis la commande en attente dans l'OMSPartie RMA :L'opérateur indique seulement en commentaire RMA : \"article défectueux\",\"échange 1/2 demandé\",\"Pièces manquantes\"","NA":"Les notes laissées par l'IA sont pertinantes et complètes.Pour les tickets Amazon, l'IA va faire un résumé de la réponse au client."}},"APPEL":{"accueil":{"C":"L'agent utilise le bon message d'accueil, donne son nom et est accueillant\nExemple : « Aosom, bonjour « XXXX », à votre écoute. »« Aosom, bonjour « XXXX », en quoi puis-je vous aider ? »","NC":"L'agent ne respecte pas les éléments attendus dans la phase d'accueil."},"identification":{"C":"L'agent identifie son interlocuteur et réalise une recherche de dossier via OMS et confirme tous les éléments nécesaires à la recherche\nExemple :« Afin que je puisse consulter votre dossier/commande, merci de me communiquer la référence de votre commande SVP » (L'agent reformule la référence de commande et le nom/prénom du client)Si le client ne sait pas où se trouve le numéro de commande, l'agent le guide en l’orientant selon la marketplace sur laquelle il a passé commande, afin de retrouver sa référence de commande.\nExemple: « Votre référence de commande Amazon commence par XXX-etc ».>L'agent vérifie l'identité de son interlocuteur pour s'assurer que c'est bien le client Exemple:« Afin que je puisse confirmer votre identité, je vous remercie de bien vouloir me donner, le code postal de l'adresse de livraison et N° de téléphone rattaché à la commande s’il vous plait ? »","IM":"L'agent ne vérifie pas l'ensemble des éléments lui permettant d'identifier le client","NA":"La communication a pris fin avant que l'agent ait pu prendre les informations. Le client demande seulement des informations avant vente"},"decouverte":{"C":"L'agent se montre disponible et à l'écoute du client, aide le client à s’exprimer en utilisant un questionnement cohérent avec la problématique et la situation.\nExemple : \"Que puis-je faire pour vous?\" \"En quoi puis-je vous aider \"","PC":"L'agent se montre disponible et à l'écoute du client mais ne l'aide pas à s’exprimer et/ou utilise un questionnement incohérent avec la problématique.","NC":"L'agent ne se montre pas disponible et à l'écoute du client, ne l'aide pas à s'exprimer et/ou absence de questionnement.Les questions sont posées de manière intensive et/ou de manière innapropriée","NA":"Le client a mis fin à l'échange avant qu'une question puisse être posée par l'agent"},"reformulation":{"C":"L'agent utilise la reformulation pour s'assurer de la bonne compréhension de la problématique du client\nExemple : « Si je comprends bien, Mme Dubois, vous nous contactez car vous n'avez toujours pas reçu votre commande, c’est bien cela ? »","NC":"Absence de reformulation par l'agent pour valider sa compréhension de la demande client"},"mise_attente":{"C":"L'agent annonce clairement la mise en attente et attend la prise en compte du client.\nExemple : \" Mme Dubois, je vais vous mettre en attente le temps que je vérifie les informations \"> L'agent respecte le temps maximum de mise en attente avant de reprendre le client: 1m 30 secondes maximum > L'agent reprend le client en confirmant sa présence par la personnalisation et en lui remerciant de sa patience\nExemple :agent : \"Mme Dubois ?\" ==> Client : \"oui\"agent : \"je vous remercie d'avoir patienté,...\"","NC":"L'agent n'annonce pas clairement la mise en attente.\nExemple de cas non conforme : \" je regarde \", \" je me renseigne \", \"Attendez\">Le client est interrompu, l'agent le met en attente de façon intempestive sans qu'il soit prévenu>Le temps d'attente dépasse le délai maximum d'1 minutes 30 secondes sans reprise de la communication>Il y a plus de 2 mises en attente lors de la conversation>L'agent coupe le micro pendant la conversation au lieu de mettre son client en attente","NA":"La mise en attente n'était pas nécessaire pour traiter la demande client."},"prise_conge":{"C":"L'agent s'assure de la compréhension réciproque des termes de l'entretien et/ou précise la suite donnée ou à donner.>L'agent se montre disponible et s'assure que son client n'ait pas d'autres questions/demandes>L'agent a fait le nécessaire pour que le client ne rappelle pas pour la même demande\nExemple :_ \"est-ce que tout a été clair pour vous Mme Dubois ? \"_ \"Avez-vous d'autres demandes ou d'autres questions ? \">L'agent assure une prise de congé courtoise avec au minimum une formule de politesse\nExemple : _\"Mme Dubois, je vous remercie de votre appel et vous souhaite une excellente journée\"","NC":"L'agent ne s'assure pas de la compréhension réciproque des termes de l'entretien et/ou ne précise pas la suite donnée ou à donner.>Le contact aboutit à une incompréhension ou à une compréhension erronnée des termes de l'entretien.>L'agent ne se montre pas disponible et ne s'assure pas que le client n'ait plus d'autres questions/demandes>L'agent n'a pas fait le nécessaire pour éviter le rappel client pour la même demande>L'agent n'assure pas une prise de congé courtoise avec au minimum une formule de politesse Exemple :_L'agent annonce des délais non conforme aux consignes de production","NA":"Fin de communication à l'initiative du client(coupure, raccroché, …)."},"enquete":{"C":"L'agent propose l'enquête au client avant de mettre fin à l'appel\nExemple : \"Je vous invite à rester en ligne pour participer à une courte enquête de satisfaction et vous souhaite une excellente journée.\"","NC":"L'agent ne propose pas l'enquête au client avant de mettre fin à l'appel","NA":"Fin de communication à l'initiative du client (coupure, raccroché, …).En cas de situation non pertinente ne permettant pas de proposer l'enquête de satisfaction\nExemple : Le client est au volantTout contexte de transfert d'appel"},"ecoute_active":{"C":"L’agent fait preuve d’une bonne capacité d’écoute, ne fait pas répéter son client plus d’une fois si la qualité de la ligne téléphonique est bonne, fait preuve de réactivité et épèle les informations à la place du client si une reconfirmation est nécessaire.L’agent utilise des signes d’approbation.\nExemple: \"oui, d'accord, je comprends, entendu, je vois etc...\"  N'interromps pas ou ne parles pas au dessus du client et s'excuse s'il le fait par mégardeFait un résumé de ce que le client lui a dit pour démontrer l'écoute et la compréhension","NC":"L'agent demande au client de répéter alors qu'il n'y avait aucun problème de qualité de la ligne téléphonique.Il interrompt le client.Le client doit poser la question à plusieurs reprises afin d'en obtenir une réponse.L'agent pense savoir ce que le client veut ou a besoin, sans même lui avoir laissé le temps de s'exprimer ou de finir ce qu’il avait à dire.Il n'a pas compris la demande du client."},"courtoisie":{"C":"L'agent présente une attitude relationnelle ouverte et disponible pour le client.Il fait preuve d'adaptation et d'attention à l'égard de son interlocuteur : adaptation du dialogue par rapport à sa situation, son profil et au contexte (empathie, accompagnement personnalisé,...)Il est courtois, agréable et souriant tout au long de l'appel. Utilise convenablement des excuses et à un moment opportunSa voix est parfaitement audible. Le ton est chaleureux. Le débit/rythme de parole adéquat\nExemple : \"Je vous rassure Mme Dupont, votre commande a été expédiée et remis auprès de notre transporteur Chronopost. Celui-ci devrait vous livrer dans la journée\"","PC":"L'agent présente une posture perfectible et il est constaté un des éléments suivants :\n- Tente de rassurer son interlocuteur mais maladroitement (ton directe et ou levé)\n- Irrégularité de l'attitude tout au long de l'entretien,","NC":"L'agent présente des signes négatifs tels que :\n- Ton neutre ou monotone\n- Parle trop vite, marmonne et n'est pas clair\n- Ne semble pas sympathique\n- Semble distrait et désintérésé\n- manque d'empathieLe dialogue est en décalage avec la situation ou le contexte.L'attention portée à l'interlocuteur est insuffisante et les efforts de l'agent pour se faire comprendre ou accompagner l'interlocuteur ne sont pas perceptibles.S'excuse à des moments inopportuns ou n'offre pas des excuses en cas de besoinNe s'adapte pas à son interlocuteur\nExemple:Ne ralentit pas le rythme en parlant à une personne agées ou malentendante","IM":"L'agent montre des signes d'agacement, manque de respect auprès du clientL'agent se montre injurieux, irrespectueux envers le client"},"directivite":{"C":"L'agent est directif, il recentre le sujet sur la demande initiale, mais reste disponible. Il ne laisse pas de blancs pendant l'appel. Tente de rassurer son interlocuteur et l'oriente suite aux réponses adaptées à sa situation>A la demande du client, et face à une situation complexe qu'il n'arrive pas à gérer, l'agent transfère à un supérieur hierarchique","PC":"L'agent apporte la réponse mais laisse l'appel se prolonger sans justification.>L'agent ne transfère pas la demande à un supérieur hierarchique alors que cela était nécessaire>L'agent a transféré une demande à un superieur hirarchique alors que cela n'était pas nécessaire","NC":"L'agent est trop directif, sans disponibilité ou au contraire aucune directivité. Il laisse des blancs dans la conversation. Il parle en même temps que son interlocuteur et/ou lui coupe la paroleHésitations / maladresses"},"expression_orale":{"C":"L'agent utilise :\n- des phrases courtes et claires \n- un vocabulaire simple et compréhensible\n- des verbes d'action et le présent.\n- un vocabulaire positif\n- Si l'agent utilise un terme technique, qu'il sache expliquer clairement au client sinon c'est impertinent","PC":"L'agent présente une expression orale perfectible : \n- Quelques maladresses de vocabulaire, grammaire ou syntaxe,\n- Tics de langage,\n- Jargon technique ou interne maladroit mais compréhensible par l'interlocuteur","NC":"L'expression orale de l'agent présente des insuffisances nombreuses de types : - phrases confuses, \n- vocabulaire non adapté (jargon technique ou interne non expliqué clairement), \n- utilisation abusive du futur ou du conditionnel générant le doute,\n- expressions négatives, familières ou inappropriées."},"personnalisation":{"C":"Utilise le nom du client au moins deux fois pendant toute l'interaction","PC":"Utilise le nom du client une fois pendant toute l'interaction","NC":"Ne demande pas le nom du client et ne l'utilise pas durant tout l'échange","NA":"Le client a refusé de communiquer son nomEn raison de la nature de l'interaction le nom du client n'était pas disponible"},"manipulation_outils":{"C":"L'agent sait lire, chercher et retranscrire les informations notés dans OMS/Edesk/Back Office Marketplace/lien transporteurs\nExemple :-localisation du colis-Lecture des informations-Lecture des historiques-Rembourser partiellement ou complétement une commande correctement-Annuler une commande-Créer un RMA avec la bonne raison RMA-Mettre une commande en attente-L'agent explique que le produit est expédié en plusieurs colis avec plusieurs numéros de suivi et le client a donc reçu un colis sur X.","NC":"L'agent ne sait pas manipuler les différents outils à sa disposition ou ne sait pas lire les informations ou retranscrit mal les données pour traiter la demande du client\nExemple:Information donnée au client erronée alors du type: l'agent dit au client que le colis est livré alors qu'en fait le colis est déposé au point relais (comme indiqué sur la preuve de livraison)"},"respect_process":{"C":"L'agent renseigne correctement l'ensemble des informations nécessaires à la prise en charge de la demande du clientL'agent sait faire un RMA, un SAV, une annulation, un remboursement ou un échange et sélectionne les raisons RMA adéquats et ajoute des commentaires si nécessaire.Sait remplir les informations complémentaires si besoin (à la demande du transporteur ou dans OMS)","NC":"L'agent ne renseigne pas l'ensemble des informations nécessaires à la prise en charge de la demande du clientLes informations renseignées par l'agent sont erronnées, incomplètes et/ou inadaptées.\nExemple : L’agent ne renseigne pas l’ensemble des informations nécessaires à la prise en charge de la demande du client.Les informations fournies par l’agent sont erronées, incomplètes et/ou inadaptées.\nExemples :-Le client souhaite reporter la livraison de son colis à une date ultérieure (commande encore non expédiée), mais l’agent ne prend pas en compte les obligations en termes de délais d’expédition imposées par les marketplaces et propose de mettre la commande en attente.-L’agent ne remplit pas le tableau d’annulation ou de modification de commande et/ou ne laisse pas de commentaire alors que cela était nécessaire.-L’agent valide un échange sur l’OMS sans avoir vérifié les informations de livraison ni complété le numéro de téléphone portable.-L’agent propose un échange sans avoir préalablement vérifié la disponibilité du stock","IM":"L'agent n'a pas respecté les process ayant pour résultat de porter préjudice au client et/ou à Aosom.\nExemple:Avoir validé un montant à rembourser erronné sans avoir vérifié au préalableN'a pas escaladé une situation où un produit a potentiellement pu porter atteinte à la santé ou à la sécurité d'un client"},"traitement_objections":{"C":"L'agent argumente de manière pertinente tout en respectant les process face à une objection client\nExemple : Le client exige un retour pour rétractation alors qu'il est hors délai.agent : \"La période de rétractation est de 14 jours à compter de la réception de votre colis. Vous aviez donc 14 jours pour vous décider, en dehors de cette période, il n'est plus possible de le retourner.\"","PC":"L'agent tente de traiter les objections du client mais maladroitement","NC":"L'agent ignore les objections client et n'y apporte aucun traitementL'agent a mal interprété l'objectionL'agent ne parvient pas à gérer correctement la demande et donne une réponse innapropriée","NA":"Aucune objection n'a été faite par le clientLorsque le client demande des informations générales L'appel se termine de façon inattendue avant que le conseiller ait eu l'occasion de gérer l'objection"},"resolution":{"C":"La réponse apportée est conforme et complète par rapport à la demande/situation client\nExemple:S'engage à obtenir une réponse ou à résoudre sa problématiqueS'engage à lui envoyer un mail récapitulatif","NC":"La réponse apportée à la demande est inexacte et mais ne porte pas préjudice au client.\nExemple : Ne reconnait pas ou ne tente pas de résoudre le problème rencontré par le clientNe prend pas en compte les problèmes rencontrés par le clientL'agent explique au client qu'il va recevoir une pièce détachée alors qu'il n'y en a pas en stock."}},"APPEL_V5":{"accueil":{"C":"L'agent utilise le bon message d'accueil, donne son nom et est accueillant\nExemple : \n« Aosom, bonjour « XXXX », à votre écoute. »\n« Aosom, bonjour « XXXX », en quoi puis-je vous aider ? »","NC":"L'agent ne respecte pas les éléments attendus dans la phase d'accueil."},"identification":{"C":">L'agent identifie son interlocuteur et réalise une recherche de dossier via OMS et confirme \ntous les éléments nécesaires à la recherche\nExemple :\n« Afin que je puisse consulter votre dossier/commande, merci de me communiquer la référence de votre commande SVP » (L'agent reformule la référence de commande et le nom/prénom du client)\n\nSi le client ne sait pas où se trouve le numéro de commande, l'agent le guide en l’orientant selon la marketplace sur laquelle il a passé commande, afin de retrouver sa référence de commande.\nExemple:\n « Votre référence de commande Amazon commence par XXX-etc ».\n\n>L'agent vérifie l'identité de son interlocuteur pour s'assurer que c'est bien le client \nExemple:\n« Afin que je puisse confirmer votre identité, je vous remercie de bien vouloir me donner, le code postal de l'adresse de livraison et N° de téléphone rattaché à la commande s’il vous plait ? »","IM":"L'agent ne vérifie pas l'ensemble des éléments lui permettant d'identifier le client","NA":"La communication a pris fin avant que l'agent ait pu prendre les informations. \nLe client demande seulement des informations avant vente"},"decouverte":{"C":"L'agent se montre disponible et à l'écoute du client, aide le client à s’exprimer en utilisant un questionnement cohérent avec la problématique et la situation.\nExemple : \n\"Que puis-je faire pour vous?\" \n\"En quoi puis-je vous aider \"","PC":"L'agent se montre disponible et à l'écoute du client mais ne l'aide pas à s’exprimer et/ou utilise un questionnement incohérent avec la problématique.","NC":"L'agent ne se montre pas disponible et à l'écoute du client, ne l'aide pas à s'exprimer et/ou absence de questionnement.\nLes questions sont posées de manière intensive et/ou de manière innapropriée","NA":"Le client a mis fin à l'échange avant qu'une question puisse être posée par l'agent"},"reformulation":{"C":"L'agent utilise la reformulation pour s'assurer de la bonne compréhension de la problématique du client\nExemple : \n« Si je comprends bien, Mme Dubois, vous nous contactez car vous n'avez toujours pas reçu votre commande, c’est bien cela ? »","NC":"Absence de reformulation par l'agent pour valider sa compréhension de la demande client"},"mise_attente":{"C":">L'agent annonce clairement la mise en attente et attend la prise en compte du client.\nExemple : \n\" Mme Dubois, je vais vous mettre en attente le temps que je vérifie les informations \"\n> L'agent respecte le temps maximum de mise en attente avant de reprendre le client: \n1m 30 secondes maximum \n> L'agent reprend le client en confirmant sa présence par la personnalisation et en lui remerciant de sa patience\nExemple :\nagent : \"Mme Dubois ?\" ==> Client : \"oui\"\nagent : \"je vous remercie d'avoir patienté,...\"","NC":">L'agent n'annonce pas clairement la mise en attente.\nExemple de cas non conforme : \n\" je regarde \", \" je me renseigne \", \"Attendez\"\n>Le client est interrompu, l'agent le met en attente de façon intempestive sans qu'il soit prévenu\n>Le temps d'attente dépasse le délai maximum d'1 minutes 30 secondes sans reprise de la communication\n>Il y a plus de 2 mises en attente lors de la conversation\n>L'agent coupe le micro pendant la conversation au lieu de mettre son client en attente","NA":"La mise en attente n'était pas nécessaire pour traiter la demande client."},"prise_conge":{"C":">L'agent s'assure de la compréhension réciproque des termes de l'entretien et/ou précise la suite donnée ou à donner.\n>L'agent se montre disponible et s'assure que son client n'ait pas d'autres questions/demandes\n>L'agent a fait le nécessaire pour que le client ne rappelle pas pour la même demande\nExemple :\n_ \"est-ce que tout a été clair pour vous Mme Dubois ? \"\n_ \"Avez-vous d'autres demandes ou d'autres questions ? \"\n>L'agent assure une prise de congé courtoise avec au minimum une formule de politesse\nExemple : \n_\"Mme Dubois, je vous remercie de votre appel et vous souhaite une excellente journée\"","NC":">L'agent ne s'assure pas de la compréhension réciproque des termes de l'entretien et/ou ne précise pas la suite donnée ou à donner.\n>Le contact aboutit à une incompréhension ou à une compréhension erronnée des termes de l'entretien.\n>L'agent ne se montre pas disponible et ne s'assure pas que le client n'ait plus d'autres questions/demandes\n>L'agent n'a pas fait le nécessaire pour éviter le rappel client pour la même demande\n>L'agent n'assure pas une prise de congé courtoise avec au minimum une formule de politesse \nExemple :\n_L'agent annonce des délais non conforme aux consignes de production","NA":"Fin de communication à l'initiative du client(coupure, raccroché, …)."},"enquete":{"C":"L'agent propose l'enquête au client avant de mettre fin à l'appel\nExemple : \n\"Je vous invite à rester en ligne pour participer à une courte enquête de satisfaction et vous souhaite une excellente journée.\"","NC":"L'agent ne propose pas l'enquête au client avant de mettre fin à l'appel","NA":"Fin de communication à l'initiative du client (coupure, raccroché, …).\nEn cas de situation non pertinente ne permettant pas de proposer l'enquête de satisfaction\nExemple : \nLe client est au volant\nTout contexte de transfert d'appel"},"ecoute_active":{"C":"L’agent fait preuve d’une bonne capacité d’écoute, ne fait pas répéter son client plus d’une fois si la qualité de la ligne téléphonique est bonne, fait preuve de réactivité et épèle les informations à la place du client si une reconfirmation est nécessaire.\nL’agent utilise des signes d’approbation.\nExemple: \n\"oui, d'accord, je comprends, entendu, je vois etc...\"  \nN'interromps pas ou ne parles pas au dessus du client et s'excuse s'il le fait par mégarde\nFait un résumé de ce que le client lui a dit pour démontrer l'écoute et la compréhension","NC":"L'agent demande au client de répéter alors qu'il n'y avait aucun problème de qualité de la ligne téléphonique.Il interrompt le client.\nLe client doit poser la question à plusieurs reprises afin d'en obtenir une réponse.\nL'agent pense savoir ce que le client veut ou a besoin, sans même lui avoir laissé le temps de s'exprimer ou de finir ce qu’il avait à dire.\nIl n'a pas compris la demande du client."},"courtoisie":{"C":"L'agent présente une attitude relationnelle ouverte et disponible pour le client.\nIl fait preuve d'adaptation et d'attention à l'égard de son interlocuteur : adaptation du dialogue par rapport à sa situation, son profil et au contexte (empathie, accompagnement personnalisé,...)\nIl est courtois, agréable et souriant tout au long de l'appel. \nUtilise convenablement des excuses et à un moment opportun\nSa voix est parfaitement audible. Le ton est chaleureux. Le débit/rythme de parole adéquat\n\nExemple : \n\"Je vous rassure Mme Dupont, votre commande a été expédiée et remis auprès de notre transporteur Chronopost. Celui-ci devrait vous livrer dans la journée\"","PC":"L'agent présente une posture perfectible et il est constaté un des éléments suivants :\n- Tente de rassurer son interlocuteur mais maladroitement (ton directe et ou levé)\n- Irrégularité de l'attitude tout au long de l'entretien,","NC":"L'agent présente des signes négatifs tels que :\n- Ton neutre ou monotone\n- Parle trop vite, marmonne et n'est pas clair\n- Ne semble pas sympathique\n- Semble distrait et désintérésé\n- manque d'empathie\nLe dialogue est en décalage avec la situation ou le contexte.\nL'attention portée à l'interlocuteur est insuffisante et les efforts de l'agent pour se faire comprendre ou accompagner l'interlocuteur ne sont pas perceptibles.\nS'excuse à des moments inopportuns ou n'offre pas des excuses en cas de besoin\nNe s'adapte pas à son interlocuteur\nExemple:\nNe ralentit pas le rythme en parlant à une personne agées ou malentendante","SI":"L'agent montre des signes d'agacement, manque de respect auprès du client\nL'agent se montre injurieux, irrespectueux envers le client"},"directivite":{"C":"L'agent est directif, il recentre le sujet sur la demande initiale, mais reste disponible. Il ne laisse pas de blancs pendant l'appel. Tente de rassurer son interlocuteur et l'oriente suite aux réponses adaptées à sa situation\n>A la demande du client, et face à une situation complexe qu'il n'arrive pas à gérer, l'agent transfère à un supérieur hierarchique","PC":"L'agent apporte la réponse mais laisse l'appel se prolonger sans justification.\n>L'agent ne transfère pas la demande à un supérieur hierarchique alors que cela était nécessaire\n>L'agent a transféré une demande à un superieur hirarchique alors que cela n'était pas nécessaire","NC":"L'agent est trop directif, sans disponibilité ou au contraire aucune directivité. Il laisse des blancs dans la conversation. Il parle en même temps que son interlocuteur et/ou lui coupe la parole\nHésitations / maladresses"},"expression_orale":{"C":"L'agent utilise :\n- des phrases courtes et claires \n- un vocabulaire simple et compréhensible\n- des verbes d'action et le présent.\n- un vocabulaire positif\n- Si l'agent utilise un terme technique, qu'il sache expliquer clairement au client sinon c'est impertinent","PC":"L'agent présente une expression orale perfectible : \n- Quelques maladresses de vocabulaire, grammaire ou syntaxe,\n- Tics de langage,\n- Jargon technique ou interne maladroit mais compréhensible par l'interlocuteur","NC":"L'expression orale de l'agent présente des insuffisances nombreuses de types : \n- phrases confuses, \n- vocabulaire non adapté (jargon technique ou interne non expliqué clairement), \n- utilisation abusive du futur ou du conditionnel générant le doute,\n- expressions négatives, familières ou inappropriées."},"personnalisation":{"C":"Utilise le nom du client au moins deux fois pendant toute l'interaction","PC":"Utilise le nom du client une fois pendant toute l'interaction","NC":"Ne demande pas le nom du client et ne l'utilise pas durant tout l'échange","NA":"Le client a refusé de communiquer son nom\nEn raison de la nature de l'interaction le nom du client n'était pas disponible"},"manipulation_outils":{"C":"L'agent sait lire, chercher et retranscrire les informations notés dans OMS/Edesk/Back Office Marketplace/lien transporteurs\nExemple :-localisation du colis-Lecture des informations-Lecture des historiques-Rembourser partiellement ou complétement une commande correctement-Annuler une commande-Créer un RMA avec la bonne raison RMA-Mettre une commande en attente-L'agent explique que le produit est expédié en plusieurs colis avec plusieurs numéros de suivi et le client a donc reçu un colis sur X.","NC":"L'agent ne sait pas manipuler les différents outils à sa disposition ou ne sait pas lire les informations ou retranscrit mal les données pour traiter la demande du client\nExemple:Information donnée au client erronée alors du type: l'agent dit au client que le colis est livré alors qu'en fait le colis est déposé au point relais (comme indiqué sur la preuve de livraison)"},"resolution_premier_contact":{"C":"La demande du client est entièrement résolue au cours de l'interaction évaluée, sans qu'une action complémentaire de l'agent ou un nouveau contact du client ne soit nécessaire.","NC":"La demande aurait pu être résolue lors de l'interaction évaluée, mais ne l'a pas été en raison d'une mauvaise analyse, d'un oubli, d'une erreur de traitement ou d'une action inadaptée ou incomplète de l'agent.","NA":"Le critère n'est pas évaluable dans les situations suivantes :\n Les prérequis à l'évaluation ne sont pas réunis (absence de lecture 360° du dossier ou absence de compréhension de la demande, ces éléments étant évalués dans les critères dédiés). \n La résolution de la demande est impossible lors de cette interaction, car l'agent doit obtenir des éléments indispensables à la poursuite du traitement (photos, vidéos, justificatifs, attestation, informations complémentaires ou toute autre donnée nécessaire). \n La nature de la demande nécessite obligatoirement une étape ou un traitement ultérieur ne permettant pas une résolution lors de cette interaction."},"respect_process":{"C":"L'agent renseigne correctement l'ensemble des informations nécessaires à la prise en charge de la demande du client\nL'agent sait faire un RMA, un SAV, une annulation, un remboursement ou un échange et sélectionne les raisons RMA adéquats et ajoute des commentaires si nécessaire.\nSait remplir les informations complémentaires si besoin (à la demande du transporteur ou dans OMS)\nL'agent sait lire, chercher et retranscrire les informations notés dans OMS/Edesk/Back Office Marketplace/lien transporteurs\n\nExemple :\n-localisation du colis\n-Lecture des informations\n-Lecture des historiques\n-Rembourser partiellement ou complétement une commande correctement\n-Annuler une commande\n-Créer un RMA avec la bonne raison RMA\n-Mettre une commande en attente\n-L'agent explique que le produit est expédié en plusieurs colis avec plusieurs numéros de suivi et le client a donc reçu un colis sur X.","NC":"L'agent ne renseigne pas l'ensemble des informations nécessaires à la prise en charge de la demande du client\nLes informations renseignées par l'agent sont erronnées, incomplètes et/ou inadaptées.\nL'agent ne sait pas manipuler les différents outils à sa disposition ou ne sait pas lire les informations ou retranscrit mal les données pour traiter la demande du client\nExemple : \nL’agent ne renseigne pas l’ensemble des informations nécessaires à la prise en charge de la demande du client.\nLes informations fournies par l’agent sont erronées, incomplètes et/ou inadaptées.\n\nExemples :\n-Le client souhaite reporter la livraison de son colis à une date ultérieure (commande encore non expédiée), mais l’agent ne prend pas en compte les obligations en termes de délais d’expédition imposées par les marketplaces et propose de mettre la commande en attente.\n-L’agent ne remplit pas le tableau d’annulation ou de modification de commande et/ou ne laisse pas de commentaire alors que cela était nécessaire.\n-L’agent valide un échange sur l’OMS sans avoir vérifié les informations de livraison ni complété le numéro de téléphone portable.\n-L’agent propose un échange sans avoir préalablement vérifié la disponibilité du stock\n-Information donnée au client erronée alors du type: l'agent dit au client que le colis est livré alors qu'en fait le colis est déposé au point relais (comme indiqué sur la preuve de livraison)","SI":"L'agent n'a pas respecté les process ayant pour résultat de porter préjudice au client et/ou à Aosom.\nExemple:\nAvoir validé un montant à rembourser erronné sans avoir vérifié au préalable\nN'a pas escaladé une situation où un produit a potentiellement pu porter atteinte à la santé ou à la sécurité d'un client"},"traitement_objections":{"C":"L'agent argumente de manière pertinente tout en respectant les process face à une objection client\nExemple : \nLe client exige un retour pour rétractation alors qu'il est hors délai.\nagent : \"La période de rétractation est de 14 jours à compter de la réception de votre colis. Vous aviez donc 14 jours pour vous décider, en dehors de cette période, il n'est plus possible de le retourner.\"","PC":"L'agent tente de traiter les objections du client mais maladroitement","NC":"L'agent ignore les objections client et n'y apporte aucun traitement\nL'agent a mal interprété l'objection\nL'agent ne parvient pas à gérer correctement la demande et donne une réponse innapropriée","NA":"Aucune objection n'a été faite par le client\nLorsque le client demande des informations générales \nL'appel se termine de façon inattendue avant que le conseiller ait eu l'occasion de gérer l'objection"},"resolution":{"C":"La réponse apportée est conforme et complète par rapport à la demande/situation client\nExemple:\nS'engage à obtenir une réponse ou à résoudre sa problématique\nS'engage à lui envoyer un mail récapitulatif","NC":"La réponse apportée à la demande est inexacte et mais ne porte pas préjudice au client.\nExemple : \nNe reconnait pas ou ne tente pas de résoudre le problème rencontré par le client\nNe prend pas en compte les problèmes rencontrés par le client\nL'agent explique au client qu'il va recevoir une pièce détachée alors qu'il n'y en a pas en stock."}},"MAIL_V5":{"charte_accueil":{"C":"L’agent assure l’accueil du client et prend en compte son mail\nExemple : \n\"Bonjour Monsieur/Madame X, j'accuse réception de votre demande\"\n\"Bonjour Madame/Monsieur X, suite à votre demande\"","NC":"L'agent ne respecte pas les éléments attendus dans la phase d'accueil."},"identification":{"C":"Si le client n'a pas donné sa référence de commande et que l'agent n'a pas réussi à retrouver la commande sur OMS avec les autres éléments présents dans le mail ou dans l'historique de conversation, l'agent demande au client sur quel site il a passé commande ainsi que sa référence de commande.\nExemple:\n « Pourriez vous me communiquez le site sur lequel vous avez passé commande, ainsi que la référence de votre commande».\n« Afin que je puisse consulter votre dossier/commande, pourriez vous me confirmer la référence de votre commande SVP »","NC":">L'agent n'a pas réussi à identifier la commande alors qu'il avait les éléments nécessaire dans le mail ou dans l'historique de conversation \n> L'agent a redemandé les éléments lui permettant d'identifier la commande, alors qu'ils étaient déjà disponibles","NA":">L'agent avait tous les éléments nécessaires à l'identification de la commande dans OMS"},"prise_conge":{"C":">L'agent  précise la suite donnée ou à donner.\n>L'agent se montre disponible pour tout autres questions/demandes\n>L'agent a fait le nécessaire pour que le client ne nous recontacte pas pour la même demande si le sujet est clos\nExemple :\n- \"Nous restons à votre disposition pour tout autre question ou demande\"\n-\"N'hésitez pas à nous contacter si vous avez d'autres questions/demandes\"\n>L'agent assure une prise de congé courtoise avec au minimum une formule de politesse\nExemple : \n-\"Vous souhaitant une bonne journée.\"\n-\"Excellente journée.\"\n-\"Bon week-end.\"","NC":">L'agent ne précise pas la suite donnée ou à donner.\n>Le mail contient une incompréhension ou des informations erronnées \n>L'agent ne se montre pas disponible pour tout autres questions/demandes\n>L'agent n'a pas fait le nécessaire pour éviter un nouveau contact pour la même demande après cloture du dossier\n>L'agent n'assure pas une prise de congé courtoise avec au minimum une formule de politesse"},"expression_ecrite":{"C":"L'agent utilise :\n- des phrases courtes/claires et formulées correctement\n- utilisation des majuscules conformes\n- respecte la mise en page et les règles de ponctuation\n- respecte les sauts de ligne, un paragraphe= un saut de ligne\n- aucune faute de grammaire ou d'orthographe\n- respecte la template des mail et l'adapte en fonction de la situation\n- un vocabulaire simple et compréhensible\n- un vocabulaire positif\n- Si l'agent utilise un terme technique, Il est en capacité de l’expliquer clairement au client, sinon c’est impertinent,","PC":"L'agent présente une expression écrite perfectible : \n- Quelques maladresses de vocabulaire, grammaire ou de syntaxe,\n- Jargon technique ou interne maladroit mais compréhensible par l'interlocuteur\n- un oubli de mot sans impact sur le sens de la phrase \n- utilisation des majuscules non conforme (1 faute)\n- une faute de grammaire ou d'orthographe\n- une faute de frappe/ mot en double","NC":"L'expression écrite de l'agent présente des insuffisances nombreuses de types : \n- phrases confuses, non correctement formulées\n- utilisation des majuscules non conforme (2 minimum)\n- je copie-colle des éléments d'OMS ou de la fiche produit sans les mettre en forme (exemple je copie le SKU)\n- pas d'espace entre deux mots\n- 2 fautes de mise en page et/ou ponctuation\n- 3 fautes d'orthographe ou de grammaire\n- vocabulaire non adapté (jargon technique ou interne non expliqué clairement).\n- utilisation abusive du futur ou du conditionnel générant le doute.\n- expressions négatives, familières ou inappropriées, mail non professionel.\n- un oubli de mot avec impact sur le sens de la phrase.\n- absence de relecture","NA":"Aucune modification à faire car la template est suffisant\nNe pas impacter de nouveau l'item si l'agent a suivi le mauvais process"},"personnalisation":{"C":"Le message est personnalisé selon les informations demandées (client)\nLa template a été personnalisé\nL'agent a utilisé le nom du client dans son mail (si disponible)","NC":"Le message n'est pas personnalisé\nL'agent n'a pas utilisé le nom du client dans son mail alors qu'il était disponible"},"lecture_360":{"C":"Bonne lecture de tous les éléments présents sur les outils (historique des échanges, OMS, Shulex, lecture suivi transporteur) afin d'avoir une compréhension globale de la demande client.\nL'agent oriente le client si besoin et utilise un questionnement cohérent avec la problématique et la situation.\nExemple:\nFaire le nécessaire pour reformuler la demande client et lui demander de nous fournir plus d'éléments pour répondre à sa demande\nL'agent explique que le produit est expédié en plusieurs colis avec plusieurs numéros de suivi et le client a donc reçu un colis sur X.","NC":"L'agent redemande des éléments déjà présent dans le mail/message ou historique de conversation\nMauvaise interprétation/analyse de la demande client\nL'agent ne demande pas au client les éléments nécessaire pour le bon traitement de sa demande\nLes questions sont posées de manière intensive et/ou de manière inapropriée et incohérentes par rapport à la demande du client"},"manipulation_outils":{"C":"L'agent sait manipuler les outils à sa disposition : OMS/Shulex/Back Office Marketplace/lien transporteurs\nExemple :\n-Créer un RMA\n- Localisation du colis\n-Sait remplir les informations complémentaires si besoin (à la demande du transporteur ou dans OMS)\n-Rembourser partiellement ou complétement une commande \n-Mettre une commande en attente","NC":"L'agent ne sait pas manipuler les différents outils à sa disposition.\nExemple:\n-Ne manipule pas correctement les outils\n-Ne valide pas entièrement un RMA"},"respect_process":{"C":"L'agent renseigne correctement l'ensemble des informations nécessaires à la prise en charge de la demande du client\nL'agent à connaissance des dernières consignes et derniers process et les applique à juste titre à la demande du client","NC":"L'agent ne renseigne pas l'ensemble des informations nécessaires à la prise en charge de la demande du client\nLes informations renseignées par l'agent sont erronnées, incomplètes et/ou inadaptées.\nL'agent n'applique pas les évolutions de consignes et de process \nExemple : \nL'agent n'a pas laissé de notes dans OMS quand cela était nécessaire\n-Le client souhaite reporter la livraison de son colis à plus tard (commande encore non expédiée), l'agent ne prend pas en compte les obligations en terme de délais d'expédition demandées par les marketplaces et propose de mettre la commande en attente.\n-L'agent ne remplit pas le tableau d'annulation ou de modification de commande et/ou ne laisse pas de commentaire alors que cela était nécessaire\n-Valide un échange sur OMS sans avoir vérifié les informations de livraison et compléter le numéro de téléphone portable\n-Proposer un échange sans avoir vérifier le stock disponible au préalable","SI":"L'agent n'a pas respecté les process ayant pour résultat de porter préjudice au client et/ou à Aosom.\nExemple:\n-Avoir validé un montant à rembourser erronné sans avoir vérifié au préalable\n-N'a pas escaladé une situation où un produit qui peut potentiellement porter atteinte à la santé ou à la sécurité d'un client\n-L'agent a donné une mauvaise date d'enlèvement pour le retour de son colis\n-L'agent ne respecte pas le choix du client et a remboursé la commande au lieu d'expédier une nouveau produit\n-L'agent annule la commande au lieu de la modifier"},"resolution":{"C":"La réponse apportée est conforme, pertinente et complète par rapport à la demande/situation du client\nExemple:\nS'engage à obtenir une réponse ou à résoudre sa problématique","NC":"La réponse apportée à la demande est inexacte et ne porte pas préjudice au client.\nL'agent ne fait pas l'action nécessaire à la bonne poursuite du dossier\nExemple : \n-Ne reconnait pas ou ne tente pas de résoudre le problème rencontré par le client\n-Ne prend pas en compte les problèmes rencontrés par le client\n-L'agent explique au client qu'il va recevoir une pièce détachée alors qu'il n'y en a pas en stock."},"historisation":{"C":"L'opérateur ajoute des notes pertinantes en commentaire de la commande ou du RMA :\nExemple:\nPartie commande :\nL'opérateur indique : \"Annulation client\", \"Demande de modification d'adresse (indiquer la nouvelle adresse\",\"Pièce 5 manquante > pas de pièce en stock, mais pièce trouvable dans le commerce > proposition remise ou échange\",\"Rétractation, enlèvement prévu le XX/XX, (indiquer le numéro de retour), 9€\"\n\nPartie RMA :\n\"La pièce 4 est arrivée endommagée à l'arrivée > envoie pièce de remplacement\"\n\"Retard de 2 jours du fait du transporteur > remise de 5€\"\n\"La fonction chauffante ne fonctionne plus > échange\"","NC":"Notes incomplètes ou erronées / mauvaise raison sélectionnée","IM":"L'opérateur ne laisse pas de notes ou des notes non pertinantes en commantaire de la commande ou du RMA :\nExemple : \nPartie commande :\nL'operateur n'indique pas pourquoi il a mis la commande en attente dans l'OMS\nPartie RMA :\nL'opérateur indique seulement en commentaire RMA : \"article défectueux\",\"échange 1/2 demandé\",\"Pièces manquantes\"","NA":"Les notes laissées par l'IA sont pertinantes et complètes.\nPour les tickets Amazon, l'IA va faire un résumé de la réponse au client."}}};
+
+/* ============ ÉTAT ============ */
+let currentGrid="MAIL_V5", currentChannel="MAIL", answers={}, me="Abraham";
+const selVersion={};
+const store=[];   // évaluations (session + cache local + Sheet)
+const contre=[];  // contre-évaluations
+let ceMode=null;  // {orig, reveal} quand une contre-évaluation est en cours
+let sending=false;// verrou anti-doublon : un seul envoi à la fois
+let donutChart=null, lineChart=null;   // instances Chart.js
+
+/* ---- Persistance locale + resynchro Sheet ---- */
+const STORE_KEY="aosom_eval_store_v1";
+function saveLocal(){try{localStorage.setItem(STORE_KEY,JSON.stringify(store));}catch(e){}}
+const CONTRE_KEY="aosom_contre_store_v1";
+function saveContreLocal(){try{localStorage.setItem(CONTRE_KEY,JSON.stringify(contre));}catch(e){}}
+function loadContreLocal(){try{const r=localStorage.getItem(CONTRE_KEY);if(r){const a=JSON.parse(r);if(Array.isArray(a))return a;}}catch(e){}return[];}
+/* identifiant unique d'évaluation — socle de l'anti-doublon côté Sheet */
+function uid(){const r=()=>Math.random().toString(36).slice(2,8);
+  return "EV-"+new Date().toISOString().slice(2,10).replace(/-/g,"")+"-"+r()+r().slice(0,2);}
+function loadLocal(){try{const r=localStorage.getItem(STORE_KEY);if(r){const a=JSON.parse(r);if(Array.isArray(a))return a;}}catch(e){}return[];}
+function parseFr(s){if(!s)return Date.now();if(s instanceof Date)return s.getTime();
+  const m=String(s).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})[ ,]*(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if(m)return new Date(+m[3],+m[2]-1,+m[1],+m[4],+m[5],+(m[6]||0)).getTime();
+  const d=new Date(s);return isNaN(d)?Date.now():d.getTime();}
+const keyOf=e=>[e.Horodatage,e.Canal,e.Conseiller,e["Référence"]].join("|");
+/* accepte « 75,00% » (ancien format texte) comme 0.75 (nouveau format numérique du Sheet) */
+function toPct(v){
+  if(v===""||v===null||v===undefined)return 0;
+  if(typeof v==="number")return Math.abs(v)<=1.0000001?v*100:v;
+  const s=String(v).trim();const isP=s.indexOf("%")>=0;
+  const n=parseFloat(s.replace("%","").replace(/\s/g,"").replace(",","."));
+  if(isNaN(n))return 0;
+  return (!isP&&Math.abs(n)<=1.0000001)?n*100:n;}
+function mergeRow(r){if(!r||!r.Canal)return;const e={...r};
+  e._pct=(e._pct!==undefined&&e._pct!=="")?+e._pct:toPct(e["Note %"]);
+  if(typeof e["Note %"]==="number")e["Note %"]=fmtPct(e._pct);
+  e._ts=e._ts||parseFr(e.Horodatage);
+  if(e.ID&&store.some(x=>x.ID&&x.ID===e.ID))return;
+  const k=keyOf(e);if(store.some(x=>keyOf(x)===k))return;store.push(e);}
+function mergeContre(r){if(!r)return;const e={...r};
+  e._pct=toPct(e["Note %"]);e._ts=e._ts||parseFr(e.Horodatage);
+  if(e.ID&&contre.some(x=>x.ID&&x.ID===e.ID))return;
+  const k=keyOf(e);if(contre.some(x=>keyOf(x)===k))return;contre.push(e);}
+async function syncFromSheet(){
+  const url=(runtimeUrl||"").trim();if(!url)return;
+  for(const canal of["MAIL","APPEL"]){
+    try{const res=await fetch(url+"?canal="+canal,{method:"GET"});const j=await res.json();(j.rows||[]).forEach(mergeRow);}catch(e){}
+    try{const rc=await fetch(url+"?action=contre&canal="+canal,{method:"GET"});const jc=await rc.json();(jc.rows||[]).forEach(mergeContre);}catch(e){}
+  }
+  store.sort((a,b)=>b._ts-a._ts);contre.sort((a,b)=>b._ts-a._ts);saveLocal();saveContreLocal();
+  renderDash();updateBell();updateTypoList();initEvalFilters();
+  if($("#view-evals")&&$("#view-evals").classList.contains("active"))renderEvals();
+  syncCalib();
+}
+
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const fmtPct=n=>n.toFixed(2).replace(".",",")+"%";
+const initials=s=>s.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+function fill(el,arr,blank){el.innerHTML=(blank?'<option value=""></option>':'')+arr.map(v=>`<option>${v}</option>`).join("")}
+
+/* ============ RÉFÉRENTIELS BACKEND ============ */
+const CONFIG_KEY="aosom_config_v1",CONFIG_TTL=4*3600*1000;
+function applyConfig(cfg){
+  if(!cfg)return;
+  if(cfg.grids&&typeof cfg.grids==="object"&&Object.keys(cfg.grids).length)Object.assign(GRIDS,cfg.grids);
+  if(cfg.reasons&&typeof cfg.reasons==="object")Object.assign(REASONS,cfg.reasons);
+  if(Array.isArray(cfg.typologies)&&cfg.typologies.length){TYPOLOGIES=cfg.typologies;updateTypoList();}
+  if(cfg.agents){
+    if(Array.isArray(cfg.agents.evaluateurs)&&cfg.agents.evaluateurs.length)EVALUATEURS=cfg.agents.evaluateurs;
+    if(Array.isArray(cfg.agents.conseillers)&&cfg.agents.conseillers.length)CONSEILLERS=cfg.agents.conseillers;
+    saveLists();refreshEvalSelects();refreshConsSelects();
+  }
+  if($("#view-grille").classList.contains("active")&&!Object.keys(answers).length){updateGridHead();renderGrid();}
+}
+async function loadConfig(force){
+  if(!force){try{const c=JSON.parse(localStorage.getItem(CONFIG_KEY)||"null");
+    if(c&&Date.now()-c.ts<CONFIG_TTL){applyConfig(c.cfg);return true;}}catch(e){}}
+  const url=(runtimeUrl||"").trim();if(!url)return false;
+  try{const res=await fetch(url+"?action=config",{method:"GET"});const j=await res.json();
+    if(j&&j.ok){try{localStorage.setItem(CONFIG_KEY,JSON.stringify({ts:Date.now(),cfg:j}));}catch(e){}applyConfig(j);return true;}
+  }catch(e){}
+  return false;
+}
+function postAgent(nom,role,actif){
+  const url=(runtimeUrl||"").trim();if(!url)return;
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},
+    body:JSON.stringify({action:"upsertAgent",nom:nom,role:role,actif:actif})});}catch(e){}
+}
+function flatCrit(g){return GRIDS[g].blocs.flatMap(b=>b.criteria)}
+
+/* ============ NAV ============ */
+function go(v){
+  $$("#menu a").forEach(a=>a.classList.toggle("active",a.dataset.v===v||((v==="mail"||v==="appel")&&a.dataset.v===v)));
+  $$(".view").forEach(s=>s.classList.remove("active"));
+  if(v==="mail"||v==="appel"){
+    $$("#menu a").forEach(a=>a.classList.toggle("active",a.dataset.v===v));
+    ceMode=null;calMode=null;
+    currentChannel=v.toUpperCase(); currentGrid=selVersion[currentChannel]||defaultGridFor(currentChannel); answers={};
+    updateGridHead(); renderGrid(); $("#view-grille").classList.add("active");
+  } else {
+    const map={dash:"dash",evals:"evals",calib:"calib",calibrage:"calibrage",rapports:"rapports",param:"param"};
+    $("#view-"+(map[v]||"dash")).classList.add("active");
+    if(v==="dash") renderDash();
+    if(v==="evals") renderEvals();
+    if(v==="rapports") renderRapports();
+    if(v==="calib") renderCalib();
+    if(v==="calibrage") renderCalibrage();
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$$("#menu a").forEach(a=>a.onclick=()=>go(a.dataset.v));
+$$("[data-go]").forEach(e=>e.onclick=()=>go(e.dataset.go));
+$("#b_new").onclick=()=>go("mail");
+
+/* ============ GRILLE ============ */
+function defaultGridFor(ch){const ks=Object.keys(GRIDS).filter(k=>GRIDS[k].channel===ch);return ks[ks.length-1];}
+function updateGridHead(){
+  const g=GRIDS[currentGrid],rules=g.rules||{};
+  $("#g_title").textContent="Grille "+g.label+" — "+g.version;
+  $("#g_sub").textContent="Évaluation d'un échange — "+flatCrit(currentGrid).length+" critères / 30 points.";
+  const host=$("#g_ver");
+  if(host){
+    const opts=Object.keys(GRIDS).filter(k=>GRIDS[k].channel===currentChannel);
+    host.innerHTML=opts.map(k=>`<button class="${k===currentGrid?'on':''}" data-g="${k}">${GRIDS[k].version}</button>`).join("");
+    $$("#g_ver button").forEach(b=>b.onclick=()=>{if(b.dataset.g===currentGrid)return;
+      if(Object.keys(answers).length&&!confirm("Changer de version de grille effacera les notations en cours. Continuer ?"))return;
+      currentGrid=b.dataset.g;selVersion[currentChannel]=currentGrid;answers={};updateGridHead();renderGrid();});
+  }
+  renderCeBanner();
+  const li=$("#lg_im"),ls=$("#lg_si");
+  if(li)li.innerHTML='<i style="background:#b91c1c"></i>'+(rules.im==="bloc"?"Impact Majeur → bloc à 0":"Impact Majeur → 0%");
+  if(ls)ls.style.display=rules.si?"flex":"none";
+}
+function renderGrid(){
+  const g=GRIDS[currentGrid]; let n=0,html="";
+  g.blocs.forEach((bloc,bi)=>{
+    html+=`<div class="fcard" id="bloc-${bi}"><div class="bloc-head"><span class="t">${bloc.title}</span><span class="coef">${bloc.coef} pts</span></div>`;
+    bloc.criteria.forEach(c=>{n++;const a=answers[c.id];
+      const segs=c.allowed.map(k=>`<button class="${APP[k].cls}${a&&a.app===k?' on':''}" data-c="${c.id}" data-a="${k}">${APP[k].short}</button>`).join("");
+      const rz=(REASONS[currentGrid]||{})[c.id];
+      const HLAB={C:"Conforme",PC:"Partiel",NC:"Non conforme",IM:"Impact Majeur",SI:"Situation Inacceptable",NA:"N/A"};
+      const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      const hbtn=rz?`<button class="help-btn" data-h="${c.id}" title="Critères de conformité / non-conformité">?</button>`:"";
+      const help=rz?`<div class="crit-help" id="help-${c.id}">`+["C","PC","NC","IM","SI","NA"].filter(k=>rz[k]).map(k=>`<div class="hrow"><div class="hlab ${k}">${HLAB[k]}</div><div class="htxt">${esc(rz[k])}</div></div>`).join("")+`</div>`:"";
+      html+=`<div class="crit${a&&a.app?' done':''}${ceDiverge(c)?' diverge':''}"><div class="crit-top">
+        <span class="crit-name"><span class="num">${n}</span>${c.name}${hbtn}${ceChip(c)}</span>
+        <span class="crit-max">/${c.coef} pt${c.coef>1?'s':''}</span>
+        <div class="seg">${segs}</div><span class="crit-pts" id="pts-${c.id}">—</span></div>
+        ${help}
+        <textarea class="crit-comment${a?' show':''}" id="cm-${c.id}" placeholder="Commentaire / justification…">${a&&a.comment?a.comment:''}</textarea></div>`;});
+    html+=`</div>`;});
+  $("#grid-host").innerHTML=html;
+  $$(".seg button").forEach(b=>b.onclick=()=>{const c=b.dataset.c,k=b.dataset.a;
+    if(answers[c]&&answers[c].app===k)delete answers[c];else answers[c]={app:k,comment:(answers[c]&&answers[c].comment)||""};
+    renderGrid();compute();});
+  $$(".crit-comment").forEach(t=>{const c=t.id.replace("cm-","");t.oninput=()=>{if(!answers[c])answers[c]={app:null,comment:""};answers[c].comment=t.value;};});
+  $$(".help-btn").forEach(b=>b.onclick=e=>{e.stopPropagation();const p=$("#help-"+b.dataset.h);const open=p.classList.toggle("show");b.classList.toggle("on",open);});
+  compute();
+}
+function compute(){
+  const g=GRIDS[currentGrid],rules=g.rules||{im:"eval",si:false};
+  const crits=flatCrit(currentGrid);
+  let base=0,obt=0,scored=0,im=false,si=false;
+  g.blocs.forEach((bloc,bi)=>{
+    let bBase=0,bObt=0,bIM=false;
+    bloc.criteria.forEach(c=>{const a=answers[c.id],cell=$("#pts-"+c.id);
+      if(!a||!a.app){if(cell){cell.textContent="—";cell.className="crit-pts";}return;}
+      scored++;
+      if(APP[a.app].na){if(cell){cell.textContent="N/A";cell.className="crit-pts na";}return;}
+      bBase+=c.coef;
+      if(APP[a.app].si){si=true;if(cell){cell.textContent="SI";cell.className="crit-pts si";}return;}
+      if(APP[a.app].im){bIM=true;im=true;if(cell){cell.textContent="IM";cell.className="crit-pts im";}return;}
+      const p=c.coef*APP[a.app].factor;bObt+=p;
+      if(cell){cell.textContent=(Number.isInteger(p)?p:p.toFixed(1))+" pt";cell.className="crit-pts"+(p===0?" zero":"");}});
+    if(bIM&&rules.im==="bloc")bObt=0;
+    base+=bBase;obt+=bObt;
+    const bh=document.getElementById("bloc-"+bi);if(bh)bh.classList.toggle("bloc-im",bIM&&rules.im==="bloc");
+  });
+  let pct=base>0?obt/base*100:0;
+  if(im&&rules.im!=="bloc")pct=0;
+  if(si)pct=0;
+  $("#s_pct").textContent=fmtPct(pct);
+  $("#s_pct").className="score-pct "+(si?"si":(im||pct<80?"bad":pct<95?"mid":"good"));
+  $("#s_brut").textContent=(Number.isInteger(obt)?obt:obt.toFixed(1))+" / "+base+" pts";
+  $("#s_base").textContent=base;$("#s_cnt").textContent=scored+"/"+crits.length;
+  $("#s_im").style.display=im?"inline-block":"none";
+  const ss=$("#s_si");if(ss)ss.style.display=si?"inline-block":"none";
+  return{pct,obt,base,im,si,scored,total:crits.length};
+}
+$("#b_reset").onclick=()=>{answers={};["f_forts","f_axes"].concat(calMode||ceMode?[]:["f_ref"]).forEach(i=>$("#"+i).value="");renderGrid();};
+const fmtSigned=n=>(n>0?"+":"")+n.toFixed(2).replace(".",",")+"%";
+async function postJSON(p){const url=(runtimeUrl||"").trim();if(!url)return"nourl";
+  try{await fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify(p)});return"ok";}catch(e){return"err";}}
+
+function buildRecord(ev,co,r,gridKey){
+  const crits=flatCrit(gridKey);
+  const rec={ID:uid(),Horodatage:new Date().toLocaleString("fr-FR"),"Évaluateur":ev,Conseiller:co,
+    "Date contact":$("#f_date").value||"","Opération":$("#f_op").value,Typologie:normTypo($("#f_typo").value),
+    Canal:currentChannel,Grille:gridKey,Version:GRIDS[gridKey].version,"Référence":$("#f_ref").value||"",
+    "Note brute":(Number.isInteger(r.obt)?r.obt:r.obt.toFixed(1)),Base:r.base,"Note %":fmtPct(r.pct),
+    "Impact Majeur":r.im?"OUI":"non","Situation Inacceptable":r.si?"OUI":"non",
+    "Points forts":$("#f_forts").value||"","Axes d'amélioration":$("#f_axes").value||""};
+  const cm=[];crits.forEach(c=>{const a=answers[c.id];rec[c.name]=a&&a.app?APP_LABEL[a.app]:"";if(a&&a.comment)cm.push(c.name+" : "+a.comment);});
+  rec["Détail commentaires"]=cm.join(" | ");
+  return rec;
+}
+
+/* ---- Enregistrement : un seul envoi à la fois (anti-doublon côté client) ---- */
+$("#b_save").onclick=async()=>{
+  if(sending)return;
+  const ev=$("#f_eval").value,co=$("#f_cons").value;
+  if(!ev||!co){toast("Évaluateur et Conseiller requis","err");return;}
+  const r=compute();if(!r.scored){toast("Aucun critère noté","err");return;}
+  const btn=$("#b_save"),lbl=btn.textContent;
+  sending=true;btn.disabled=true;btn.textContent="Envoi…";
+  try{ if(ceMode) await saveContre(ev,co,r); else if(calMode) await saveCalib(ev,co,r); else await saveEval(ev,co,r); }
+  finally{ sending=false;btn.disabled=false;btn.textContent=lbl; }
+};
+
+async function saveEval(ev,co,r){
+  const rec=buildRecord(ev,co,r,currentGrid);
+  store.unshift({...rec,_pct:r.pct,_ts:Date.now()});saveLocal();
+  const st=await postJSON({action:"saveEval",canal:currentChannel,grille:currentGrid,record:rec});
+  toast(st==="ok"?"Évaluation enregistrée ✓":st==="nourl"?"Enregistré en session ✓":"Enregistré en session — envoi Sheet échoué",st==="err"?"err":"ok");
+  answers={};["f_ref","f_forts","f_axes"].forEach(i=>$("#"+i).value="");
+  renderGrid();updateBell();updateTypoList();renderDash();
+}
+
+/* ============ CONTRE-ÉVALUATION ============ */
+function isoDate(v){if(!v)return"";const s=String(v).trim();
+  let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[0];
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m)return m[3]+"-"+("0"+m[2]).slice(-2)+"-"+("0"+m[1]).slice(-2);
+  const d=new Date(s);return isNaN(d.getTime())?"":d.toISOString().slice(0,10);}
+
+function startContre(e){
+  if(!e){toast("Évaluation introuvable","err");return;}
+  if(Object.keys(answers).length&&!confirm("Une notation est en cours. La remplacer par la contre-évaluation ?"))return;
+  const ap=(e.Canal||"").toUpperCase()==="APPEL";
+  const gk=(e.Grille&&GRIDS[e.Grille])?e.Grille:defaultGridFor(ap?"APPEL":"MAIL");
+  calMode=null;ceMode={orig:e,gridKey:gk,reveal:false};
+  currentChannel=ap?"APPEL":"MAIL";currentGrid=gk;selVersion[currentChannel]=gk;answers={};
+  $$("#menu a").forEach(a=>a.classList.toggle("active",a.dataset.v===(ap?"appel":"mail")));
+  $$(".view").forEach(s=>s.classList.remove("active"));$("#view-grille").classList.add("active");
+  setSel($("#f_eval"),EVALUATEURS.indexOf(me)>=0?me:"");
+  setSel($("#f_cons"),e.Conseiller||"");
+  $("#f_date").value=isoDate(e["Date contact"]||e.Horodatage);
+  $("#f_typo").value=e.Typologie||"";
+  $("#f_ref").value=e["Référence"]||"";
+  ["f_forts","f_axes"].forEach(i=>$("#"+i).value="");
+  updateGridHead();renderGrid();window.scrollTo({top:0,behavior:"smooth"});
+  toast("Contre-évaluation à l'aveugle — re-note la grille","ok");
+}
+/* force une valeur dans un select, en ajoutant l'option si elle a disparu du référentiel */
+function setSel(el,val){
+  if(!el)return;
+  if(val&&![...el.options].some(o=>o.value===val)){
+    const o=document.createElement("option");o.value=val;o.textContent=val;el.appendChild(o);}
+  el.value=val||"";
+}
+function exitContre(){ceMode=null;answers={};["f_ref","f_forts","f_axes"].forEach(i=>$("#"+i).value="");updateGridHead();renderGrid();}
+
+function renderCeBanner(){
+  const b=$("#ce_banner");if(!b)return;
+  if(calMode){renderCalBanner();return;}
+  b.classList.remove("cal-banner");const gv=$("#g_ver");if(gv)gv.style.display="";
+  if(!ceMode){b.style.display="none";b.innerHTML="";return;}
+  const o=ceMode.orig,rv=ceMode.reveal;
+  b.style.display="flex";
+  b.innerHTML=`<div><div class="ce-t">Contre-évaluation — notation à l'aveugle</div>
+    <div class="ce-s">${escHtml(o.Conseiller||"—")} · ${escHtml(o["Référence"]||"sans référence")} · ${escHtml(o.Typologie||"")} · éval initiale du ${escHtml(o.Horodatage||"")}
+    ${rv?" · par <b>"+escHtml(o["Évaluateur"]||"—")+"</b> · note initiale <b>"+escHtml(o["Note %"]||"")+"</b>":" · évaluateur et note initiale masqués"}</div></div>
+    <div class="ce-acts"><button id="ce_toggle">${rv?"Masquer":"Afficher"} la notation initiale</button><button id="ce_quit">Quitter</button></div>`;
+  $("#ce_toggle").onclick=()=>{ceMode.reveal=!ceMode.reveal;renderCeBanner();renderGrid();};
+  $("#ce_quit").onclick=()=>{if(Object.keys(answers).length&&!confirm("Abandonner la contre-évaluation en cours ?"))return;exitContre();};
+}
+function ceChip(c){
+  if(calMode)return calChip(c);
+  if(!ceMode||!ceMode.reveal)return"";
+  const o=LABEL2APP[ceMode.orig[c.name]||""];
+  return `<span class="orig-chip ${o||""}">initial : ${o?APP[o].short:"non noté"}</span>`;
+}
+function ceDiverge(c){
+  if(calMode)return calSplit(c);
+  if(!ceMode||!ceMode.reveal)return false;
+  const o=LABEL2APP[ceMode.orig[c.name]||""]||null,n=(answers[c.id]&&answers[c.id].app)||null;
+  return !!(o||n)&&o!==n;
+}
+function compareToOrig(orig,gridKey){
+  let cmp=0,same=0;const div=[];
+  flatCrit(gridKey).forEach(c=>{
+    const o=LABEL2APP[orig[c.name]||""]||null,n=(answers[c.id]&&answers[c.id].app)||null;
+    if(!o&&!n)return;cmp++;
+    if(o===n)same++;else div.push(c.name+" : "+(o?APP_LABEL[o]:"NON NOTÉ")+" → "+(n?APP_LABEL[n]:"NON NOTÉ"));
+  });
+  return{compared:cmp,same,concord:cmp?same/cmp*100:0,div};
+}
+async function saveContre(ev,co,r){
+  const o=ceMode.orig,gk=ceMode.gridKey;
+  if(ev===o["Évaluateur"]&&!confirm("Le contre-évaluateur est le même que l'évaluateur initial ("+ev+"). Continuer ?"))return;
+  const cmp=compareToOrig(o,gk);
+  const pInit=(o._pct!==undefined&&o._pct!=="")?+o._pct:toPct(o["Note %"]);
+  const ecart=r.pct-pInit;
+  const flagChg=((o["Impact Majeur"]==="OUI")!==!!r.im)||((o["Situation Inacceptable"]==="OUI")!==!!r.si);
+  const verdict=(flagChg||Math.abs(ecart)>10)?"Écart majeur":(Math.abs(ecart)>5||cmp.div.length>2)?"Écart mineur":"Concordant";
+
+  const rec=buildRecord(ev,co,r,gk);
+  rec["Éval initiale ID"]=o.ID||"";
+  rec["Évaluateur initial"]=o["Évaluateur"]||"";
+  rec["Note initiale %"]=fmtPct(pInit);
+  rec["Écart"]=fmtSigned(ecart);
+  rec["Concordance"]=fmtPct(cmp.concord);
+  rec["Critères divergents"]=cmp.div.length;
+  rec["Verdict"]=verdict;
+  rec["Détail divergences"]=cmp.div.join(" | ");
+  rec["Commentaire contre-éval"]=$("#f_axes").value||"";
+
+  contre.unshift({...rec,_pct:r.pct,_ts:Date.now()});saveContreLocal();
+
+  const t=store.filter(x=>(o.ID&&x.ID===o.ID)||keyOf(x)===keyOf(o))[0];
+  if(t){t["Contre-évaluateur"]=ev;t["Date contre-éval"]=rec.Horodatage;t["Note contre-éval %"]=rec["Note %"];
+    t["Écart"]=rec["Écart"];t["Concordance"]=rec["Concordance"];t["Verdict contre-éval"]=verdict;
+    t["Critères divergents"]=cmp.div.length;t["Commentaire contre-éval"]=rec["Commentaire contre-éval"];saveLocal();}
+
+  const st=await postJSON({action:"contreEval",canal:currentChannel,grille:gk,record:rec,
+    link:{evalId:o.ID||"",horodatage:o.Horodatage||"",conseiller:o.Conseiller||"",reference:o["Référence"]||""}});
+  toast(st==="ok"?"Contre-évaluation enregistrée — "+verdict+" ("+fmtSigned(ecart)+")":
+        st==="nourl"?"Contre-évaluation en session ✓":"En session — envoi Sheet échoué",st==="err"?"err":"ok");
+  exitContre();renderDash();renderEvals();
+}
+
+/* ---- Vue Contre-évaluations ---- */
+function fmtEcart(v){
+  if(v===""||v===null||v===undefined)return"";
+  if(typeof v==="number"){const n=Math.abs(v)<=1.0000001?v*100:v;return(n>0?"+":"")+n.toFixed(2).replace(".",",")+"%";}
+  const s=String(v).trim();return(s.charAt(0)==="-"||s.charAt(0)==="+")?s:"+"+s;
+}
+function ceCell(e){
+  const v=e["Verdict contre-éval"];
+  if(!v)return'<span style="color:var(--muted)">—</span>';
+  const k=v==="Concordant"?"ce-ok":v==="Écart mineur"?"ce-min":"ce-maj";
+  const abbr=v==="Concordant"?"Concordant":v==="Écart mineur"?"Mineur":"Majeur";
+  const tip=v+" · "+fmtEcart(e["Écart"])+" · "+(e["Critères divergents"]||0)+" critère(s) divergent(s) · contre-évaluée par "+(e["Contre-évaluateur"]||"—");
+  return `<span class="badge ${k}" title="${escHtml(tip)}">${abbr} ${escHtml(fmtEcart(e["Écart"]))}</span>`;
+}
+function ceCritStats(){
+  const m={};
+  contre.forEach(e=>{
+    const gk=(e.Grille&&GRIDS[e.Grille])?e.Grille:((e.Canal||"").toUpperCase()==="APPEL"?defaultGridFor("APPEL"):defaultGridFor("MAIL"));
+    const divs={};String(e["Détail divergences"]||"").split(" | ").forEach(s=>{const i=s.indexOf(" : ");if(i>0)divs[s.slice(0,i)]=1;});
+    flatCrit(gk).forEach(c=>{if(!e[c.name])return;
+      m[c.name]=m[c.name]||{cmp:0,div:0};m[c.name].cmp++;if(divs[c.name])m[c.name].div++;});
+  });
+  return Object.keys(m).map(k=>({name:k,cmp:m[k].cmp,div:m[k].div,rate:m[k].cmp?(1-m[k].div/m[k].cmp)*100:100}))
+    .sort((a,b)=>(b.div-a.div)||(a.rate-b.rate));
+}
+function renderCalib(){
+  const host=$("#ce_kpi");if(!host)return;
+  const n=contre.length;
+  const avgC=n?contre.reduce((s,e)=>s+toPct(e["Concordance"]),0)/n:0;
+  const avgE=n?contre.reduce((s,e)=>s+Math.abs(toPct(e["Écart"])),0)/n:0;
+  const okN=contre.filter(e=>e["Verdict"]==="Concordant").length;
+  const maj=contre.filter(e=>e["Verdict"]==="Écart majeur").length;
+  host.innerHTML=[["Contre-évaluations",n,"var(--txt)"],
+    ["Concordance moyenne",n?fmtPct(avgC):"—",avgC>=90?"#0a7d54":avgC>=75?"#b45309":"#cc2626"],
+    ["Écart absolu moyen",n?fmtPct(avgE):"—",avgE<=5?"#0a7d54":avgE<=10?"#b45309":"#cc2626"],
+    ["Verdicts concordants",n?Math.round(okN/n*100)+" %":"—","#0a7d54"],
+    ["Écarts majeurs",maj,maj?"#cc2626":"#0a7d54"]]
+    .map(k=>`<div class="b"><div class="l">${k[0]}</div><div class="v" style="color:${k[2]}">${k[1]}</div></div>`).join("");
+
+  const cs=ceCritStats();
+  $("#ce_n").textContent=cs.length+" critère(s) comparé(s)";
+  $("#ce_crit_body").innerHTML=cs.length?cs.map(s=>`<tr><td style="font-weight:700">${escHtml(s.name)}</td>
+    <td style="font-weight:900;color:${s.div?"#cc2626":"var(--muted)"}">${s.div}</td><td>${s.cmp}</td>
+    <td style="font-weight:800;color:${s.rate>=90?"#0a7d54":s.rate>=75?"#b45309":"#cc2626"}">${fmtPct(s.rate)}</td></tr>`).join("")
+    :`<tr><td colspan="4"><div class="empty">Aucune contre-évaluation enregistrée.</div></td></tr>`;
+
+  $("#ce_body").innerHTML=contre.length?contre.map(e=>{
+    const v=e["Verdict"]||"";const k=v==="Concordant"?"ce-ok":v==="Écart mineur"?"ce-min":"ce-maj";
+    const ap=(e.Canal||"").toUpperCase()==="APPEL";
+    return `<tr><td style="white-space:nowrap">${escHtml(e.Horodatage||"")}</td>
+      <td><span class="badge" style="background:${ap?'var(--purple-soft)':'var(--blue-soft)'};color:${ap?'var(--purple)':'var(--blue)'}">${ap?'Appel':'Mail'}</span></td>
+      <td>${escHtml(e.Conseiller||"")}</td><td>${escHtml(e["Évaluateur initial"]||"")}</td><td>${escHtml(e["Évaluateur"]||"")}</td>
+      <td>${escHtml(e["Note initiale %"]||"")}</td><td style="font-weight:800">${escHtml(e["Note %"]||"")}</td>
+      <td style="font-weight:900">${escHtml(fmtEcart(e["Écart"]))}</td><td>${escHtml(e["Concordance"]||"")}</td>
+      <td><span class="badge ${k}">${escHtml(v)}</span></td></tr>`;}).join("")
+    :`<tr><td colspan="10"><div class="empty">Aucune contre-évaluation enregistrée.</div></td></tr>`;
+}
+
+/* ============ DASHBOARD ============ */
+const TIERS=[{k:"Excellent",min:95,c:"#1eb980"},{k:"Bon",min:90,c:"#2f6bed"},{k:"Moyen",min:80,c:"#f5a623"},{k:"Faible",min:0,c:"#ef4444"}];
+function tierOf(p){return TIERS.find(t=>p>=t.min)}
+function renderDash(){
+  const n=store.length, avg=n?store.reduce((s,e)=>s+e._pct,0)/n:0;
+  const evtr=new Set(store.map(e=>e["Évaluateur"])).size;
+  const today=new Date().toLocaleDateString("fr-FR");
+  const todayN=store.filter(e=>new Date(e._ts).toLocaleDateString("fr-FR")===today).length;
+  $("#k_total").textContent=n; $("#k_total_t").innerHTML=ic('up')+(todayN?todayN+" auj.":"");
+  $("#k_avg").textContent=n?fmtPct(avg):"—"; $("#k_avg_t").innerHTML=n?ic('up')+"qualité":"";
+  $("#k_evtr").textContent=evtr; $("#k_evtr_t").innerHTML="";
+  $("#k_glob").textContent=n?(avg/20).toFixed(1).replace(".",",")+" /5":"—"; $("#k_glob_t").innerHTML="";
+
+  // recent
+  const rb=$("#recent_body");
+  if(!n)rb.innerHTML=`<tr><td colspan="6"><div class="empty">Aucune évaluation. Clique « Nouvelle évaluation ».</div></td></tr>`;
+  else rb.innerHTML=store.slice(0,5).map(e=>{
+    const ap=e.Canal==="APPEL";const p=e._pct;const st=e["Situation Inacceptable"]==="OUI"?'<span class="badge si">Sit. Inacceptable</span>':e["Impact Majeur"]==="OUI"?'<span class="badge im">Impact majeur</span>':'<span class="badge ok">Validée</span>';
+    const d=new Date(e._ts);
+    return `<tr><td><div class="tico ${ap?'appel':'mail'}">${ic(ap?'phone':'mail')}</div></td>
+      <td><b>${ap?'Appel':'Mail'} · ${e["Référence"]||'—'}</b></td>
+      <td><div class="evcell"><div class="av">${initials(e["Évaluateur"])}</div>${e["Évaluateur"]}</div></td>
+      <td><div class="score-cell">${ic('star')}${fmtPct(p)}</div></td>
+      <td><div class="dt">${d.toLocaleDateString("fr-FR")}<small>${d.toLocaleTimeString("fr-FR",{hour:'2-digit',minute:'2-digit'})}</small></div></td>
+      <td>${st}</td></tr>`;}).join("");
+
+  // donut
+  const counts={Excellent:0,Bon:0,Moyen:0,Faible:0};store.forEach(e=>counts[tierOf(e._pct).k]++);
+  $("#donut_n").textContent=n;
+  let leg="";
+  TIERS.forEach(t=>{const frac=n?counts[t.k]/n:0;
+    leg+=`<div class="row"><span class="dot" style="background:${t.c}"></span><span class="nm">${t.k}</span><span class="pc">${n?Math.round(frac*100):0}%</span></div>`;});
+  $("#donut_legend").innerHTML=leg;
+  const dData=TIERS.map(t=>counts[t.k]), dColors=TIERS.map(t=>t.c);
+  if(donutChart){donutChart.data.datasets[0].data=dData;donutChart.update();}
+  else donutChart=new Chart($("#donut_canvas"),{
+    type:"doughnut",
+    data:{labels:TIERS.map(t=>t.k),datasets:[{data:dData,backgroundColor:dColors,borderWidth:0,hoverOffset:4}]},
+    options:{cutout:"72%",responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>`${c.label} : ${c.raw} (${n?Math.round(c.raw/n*100):0}%)`}}}}
+  });
+
+  // line (6 mois)
+  drawLine();
+  // critères à améliorer (toutes grilles confondues)
+  renderLowCrit($("#crit_low"),null,3);
+  // feed
+  const fb=$("#feed");
+  if(!n)fb.innerHTML=`<div class="empty" style="padding:24px 0">Aucune activité.</div>`;
+  else fb.innerHTML=store.slice(0,4).map(e=>{
+    return `<div class="fitem"><div class="fic g">${ic('check')}</div><div><div class="tx"><b>${e["Évaluateur"]}</b> a évalué ${e.Canal==="APPEL"?'un appel':'un mail'} (${e.Conseiller})</div><div class="tm">${rel(e._ts)}</div></div></div>`;}).join("");
+}
+function rel(ts){const s=(Date.now()-ts)/1000;if(s<60)return"à l'instant";if(s<3600)return"il y a "+Math.floor(s/60)+" min";if(s<86400)return"il y a "+Math.floor(s/3600)+" h";return"il y a "+Math.floor(s/86400)+" j";}
+function drawLine(){
+  // buckets par mois (6 derniers)
+  const now=new Date();const labels=[],buckets=[];
+  for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    labels.push(d.toLocaleDateString("fr-FR",{month:"short"}));
+    const vals=store.filter(e=>{const x=new Date(e._ts);return x.getMonth()===d.getMonth()&&x.getFullYear()===d.getFullYear();}).map(e=>e._pct);
+    buckets.push(vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null);}
+  const data=buckets.map(v=>v===null?null:Math.round(v*10)/10);
+  if(lineChart){lineChart.data.labels=labels;lineChart.data.datasets[0].data=data;lineChart.update();return;}
+  lineChart=new Chart($("#line_canvas"),{
+    type:"line",
+    data:{labels,datasets:[{data,
+      borderColor:c=>{const{ctx,chartArea}=c.chart;if(!chartArea)return"#2f6bed";
+        const g=ctx.createLinearGradient(chartArea.left,0,chartArea.right,0);
+        g.addColorStop(0,"#2f6bed");g.addColorStop(1,"#06b6d4");return g;},
+      borderWidth:3,tension:.35,spanGaps:true,
+      pointBackgroundColor:"#06b6d4",pointBorderColor:"#fff",pointBorderWidth:2,pointRadius:3.5,pointHoverRadius:5,
+      fill:true,
+      backgroundColor:c=>{const{ctx,chartArea}=c.chart;if(!chartArea)return"rgba(47,107,237,.12)";
+        const g=ctx.createLinearGradient(0,chartArea.top,0,chartArea.bottom);
+        g.addColorStop(0,"rgba(34,211,238,.26)");g.addColorStop(1,"rgba(47,107,237,0)");return g;}}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      scales:{
+        y:{min:60,max:100,ticks:{stepSize:10,callback:v=>v+"%",color:"#6e7c91",font:{weight:700,size:9}},grid:{color:"#eef1f5"},border:{display:false}},
+        x:{ticks:{color:"#6e7c91",font:{weight:700,size:9}},grid:{display:false},border:{display:false}}},
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.raw==null?"—":Math.round(c.raw)+"%"}}}}
+  });
+}
+/* conformité moyenne par critère */
+function critStats(gridKey){
+  const evs=store.filter(e=>e.Canal===gridKey);const out={};
+  flatCrit(gridKey).forEach(c=>{let sum=0,cnt=0;
+    evs.forEach(e=>{const lbl=e[c.name];if(!lbl||lbl==="NON APPLICABLE")return;
+      let f=lbl==="CONFORME"?1:lbl==="PARTIELLEMENT CONFORME"?.5:0;sum+=f;cnt++;});
+    if(cnt)out[c.name]=Math.round(sum/cnt*100);});
+  return out;
+}
+function barColor(v){return v>=90?"#1eb980":v>=75?"#f5a623":"#ef4444"}
+function renderLowCrit(host,gridKey,limit){
+  let stats={};
+  if(gridKey)stats=critStats(gridKey);
+  else{const m=critStats("MAIL"),a=critStats("APPEL");stats={...m};for(const k in a)stats[k]=stats[k]!==undefined?Math.round((stats[k]+a[k])/2):a[k];}
+  let arr=Object.entries(stats).sort((x,y)=>x[1]-y[1]);
+  if(limit)arr=arr.slice(0,limit);
+  if(!arr.length){host.innerHTML=`<div class="empty" style="padding:20px 0">Pas encore de données.</div>`;return;}
+  host.innerHTML=arr.map(([nm,v])=>`<div class="prg"><div class="top"><span>${nm}</span><b>${v}%</b></div><div class="bar"><span style="width:${v}%;background:${barColor(v)}"></span></div></div>`).join("");
+}
+/* ---- Rapports : filtres + Pareto ---- */
+let paretoChart=null;
+const LABEL2APP={"CONFORME":"C","PARTIELLEMENT CONFORME":"PC","NON CONFORME":"NC","IMPACT MAJEUR":"IM","SITUATION INACCEPTABLE":"SI","NON APPLICABLE":"NA"};
+function rapFilteredEvals(){
+  const gk=$("#rap_grid").value;
+  const du=$("#rap_du").value?new Date($("#rap_du").value+"T00:00:00").getTime():-Infinity;
+  const au=$("#rap_au").value?new Date($("#rap_au").value+"T23:59:59").getTime():Infinity;
+  return store.filter(e=>e.Canal===gk && e._ts>=du && e._ts<=au);
+}
+function critReport(gridKey,evals){
+  return flatCrit(gridKey).map(c=>{
+    const r={name:c.name,coef:c.coef,C:0,PC:0,NC:0,IM:0,NA:0,scored:0,lost:0};
+    evals.forEach(e=>{const app=LABEL2APP[e[c.name]];if(!app)return;
+      r[app]++;
+      if(app==="NA")return;
+      r.scored++;
+      r.lost+=c.coef*(1-(APP[app].factor||0));
+    });
+    const base=r.C+r.PC+r.NC+r.IM;
+    r.conf=base?Math.round((r.C+r.PC*0.5)/base*100):null;
+    return r;
+  });
+}
+function fillRapCrit(){
+  const gk=$("#rap_grid").value,sel=$("#rap_crit"),cur=sel.value;
+  sel.innerHTML='<option value="ALL">Tous les critères</option>'+flatCrit(gk).map(c=>`<option>${c.name}</option>`).join("");
+  sel.value=[...sel.options].some(o=>o.value===cur)?cur:"ALL";
+}
+function drawPareto(labels,bars,cum,full){
+  const ctx=$("#pareto_canvas");
+  if(paretoChart){paretoChart.destroy();paretoChart=null;}
+  if(!labels.length)return;
+  paretoChart=new Chart(ctx,{
+    type:"bar",
+    data:{labels,datasets:[
+      {type:"bar",label:"Points perdus",data:bars,borderRadius:6,maxBarThickness:46,yAxisID:"y",order:2,
+        backgroundColor:c=>{const{ctx,chartArea}=c.chart;if(!chartArea)return"#2f6bed";
+          const g=ctx.createLinearGradient(0,chartArea.bottom,0,chartArea.top);
+          g.addColorStop(0,"#2f6bed");g.addColorStop(1,"#22d3ee");return g;}},
+      {type:"line",label:"Cumul %",data:cum,borderColor:"#f5a623",backgroundColor:"#f5a623",borderWidth:2.5,tension:0,pointRadius:3,pointBackgroundColor:"#f5a623",yAxisID:"y1",order:1}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+      scales:{
+        x:{ticks:{color:"#6e7c91",font:{weight:700,size:9},maxRotation:55},grid:{display:false},border:{display:false}},
+        y:{beginAtZero:true,title:{display:true,text:"Points perdus",color:"#6e7c91",font:{weight:700,size:10}},ticks:{color:"#6e7c91",font:{weight:700,size:9}},grid:{color:"#eef1f5"},border:{display:false}},
+        y1:{position:"right",min:0,max:100,title:{display:true,text:"% cumulé",color:"#6e7c91",font:{weight:700,size:10}},ticks:{color:"#6e7c91",font:{weight:700,size:9},callback:v=>v+"%"},grid:{display:false},border:{display:false}}
+      },
+      plugins:{legend:{display:true,labels:{color:"#67768c",font:{weight:700},usePointStyle:true,boxWidth:8}},
+        tooltip:{callbacks:{title:items=>full[items[0].dataIndex],
+          label:c=>c.dataset.type==="line"?"Cumul : "+c.raw+"%":"Pts perdus : "+c.raw}}}}
+  });
+}
+function renderRapTable(rows,n){
+  const tb=$("#rap_tbody");
+  if(!rows.length||!n){tb.innerHTML=`<tr><td colspan="9"><div class="empty">Aucune donnée sur la période.</div></td></tr>`;return;}
+  const cell=(v,col)=>v?`<b style="color:${col}">${v}</b>`:`<span style="color:var(--faint)">0</span>`;
+  tb.innerHTML=rows.map(r=>{
+    const confCol=r.conf===null?"var(--faint)":r.conf>=90?"#0a7d54":r.conf>=75?"#b45309":"#cc2626";
+    return `<tr>
+      <td style="font-weight:700">${r.name}</td>
+      <td>${r.scored+r.NA}</td>
+      <td>${cell(r.C,"#0a7d54")}</td>
+      <td>${cell(r.PC,"#b45309")}</td>
+      <td>${cell(r.NC,"#cc2626")}</td>
+      <td>${cell(r.IM,"#b91c1c")}</td>
+      <td>${cell(r.NA,"#475569")}</td>
+      <td style="font-weight:900;color:${confCol}">${r.conf===null?"—":r.conf+"%"}</td>
+      <td style="font-weight:900;color:${r.lost>0?"#cc2626":"var(--faint)"}">${r.lost>0?Math.round(r.lost*10)/10:"0"}</td>
+    </tr>`;}).join("");
+}
+function renderRapports(){
+  fillRapCrit();
+  const gk=$("#rap_grid").value;
+  $("#rap_grid_lbl").textContent="Grille "+(gk==="MAIL"?"Mail":"Appel");
+  const evals=rapFilteredEvals();
+  $("#rap_count").textContent=evals.length+" évaluation(s) "+(gk==="MAIL"?"Mail":"Appel")+" sur la période";
+  const rep=critReport(gk,evals);
+  // Pareto (items avec pertes, triés décroissant + cumul %)
+  const pa=rep.filter(r=>r.lost>0).sort((a,b)=>b.lost-a.lost);
+  const total=pa.reduce((s,r)=>s+r.lost,0);let cum=0;
+  const cumArr=pa.map(r=>{cum+=r.lost;return total?Math.round(cum/total*1000)/10:0;});
+  const full=pa.map(r=>r.name);
+  drawPareto(full.map(n=>n.length>16?n.slice(0,15)+"…":n),pa.map(r=>Math.round(r.lost*10)/10),cumArr,full);
+  // Table détail (triée par impact), filtrable par critère
+  const cf=$("#rap_crit").value;
+  let rows=rep.slice().sort((a,b)=>b.lost-a.lost);
+  if(cf!=="ALL")rows=rows.filter(r=>r.name===cf);
+  renderRapTable(rows,evals.length);
+}
+["rap_du","rap_au","rap_grid","rap_crit"].forEach(id=>$("#"+id).onchange=renderRapports);
+$("#rap_reset").onclick=()=>{$("#rap_du").value="";$("#rap_au").value="";$("#rap_grid").value="MAIL";$("#rap_crit").value="ALL";renderRapports();};
+
+/* ============ ÉVALUATIONS ============ */
+let evSort={key:"_ts",dir:-1}, evShown=[];
+/* « 13/09/2026 11:01:00 » → « 13/09/26 11:01 » : la colonne Date tenait sur deux lignes */
+function shortStamp(v){
+  if(!v)return"";
+  const s=String(v).trim();
+  const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ ,]+(\d{1,2}):(\d{2}))?/);
+  if(m)return m[1]+"/"+m[2]+"/"+m[3].slice(2)+(m[4]?" "+("0"+m[4]).slice(-2)+":"+m[5]:"");
+  const d=new Date(s);
+  if(!isNaN(d.getTime()))return d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"2-digit"});
+  return s;
+}
+function evalRow(e,i){
+  const ap=(e.Canal||"").toUpperCase()==="APPEL";const pct=e["Note %"]||"";
+  const pn=e._pct!==undefined?e._pct:parseFloat(String(pct).replace("%","").replace(",","."))||0;
+  const col=e["Impact Majeur"]==="OUI"||pn<80?"#cc2626":pn<95?"#b45309":"#0a7d54";
+  const st=e["Situation Inacceptable"]==="OUI"?'<span class="badge si">Sit. Inacceptable</span>':e["Impact Majeur"]==="OUI"?'<span class="badge im">Impact majeur</span>':'<span class="badge ok">Validée</span>';
+  return `<tr><td style="white-space:nowrap" title="${escHtml(e.Horodatage||"")}">${escHtml(shortStamp(e.Horodatage||e["Date contact"]||""))}</td>
+   <td><span class="badge" style="background:${ap?'var(--purple-soft)':'var(--blue-soft)'};color:${ap?'var(--purple)':'var(--blue)'}">${ap?'Appel':'Mail'}</span></td>
+   <td>${escHtml(e.Conseiller||"")}</td><td>${escHtml(e["Évaluateur"]||"")}</td><td>${escHtml(e.Typologie||"")}</td>
+   <td style="color:var(--muted)">${escHtml(e["Référence"]||"")}</td>
+   <td style="font-weight:900;color:${col}">${escHtml(pct)}</td><td>${st}</td>
+   <td>${ceCell(e)}</td>
+   <td><button class="btn-pdf" data-pdf="${i}" title="Exporter en PDF">PDF</button><button class="btn-ce" data-ce="${i}" title="Lancer une contre-évaluation">⇄ Contre</button></td></tr>`;
+}
+function getFilteredEvals(){
+  const q=($("#ev_q").value||"").trim().toLowerCase();
+  const canal=$("#ev_canal").value,cons=$("#ev_cons").value,evtr=$("#ev_evtr").value,typo=$("#ev_typo").value,stat=$("#ev_stat").value;
+  const du=$("#ev_du").value?new Date($("#ev_du").value+"T00:00:00").getTime():-Infinity;
+  const au=$("#ev_au").value?new Date($("#ev_au").value+"T23:59:59").getTime():Infinity;
+  let data=store.filter(e=>{
+    if(canal!=="ALL"&&(e.Canal||"").toUpperCase()!==canal)return false;
+    if(cons!=="ALL"&&e.Conseiller!==cons)return false;
+    if(evtr!=="ALL"&&e["Évaluateur"]!==evtr)return false;
+    if(typo!=="ALL"&&normTypo(e.Typologie)!==typo)return false;
+    const im=e["Impact Majeur"]==="OUI",siF=e["Situation Inacceptable"]==="OUI";
+    if(stat==="IM"&&!im)return false;if(stat==="SI"&&!siF)return false;if(stat==="OK"&&(im||siF))return false;
+    if((e._ts||0)<du||(e._ts||0)>au)return false;
+    if(q){const hay=[e["Référence"],e.Conseiller,e["Évaluateur"],e.Typologie].join(" ").toLowerCase();if(!hay.includes(q))return false;}
+    return true;
+  });
+  const k=evSort.key,d=evSort.dir;
+  data.sort((a,b)=>{if(k[0]==="_")return((a[k]||0)-(b[k]||0))*d;
+    const x=(a[k]||"").toString().toLowerCase(),y=(b[k]||"").toString().toLowerCase();return x<y?-d:x>y?d:0;});
+  return data;
+}
+function renderEvals(){
+  const data=getFilteredEvals();evShown=data;const b=$("#evals_body");
+  b.innerHTML=data.length?data.map(evalRow).join(""):`<tr><td colspan="10"><div class="empty">Aucune évaluation à afficher.</div></td></tr>`;
+  $$("#evals_body [data-pdf]").forEach(btn=>btn.onclick=()=>printEval(evShown[+btn.dataset.pdf]));
+  $$("#evals_body [data-ce]").forEach(btn=>btn.onclick=()=>startContre(evShown[+btn.dataset.ce]));
+  $("#ev_count").textContent=data.length+" / "+store.length+" évaluation(s)";
+}
+function fillFilter(sel,arr,allLabel){const cur=sel.value;sel.innerHTML=`<option value="ALL">${allLabel}</option>`+arr.map(v=>`<option>${escHtml(v)}</option>`).join("");sel.value=[...sel.options].some(o=>o.value===cur)?cur:"ALL";}
+function initEvalFilters(){if(!$("#ev_cons"))return;
+  fillFilter($("#ev_cons"),CONSEILLERS,"Tous conseillers");
+  fillFilter($("#ev_evtr"),EVALUATEURS,"Tous évaluateurs");
+  fillFilter($("#ev_typo"),[...new Set(store.map(e=>normTypo(e.Typologie)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr")),"Toutes typologies");}
+["ev_q","ev_canal","ev_cons","ev_evtr","ev_typo","ev_stat","ev_du","ev_au"].forEach(id=>{const el=$("#"+id);if(el){el.oninput=renderEvals;el.onchange=renderEvals;}});
+$("#ev_reset").onclick=()=>{["ev_q","ev_du","ev_au"].forEach(i=>$("#"+i).value="");["ev_canal","ev_cons","ev_evtr","ev_typo","ev_stat"].forEach(i=>$("#"+i).value="ALL");renderEvals();};
+$$("#view-evals th.srt").forEach(th=>th.onclick=()=>{const k=th.dataset.k;
+  if(evSort.key===k)evSort.dir*=-1;else evSort={key:k,dir:k[0]==="_"?-1:1};
+  $$("#view-evals th.srt").forEach(t=>t.classList.remove("asc","desc"));
+  th.classList.add(evSort.dir>0?"asc":"desc");renderEvals();});
+$("#b_refresh").onclick=async()=>{
+  const url=(runtimeUrl||"").trim();if(!url){toast("URL Sheet non configurée","err");return;}
+  $("#evals_hint").textContent="Chargement depuis le Sheet…";
+  await syncFromSheet();renderEvals();
+  $("#evals_hint").textContent=store.length+" évaluation(s) en mémoire (session + Sheet).";
+};
+$("#b_csv").onclick=()=>{const data=getFilteredEvals();if(!data.length){toast("Aucune éval à exporter","err");return;}
+  const cols=Object.keys(data[0]).filter(k=>k[0]!=="_");const esc=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const csv=[cols.map(esc).join(";")].concat(data.map(r=>cols.map(c=>esc(r[c])).join(";"))).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));
+  a.download="evaluations_aosom_"+new Date().toISOString().slice(0,10)+".csv";a.click();};
+
+/* ---- Export PDF d'une évaluation (impression navigateur) ---- */
+function printEval(e){if(!e){toast("Évaluation introuvable","err");return;}$("#print_area").innerHTML=evalDetailHtml(e);window.print();}
+function evalDetailHtml(e){
+  const ap=(e.Canal||"").toUpperCase()==="APPEL";
+  const crits=flatCrit(e.Grille&&GRIDS[e.Grille]?e.Grille:(ap?"APPEL":"MAIL"));
+  const cm={};(e["Détail commentaires"]||"").split(" | ").forEach(s=>{const i=s.indexOf(" : ");if(i>0)cm[s.slice(0,i)]=s.slice(i+3);});
+  const COL={CONFORME:"#0a7d54","PARTIELLEMENT CONFORME":"#b45309","NON CONFORME":"#cc2626","IMPACT MAJEUR":"#b91c1c","SITUATION INACCEPTABLE":"#7c3aed","NON APPLICABLE":"#475569"};
+  const rows=crits.map((c,i)=>{
+    const lbl=e[c.name]||"";const app=LABEL2APP[lbl];let pts="—";
+    if(app==="NA")pts="N/A";else if(app==="IM")pts="IM";else if(app==="SI")pts="SI";
+    else if(app){const p=c.coef*(APP[app].factor||0);pts=(Number.isInteger(p)?p:p.toFixed(1))+" / "+c.coef;}
+    const cmt=cm[c.name]?`<div style="color:#475569;font-style:italic;font-size:10.5px;margin-top:3px">↳ ${escHtml(cm[c.name])}</div>`:"";
+    return `<tr style="border-bottom:1px solid #f1f4f8">
+      <td style="text-align:center;color:#9aa7ba;padding:6px 5px">${i+1}</td>
+      <td style="padding:6px 5px;font-weight:600">${escHtml(c.name)}${cmt}</td>
+      <td style="text-align:center;color:#9aa7ba;padding:6px 5px">${c.coef}</td>
+      <td style="padding:6px 5px;font-weight:700;color:${COL[lbl]||"#9aa7ba"}">${escHtml(lbl||"—")}</td>
+      <td style="text-align:right;padding:6px 5px;font-weight:800;white-space:nowrap">${pts}</td></tr>`;
+  }).join("");
+  const im=e["Impact Majeur"]==="OUI",siPdf=e["Situation Inacceptable"]==="OUI";
+  const scoreCol=siPdf?"#7c3aed":im?"#b91c1c":(e._pct>=95?"#0a7d54":e._pct>=80?"#b45309":"#cc2626");
+  const meta=(l,v)=>`<div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:#9aa7ba;font-weight:800">${l}</div><div style="font-weight:700;font-size:12.5px;color:#1f2b3d">${escHtml(v||"—")}</div></div>`;
+  return `<div style="font-family:'Nunito Sans',Arial,sans-serif;color:#1f2b3d;max-width:760px;margin:0 auto">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:3px solid #2f6bed;padding-bottom:12px;margin-bottom:16px">
+      <div><div style="font-size:20px;font-weight:900;letter-spacing:-.3px">Fiche d'évaluation qualité</div>
+        <div style="font-size:12px;color:#67768c;font-weight:700">AOSOM FR · ${ap?"Grille Appel":"Grille Mail"}${e.Version?" — "+escHtml(e.Version):""}</div></div>
+      <div style="font-size:15px;font-weight:900;color:#2f6bed">ABL <span style="font-style:italic;font-weight:600;color:#67768c">outsourcing</span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+      <div style="background:${im?"#fdecec":"#f1f7ff"};border-radius:14px;padding:12px 22px;text-align:center;min-width:128px">
+        <div style="font-size:30px;font-weight:900;color:${scoreCol};line-height:1">${escHtml(e["Note %"]||"")}</div>
+        <div style="font-size:10.5px;font-weight:800;color:#67768c;margin-top:3px">${escHtml((e["Note brute"]!=null?e["Note brute"]:"")+"")} / ${escHtml((e.Base!=null?e.Base:"")+"")} pts</div></div>
+      ${siPdf?`<div style="background:#7c3aed;color:#fff;padding:9px 15px;border-radius:9px;font-weight:900;font-size:12px">⛔ SITUATION INACCEPTABLE — évaluation à 0%</div>`:im?`<div style="background:#b91c1c;color:#fff;padding:9px 15px;border-radius:9px;font-weight:900;font-size:12px">⚠ IMPACT MAJEUR${e.Version&&e.Version.indexOf("V5")===0?" — bloc à 0":" — note ramenée à 0%"}</div>`:""}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:13px;background:#f8fafc;border:1px solid #eceff4;border-radius:12px;padding:14px;margin-bottom:18px">
+      ${meta("Conseiller",e.Conseiller)}${meta("Évaluateur",e["Évaluateur"])}${meta("Date contact",e["Date contact"]||e.Horodatage)}${meta("Canal",ap?"Appel":"Mail")}
+      ${meta("Référence",e["Référence"])}${meta("Typologie",e.Typologie)}${meta("Opération",e["Opération"])}${meta("Horodatage",e.Horodatage)}
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:18px">
+      <thead><tr style="border-bottom:2px solid #eceff4">
+        ${["#","Critère","Coef","Notation","Points"].map((h,j)=>`<th style="text-align:${j===1||j===3?"left":j===4?"right":"center"};padding:7px 5px;font-size:9px;text-transform:uppercase;color:#9aa7ba;letter-spacing:.5px">${h}</th>`).join("")}
+      </tr></thead><tbody>${rows}</tbody></table>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="border:1px solid #eceff4;border-radius:12px;padding:13px"><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;color:#0a7d54;font-weight:900;margin-bottom:6px">Points forts</div><div style="font-size:12px;white-space:pre-wrap">${escHtml(e["Points forts"]||"—")}</div></div>
+      <div style="border:1px solid #eceff4;border-radius:12px;padding:13px"><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;color:#b45309;font-weight:900;margin-bottom:6px">Axes d'amélioration</div><div style="font-size:12px;white-space:pre-wrap">${escHtml(e["Axes d'amélioration"]||"—")}</div></div>
+    </div>
+    <div style="text-align:right;color:#9aa7ba;font-size:9.5px;font-weight:700;margin-top:16px">Évaluation Qualité AOSOM FR · ABL Outsourcing</div>
+  </div>`;
+}
+
+/* ---- Import évaluation produite par la skill (IA) ---- */
+$("#b_import_toggle").onclick=()=>{const b=$("#import_box");b.style.display=b.style.display==="none"?"block":"none";};
+$("#b_import_send").onclick=async()=>{
+  const raw=$("#import_json").value.trim();if(!raw){toast("Colle d'abord le JSON","err");return;}
+  let obj;try{obj=JSON.parse(raw);}catch(e){$("#import_hint").textContent="JSON invalide.";toast("JSON invalide","err");return;}
+  const rec=obj.record||obj;const canal=String(obj.canal||rec.Canal||"").toUpperCase();
+  if((canal!=="MAIL"&&canal!=="APPEL")||!rec.Conseiller){$("#import_hint").textContent="Canal (MAIL/APPEL) et Conseiller requis.";toast("Données incomplètes","err");return;}
+  rec.Canal=canal;if(!rec.Horodatage)rec.Horodatage=new Date().toLocaleString("fr-FR");if(!rec.ID)rec.ID=uid();
+  const pct=parseFloat(String(rec["Note %"]||"").replace("%","").replace(",","."))||0;
+  store.unshift({...rec,_pct:pct,_ts:Date.now()});saveLocal();
+  const url=(runtimeUrl||"").trim();
+  if(url){try{await fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify({action:"saveEval",canal,record:rec})});$("#import_hint").textContent="Envoyé vers le Sheet ("+canal+").";toast("Évaluation importée et envoyée ✓","ok");}catch(e){$("#import_hint").textContent="Importée en session — envoi Sheet échoué.";toast("Envoi Sheet échoué","err");}}
+  else{$("#import_hint").textContent="Importée en session (URL Sheet non configurée).";toast("Importée en session ✓","ok");}
+  $("#import_json").value="";renderEvals();renderDash();updateBell();
+};
+
+/* ============ CALIBRAGE (sessions multi-évaluateurs) ============
+   Plusieurs évaluateurs notent le même contact à l'aveugle, puis une note de
+   référence est arrêtée en séance. Stockage : onglet « Suivi CALIBRAGE » du Sheet
+   (action saveEval générique), une ligne par événement :
+   Type = SESSION (création) | NOTE (notation d'un évaluateur) | REFERENCE (note arrêtée).
+   La dernière ligne fait foi (une nouvelle NOTE du même évaluateur remplace l'ancienne). */
+const CAL_CANAL="CALIBRAGE",CAL_KEY="aosom_calib_store_v1";
+const calib=[];
+let calMode=null;  // {id,s,sess,gridKey,role:"NOTE"|"REF",reveal,push} quand une notation de calibrage est en cours
+let calOpen=null;  // ID de la session affichée en détail
+function saveCalibLocal(){try{localStorage.setItem(CAL_KEY,JSON.stringify(calib));}catch(e){}}
+function loadCalibLocal(){try{const a=JSON.parse(localStorage.getItem(CAL_KEY)||"[]");return Array.isArray(a)?a:[];}catch(e){return[];}}
+function mergeCalib(r){
+  if(!r||!r.Type||!r.Session)return;
+  const e={...r};e._ts=e._ts||parseFr(e.Horodatage);
+  if(e.Type!=="SESSION")e._pct=(e._pct!==undefined&&e._pct!=="")?+e._pct:toPct(e["Note %"]);
+  if(e.ID&&calib.some(x=>x.ID===e.ID))return;
+  calib.push(e);
+}
+async function syncCalib(){
+  const url=(runtimeUrl||"").trim();if(!url)return false;
+  try{const r=await fetch(url+"?canal="+CAL_CANAL,{method:"GET"});const j=await r.json();(j.rows||[]).forEach(mergeCalib);}
+  catch(e){return false;}
+  calib.sort((a,b)=>a._ts-b._ts);saveCalibLocal();
+  if($("#view-calibrage").classList.contains("active"))renderCalibrage();
+  return true;
+}
+function calGridKey(r){return(r.Grille&&GRIDS[r.Grille])?r.Grille:defaultGridFor((r.Canal||"").toUpperCase()==="APPEL"?"APPEL":"MAIL");}
+/* « 2026-09-22T21:00:00.000Z » (date renvoyée par le Sheet) → date locale AAAA-MM-JJ */
+function calDate(v){
+  const s=String(v||"").trim();if(!s)return"";
+  if(s.indexOf("T")>0){const d=new Date(s);if(!isNaN(d.getTime()))return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
+  return isoDate(s);
+}
+function calStamp(ts){const d=new Date(ts);return d.toLocaleDateString("fr-FR")+" "+d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});}
+function calSessions(){
+  const by={};
+  calib.forEach(e=>{
+    const o=by[e.Session]=by[e.Session]||{id:e.Session,s:null,notes:{},ref:null};
+    if(e.Type==="SESSION"){if(!o.s||e._ts>o.s._ts)o.s=e;}
+    else if(e.Type==="NOTE"){const k=e["Évaluateur"]||"—";if(!o.notes[k]||e._ts>=o.notes[k]._ts)o.notes[k]=e;}
+    else if(e.Type==="REFERENCE"){if(!o.ref||e._ts>=o.ref._ts)o.ref=e;}
+  });
+  return Object.values(by).filter(o=>o.s)
+    .map(o=>({...o,notes:Object.values(o.notes).sort((a,b)=>String(a["Évaluateur"]).localeCompare(String(b["Évaluateur"]),"fr"))}))
+    .sort((a,b)=>b.s._ts-a.s._ts);
+}
+function calFind(id){return calSessions().find(x=>x.id===id)||null;}
+const calApp=(r,c)=>LABEL2APP[(r&&r[c.name])||""]||null;
+function calCommentMap(r){const m={};String((r&&r["Détail commentaires"])||"").split(" | ").forEach(s=>{const i=s.indexOf(" : ");if(i>0)m[s.slice(0,i)]=s.slice(i+3);});return m;}
+/* notation majoritaire par critère (proposition de référence avant arbitrage) */
+function calConsensus(notes,gk){
+  const out={};
+  flatCrit(gk).forEach(c=>{
+    const cnt={};notes.forEach(n=>{const k=calApp(n,c);if(k)cnt[k]=(cnt[k]||0)+1;});
+    const arr=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);const tot=arr.reduce((s,x)=>s+x[1],0);
+    out[c.id]={app:arr.length?arr[0][0]:null,share:tot?arr[0][1]/tot*100:0,tie:arr.length>1&&arr[0][1]===arr[1][1],n:tot,cnt};
+  });
+  return out;
+}
+/* comparaison d'une notation à la référence — mêmes seuils que la contre-évaluation */
+function calCompare(a,ref,gk){
+  let cmp=0,same=0;const div=[];
+  flatCrit(gk).forEach(c=>{const x=calApp(a,c),y=calApp(ref,c);if(!x&&!y)return;cmp++;if(x===y)same++;else div.push(c.name);});
+  const ecart=(a._pct||0)-(ref._pct||0);
+  const flag=((a["Impact Majeur"]==="OUI")!==(ref["Impact Majeur"]==="OUI"))||((a["Situation Inacceptable"]==="OUI")!==(ref["Situation Inacceptable"]==="OUI"));
+  const verdict=(flag||Math.abs(ecart)>10)?"Écart majeur":(Math.abs(ecart)>5||div.length>2)?"Écart mineur":"Aligné";
+  return{cmp,same,concord:cmp?same/cmp*100:100,div,ecart,verdict,flag};
+}
+const calVerdictCls=v=>v==="Aligné"?"ce-ok":v==="Écart mineur"?"ce-min":"ce-maj";
+const calColor=v=>v>=90?"#0a7d54":v>=75?"#b45309":"#cc2626";
+function calChipHtml(k){return `<span class="orig-chip ${k||""}" style="margin:0">${k?APP[k].short:"—"}</span>`;}
+
+/* ---- Création de session ---- */
+function fillCalGrilles(){
+  const ch=$("#cal_canal").value,sel=$("#cal_grille");
+  const ks=Object.keys(GRIDS).filter(k=>GRIDS[k].channel===ch);
+  sel.innerHTML=ks.map(k=>`<option value="${k}">${escHtml(GRIDS[k].version)}</option>`).join("");
+  sel.value=defaultGridFor(ch);
+}
+function calResetForm(){["cal_ref","cal_lien","cal_consigne","cal_typo"].forEach(i=>$("#"+i).value="");$("#cal_date").value="";$("#cal_cons").value="";}
+async function createCalSession(){
+  if(sending)return;
+  const canal=$("#cal_canal").value,gk=$("#cal_grille").value,co=$("#cal_cons").value;
+  if(!co){toast("Choisis le conseiller évalué","err");return;}
+  if(!$("#cal_ref").value.trim()&&!$("#cal_lien").value.trim()){toast("Renseigne une référence ou un lien vers le contact","err");return;}
+  const id="CAL-"+new Date().toISOString().slice(2,10).replace(/-/g,"")+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+  const rec={Type:"SESSION",Session:id,ID:id,Horodatage:new Date().toLocaleString("fr-FR"),"Évaluateur":me,Conseiller:co,
+    "Date contact":$("#cal_date").value||"","Opération":OPERATIONS[0],Typologie:normTypo($("#cal_typo").value),
+    Canal:canal,Grille:gk,Version:GRIDS[gk].version,"Référence":$("#cal_ref").value.trim(),
+    Lien:$("#cal_lien").value.trim(),Consigne:$("#cal_consigne").value.trim()};
+  sending=true;
+  try{
+    calib.push({...rec,_ts:Date.now()});saveCalibLocal();
+    const st=await postJSON({action:"saveEval",canal:CAL_CANAL,grille:gk,record:rec});
+    toast(st==="ok"?"Session "+id+" créée ✓":st==="nourl"?"Session créée en local (URL Sheet non configurée)":"Session créée en local — envoi Sheet échoué",st==="err"?"err":"ok");
+  }finally{sending=false;}
+  calResetForm();$("#cal_new").style.display="none";calOpen=id;renderCalibrage();
+}
+
+/* ---- Notation de calibrage (réutilise la grille) ---- */
+function startCalib(id,role){
+  const sess=calFind(id);if(!sess){toast("Session introuvable","err");return;}
+  if(Object.keys(answers).length&&!confirm("Une notation est en cours. La remplacer ?"))return;
+  const s=sess.s,gk=calGridKey(s);
+  ceMode=null;
+  calMode={id,s,sess,gridKey:gk,role,reveal:role==="REF",push:true};
+  currentChannel=GRIDS[gk].channel;currentGrid=gk;selVersion[currentChannel]=gk;answers={};
+  const src=role==="REF"?sess.ref:sess.notes.find(n=>n["Évaluateur"]===me);
+  if(src){
+    const cm=calCommentMap(src);
+    flatCrit(gk).forEach(c=>{const k=calApp(src,c);if(k||cm[c.name])answers[c.id]={app:k,comment:cm[c.name]||""};});
+  }else if(role==="REF"){
+    const cs=calConsensus(sess.notes,gk);
+    Object.keys(cs).forEach(cid=>{if(cs[cid].app)answers[cid]={app:cs[cid].app,comment:""};});
+  }
+  $$("#menu a").forEach(a=>a.classList.toggle("active",a.dataset.v==="calibrage"));
+  $$(".view").forEach(v=>v.classList.remove("active"));$("#view-grille").classList.add("active");
+  setSel($("#f_eval"),EVALUATEURS.indexOf(me)>=0?me:"");
+  setSel($("#f_cons"),s.Conseiller||"");
+  $("#f_date").value=calDate(s["Date contact"]);
+  $("#f_typo").value=s.Typologie||"";
+  $("#f_ref").value=s["Référence"]||"";
+  $("#f_forts").value=(src&&src["Points forts"])||"";
+  $("#f_axes").value=(src&&src["Axes d'amélioration"])||"";
+  updateGridHead();renderGrid();window.scrollTo({top:0,behavior:"smooth"});
+  toast(role==="REF"?"Note de référence — pré-remplie avec la majorité des évaluateurs":"Calibrage à l'aveugle — note la grille","ok");
+}
+function exitCalib(){calMode=null;answers={};["f_ref","f_forts","f_axes"].forEach(i=>$("#"+i).value="");updateGridHead();renderGrid();}
+function renderCalBanner(){
+  const b=$("#ce_banner"),m=calMode,s=m.s,ref=m.role==="REF";
+  const lien=s.Lien?(/^https?:\/\//i.test(s.Lien)?` · <a href="${escHtml(s.Lien)}" target="_blank" rel="noopener" style="color:#a5f3fc;font-weight:800">ouvrir le contact ↗</a>`:" · "+escHtml(s.Lien)):"";
+  b.style.display="flex";const gv=$("#g_ver");if(gv)gv.style.display="none";
+  b.innerHTML=`<div><div class="ce-t">${ref?"Calibrage — note de référence":"Calibrage — notation à l'aveugle"} · ${escHtml(m.id)}</div>
+    <div class="ce-s">${escHtml(s.Conseiller||"—")} · ${escHtml(s["Référence"]||"sans référence")}${s.Typologie?" · "+escHtml(s.Typologie):""} · animé par ${escHtml(s["Évaluateur"]||"—")}${lien}</div>
+    ${s.Consigne?`<div class="ce-s" style="margin-top:3px">Consigne : ${escHtml(s.Consigne)}</div>`:""}
+    ${ref?`<label class="ce-s" style="display:flex;gap:7px;align-items:center;margin-top:6px;cursor:pointer"><input type="checkbox" id="cal_push" ${m.push?"checked":""}>Reporter aussi dans le Suivi ${escHtml(GRIDS[m.gridKey].label)} (évaluateur « Calibrage »)</label>`:""}</div>
+    <div class="ce-acts">${ref?`<button id="cal_toggle">${m.reveal?"Masquer":"Afficher"} les notations</button>`:""}<button id="cal_quit">Quitter</button></div>`;
+  b.classList.add("cal-banner");
+  if(ref){$("#cal_toggle").onclick=()=>{m.reveal=!m.reveal;renderCalBanner();renderGrid();};$("#cal_push").onchange=e=>{m.push=e.target.checked;};}
+  $("#cal_quit").onclick=()=>{if(Object.keys(answers).length&&!confirm("Abandonner la notation de calibrage en cours ?"))return;const id=m.id;exitCalib();calOpen=id;go("calibrage");};
+}
+/* répartition des notations des évaluateurs sur un critère (mode référence) */
+function calChip(c){
+  if(!calMode||calMode.role!=="REF"||!calMode.reveal)return"";
+  const cnt={};calMode.sess.notes.forEach(n=>{const k=calApp(n,c);if(k)cnt[k]=(cnt[k]||0)+1;});
+  return Object.keys(cnt).map(k=>`<span class="orig-chip ${k}">${APP[k].short} ×${cnt[k]}</span>`).join("");
+}
+function calSplit(c){
+  if(!calMode||calMode.role!=="REF"||!calMode.reveal)return false;
+  return new Set(calMode.sess.notes.map(n=>calApp(n,c)).filter(Boolean)).size>1;
+}
+async function saveCalib(ev,co,r){
+  const m=calMode,sess=calFind(m.id)||m.sess,ref=m.role==="REF";
+  if(!ref&&sess.notes.some(n=>n["Évaluateur"]===ev)&&!confirm(ev+" a déjà noté cette session. Remplacer sa notation ?"))return;
+  const base=buildRecord(ev,co,r,m.gridKey);
+  const rec={Type:ref?"REFERENCE":"NOTE",Session:m.id,...base};
+  calib.push({...rec,_pct:r.pct,_ts:Date.now()});saveCalibLocal();
+  const st=await postJSON({action:"saveEval",canal:CAL_CANAL,grille:m.gridKey,record:rec});
+  let extra="";
+  if(ref&&m.push){
+    if(store.some(x=>x["Session calibrage"]===m.id))extra=" — déjà reportée dans le Suivi (non dupliquée)";
+    else{
+      const ev2=EVALUATEURS.indexOf("Calibrage")>=0?"Calibrage":ev;
+      const rec2=buildRecord(ev2,co,r,m.gridKey);rec2["Session calibrage"]=m.id;
+      store.unshift({...rec2,_pct:r.pct,_ts:Date.now()});saveLocal();
+      await postJSON({action:"saveEval",canal:currentChannel,grille:m.gridKey,record:rec2});
+      extra=" — reportée dans le Suivi "+GRIDS[m.gridKey].label;
+    }
+  }
+  toast((ref?"Référence enregistrée":"Notation de calibrage enregistrée")+(st==="ok"?" ✓":st==="nourl"?" (local)":" — envoi Sheet échoué")+extra,st==="err"?"err":"ok");
+  const id=m.id;exitCalib();calOpen=id;go("calibrage");renderDash();updateBell();
+}
+
+/* ---- Vue Calibrage ---- */
+function renderCalibrage(){
+  const S=calSessions();
+  const closed=S.filter(x=>x.ref);
+  const cmps=[];closed.forEach(x=>{const gk=calGridKey(x.s);x.notes.forEach(n=>cmps.push({ev:n["Évaluateur"],sess:x,...calCompare(n,x.ref,gk)}));});
+  const n=cmps.length;
+  const avgC=n?cmps.reduce((s,c)=>s+c.concord,0)/n:0,avgE=n?cmps.reduce((s,c)=>s+Math.abs(c.ecart),0)/n:0;
+  const okN=cmps.filter(c=>c.verdict==="Aligné").length;
+  $("#cal_kpi").innerHTML=[["Sessions",S.length?S.length+` <small style="font-size:12px;color:var(--muted);font-weight:800">${S.length-closed.length} ouverte(s)</small>`:"0","var(--txt)"],
+    ["Notations comparées",n,"var(--txt)"],
+    ["Alignement critères",n?fmtPct(avgC):"—",n?calColor(avgC):"var(--muted)"],
+    ["Écart absolu moyen",n?fmtPct(avgE):"—",!n?"var(--muted)":avgE<=5?"#0a7d54":avgE<=10?"#b45309":"#cc2626"],
+    ["Évaluateurs alignés",n?Math.round(okN/n*100)+" %":"—",n?calColor(okN/n*100):"var(--muted)"]]
+    .map(k=>`<div class="b"><div class="l">${k[0]}</div><div class="v" style="color:${k[2]}">${k[1]}</div></div>`).join("");
+
+  $("#cal_body").innerHTML=S.length?S.map(x=>{
+    const s=x.s,ap=(s.Canal||"").toUpperCase()==="APPEL",mine=x.notes.some(nn=>nn["Évaluateur"]===me);
+    const st=x.ref?`<span class="badge ok">Clôturée · réf. ${escHtml(fmtPct(x.ref._pct||0))}</span>`:`<span class="badge rev">Ouverte</span>`;
+    return `<tr${calOpen===x.id?' class="cal-sel"':""}><td style="font-weight:800;white-space:nowrap">${escHtml(x.id)}</td>
+      <td style="white-space:nowrap">${escHtml(new Date(s._ts).toLocaleDateString("fr-FR"))}</td>
+      <td><span class="badge" style="background:${ap?'var(--purple-soft)':'var(--blue-soft)'};color:${ap?'var(--purple)':'var(--blue)'}">${ap?'Appel':'Mail'}</span></td>
+      <td>${escHtml(s.Conseiller||"")}</td><td style="color:var(--muted);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(s["Référence"]||"")}">${escHtml(s["Référence"]||"")}</td>
+      <td>${escHtml(s["Évaluateur"]||"")}</td>
+      <td title="${escHtml(x.notes.map(nn=>nn["Évaluateur"]).join(", "))}"><b>${x.notes.length}</b>${mine?' <span style="color:var(--green-text);font-weight:800">· noté ✓</span>':""}</td>
+      <td>${st}</td>
+      <td style="white-space:nowrap"><button class="btn-pdf" data-cal-open="${escHtml(x.id)}">Résultats</button><button class="btn-ce" data-cal-note="${escHtml(x.id)}">${mine?"✎ Ma note":"✎ Noter"}</button></td></tr>`;}).join("")
+    :`<tr><td colspan="9"><div class="empty">Aucune session. Clique « Nouvelle session » pour lancer un calibrage.</div></td></tr>`;
+  $$("[data-cal-open]").forEach(b=>b.onclick=()=>{calOpen=calOpen===b.dataset.calOpen?null:b.dataset.calOpen;renderCalibrage();if(calOpen)$("#cal_detail").scrollIntoView({behavior:"smooth",block:"start"});});
+  $$("[data-cal-note]").forEach(b=>b.onclick=()=>startCalib(b.dataset.calNote,"NOTE"));
+
+  renderCalDetail();
+
+  /* alignement par évaluateur (sessions clôturées uniquement) */
+  const byEv={};cmps.forEach(c=>{(byEv[c.ev]=byEv[c.ev]||[]).push(c);});
+  const evRows=Object.keys(byEv).map(k=>{const a=byEv[k].sort((x,y)=>x.sess.ref._ts-y.sess.ref._ts);
+    return{ev:k,n:a.length,concord:a.reduce((s,c)=>s+c.concord,0)/a.length,ecart:a.reduce((s,c)=>s+c.ecart,0)/a.length,
+      abs:a.reduce((s,c)=>s+Math.abs(c.ecart),0)/a.length,ok:a.filter(c=>c.verdict==="Aligné").length,last:a[a.length-1].verdict};})
+    .sort((a,b)=>a.concord-b.concord);
+  $("#cal_ev_body").innerHTML=evRows.length?evRows.map(r=>{
+    const tend=Math.abs(r.ecart)<=2?'<span style="color:var(--muted)">neutre</span>':r.ecart<0?'<span style="color:#cc2626;font-weight:800">plus sévère</span>':'<span style="color:#b45309;font-weight:800">plus indulgent</span>';
+    return `<tr><td style="font-weight:800">${escHtml(r.ev)}</td><td>${r.n}</td>
+      <td style="font-weight:900;color:${calColor(r.concord)}">${fmtPct(r.concord)}</td>
+      <td style="font-weight:800;white-space:nowrap">${fmtSigned(r.ecart)}<div style="font-size:11px">${tend}</div></td><td>${fmtPct(r.abs)}</td>
+      <td>${r.ok}/${r.n}</td><td><span class="badge ${calVerdictCls(r.last)}">${escHtml(r.last)}</span></td></tr>`;}).join("")
+    :`<tr><td colspan="7"><div class="empty">Aucune session clôturée : définis une note de référence pour mesurer l'alignement.</div></td></tr>`;
+
+  /* critères à recalibrer (divergences vs référence, toutes sessions clôturées) */
+  const cm={};
+  closed.forEach(x=>{const gk=calGridKey(x.s);flatCrit(gk).forEach(c=>{const y=calApp(x.ref,c);
+    x.notes.forEach(nn=>{const v=calApp(nn,c);if(!v&&!y)return;const o=cm[c.name]=cm[c.name]||{cmp:0,div:0};o.cmp++;if(v!==y)o.div++;});});});
+  const cr=Object.keys(cm).map(k=>({name:k,...cm[k],rate:(1-cm[k].div/cm[k].cmp)*100})).sort((a,b)=>(b.div-a.div)||(a.rate-b.rate));
+  $("#cal_crit_n").textContent=cr.length+" critère(s)";
+  $("#cal_crit_body").innerHTML=cr.length?cr.map(s=>`<tr><td style="font-weight:700">${escHtml(s.name)}</td>
+    <td style="font-weight:900;color:${s.div?"#cc2626":"var(--muted)"}">${s.div}</td><td>${s.cmp}</td>
+    <td style="font-weight:800;color:${calColor(s.rate)}">${fmtPct(s.rate)}</td></tr>`).join("")
+    :`<tr><td colspan="4"><div class="empty">Pas encore de données.</div></td></tr>`;
+}
+function renderCalDetail(){
+  const box=$("#cal_detail"),x=calOpen?calFind(calOpen):null;
+  if(!x){box.style.display="none";return;}
+  box.style.display="block";
+  const s=x.s,gk=calGridKey(s),crits=flatCrit(gk),ref=x.ref,notes=x.notes;
+  const mine=notes.some(n=>n["Évaluateur"]===me),anim=s["Évaluateur"]===me;
+  const lien=s.Lien?(/^https?:\/\//i.test(s.Lien)?` · <a href="${escHtml(s.Lien)}" target="_blank" rel="noopener">contact ↗</a>`:" · "+escHtml(s.Lien)):"";
+  $("#cal_d_title").innerHTML=`Session ${escHtml(x.id)}`;
+  $("#cal_d_sub").innerHTML=`${escHtml(GRIDS[gk].label)} ${escHtml(GRIDS[gk].version)} · ${escHtml(s.Conseiller||"—")} · ${escHtml(s["Référence"]||"sans référence")}${s.Typologie?" · "+escHtml(s.Typologie):""} · animée par ${escHtml(s["Évaluateur"]||"—")}${lien}${s.Consigne?`<br>Consigne : ${escHtml(s.Consigne)}`:""}`;
+  $("#cal_d_note").textContent=mine?"✎ Modifier ma note":"✎ Noter ce contact";
+  $("#cal_d_ref").textContent=ref?"Modifier la référence":"Définir la référence";
+  $("#cal_d_ref").disabled=!notes.length;
+  $("#cal_d_ref").title=notes.length?"Pré-remplie avec la notation majoritaire, à arbitrer en séance":"Il faut au moins une notation";
+  const visible=!!ref||mine||anim;
+  if(!visible||!notes.length){
+    $("#cal_d_kpi").innerHTML="";
+    $("#cal_d_body").innerHTML=`<div class="empty" style="padding:28px 0">${!notes.length?"Aucune notation pour l'instant — "+"chaque évaluateur clique « Noter ce contact ».":"Notation à l'aveugle : note d'abord ce contact pour voir les notations des autres ("+notes.length+" reçue(s))."}</div>`;
+    return;
+  }
+  const cons=calConsensus(notes,gk);
+  const refApp=c=>ref?calApp(ref,c):cons[c.id].app;
+  const pcts=notes.map(n=>n._pct||0);
+  const mean=pcts.reduce((a,b)=>a+b,0)/pcts.length;
+  const sd=Math.sqrt(pcts.reduce((a,b)=>a+(b-mean)*(b-mean),0)/pcts.length);
+  let agreeSum=0,agreeN=0;
+  const rows=crits.map((c,i)=>{
+    const y=refApp(c);let ag=0,tot=0;
+    const cells=notes.map(n=>{const v=calApp(n,c);if(v||y){tot++;if(v===y)ag++;}
+      const cm=calCommentMap(n)[c.name];
+      return `<td><span class="orig-chip ${v||""}${v!==y&&(v||y)?" cal-off":""}" style="margin:0"${cm?` title="${escHtml(cm)}"`:""}>${v?APP[v].short:"—"}${cm?" 💬":""}</span></td>`;}).join("");
+    const rate=tot?ag/tot*100:null;if(rate!==null){agreeSum+=rate;agreeN++;}
+    const refCell=ref?calChipHtml(y):(y?`<span class="orig-chip ${y}" style="margin:0;opacity:.8">${APP[y].short}${cons[c.id].tie?" ?":""}</span>`:"—");
+    return `<tr${rate!==null&&rate<100?' class="cal-split"':""}><td><span style="color:var(--faint);font-weight:800;margin-right:6px">${i+1}</span>${escHtml(c.name)} <span style="color:var(--faint);font-size:11px">/${c.coef}</span></td>
+      ${cells}<td class="ref">${refCell}</td>
+      <td style="font-weight:900;color:${rate===null?"var(--faint)":calColor(rate)}">${rate===null?"—":Math.round(rate)+" %"}</td></tr>`;}).join("");
+  const cmpN=ref?notes.map(n=>calCompare(n,ref,gk)):null;
+  const sum=(lbl,f,refV)=>`<tr class="sum"><td>${lbl}</td>${notes.map((n,i)=>`<td>${f(n,i)}</td>`).join("")}<td class="ref">${refV}</td><td></td></tr>`;
+  let foot=sum("Note",n=>`<span style="color:${n["Situation Inacceptable"]==="OUI"?"#7c3aed":n["Impact Majeur"]==="OUI"?"#b91c1c":calColor(n._pct||0)}">${fmtPct(n._pct||0)}</span>${n["Impact Majeur"]==="OUI"?" IM":""}${n["Situation Inacceptable"]==="OUI"?" SI":""}`,
+    ref?`<b>${fmtPct(ref._pct||0)}</b>${ref["Impact Majeur"]==="OUI"?" IM":""}${ref["Situation Inacceptable"]==="OUI"?" SI":""}`:`<span style="color:var(--muted)">moy. ${fmtPct(mean)}</span>`);
+  if(cmpN){
+    foot+=sum("Écart vs référence",(n,i)=>fmtSigned(cmpN[i].ecart),"");
+    foot+=sum("Critères alignés",(n,i)=>`<span style="color:${calColor(cmpN[i].concord)}">${cmpN[i].same}/${cmpN[i].cmp}</span>`,"");
+    foot+=sum("Verdict",(n,i)=>`<span class="badge ${calVerdictCls(cmpN[i].verdict)}">${escHtml(cmpN[i].verdict)}</span>`,"");
+  }
+  const agreeAvg=agreeN?agreeSum/agreeN:0;
+  const okN=cmpN?cmpN.filter(c=>c.verdict==="Aligné").length:0;
+  $("#cal_d_kpi").innerHTML=[["Évaluateurs",notes.length,"var(--txt)"],
+    ["Notes min – max",fmtPct(Math.min(...pcts))+" – "+fmtPct(Math.max(...pcts)),"var(--txt)"],
+    ["Écart-type des notes",fmtPct(sd),sd<=5?"#0a7d54":sd<=10?"#b45309":"#cc2626"],
+    [ref?"Accord critères / réf.":"Accord critères / majorité",fmtPct(agreeAvg),calColor(agreeAvg)],
+    ["Évaluateurs alignés",ref?okN+"/"+notes.length:"réf. à définir",ref?calColor(okN/notes.length*100):"var(--muted)"]]
+    .map(k=>`<div class="b"><div class="l">${k[0]}</div><div class="v" style="color:${k[2]};font-size:21px">${k[1]}</div></div>`).join("");
+  /* commentaires sur les critères où les évaluateurs divergent : matière du débrief */
+  const talk=crits.filter(c=>new Set(notes.map(n=>calApp(n,c)).filter(Boolean)).size>1||(ref&&notes.some(n=>calApp(n,c)!==calApp(ref,c)&&(calApp(n,c)||calApp(ref,c))))).map(c=>{
+    const lines=notes.map(n=>{const cm=calCommentMap(n)[c.name];const v=calApp(n,c);
+      return `<li><b>${escHtml(n["Évaluateur"])}</b> — ${v?APP_LABEL[v].toLowerCase():"non noté"}${cm?" : "+escHtml(cm):""}</li>`;}).join("");
+    const rc=ref?calCommentMap(ref)[c.name]:"";
+    return `<div class="cal-talk"><div class="t">${escHtml(c.name)}${ref?` → référence : <span class="orig-chip ${calApp(ref,c)||""}" style="margin:0">${calApp(ref,c)?APP[calApp(ref,c)].short:"—"}</span>`:""}</div><ul>${lines}${rc?`<li><b>Référence</b> : ${escHtml(rc)}</li>`:""}</ul></div>`;}).join("");
+  $("#cal_d_body").innerHTML=`<div style="overflow-x:auto;padding:0 10px"><table class="cal-mx"><thead><tr><th>Critère</th>${notes.map(n=>`<th title="${escHtml(calStamp(n._ts))}">${escHtml(n["Évaluateur"])}</th>`).join("")}<th class="ref">${ref?"Référence":"Majorité (provisoire)"}</th><th>Accord</th></tr></thead>
+    <tbody>${rows}${foot}</tbody></table></div>
+    ${talk?`<div style="padding:16px 22px 4px"><div class="cal-h">Critères à débattre (${talk.split('class="cal-talk"').length-1})</div>${talk}</div>`:`<div class="hint" style="padding-top:14px">Aucune divergence : tous les évaluateurs ont noté pareil${ref?" que la référence":""}.</div>`}`;
+}
+function exportCalCsv(){
+  const x=calOpen?calFind(calOpen):null;if(!x||!x.notes.length){toast("Rien à exporter","err");return;}
+  const gk=calGridKey(x.s),ref=x.ref,notes=x.notes,esc=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const head=["Critère","Coef"].concat(notes.map(n=>n["Évaluateur"]),[ref?"Référence":"Majorité"]);
+  const cons=calConsensus(notes,gk);
+  const lines=flatCrit(gk).map(c=>[c.name,c.coef].concat(notes.map(n=>n[c.name]||""),[ref?(ref[c.name]||""):(cons[c.id].app?APP_LABEL[cons[c.id].app]:"")]));
+  lines.push(["Note %",""].concat(notes.map(n=>fmtPct(n._pct||0)),[ref?fmtPct(ref._pct||0):""]));
+  if(ref){const cm=notes.map(n=>calCompare(n,ref,gk));
+    lines.push(["Écart vs référence",""].concat(cm.map(c=>fmtSigned(c.ecart)),[""]));
+    lines.push(["Verdict",""].concat(cm.map(c=>c.verdict),[""]));}
+  const csv=[head].concat(lines).map(r=>r.map(esc).join(";")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
+  a.download="calibrage_"+x.id+".csv";a.click();
+}
+$("#cal_new_toggle").onclick=()=>{const b=$("#cal_new");const open=b.style.display==="none";b.style.display=open?"block":"none";
+  if(open){fill($("#cal_cons"),CONSEILLERS,true);fillCalGrilles();}};
+$("#cal_canal").onchange=fillCalGrilles;
+$("#cal_create").onclick=createCalSession;
+$("#cal_cancel").onclick=()=>{calResetForm();$("#cal_new").style.display="none";};
+$("#cal_refresh").onclick=async()=>{const ok=await syncCalib();renderCalibrage();toast(ok?"Calibrages rechargés ✓":"Sheet injoignable — données locales affichées",ok?"ok":"err");};
+$("#cal_d_note").onclick=()=>calOpen&&startCalib(calOpen,"NOTE");
+$("#cal_d_ref").onclick=()=>calOpen&&startCalib(calOpen,"REF");
+$("#cal_d_csv").onclick=exportCalCsv;
+$("#cal_d_close").onclick=()=>{calOpen=null;renderCalibrage();};
+
+/* ============ PARAM ============ */
+$("#p_url").value=runtimeUrl;$("#p_url").oninput=()=>{runtimeUrl=$("#p_url").value.trim();try{localStorage.setItem(URL_KEY,runtimeUrl);}catch(e){}};
+$("#b_test").onclick=async()=>{const url=(runtimeUrl||"").trim();if(!url){toast("Renseigne l'URL","err");return;}
+  try{await fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify({canal:"TEST",record:{Horodatage:new Date().toLocaleString("fr-FR"),Test:"OK"}})});toast("Test envoyé — vérifie l'onglet Suivi TEST ✓","ok");}catch(e){toast("Échec","err");}};
+$("#p_me").onchange=()=>setMe($("#p_me").value);
+function setMe(name){
+  me=name;
+  $("#u_name").textContent=me;
+  $("#u_av").textContent=initials(me);
+  $("#u_role").textContent="Évaluateur";
+  $("#hello").innerHTML="👋 Bonjour "+me+"&nbsp;!";
+  if($("#f_eval"))$("#f_eval").value=me;
+  if($("#p_me"))$("#p_me").value=me;
+  renderUserMenu();
+  closeUserMenu();
+}
+const applyMe=()=>setMe(me);   // compat
+function renderUserMenu(){
+  $("#usermenu").innerHTML='<div class="hd">Changer d\'évaluateur</div>'+EVALUATEURS.map(n=>
+    `<button data-me="${n}" class="${n===me?'cur':''}"><span class="av">${initials(n)}</span>${n}<span class="ck">${ic('check')}</span></button>`).join("");
+  $$("#usermenu button").forEach(b=>b.onclick=e=>{e.stopPropagation();setMe(b.dataset.me);toast("Session : "+b.dataset.me,"ok");});
+}
+function openUserMenu(){$("#usermenu").classList.add("show");$("#userCard").classList.add("open");}
+function closeUserMenu(){$("#usermenu").classList.remove("show");$("#userCard").classList.remove("open");}
+$("#userCard").onclick=e=>{e.stopPropagation();$("#usermenu").classList.contains("show")?closeUserMenu():openUserMenu();};
+document.addEventListener("click",()=>closeUserMenu());
+
+/* ============ GESTION CONSEILLERS / ÉVALUATEURS ============ */
+function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function saveLists(){try{localStorage.setItem(LIST_KEYS.eval,JSON.stringify(EVALUATEURS));localStorage.setItem(LIST_KEYS.cons,JSON.stringify(CONSEILLERS));}catch(e){}}
+function refreshEvalSelects(){
+  const keep=$("#f_eval").value;
+  fill($("#f_eval"),EVALUATEURS,true);if(keep&&EVALUATEURS.includes(keep))$("#f_eval").value=keep;
+  fill($("#p_me"),EVALUATEURS,false);
+  if(!EVALUATEURS.includes(me)&&EVALUATEURS[0])setMe(EVALUATEURS[0]);else $("#p_me").value=me;
+  renderUserMenu();renderListChips();if(typeof initEvalFilters==="function")initEvalFilters();
+}
+function refreshConsSelects(){const keep=$("#f_cons").value;fill($("#f_cons"),CONSEILLERS,true);if(keep&&CONSEILLERS.includes(keep))$("#f_cons").value=keep;renderListChips();if(typeof initEvalFilters==="function")initEvalFilters();}
+function renderListChips(){
+  const ec=$("#eval_chips"),cc=$("#cons_chips");if(!ec||!cc)return;
+  const mk=arr=>arr.map(n=>`<span class="chip">${escHtml(n)}<button data-x="${escHtml(n)}" title="Retirer">×</button></span>`).join("");
+  ec.innerHTML=mk(EVALUATEURS);cc.innerHTML=mk(CONSEILLERS);
+  $$("#eval_chips .chip button").forEach(b=>b.onclick=()=>removeFromList("eval",b.dataset.x));
+  $$("#cons_chips .chip button").forEach(b=>b.onclick=()=>removeFromList("cons",b.dataset.x));
+}
+function addToList(kind){
+  const inp=kind==="eval"?$("#p_new_eval"):$("#p_new_cons");
+  const v=(inp.value||"").trim();if(!v){toast("Saisis un nom","err");return;}
+  const list=kind==="eval"?EVALUATEURS:CONSEILLERS;
+  if(list.some(x=>x.toLowerCase()===v.toLowerCase())){toast("Déjà présent dans la liste","err");return;}
+  list.push(v);saveLists();inp.value="";postAgent(v,kind==="eval"?"evaluateur":"conseiller",true);
+  kind==="eval"?refreshEvalSelects():refreshConsSelects();
+  toast((kind==="eval"?"Évaluateur":"Conseiller")+" ajouté ✓","ok");
+}
+function removeFromList(kind,name){
+  const list=kind==="eval"?EVALUATEURS:CONSEILLERS;
+  if(list.length<=1){toast("Au moins un nom doit rester","err");return;}
+  const next=list.filter(x=>x!==name);postAgent(name,kind==="eval"?"evaluateur":"conseiller",false);
+  if(kind==="eval"){EVALUATEURS=next;saveLists();refreshEvalSelects();}
+  else{CONSEILLERS=next;saveLists();refreshConsSelects();}
+  toast("« "+name+" » retiré","ok");
+}
+$("#b_add_eval").onclick=()=>addToList("eval");
+$("#b_add_cons").onclick=()=>addToList("cons");
+$("#p_new_eval").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addToList("eval");}};
+$("#p_new_cons").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addToList("cons");}};
+renderListChips();
+
+/* ============ TOAST / BELL ============ */
+let tT;function toast(m,t){const el=$("#toast");el.textContent=m;el.className="toast show "+(t||"");clearTimeout(tT);tT=setTimeout(()=>el.className="toast",3200);}
+function updateBell(){const today=new Date().toLocaleDateString("fr-FR");$("#bell_n").textContent=store.filter(e=>new Date(e._ts).toLocaleDateString("fr-FR")===today).length;}
+
+/* ============ INIT ============ */
+fill($("#f_eval"),EVALUATEURS,true);fill($("#f_cons"),CONSEILLERS,true);fill($("#f_op"),OPERATIONS,false);updateTypoList();
+fill($("#p_me"),EVALUATEURS,false);
+$("#today").textContent=new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+$("#p_me").value=me;applyMe();
+initEvalFilters();
+loadLocal().forEach(e=>store.push(e));store.sort((a,b)=>(b._ts||0)-(a._ts||0));
+loadContreLocal().forEach(e=>contre.push(e));contre.sort((a,b)=>(b._ts||0)-(a._ts||0));
+loadCalibLocal().forEach(e=>calib.push(e));calib.sort((a,b)=>(a._ts||0)-(b._ts||0));
+updateGridHead();renderGrid();renderDash();updateBell();
+syncFromSheet();loadConfig(false);
+const bcr=$("#b_cfg_refresh");if(bcr)bcr.onclick=async()=>{bcr.disabled=true;bcr.textContent="Synchronisation…";
+  const ok=await loadConfig(true);bcr.disabled=false;bcr.textContent="Rafraîchir depuis le Sheet";
+  toast(ok?"Référentiels synchronisés ✓":"Sheet injoignable — référentiels intégrés conservés",ok?"ok":"err");};
+/* inject static icons */
+document.querySelectorAll('[data-ic]').forEach(e=>{e.innerHTML=ic(e.dataset.ic);});
+
+</script>
+</body>
+</html>
