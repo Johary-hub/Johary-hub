@@ -1,0 +1,15 @@
+{
+  "name": "chat-ephemere",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node test/e2e.cjs",
+    "build": "node build.mjs"
+  },
+  "private": true,
+  "description": "Chat éphémère à deux en un seul fichier HTML (WebRTC + Trystero)",
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "trystero": "0.26.0",
+    "ws": "8.22.2"
+  }
+}
