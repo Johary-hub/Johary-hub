@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src __CONNECT_SRC__; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="dark light">
+<title>Chat éphémère</title>
+<link rel="icon" href="data:,">
+<style>/*__CSS__*/</style>
+</head>
+<body>
+<main id="app">
+
+  <section id="ecran-entree" class="ecran" aria-labelledby="titre-entree">
+    <h1 id="titre-entree">Chat éphémère</h1>
+    <p class="accroche">À deux, en direct. Chaque message disparaît après 30 secondes. Rien n'est enregistré.</p>
+
+    <label for="champ-pseudo">Pseudo</label>
+    <input id="champ-pseudo" type="text" maxlength="20" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next">
+
+    <label for="champ-phrase">Phrase secrète</label>
+    <div class="champ-secret">
+      <input id="champ-phrase" type="password" minlength="12" maxlength="200" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" aria-describedby="aide-phrase">
+      <button id="bouton-voir" type="button" aria-pressed="false" aria-controls="champ-phrase">Afficher</button>
+    </div>
+    <p id="aide-phrase" class="aide">Convenez de la phrase secrète par un autre moyen. Les deux personnes doivent saisir exactement la même.</p>
+
+    <p id="erreur-entree" class="erreur" role="alert"></p>
+
+    <button id="bouton-rejoindre" type="button" class="principal">Rejoindre</button>
+  </section>
+
+  <section id="ecran-chat" class="ecran" hidden aria-label="Conversation">
+    <header class="bandeau">
+      <p id="etat" class="etat" data-etat="attente" role="status" aria-live="polite">En attente de l'autre personne…</p>
+      <button id="bouton-quitter" type="button">Quitter</button>
+    </header>
+    <p id="avis" class="avis" role="status" aria-live="polite" hidden></p>
+
+    <div id="messages" class="messages" role="log" aria-live="polite" aria-label="Messages" tabindex="0"></div>
+
+    <div class="saisie">
+      <label for="champ-message" class="invisible">Votre message</label>
+      <textarea id="champ-message" rows="1" maxlength="2000" placeholder="Votre message" autocomplete="off" enterkeyhint="send" disabled></textarea>
+      <button id="bouton-envoyer" type="button" class="principal" disabled>Envoyer</button>
+    </div>
+  </section>
+
+</main>
+<script>/*__JS__*/</script>
+</body>
+</html>

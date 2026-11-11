@@ -1,0 +1,59 @@
+# Construit le chat éphémère et publie le site GitHub Pages :
+#   /        -> contenu de docs/ (formation Lean Six Sigma, inchangé)
+#   /chat/   -> chat-ephemere/dist/index.html (fichier unique)
+#
+# Prérequis (une seule fois) : Settings > Pages > Source = « GitHub Actions ».
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'chat-ephemere/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: chat-ephemere/package-lock.json
+      - name: Build du chat (fichier unique)
+        working-directory: chat-ephemere
+        run: |
+          npm ci
+          npm run build
+      - name: Assemblage du site
+        run: |
+          mkdir -p _site/chat
+          cp -r docs/. _site/
+          cp chat-ephemere/dist/index.html _site/chat/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
