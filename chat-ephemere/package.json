@@ -2,7 +2,7 @@
   "name": "chat-ephemere",
   "version": "1.0.0",
   "scripts": {
-    "test": "node test/e2e.cjs",
+    "test": "node test/e2e.cjs && node test/e2e-relais.cjs",
     "build": "node build.mjs"
   },
   "private": true,

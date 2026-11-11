@@ -33,6 +33,13 @@
     </div>
     <p id="aide-phrase" class="aide">Convenez de la phrase secrète par un autre moyen. Les deux personnes doivent saisir exactement la même.</p>
 
+    <details class="avance">
+      <summary>Réseau filtré ? Passer par un relais Google</summary>
+      <label for="champ-relais">Adresse du relais</label>
+      <input id="champ-relais" type="url" inputmode="url" maxlength="300" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://script.google.com/macros/s/…/exec" aria-describedby="aide-relais">
+      <p id="aide-relais" class="aide">Laissez vide pour la connexion directe. Les deux personnes doivent utiliser la même adresse. Les messages passent alors par ce relais, chiffrés avec la phrase secrète, et y sont supprimés dès leur remise.</p>
+    </details>
+
     <p id="erreur-entree" class="erreur" role="alert"></p>
 
     <button id="bouton-rejoindre" type="button" class="principal">Rejoindre</button>
@@ -63,6 +70,12 @@
   </section>
 
 </main>
+<script>
+// Adresse du relais Google (facultatif). Collez ici l'adresse de votre
+// application web Apps Script, entre les guillemets, pour qu'elle soit
+// préremplie : "https://script.google.com/macros/s/XXXX/exec"
+var RELAIS_GOOGLE = "__RELAIS_GOOGLE__";
+</script>
 <script>/*__JS__*/</script>
 </body>
 </html>

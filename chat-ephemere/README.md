@@ -1,7 +1,7 @@
 # You & Me — chat éphémère à deux
 
 Un chat pour **deux personnes exactement**, livré en **un seul fichier** :
-[`dist/index.html`](dist/index.html) (≈ 89 Ko, CSS, JS et Trystero inlinés).
+[`dist/index.html`](dist/index.html) (≈ 93 Ko, CSS, JS et Trystero inlinés).
 
 - Les messages circulent **en direct** entre les deux navigateurs (WebRTC DataChannel, chiffré DTLS).
 - **Rien n'est stocké** : ni serveur, ni disque, ni stockage navigateur.
@@ -23,6 +23,12 @@ Navigateur A  <──── WebRTC DataChannel (chiffré DTLS) ────>  Na
 
 Rien n'est mémorisé : pseudo et phrase sont à ressaisir à chaque ouverture. Il n'y a pas de file d'attente : si l'autre n'est pas connecté, l'envoi est impossible.
 
+## Réseau filtré : mode relais Google
+
+Si le réseau bloque la connexion directe (pare-feu d'entreprise, FortiGuard…), l'écran d'entrée propose **« Réseau filtré ? Passer par un relais Google »**. Les messages passent alors par un Google Apps Script adossé à une Google Sheet, chiffrés dans le navigateur avec la phrase secrète et supprimés par le script dès leur remise (30 s au plus tard). Installation et limites : [`relais-google/README.md`](relais-google/README.md).
+
+Ce mode déroge volontairement à deux principes du mode direct : les messages transitent par un serveur tiers (Google) et y séjournent brièvement, sous forme chiffrée.
+
 ## Développement
 
 ```bash
@@ -43,7 +49,7 @@ Dépendances fixées à la version exacte : `trystero` 0.26.0 (stratégie Nostr 
 npm test
 ```
 
-Lance un relais Nostr local en mémoire, construit une variante de test pointant dessus et pilote quatre profils Chromium ouvrant le fichier en `file://` (≈ 1 min 30). Nécessite [Playwright](https://playwright.dev) (`npm i --no-save playwright && npx playwright install chromium`). Il vérifie : connexion à deux, phrases différentes isolées, message visible des deux côtés puis disparu à 30 s ± 1 s, `<img src=x onerror=alert(1)>` affiché comme du texte, troisième arrivant en « Salon complet » sans aucun message, rechargement et « Quitter » qui vident l'autre écran, aucun stockage utilisé, console vide (pas d'avertissement CSP), rien de lisible côté relais.
+`npm test` enchaîne le mode direct puis le mode relais Google (le vrai `Code.gs` exécuté dans un simulateur local de Google Sheets). Le premier lance un relais Nostr local en mémoire, construit une variante de test pointant dessus et pilote quatre profils Chromium ouvrant le fichier en `file://` (≈ 1 min 30). Nécessite [Playwright](https://playwright.dev) (`npm i --no-save playwright && npx playwright install chromium`). Il vérifie : connexion à deux, phrases différentes isolées, message visible des deux côtés puis disparu à 30 s ± 1 s, `<img src=x onerror=alert(1)>` affiché comme du texte, troisième arrivant en « Salon complet » sans aucun message, rechargement et « Quitter » qui vident l'autre écran, aucun stockage utilisé, console vide (pas d'avertissement CSP), rien de lisible côté relais.
 
 ## Fonctionnement
 
@@ -56,7 +62,7 @@ Lance un relais Nostr local en mémoire, construit une variante de test pointant
 | Messages | actions `msg` `{id, texte, envoyeA}` et `hello` `{pseudo}` ; types et longueurs validés ; affichage par `textContent` uniquement |
 | Expiration | `DUREE_MS = 30000` ; un `setTimeout` par bulle, barre de progression en CSS ; le tableau en mémoire ne contient jamais le texte |
 | Nettoyage | `pagehide` / `beforeunload` : `room.leave()` ; au retour d'un onglet masqué, purge des messages échus |
-| CSP | `default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src wss:; base-uri 'none'; form-action 'none'` |
+| CSP | `default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src wss: https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'` |
 
 `img-src data:` ne sert qu'à l'icône vide (`data:,`) qui évite une requête `favicon.ico`.
 

@@ -2,7 +2,12 @@
 //
 // Variables d'environnement réservées aux tests automatisés :
 //   RELAIS_TEST  liste d'URL de relais séparées par des virgules (ex. ws://127.0.0.1:7777)
+//   RELAIS_GAS_TEST  autorise un relais Google simulé en http://127.0.0.1 (valeur : son URL)
 //   SORTIE       chemin du fichier produit (défaut : dist/index.html)
+//
+// Variable utile en production :
+//   RELAIS_GOOGLE  adresse https://script.google.com/macros/s/…/exec préremplie dans le fichier
+//
 // Sans elles, le build utilise les relais Nostr publics de Trystero.
 
 import {build} from 'esbuild'
@@ -15,6 +20,14 @@ const relaisTest = (process.env.RELAIS_TEST || '')
   .split(',')
   .map(s => s.trim())
   .filter(Boolean)
+const relaisGoogle = (process.env.RELAIS_GOOGLE || '').trim()
+const relaisGasTest = (process.env.RELAIS_GAS_TEST || '').trim()
+
+if (/["\\<>\s]/.test(relaisGoogle)) {
+  console.error('RELAIS_GOOGLE : adresse invalide')
+  process.exit(1)
+}
+
 const sortie = resolve(racine, process.env.SORTIE || 'dist/index.html')
 
 const [js, css] = await Promise.all([
@@ -28,7 +41,8 @@ const [js, css] = await Promise.all([
     drop: ['console', 'debugger'],
     write: false,
     define: {
-      __RELAIS__: relaisTest.length ? JSON.stringify(relaisTest) : 'null'
+      __RELAIS__: relaisTest.length ? JSON.stringify(relaisTest) : 'null',
+      __RELAIS_GOOGLE_TEST__: relaisGasTest ? 'true' : 'false'
     }
   }),
   build({
@@ -48,7 +62,19 @@ const styleSur = css.outputFiles[0].text.trim().replace(/<\/style/gi, '<\\/style
 const gabarit = await readFile(resolve(racine, 'src/index.html'), 'utf8')
 
 const html = gabarit
-  .replace('__CONNECT_SRC__', () => (relaisTest.length ? 'wss: ws:' : 'wss:'))
+  .replace('__CONNECT_SRC__', () =>
+    [
+      'wss:',
+      // Relais Google : l'appel est redirigé vers script.googleusercontent.com.
+      'https://script.google.com',
+      'https://script.googleusercontent.com',
+      relaisTest.length ? 'ws:' : '',
+      relaisGasTest ? new URL(relaisGasTest).origin : ''
+    ]
+      .filter(Boolean)
+      .join(' ')
+  )
+  .replace('__RELAIS_GOOGLE__', () => relaisGoogle)
   .replace('/*__CSS__*/', () => styleSur)
   .replace('/*__JS__*/', () => scriptSur)
 
@@ -60,7 +86,7 @@ const interdits = [
   [/@import\b|url\(\s*["']?(?:https?:)?\/\//i, 'import CSS externe'],
   [/\b(?:localStorage|sessionStorage|indexedDB)\b/, 'stockage navigateur'],
   [/document\.cookie|\bcaches\.open\b|serviceWorker/, 'cookies, cache ou service worker'],
-  [/\/\*__(?:CSS|JS)__\*\/|__CONNECT_SRC__|__RELAIS__/, "marqueur d'injection non remplacé"]
+  [/\/\*__(?:CSS|JS)__\*\/|__CONNECT_SRC__|__RELAIS__|__RELAIS_GOOGLE__|__RELAIS_GOOGLE_TEST__/, "marqueur d'injection non remplacé"]
 ]
 
 const problemes = interdits.filter(([motif]) => motif.test(html)).map(([, nom]) => nom)
