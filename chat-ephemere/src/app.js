@@ -1,4 +1,5 @@
 import {joinRoom} from 'trystero'
+import {creerSalonGas, deriverCles} from './relais-gas.js'
 
 // ---------------------------------------------------------------- Réglages
 
@@ -10,6 +11,7 @@ const TEXTE_MAX = 2000
 const DELAI_ATTENTE_MS = 60000
 const DELAI_PRESENCE_MS = 30000
 const DELAI_HELLO_MS = 8000
+const DELAI_HELLO_RELAIS_MS = 25000
 const DELAI_PING_MS = 2500
 
 // Serveurs TURN optionnels (utile en 4G/CGNAT). Vide par défaut.
@@ -19,6 +21,17 @@ const TURN = []
 
 // Remplacé au build. `null` = relais Nostr publics par défaut de Trystero.
 const RELAIS = __RELAIS__
+
+// Relais Google (Apps Script) pour les réseaux filtrés. L'adresse par défaut
+// vient de la variable RELAIS_GOOGLE déclarée en tête du fichier HTML.
+const RELAIS_GOOGLE_DEFAUT =
+  typeof RELAIS_GOOGLE === 'string' ? RELAIS_GOOGLE.trim() : ''
+const RE_RELAIS_GOOGLE = __RELAIS_GOOGLE_TEST__
+  ? /^http:\/\/127\.0\.0\.1:\d+\/exec$/
+  : /^https:\/\/script\.google\.com\/(?:a\/macros\/[\w.-]+|macros)\/s\/[\w-]+\/exec$/
+
+const MSG_RELAIS =
+  'Relais injoignable. Vérifiez son adresse et votre connexion ; nouvelle tentative en cours…'
 
 const MSG_RESEAU =
   'Connexion directe impossible sur ce réseau. Essayez un autre réseau (Wi-Fi).'
@@ -31,10 +44,12 @@ const ecranEntree = $('ecran-entree')
 const ecranChat = $('ecran-chat')
 const champPseudo = $('champ-pseudo')
 const champPhrase = $('champ-phrase')
+const champRelais = $('champ-relais')
 const boutonVoir = $('bouton-voir')
 const boutonRejoindre = $('bouton-rejoindre')
 const erreurEntree = $('erreur-entree')
 const etat = $('etat')
+const avatar = $('avatar')
 const avis = $('avis')
 const zoneMessages = $('messages')
 const champMessage = $('champ-message')
@@ -51,6 +66,7 @@ let peerActif = null // identifiant du seul pair accepté
 let peerReserve = null // pair en cours de poignée de main
 let pairConfirme = false // son « hello » a été reçu
 let complet = false
+let modeRelais = false
 let jonctionEnCours = false
 let minuterieAttente = null
 let minuteriePresence = null
@@ -85,9 +101,19 @@ const arreter = minuterie => {
 
 // ---------------------------------------------------------------- Affichage
 
-const definirEtat = (code, texte) => {
+const definirEtat = (code, texte, pseudo = '') => {
   etat.dataset.etat = code
   etat.textContent = texte
+  avatar.textContent = pseudo ? Array.from(pseudo)[0].toUpperCase() : '?'
+}
+
+const heure = () => {
+  const d = new Date()
+  return (
+    String(d.getHours()).padStart(2, '0') +
+    ':' +
+    String(d.getMinutes()).padStart(2, '0')
+  )
 }
 
 const montrerAvis = texte => {
@@ -150,7 +176,11 @@ const afficherMessage = (id, texte, deMoi) => {
   barre.className = 'barre'
   barre.style.setProperty('--duree', DUREE_MS + 'ms')
 
-  bulle.append(contenu, barre)
+  const horodatage = document.createElement('span')
+  horodatage.className = 'heure'
+  horodatage.textContent = heure()
+
+  bulle.append(contenu, horodatage, barre)
   zoneMessages.append(bulle)
   zoneMessages.scrollTop = zoneMessages.scrollHeight
 
@@ -279,7 +309,7 @@ const surArrivee = peerId => {
   minuterieHello = arreter(minuterieHello)
   minuterieHello = setTimeout(() => {
     if (peerActif === peerId && !pairConfirme) salonComplet()
-  }, DELAI_HELLO_MS)
+  }, modeRelais ? DELAI_HELLO_RELAIS_MS : DELAI_HELLO_MS)
 }
 
 const surDepart = peerId => {
@@ -300,7 +330,7 @@ const surHello = (data, {peerId}) => {
   pairConfirme = true
   arreterMinuteries()
   cacherAvis()
-  definirEtat('connecte', 'Connecté à ' + pseudo)
+  definirEtat('connecte', 'Connecté à ' + pseudo, pseudo)
   activerSaisie(true)
   champMessage.focus()
 }
@@ -363,12 +393,14 @@ const reinitialiser = () => {
   peerReserve = null
   pairConfirme = false
   complet = false
+  modeRelais = false
   monPseudo = ''
 }
 
 const montrerEntree = () => {
   champPseudo.value = ''
   champPhrase.value = ''
+  champRelais.value = RELAIS_GOOGLE_DEFAUT
   champPhrase.type = 'password'
   boutonVoir.textContent = 'Afficher'
   boutonVoir.setAttribute('aria-pressed', 'false')
@@ -396,14 +428,24 @@ const rejoindre = async () => {
     return
   }
 
+  const relais = champRelais.value.trim()
+
+  if (relais && !RE_RELAIS_GOOGLE.test(relais)) {
+    erreurEntree.textContent =
+      "L'adresse du relais doit ressembler à https://script.google.com/macros/s/…/exec."
+    champRelais.closest('details').open = true
+    champRelais.focus()
+    return
+  }
+
   if (
     !window.crypto ||
     !crypto.subtle ||
     !crypto.randomUUID ||
-    !window.RTCPeerConnection
+    (!relais && !window.RTCPeerConnection)
   ) {
     erreurEntree.textContent =
-      'Ce navigateur ne permet pas la connexion directe chiffrée (WebRTC ou contexte sécurisé indisponible).'
+      'Ce navigateur ne permet pas la connexion chiffrée (WebRTC ou contexte sécurisé indisponible).'
     return
   }
 
@@ -411,19 +453,33 @@ const rejoindre = async () => {
   erreurEntree.textContent = ''
 
   try {
-    const roomId = await deriverSalon(phrase)
-    const config = {appId: APP_ID, password: phrase}
+    if (relais) {
+      const cles = await deriverCles(phrase)
 
-    if (TURN.length) config.turnConfig = TURN
-    if (RELAIS) config.relayConfig = {urls: RELAIS}
+      reinitialiser()
+      monPseudo = pseudo
+      modeRelais = true
 
-    reinitialiser()
-    monPseudo = pseudo
+      room = creerSalonGas(relais, cles, {
+        surComplet: salonComplet,
+        surPanne: () => montrerAvis(MSG_RELAIS),
+        surReprise: cacherAvis
+      })
+    } else {
+      const roomId = await deriverSalon(phrase)
+      const config = {appId: APP_ID, password: phrase}
 
-    room = joinRoom(config, roomId, {
-      onJoinError: surErreurJonction,
-      onPeerHandshake: poigneeDeMain
-    })
+      if (TURN.length) config.turnConfig = TURN
+      if (RELAIS) config.relayConfig = {urls: RELAIS}
+
+      reinitialiser()
+      monPseudo = pseudo
+
+      room = joinRoom(config, roomId, {
+        onJoinError: surErreurJonction,
+        onPeerHandshake: poigneeDeMain
+      })
+    }
 
     actionMsg = room.makeAction('msg')
     actionHello = room.makeAction('hello')
@@ -446,7 +502,7 @@ const rejoindre = async () => {
   champPhrase.type = 'password'
 
   definirEtat('attente', "En attente de l'autre personne…")
-  armerAttente()
+  if (!modeRelais) armerAttente()
   ecranEntree.hidden = true
   ecranChat.hidden = false
 }
@@ -528,3 +584,5 @@ addEventListener('beforeunload', surFermeture)
 addEventListener('pageshow', e => {
   if (e.persisted) quitter()
 })
+
+champRelais.value = RELAIS_GOOGLE_DEFAUT
