@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="color-scheme" content="dark light">
-<title>Chat éphémère</title>
+<title>You &amp; Me</title>
 <link rel="icon" href="data:,">
 <style>/*__CSS__*/</style>
 </head>
@@ -15,8 +15,13 @@
 <main id="app">
 
   <section id="ecran-entree" class="ecran" aria-labelledby="titre-entree">
-    <h1 id="titre-entree">Chat éphémère</h1>
-    <p class="accroche">À deux, en direct. Chaque message disparaît après 30 secondes. Rien n'est enregistré.</p>
+    <div class="marque">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="M12 21s-7.5-4.6-10-9.4C.3 8.300 2 4.500 5.700 4.500c2.100 0 3.500 1.100 4.300 2.300.8-1.200 2.200-2.300 4.300-2.300 3.700 0 5.400 3.800 3.700 7.100C19.500 16.400 12 21 12 21z" transform="translate(1.200 0)"/></svg>
+      </div>
+      <h1 id="titre-entree">You &amp; Me</h1>
+      <p class="accroche">À deux, en direct. Chaque message disparaît après 30 secondes. Rien n'est enregistré.</p>
+    </div>
 
     <label for="champ-pseudo">Pseudo</label>
     <input id="champ-pseudo" type="text" maxlength="20" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="next">
@@ -35,8 +40,14 @@
 
   <section id="ecran-chat" class="ecran" hidden aria-label="Conversation">
     <header class="bandeau">
-      <p id="etat" class="etat" data-etat="attente" role="status" aria-live="polite">En attente de l'autre personne…</p>
-      <button id="bouton-quitter" type="button">Quitter</button>
+      <button id="bouton-quitter" type="button" class="rond principal" aria-label="Quitter" title="Quitter">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round" d="M11 5l-7 7 7 7M4 12h16"/></svg>
+      </button>
+      <div id="avatar" class="avatar" aria-hidden="true">?</div>
+      <div class="identite">
+        <p class="nom-app">You &amp; Me</p>
+        <p id="etat" class="etat" data-etat="attente" role="status" aria-live="polite">En attente de l'autre personne…</p>
+      </div>
     </header>
     <p id="avis" class="avis" role="status" aria-live="polite" hidden></p>
 
@@ -45,7 +56,9 @@
     <div class="saisie">
       <label for="champ-message" class="invisible">Votre message</label>
       <textarea id="champ-message" rows="1" maxlength="2000" placeholder="Votre message" autocomplete="off" enterkeyhint="send" disabled></textarea>
-      <button id="bouton-envoyer" type="button" class="principal" disabled>Envoyer</button>
+      <button id="bouton-envoyer" type="button" class="rond principal" aria-label="Envoyer" title="Envoyer" disabled>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3.400 20.400l17.500-7.500a1 1 0 000-1.800L3.400 3.600a1 1 0 00-1.400 1.200L4.500 11l8.500 1-8.500 1L2 19.200a1 1 0 001.400 1.200z"/></svg>
+      </button>
     </div>
   </section>
 

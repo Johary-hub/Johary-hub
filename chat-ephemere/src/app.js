@@ -35,6 +35,7 @@ const boutonVoir = $('bouton-voir')
 const boutonRejoindre = $('bouton-rejoindre')
 const erreurEntree = $('erreur-entree')
 const etat = $('etat')
+const avatar = $('avatar')
 const avis = $('avis')
 const zoneMessages = $('messages')
 const champMessage = $('champ-message')
@@ -85,9 +86,19 @@ const arreter = minuterie => {
 
 // ---------------------------------------------------------------- Affichage
 
-const definirEtat = (code, texte) => {
+const definirEtat = (code, texte, pseudo = '') => {
   etat.dataset.etat = code
   etat.textContent = texte
+  avatar.textContent = pseudo ? Array.from(pseudo)[0].toUpperCase() : '?'
+}
+
+const heure = () => {
+  const d = new Date()
+  return (
+    String(d.getHours()).padStart(2, '0') +
+    ':' +
+    String(d.getMinutes()).padStart(2, '0')
+  )
 }
 
 const montrerAvis = texte => {
@@ -150,7 +161,11 @@ const afficherMessage = (id, texte, deMoi) => {
   barre.className = 'barre'
   barre.style.setProperty('--duree', DUREE_MS + 'ms')
 
-  bulle.append(contenu, barre)
+  const horodatage = document.createElement('span')
+  horodatage.className = 'heure'
+  horodatage.textContent = heure()
+
+  bulle.append(contenu, horodatage, barre)
   zoneMessages.append(bulle)
   zoneMessages.scrollTop = zoneMessages.scrollHeight
 
@@ -300,7 +315,7 @@ const surHello = (data, {peerId}) => {
   pairConfirme = true
   arreterMinuteries()
   cacherAvis()
-  definirEtat('connecte', 'Connecté à ' + pseudo)
+  definirEtat('connecte', 'Connecté à ' + pseudo, pseudo)
   activerSaisie(true)
   champMessage.focus()
 }

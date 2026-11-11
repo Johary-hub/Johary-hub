@@ -1,7 +1,7 @@
-# Chat éphémère à deux
+# You & Me — chat éphémère à deux
 
 Un chat pour **deux personnes exactement**, livré en **un seul fichier** :
-[`dist/index.html`](dist/index.html) (≈ 85 Ko, CSS, JS et Trystero inlinés).
+[`dist/index.html`](dist/index.html) (≈ 89 Ko, CSS, JS et Trystero inlinés).
 
 - Les messages circulent **en direct** entre les deux navigateurs (WebRTC DataChannel, chiffré DTLS).
 - **Rien n'est stocké** : ni serveur, ni disque, ni stockage navigateur.
